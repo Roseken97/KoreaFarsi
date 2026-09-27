@@ -1,9 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "./env";
+import { SESSION_ONLY_COOKIE, applyRememberPolicy } from "./remember";
 
 export async function createClient() {
   const cookieStore = await cookies();
+  const sessionOnly = cookieStore.get(SESSION_ONLY_COOKIE)?.value === "1";
 
   return createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     cookies: {
@@ -12,7 +14,9 @@ export async function createClient() {
       },
       setAll(cookiesToSet) {
         try {
-          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, applyRememberPolicy(options, sessionOnly)),
+          );
         } catch {
           // Called from a Server Component, where cookies are read-only.
           // The proxy refreshes the session, so this is safe to ignore.

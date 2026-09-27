@@ -3,16 +3,27 @@
 import { useState } from "react";
 import { GoogleIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
-import { createClient } from "@/lib/supabase/client";
+import { authErrorMessage } from "@/lib/auth/errors";
+import { useI18n } from "@/lib/i18n/client";
+import { createClient, setRememberMe } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
-import { NOT_CONFIGURED_MESSAGE, authErrorMessage } from "@/lib/auth/errors";
 
-export function GoogleButton({ next, onError }: { next: string; onError: (message: string) => void }) {
+export function GoogleButton({
+  next,
+  remember = true,
+  onError,
+}: {
+  next: string;
+  remember?: boolean;
+  onError: (message: string) => void;
+}) {
+  const { m } = useI18n();
   const [loading, setLoading] = useState(false);
 
   async function signIn() {
-    if (!isSupabaseConfigured) return onError(NOT_CONFIGURED_MESSAGE);
+    if (!isSupabaseConfigured) return onError(m.errors.notConfigured);
     setLoading(true);
+    setRememberMe(remember);
     const { error } = await createClient().auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -22,23 +33,24 @@ export function GoogleButton({ next, onError }: { next: string; onError: (messag
     // On success the browser navigates away to Google.
     if (error) {
       setLoading(false);
-      onError(authErrorMessage(error));
+      onError(authErrorMessage(m, error));
     }
   }
 
   return (
     <Button type="button" variant="secondary" loading={loading} onClick={signIn}>
       <GoogleIcon />
-      ادامه با گوگل
+      {m.auth.google}
     </Button>
   );
 }
 
 export function OrDivider() {
+  const { m } = useI18n();
   return (
     <div className="my-6 flex items-center gap-3 text-xs text-ink-faint">
       <span className="h-px flex-1 bg-line" />
-      یا
+      {m.common.or}
       <span className="h-px flex-1 bg-line" />
     </div>
   );

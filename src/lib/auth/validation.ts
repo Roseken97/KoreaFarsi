@@ -1,15 +1,18 @@
+import { fmt, formatNumber, type Locale, type Messages } from "@/lib/i18n/config";
+
 export const MIN_PASSWORD_LENGTH = 8;
 
-export function validateEmail(email: string) {
-  if (!email.trim()) return "ایمیل را وارد کنید.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return "آدرس ایمیل معتبر نیست.";
+export function validateEmail(m: Messages, email: string) {
+  if (!email.trim()) return m.errors.validation.emailRequired;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return m.errors.validation.emailInvalid;
   return "";
 }
 
-export function validatePassword(password: string) {
-  if (!password) return "رمز عبور را وارد کنید.";
-  if (password.length < MIN_PASSWORD_LENGTH) return `رمز عبور باید حداقل ${toFa(MIN_PASSWORD_LENGTH)} کاراکتر باشد.`;
-  if (!/[a-zA-Z]/.test(password) || !/\d/.test(password)) return "رمز عبور باید شامل حرف انگلیسی و عدد باشد.";
+export function validatePassword(m: Messages, locale: Locale, password: string) {
+  if (!password) return m.errors.validation.passwordRequired;
+  if (password.length < MIN_PASSWORD_LENGTH)
+    return fmt(m.errors.validation.passwordMin, { n: formatNumber(MIN_PASSWORD_LENGTH, locale) });
+  if (!/[a-zA-Z]/.test(password) || !/\d/.test(password)) return m.errors.validation.passwordComplex;
   return "";
 }
 
@@ -17,8 +20,4 @@ export function validatePassword(password: string) {
 export function safeNext(next: string | null | undefined, fallback = "/home") {
   if (!next || !next.startsWith("/") || next.startsWith("//")) return fallback;
   return next;
-}
-
-export function toFa(n: number) {
-  return n.toLocaleString("fa-IR");
 }

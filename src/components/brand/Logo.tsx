@@ -1,31 +1,28 @@
-/**
- * PROVISIONAL wordmark. Replace with Rose's logo files
- * (drop them in /public/brand and swap this component's markup).
- */
-export function LogoMark({ size = 56 }: { size?: number }) {
+import Image from "next/image";
+
+/** Official KoreaFarsi mark (public/brand/logo-512.png, transparent). */
+export function LogoMark({ size = 56, priority = false }: { size?: number; priority?: boolean }) {
   return (
-    <span
-      className="inline-grid place-items-center rounded-[30%] bg-teal text-cream shadow-soft"
-      style={{ width: size, height: size }}
-      aria-hidden="true"
-    >
-      <span className="font-bold leading-none" style={{ fontSize: size * 0.42 }} lang="ko">
-        한
-      </span>
-    </span>
+    <Image
+      src="/brand/logo-512.png"
+      alt=""
+      width={size}
+      height={size}
+      priority={priority}
+      className="shrink-0 select-none"
+      draggable={false}
+    />
   );
 }
 
+/** Mark + "KoreaFarsi" serif wordmark. The wordmark is the brand name, so it stays Latin in every locale. */
 export function Logo({ size = 40, withText = true }: { size?: number; withText?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-3">
+    <span className="inline-flex items-center gap-2.5" dir="ltr">
       <LogoMark size={size} />
       {withText && (
-        <span className="flex flex-col leading-tight">
-          <span className="text-lg font-bold text-ink">کره‌فارسی</span>
-          <span className="text-xs font-medium tracking-wide text-ink-soft" dir="ltr">
-            KoreaFarsi
-          </span>
+        <span className="font-[family-name:var(--font-playfair)] text-xl font-semibold tracking-tight text-ink">
+          KoreaFarsi
         </span>
       )}
     </span>

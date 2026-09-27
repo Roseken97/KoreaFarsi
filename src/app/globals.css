@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 /*
- * KoreaFarsi design tokens — PROVISIONAL.
- * Derived from PROJECT_CONTEXT.md §18 (warm cream, sage/teal, blush, navy text).
+ * KoreaFarsi design tokens — PARTLY PROVISIONAL.
+ * ink + blush are sampled from the official logo (navy #121e30, rose #de8b89).
+ * cream / sage / teal follow PROJECT_CONTEXT.md §18 until checked against the sketches PDF.
  * Replace values here once exact colors are extracted from the UX sketches;
  * every component reads from these tokens, so no component code needs to change.
  */
@@ -10,7 +11,7 @@
   --color-cream: #faf6ef;
   --color-cream-deep: #f2eadc;
   --color-surface: #ffffff;
-  --color-ink: #1f2a44;
+  --color-ink: #16213a;
   --color-ink-soft: #5b6478;
   --color-ink-faint: #9aa1b0;
   --color-line: #e9e1d3;
@@ -18,14 +19,15 @@
   --color-sage-soft: #e3ece5;
   --color-teal: #4f8a87;
   --color-teal-deep: #3d716e;
-  --color-blush: #eab8b8;
-  --color-blush-soft: #f8e6e4;
+  --color-blush: #de8b89;
+  --color-blush-soft: #f8e3e1;
   --color-danger: #c0564b;
   --color-danger-soft: #fbeae7;
   --color-success: #4f8a6a;
   --color-success-soft: #e6f1ea;
 
-  --font-sans: var(--font-vazirmatn), system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;
+  --font-display: var(--font-playfair), Georgia, serif;
 
   --radius-card: 1.5rem;
   --radius-field: 1rem;
@@ -36,6 +38,12 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Persian: no serif display face; Vazirmatn carries both roles. */
+html[lang="fa"] {
+  --font-sans: var(--font-vazirmatn), system-ui, sans-serif;
+  --font-display: var(--font-vazirmatn), system-ui, sans-serif;
 }
 
 body {

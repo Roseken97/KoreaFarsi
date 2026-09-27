@@ -2,16 +2,18 @@
 
 import { useId, useState, type InputHTMLAttributes } from "react";
 import { EyeIcon, EyeOffIcon } from "@/components/icons";
+import { useI18n } from "@/lib/i18n/client";
 
 type FieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   error?: string;
-  /** Email and password are typed left-to-right even in the RTL UI. */
+  /** Email and password are typed left-to-right even in the Persian (RTL) UI. */
   ltr?: boolean;
 };
 
 export function Field({ label, error, ltr, type = "text", className = "", ...props }: FieldProps) {
   const id = useId();
+  const { m } = useI18n();
   const [revealed, setRevealed] = useState(false);
   const isPassword = type === "password";
 
@@ -20,19 +22,18 @@ export function Field({ label, error, ltr, type = "text", className = "", ...pro
       <label htmlFor={id} className="text-sm font-medium text-ink">
         {label}
       </label>
-      <div className="relative">
+      {/* dir on the wrapper so the eye button and padding follow the input's direction */}
+      <div className="relative" dir={ltr ? "ltr" : undefined}>
         <input
           id={id}
           type={isPassword && revealed ? "text" : type}
-          dir={ltr ? "ltr" : undefined}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${id}-error` : undefined}
           className={
             "h-13 w-full rounded-field border bg-surface px-4 text-[15px] text-ink outline-none transition " +
             "placeholder:text-ink-faint focus:border-teal focus:ring-4 focus:ring-teal/15 " +
             (error ? "border-danger " : "border-line ") +
-            (ltr ? "text-left " : "") +
-            (isPassword ? "pl-12" : "")
+            (isPassword ? "pe-12" : "")
           }
           {...props}
         />
@@ -40,8 +41,8 @@ export function Field({ label, error, ltr, type = "text", className = "", ...pro
           <button
             type="button"
             onClick={() => setRevealed((v) => !v)}
-            className="absolute inset-y-0 left-0 grid w-12 place-items-center text-ink-faint hover:text-ink-soft"
-            aria-label={revealed ? "پنهان کردن رمز" : "نمایش رمز"}
+            className="absolute inset-y-0 end-0 grid w-12 place-items-center text-ink-faint hover:text-ink-soft"
+            aria-label={revealed ? m.auth.fields.hidePassword : m.auth.fields.showPassword}
           >
             {revealed ? <EyeOffIcon width={20} height={20} /> : <EyeIcon width={20} height={20} />}
           </button>

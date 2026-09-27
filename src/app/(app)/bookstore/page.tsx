@@ -1,8 +1,7 @@
-import type { Metadata } from "next";
-import { ComingSoon } from "@/components/shell/ComingSoon";
+import { ComingSoon, placeholderMetadata } from "@/components/shell/ComingSoon";
 
-export const metadata: Metadata = { title: "کتاب‌فروشی" };
+export const generateMetadata = placeholderMetadata("bookstore");
 
 export default function Page() {
-  return <ComingSoon title="کتاب‌فروشی" description="معرفی و خرید کتاب‌ها و دوره‌های کره‌فارسی به‌زودی از همین‌جا ممکن می‌شود." />;
+  return <ComingSoon section="bookstore" />;
 }

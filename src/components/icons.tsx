@@ -27,26 +27,26 @@ export const HomeIcon = (p: IconProps) => (
   </Base>
 );
 
-export const CoursesIcon = (p: IconProps) => (
+export const PlannerIcon = (p: IconProps) => (
   <Base {...p}>
-    <rect x="3.5" y="5" width="17" height="12" rx="2.5" />
-    <path d="m10.5 9 3.5 2-3.5 2z" />
-    <path d="M8 20h8" />
+    <rect x="4" y="5" width="16" height="15" rx="2.5" />
+    <path d="M4 9.5h16M8.5 3.5v3M15.5 3.5v3" />
+    <path d="m9 14.5 2 2 4-4" />
   </Base>
 );
 
-export const BookstoreIcon = (p: IconProps) => (
+export const LibraryIcon = (p: IconProps) => (
   <Base {...p}>
-    <path d="M5 4.5h9.5A2.5 2.5 0 0 1 17 7v12.5H7.5A2.5 2.5 0 0 1 5 17z" />
-    <path d="M5 17a2.5 2.5 0 0 1 2.5-2.5H17" />
-    <path d="M19.5 8v11.5" />
+    <path d="M5 4.5h3.5v15H5zM10.5 4.5H14v15h-3.5z" />
+    <path d="m16 5.6 3.3-.9 3 14-3.3.9z" />
   </Base>
 );
 
-export const AiHubIcon = (p: IconProps) => (
+export const DictionaryIcon = (p: IconProps) => (
   <Base {...p}>
-    <path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-7l-4.5 3.5v-3.5H5A1.5 1.5 0 0 1 3.5 15V7A1.5 1.5 0 0 1 5 5.5z" />
-    <path d="M12 8.5v1M12 12.5v1M9.5 11h1M13.5 11h1" />
+    <path d="M6.5 3.5H18a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6.5A1.5 1.5 0 0 1 5 19V5a1.5 1.5 0 0 1 1.5-1.5z" />
+    <path d="M5 17.5A1.5 1.5 0 0 1 6.5 16H19" />
+    <path d="M9.5 7.5h2.5v3M9.5 10.5h3.2M14.5 7v5" />
   </Base>
 );
 
@@ -54,13 +54,6 @@ export const AccountIcon = (p: IconProps) => (
   <Base {...p}>
     <circle cx="12" cy="8.5" r="3.5" />
     <path d="M5 19.5c1.2-3.2 3.8-5 7-5s5.8 1.8 7 5" />
-  </Base>
-);
-
-export const KoreaLifeIcon = (p: IconProps) => (
-  <Base {...p}>
-    <path d="M12 21s-6.5-5.4-6.5-11a6.5 6.5 0 0 1 13 0c0 5.6-6.5 11-6.5 11z" />
-    <circle cx="12" cy="10" r="2.3" />
   </Base>
 );
 
@@ -78,10 +71,17 @@ export const EyeOffIcon = (p: IconProps) => (
   </Base>
 );
 
-export const ArrowBackIcon = (p: IconProps) => (
-  // Points right: "back" in an RTL interface.
+/** Points forward in reading direction (right in LTR, left in RTL). */
+export const ArrowForwardIcon = ({ className = "", ...p }: IconProps) => (
+  <Base className={`rtl:-scale-x-100 ${className}`} {...p}>
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </Base>
+);
+
+export const CheckCircleIcon = (p: IconProps) => (
   <Base {...p}>
-    <path d="M9.5 5.5 16 12l-6.5 6.5" />
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="m8.5 12.2 2.4 2.4 4.6-4.9" />
   </Base>
 );
 

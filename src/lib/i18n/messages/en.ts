@@ -1,0 +1,180 @@
+/**
+ * English (default locale). Source of truth for the message shape:
+ * fa.ts must match this structure (enforced by the `Messages` type).
+ * Copy marked PROVISIONAL is placeholder until final copy is supplied.
+ */
+export const en = {
+  common: {
+    brand: "KoreaFarsi",
+    backHome: "Back to Home",
+    comingSoon: "This section is coming soon.",
+    or: "or",
+  },
+  splash: {
+    tagline: "A Bridge to a Brighter You",
+    subline: "More than a language, a closer you.",
+    loading: "Loading your journey…",
+  },
+  onboarding: {
+    skip: "Skip",
+    next: "Next",
+    getStarted: "Get Started",
+    slides: [
+      {
+        glyph: "안녕",
+        title: "A New Journey Awaits",
+        body: "Learn Korean with a path designed for Persian speakers.",
+      },
+      {
+        glyph: "책",
+        title: "Learn Your Way",
+        body: "Books, courses and materials that fit your level and your pace.", // PROVISIONAL
+      },
+      {
+        glyph: "연습",
+        title: "Real Practice, Real Progress",
+        body: "Practise what you learn and see how far you've come.", // PROVISIONAL
+      },
+      {
+        glyph: "함께",
+        title: "Be Part of a Bigger Story",
+        body: "Join a growing community of Persian-speaking Korean learners.", // PROVISIONAL
+      },
+    ],
+  },
+  welcome: {
+    title: "Welcome to KoreaFarsi",
+    subtitle: "Your bridge to Korean, designed for Persian speakers.", // PROVISIONAL
+    createAccount: "Create an account",
+    login: "Log in",
+    guest: "Continue as guest",
+  },
+  auth: {
+    fields: {
+      fullName: "Full Name",
+      email: "Email",
+      password: "Password",
+      newPassword: "New Password",
+      confirmPassword: "Confirm Password",
+      showPassword: "Show password",
+      hidePassword: "Hide password",
+    },
+    google: "Continue with Google",
+    login: {
+      metaTitle: "Log in",
+      title: "Welcome back",
+      subtitle: "Log in to continue your journey.",
+      rememberMe: "Remember me",
+      forgot: "Forgot password?",
+      submit: "Log In",
+      noAccount: "Don't have an account?",
+      signupLink: "Sign up",
+    },
+    signup: {
+      metaTitle: "Sign up",
+      title: "Create your account",
+      subtitle: "Start learning Korean in a few seconds.",
+      submit: "Sign Up",
+      haveAccount: "Already have an account?",
+      loginLink: "Log in",
+      checkEmailTitle: "Check your email",
+      checkEmailBody: "We sent a confirmation link to {email}. Open it to activate your account.",
+      checkEmailSpam: "Can't find it? Check your spam folder.",
+      backToLogin: "Back to log in",
+    },
+    forgot: {
+      metaTitle: "Forgot password",
+      title: "Forgot password?",
+      subtitle: "Enter your account email and we'll send you a link to reset your password.",
+      submit: "Send Reset Link",
+      sentTitle: "Reset link sent",
+      sentBody: "If an account exists for {email}, a reset link is on its way.",
+      backToLogin: "Back to log in",
+    },
+    reset: {
+      metaTitle: "Reset password",
+      title: "Reset password",
+      subtitle: "Choose a new password for your account.",
+      submit: "Save New Password",
+      requestNew: "Request a new link",
+    },
+    success: {
+      metaTitle: "You're in",
+      title: "You're In!",
+      body: "Your account is ready. Your Korean journey starts now.",
+      cta: "Go to Home",
+    },
+  },
+  errors: {
+    generic: "Something went wrong. Please try again.",
+    network: "Couldn't reach the server. Check your connection.",
+    notConfigured: "Sign-in isn't connected yet (Supabase keys are missing in .env.local).",
+    callback: "This link is invalid or has expired. Please try again.",
+    codes: {
+      invalid_credentials: "Incorrect email or password.",
+      email_not_confirmed: "Your email isn't confirmed yet. Please check your inbox.",
+      user_already_exists: "An account with this email already exists. Log in instead.",
+      email_exists: "An account with this email already exists. Log in instead.",
+      weak_password: "Password is too weak. Use at least 8 characters with letters and numbers.",
+      same_password: "Your new password must be different from the old one.",
+      over_email_send_rate_limit: "Too many requests. Please try again in a few minutes.",
+      over_request_rate_limit: "Too many requests. Please try again in a few minutes.",
+      email_address_invalid: "This email address isn't valid.",
+      signup_disabled: "Sign-up is currently disabled.",
+      session_not_found: "Your session has expired. Please try again.",
+      provider_disabled: "This sign-in method isn't enabled yet.",
+    } as Record<string, string>,
+    validation: {
+      nameRequired: "Please enter your name.",
+      emailRequired: "Please enter your email.",
+      emailInvalid: "This email address isn't valid.",
+      passwordRequired: "Please enter your password.",
+      passwordMin: "Password must be at least {n} characters.",
+      passwordComplex: "Password must include letters and numbers.",
+      confirmMismatch: "Passwords don't match.",
+    },
+  },
+  nav: {
+    label: "Main navigation",
+    planner: "Planner",
+    library: "Library",
+    home: "Home",
+    dictionary: "Dictionary",
+    account: "Account",
+  },
+  placeholders: {
+    planner: { title: "Planner", body: "Your personal study planner is coming in a future update." },
+    library: { title: "Library", body: "Your digital library is coming in a future update." },
+    dictionary: { title: "Dictionary", body: "The Korean–Persian dictionary is coming in a future update." },
+    courses: { title: "My Courses", body: "Video courses and lessons are coming in a future update." },
+    bookstore: { title: "Bookstore", body: "KoreaFarsi books and courses will be available here soon." },
+    aiHub: { title: "KoreaFarsi AI", body: "Ask about Korean, universities, scholarships and life in Korea — coming soon." },
+    koreaLife: { title: "Korea Life", body: "Culture, travel, food and more — coming in a future update." },
+  },
+  home: {
+    metaTitle: "Home",
+    greeting: "안녕하세요",
+    welcomeNamed: "Welcome, {name}",
+    welcomeGuest: "Welcome to KoreaFarsi",
+    stub: "The Home screen with its four main cards is built in the next milestone.",
+  },
+  account: {
+    metaTitle: "Account",
+    title: "Account",
+    name: "Name",
+    email: "Email",
+    signOut: "Log Out",
+    notConfigured: "Sign-in needs Supabase to be connected.",
+  },
+  language: {
+    label: "Language",
+    en: "English",
+    fa: "فارسی",
+  },
+  notFound: {
+    title: "This page couldn't be found",
+    cta: "Go to Home",
+  },
+};
+
+export type Messages = typeof en;

@@ -1,12 +1,12 @@
 # KoreaFarsi — Phase 1 (Web + PWA)
 
-محدوده و مشخصات فنی: [`PROJECT_BRIEF.md`](./PROJECT_BRIEF.md) (سند الزام‌آور) · زمینه‌ی بلندمدت: [`PROJECT_CONTEXT.md`](./PROJECT_CONTEXT.md)
+محدوده و مشخصات فنی: [`PROJECT_BRIEF.md`](./PROJECT_BRIEF.md) (سند الزام‌آور) · مشخصات صفحات: [`UX_SPECS.md`](./UX_SPECS.md) · زمینه‌ی بلندمدت: [`PROJECT_CONTEXT.md`](./PROJECT_CONTEXT.md)
 
 ## وضعیت Milestone‌ها
 
 | # | Milestone | وضعیت |
 |---|---|---|
-| 1 | Setup + Auth + Shell | ✅ ساخته شده — منتظر تأیید رز |
+| 1 | Setup + Auth + Shell | ✅ ساخته شده، هم‌راستا با UX_SPECS — منتظر PDF اسکچ‌ها و تأیید رز |
 | 2 | Home + Account | ⏳ |
 | 3 | Bookstore | ⏳ |
 | 4 | چت‌بات اطلاعاتی | ⏳ |
@@ -44,20 +44,24 @@ src/
   proxy.ts                    تازه‌سازی session + محافظت از /account
   app/
     page.tsx                  Splash → onboarding (بار اول) یا home
-    onboarding/               ۴ اسلاید (محتوا در slides.ts)
-    auth/                     login · signup · forgot-password · reset-password · callback
+    onboarding/               ۴ اسلاید → /auth/welcome
+    auth/                     welcome · login · signup · forgot-password · reset-password · success · callback
     (app)/                    Shell: Bottom Nav (<768px) / Sidebar (≥768px)
       home/ account/          stub‌های Milestone 1 (نسخه‌ی کامل در Milestone 2)
-      courses/ bookstore/ ai-hub/ korea-life/   Placeholder «به‌زودی»
+      planner/ library/ dictionary/            Placeholder (آیتم‌های منو)
+      courses/ bookstore/ ai-hub/ korea-life/  Placeholder (مقصد کارت‌های Home)
   components/                 ui · shell · auth · brand · icons
-  lib/supabase/               client · server · proxy · env
-  lib/auth/                   پیام‌های خطای فارسی · اعتبارسنجی
+  lib/i18n/                   en (پیش‌فرض) · fa · cookie زبان
+  lib/supabase/               client · server · proxy · env · remember (Remember me)
+  lib/auth/                   پیام خطا · اعتبارسنجی
+design/brand/                 فایل اصلی لوگو (public/brand/logo-512.png نسخه‌ی وب است)
 supabase/migrations/          SQL
 ```
 
 ## قراردادها
 
-- **RTL** سراسری (`<html dir="rtl" lang="fa">`)؛ فیلدهای ایمیل/رمز `dir="ltr"`.
-- **رنگ، فونت، radius، سایه** فقط از tokenهای `src/app/globals.css` خوانده می‌شوند (فعلاً موقت، تا استخراج از اسکچ‌ها).
+- **زبان:** English پیش‌فرض (LTR)، فارسی انتخابی (RTL). زبان در cookie `kf_locale` ذخیره می‌شود و `lang`/`dir` روی `<html>` را تعیین می‌کند. همه‌ی متن‌ها فقط در `src/lib/i18n/messages/` هستند؛ از property‌های منطقی (`ms-`/`me-`/`start`/`end`) استفاده کنید تا layout خودکار آینه شود.
+- **Remember me:** اگر خاموش باشد، cookieهای ورود با بستن مرورگر پاک می‌شوند (`lib/supabase/remember.ts`).
+- **رنگ، فونت، radius، سایه** فقط از tokenهای `src/app/globals.css` خوانده می‌شوند. سرمه‌ای و صورتی از لوگو گرفته شده‌اند؛ بقیه تا PDF اسکچ‌ها موقت‌اند. فونت‌ها: Playfair Display (عنوان) + Inter (متن) + Vazirmatn (فارسی).
 - **ناوبری** از یک منبع: `src/components/shell/nav-items.ts`.
 - **دسترسی مهمان:** همه‌ی صفحات به‌جز `/account` بدون ورود قابل‌مشاهده‌اند.

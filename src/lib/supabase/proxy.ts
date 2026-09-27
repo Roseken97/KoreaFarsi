@@ -1,17 +1,20 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "./env";
+import { SESSION_ONLY_COOKIE, applyRememberPolicy } from "./remember";
 
 /** Routes that require a signed-in user. Everything else is open to guests. */
 const PROTECTED_PREFIXES = ["/account"];
 
 /** Auth pages a signed-in user has no reason to see. */
-const GUEST_ONLY_PATHS = ["/auth/login", "/auth/signup"];
+const GUEST_ONLY_PATHS = ["/auth/welcome", "/auth/login", "/auth/signup"];
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   if (!isSupabaseConfigured) return response;
+
+  const sessionOnly = request.cookies.get(SESSION_ONLY_COOKIE)?.value === "1";
 
   const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     cookies: {
@@ -22,7 +25,7 @@ export async function updateSession(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
         response = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) =>
-          response.cookies.set(name, value, options),
+          response.cookies.set(name, value, applyRememberPolicy(options, sessionOnly)),
         );
         Object.entries(headers ?? {}).forEach(([key, value]) => response.headers.set(key, value));
       },

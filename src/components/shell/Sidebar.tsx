@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/brand/Logo";
+import { useI18n } from "@/lib/i18n/client";
+import { LanguageSwitch } from "./LanguageSwitch";
 import { NAV_ITEMS, isActive } from "./nav-items";
 
 // Desktop keeps Home first: the "center slot" is a thumb-reach pattern that
@@ -14,16 +16,18 @@ const SIDEBAR_ITEMS = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { m } = useI18n();
 
   return (
-    <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-l border-line/70 bg-surface/70 px-5 py-8 md:flex lg:w-72">
+    <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-e border-line/70 bg-surface/70 px-5 py-8 md:flex lg:w-72">
       <Link href="/home" className="px-2">
         <Logo />
       </Link>
 
-      <nav aria-label="ناوبری اصلی" className="mt-10">
+      <nav aria-label={m.nav.label} className="mt-10">
         <ul className="flex flex-col gap-1">
-          {SIDEBAR_ITEMS.map(({ href, label, Icon }) => {
+          {SIDEBAR_ITEMS.map(({ href, labelKey, Icon }) => {
+            const label = m.nav[labelKey];
             const active = isActive(pathname, href);
             return (
               <li key={href}>
@@ -43,9 +47,9 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      <p className="mt-auto px-2 text-xs leading-6 text-ink-faint">
-        آموزش زبان کره‌ای برای فارسی‌زبانان
-      </p>
+      <div className="mt-auto px-2">
+        <LanguageSwitch />
+      </div>
     </aside>
   );
 }

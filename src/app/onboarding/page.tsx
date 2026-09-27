@@ -1,24 +1,34 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Button, ButtonLink } from "@/components/ui/Button";
+import { Logo } from "@/components/brand/Logo";
+import { ArrowForwardIcon } from "@/components/icons";
+import { Button } from "@/components/ui/Button";
+import { useI18n } from "@/lib/i18n/client";
 import { markOnboarded } from "@/lib/onboarding";
-import { SLIDES, type Slide } from "./slides";
 
-const TONE: Record<Slide["tone"], string> = {
-  teal: "bg-teal text-white",
-  blush: "bg-blush text-ink",
-  sage: "bg-sage text-ink",
-  cream: "bg-cream-deep text-teal-deep",
-};
+/**
+ * PROVISIONAL slide visuals: a Korean word on a brand-colored panel.
+ * UX_SPECS asks for illustrations (Seoul, learning, culture) — swap each
+ * panel for an <Image> once the 4 artworks exist. Copy lives in the i18n files.
+ */
+const VISUALS = [
+  "bg-ink text-cream",
+  "bg-blush-soft text-ink",
+  "bg-sage-soft text-teal-deep",
+  "bg-cream-deep text-ink",
+];
+
+const pad = (n: number) => String(n).padStart(2, "0");
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const { m } = useI18n();
+  const slides = m.onboarding.slides;
   const slideRefs = useRef<(HTMLElement | null)[]>([]);
   const [index, setIndex] = useState(0);
-  const isLast = index === SLIDES.length - 1;
+  const isLast = index === slides.length - 1;
 
   // Track the visible slide from native swipe/scroll (direction-agnostic, RTL-safe).
   useEffect(() => {
@@ -38,29 +48,31 @@ export default function OnboardingPage() {
     slideRefs.current[i]?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
   }
 
-  function finish(to: string) {
+  // Onboarding → Auth Welcome (Create account / Log in / Continue as guest).
+  function finish() {
     markOnboarded();
-    router.replace(to);
+    router.replace("/auth/welcome");
   }
 
   return (
     <div className="flex min-h-dvh flex-col md:items-center md:justify-center md:p-8">
       <div className="flex w-full flex-1 flex-col md:max-w-md md:flex-none md:rounded-[2rem] md:bg-surface/80 md:py-8 md:shadow-lift">
-        <div className="flex h-11 items-center justify-end px-6 pt-6 md:pt-0">
+        <header className="flex items-center justify-between px-6 pt-6 md:pt-0">
+          <Logo size={36} />
           <button
-            onClick={() => finish("/home")}
+            onClick={finish}
             className={`text-sm font-medium text-ink-soft hover:text-ink ${isLast ? "invisible" : ""}`}
             tabIndex={isLast ? -1 : undefined}
           >
-            رد شدن
+            {m.onboarding.skip}
           </button>
-        </div>
+        </header>
 
         <div
           className="flex flex-1 snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           aria-roledescription="carousel"
         >
-          {SLIDES.map((slide, i) => (
+          {slides.map((slide, i) => (
             <section
               key={slide.glyph}
               ref={(el) => {
@@ -68,56 +80,42 @@ export default function OnboardingPage() {
               }}
               data-index={i}
               aria-roledescription="slide"
-              aria-label={`${i + 1} از ${SLIDES.length}`}
-              className="flex w-full shrink-0 snap-start flex-col items-center justify-center px-8 text-center"
+              aria-label={`${pad(i + 1)} / ${pad(slides.length)}`}
+              className="flex w-full shrink-0 snap-start flex-col justify-center px-6 py-6"
             >
               <div
-                className={`grid size-52 place-items-center rounded-[3rem] shadow-lift md:size-44 ${TONE[slide.tone]}`}
+                className={`relative grid aspect-[4/3] w-full place-items-center overflow-hidden rounded-[2rem] shadow-soft ${VISUALS[i]}`}
               >
-                <span lang="ko" className="text-6xl font-bold md:text-5xl">
+                <span lang="ko" className="text-7xl font-bold md:text-6xl">
                   {slide.glyph}
                 </span>
               </div>
-              <p className="mt-3 text-xs text-ink-faint">{slide.glyphMeaning}</p>
-              <h2 className="mt-8 text-2xl font-bold text-ink">{slide.title}</h2>
-              <p className="mt-3 max-w-xs text-[15px] leading-7 text-ink-soft">{slide.body}</p>
+              <p dir="ltr" className="mt-8 text-start text-xs font-semibold tracking-[0.2em] text-blush rtl:text-end">
+                {pad(i + 1)} / {pad(slides.length)}
+              </p>
+              <h2 className="mt-3 font-display text-3xl leading-tight font-semibold text-ink">{slide.title}</h2>
+              <p className="mt-3 text-[15px] leading-7 text-ink-soft">{slide.body}</p>
             </section>
           ))}
         </div>
 
-        <div className="flex justify-center gap-2 py-6" role="tablist" aria-label="اسلایدها">
-          {SLIDES.map((_, i) => (
-            <button
-              key={i}
-              role="tab"
-              aria-selected={i === index}
-              aria-label={`اسلاید ${i + 1}`}
-              onClick={() => goTo(i)}
-              className={`h-2 rounded-full transition-all ${i === index ? "w-7 bg-teal" : "w-2 bg-line"}`}
-            />
-          ))}
-        </div>
-
-        <div className="flex flex-col gap-3 px-6 pb-8 md:pb-0">
-          {isLast ? (
-            <>
-              <ButtonLink href="/auth/signup" onClick={markOnboarded}>
-                ساخت حساب کاربری
-              </ButtonLink>
-              <ButtonLink href="/auth/login" variant="secondary" onClick={markOnboarded}>
-                ورود
-              </ButtonLink>
-              <Link
-                href="/home"
-                onClick={markOnboarded}
-                className="py-2 text-center text-sm font-medium text-ink-soft hover:text-ink"
-              >
-                فعلاً بدون ثبت‌نام ادامه می‌دهم
-              </Link>
-            </>
-          ) : (
-            <Button onClick={() => goTo(index + 1)}>بعدی</Button>
-          )}
+        <div className="flex items-center justify-between gap-6 px-6 pb-8 md:pb-0">
+          <div className="flex gap-2" role="tablist">
+            {slides.map((s, i) => (
+              <button
+                key={i}
+                role="tab"
+                aria-selected={i === index}
+                aria-label={`${pad(i + 1)} / ${pad(slides.length)}`}
+                onClick={() => goTo(i)}
+                className={`h-2 rounded-full transition-all ${i === index ? "w-7 bg-ink" : "w-2 bg-line"}`}
+              />
+            ))}
+          </div>
+          <Button onClick={isLast ? finish : () => goTo(index + 1)} className="w-auto! px-7">
+            {isLast ? m.onboarding.getStarted : m.onboarding.next}
+            <ArrowForwardIcon width={18} height={18} />
+          </Button>
         </div>
       </div>
     </div>
