@@ -17,7 +17,7 @@
 | بخش | وضعیت |
 |---|---|
 | کتابخانه‌ی دیجیتال (Library) | ✅ ساخته شد — بدون درگاه پرداخت؛ دسترسی دستی از `/admin/orders` |
-| Planner | ⏳ |
+| Planner | ✅ ساخته شد — فرم کوتاه → تسک‌های روزانه‌ی واقعی، وصل به Home و Streak در Account |
 | Courses واقعی | ⏳ — منتظر تصمیم میزبانی ویدیو |
 
 ## Stack
@@ -42,12 +42,21 @@ npm run dev                  # http://localhost:3000
 
 1. در [supabase.com](https://supabase.com) یک پروژه بسازید.
 2. **Project Settings → API**: مقدار `Project URL` و `anon`/`publishable` key را در `.env.local` بگذارید.
-3. **SQL Editor**: فایل‌های `supabase/migrations/` را به ترتیب شماره اجرا کنید (`0001_…`، `0002_…`).
+3. **SQL Editor**: فایل‌های `supabase/migrations/` را به ترتیب شماره اجرا کنید (`0001` تا `0007`).
 4. **Authentication → URL Configuration**:
    - Site URL: `http://localhost:3000` (بعداً دامین اصلی)
    - Redirect URLs: `http://localhost:3000/auth/callback` (و بعداً `https://<domain>/auth/callback`)
 5. **Authentication → Sign In / Providers → Google** (اختیاری): Client ID/Secret از Google Cloud Console.
    تا این مرحله انجام نشود، دکمه‌ی «ادامه با گوگل» پیام «این روش ورود هنوز فعال نشده» می‌دهد.
+
+## Planner (فاز ۲)
+
+- **بدون هوش مصنوعی:** برنامه با یک الگوریتم ساده و قطعی ساخته می‌شود (بدون فراخوانی Claude)، چون هنوز محتوای واقعی درس (دوره) وجود ندارد که برنامه به آن ارجاع بدهد.
+- **جریان:** کاربر ۴ سؤال کوتاه جواب می‌دهد (سطح، روزهای هفته، دقیقه در روز، حوزه‌های تمرکز از میان تماشا/مرور/تمرین/صحبت) → هر روزی که در برنامه‌اش باشد، اولین بار که سایت را باز می‌کند، تسک‌های همان روز ساخته می‌شوند (بدون نیاز به cron job).
+- **اتصال به Home:** بخش «Today's Plan» در صفحه‌ی خانه حالا تسک‌های واقعی همان روز را نشان می‌دهد و می‌شود مستقیم از آنجا تیک زد.
+- **Streak واقعی:** عدد «روز پیاپی» در Account از تاریخچه‌ی واقعی تسک‌های تمام‌شده محاسبه می‌شود، نه عدد ثابت.
+- **محدودیت فعلی:** چون Courses واقعی هنوز نیست، عنوان تسک‌ها کلی است (مثلاً «تمرین»، نه اسم یک درس مشخص). وقتی Courses ساخته شد، می‌شود تسک‌ها را به درس‌های واقعی وصل کرد.
+- جدول‌ها: `study_plans` و `planner_tasks` (migration `0007`)، هر دو کاملاً مالکیت کاربر (RLS معمولی، نه service role).
 
 ## چت‌بات اطلاعاتی (ماژول مستقل)
 
@@ -96,7 +105,8 @@ src/
       home/                   Home (اسکچ ۰۲): hero، ۴ کارت، Continue، Today's Plan
       account/                Account (اسکچ ۰۵) + profile · language · settings · help · achievements
       notifications/          Placeholder
-      planner/ library/ dictionary/            Placeholder (آیتم‌های منو)
+      planner/                برنامه‌ریز واقعی (فاز ۲): فرم تنظیم + تسک‌های روزانه
+      dictionary/             Placeholder (آیتم منو)
       bookstore/              کتاب‌فروشی (اسکچ ۱۳) · [slug] صفحه‌ی محصول · cart سبد + درخواست خرید
       ai-hub/                 چت‌بات اطلاعاتی
       admin/knowledge/        فرم افزودن منبع دانش (فقط ادمین)
@@ -111,6 +121,7 @@ src/
   lib/auth/                   پیام خطا · اعتبارسنجی
   lib/bookstore/              catalog (Supabase یا نمونه) · cart (localStorage) · actions (درخواست خرید)
   lib/library/                کتابخانه‌ی دیجیتال: queries · actions (لینک دانلود امن) · admin-actions (اعطای دسترسی)
+  lib/planner/                برنامه‌ریز: queries (تولید/خواندن تسک، محاسبه‌ی streak) · actions (ذخیره‌ی برنامه، تیک زدن تسک)
   lib/supabase/admin.ts       کلاینت service-role مشترک (چت‌بات و کتابخانه از همین استفاده می‌کنند)
   lib/chat-agent/             ماژول مستقل چت‌بات: system-prompt · knowledge-loader · chat-handler · rate-limiter
 src/config/contact.ts        راه‌های ارتباطی (اینستاگرام/تلگرام/ایمیل) — باید پر شود

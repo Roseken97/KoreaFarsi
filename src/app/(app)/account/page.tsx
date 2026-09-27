@@ -21,7 +21,9 @@ import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
 import { Avatar } from "@/components/ui/Avatar";
 import { ListGroup, ListRow } from "@/components/ui/ListRow";
 import { Notice } from "@/components/ui/Notice";
+import { formatNumber } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
+import { computeStreak, getActivePlan } from "@/lib/planner/queries";
 import { getProfile } from "@/lib/profile";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { SignOutRow } from "./SignOutButton";
@@ -31,16 +33,17 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: m.account.metaTitle };
 }
 
-/** Account screen (sketch 05). Learning sections are placeholders in Phase 1. */
+/** Account screen (sketch 05). Level/XP wait on Courses; Streak is real, from Planner (Phase 2). */
 export default async function AccountPage() {
-  const [{ m }, profile] = await Promise.all([getMessages(), getProfile()]);
+  const [{ m, locale }, profile, plan] = await Promise.all([getMessages(), getProfile(), getActivePlan()]);
   if (isSupabaseConfigured && !profile) redirect("/auth/login?next=/account");
 
+  const streak = plan ? await computeStreak(plan.id) : null;
   const t = m.account;
-  const stats: { label: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; tone: string }[] = [
-    { label: t.stats.level, Icon: LevelIcon, tone: "text-teal" },
-    { label: t.stats.xp, Icon: StarIcon, tone: "text-blush" },
-    { label: t.stats.streak, Icon: FlameIcon, tone: "text-danger/80" },
+  const stats: { label: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; tone: string; value: string; soon: boolean }[] = [
+    { label: t.stats.level, Icon: LevelIcon, tone: "text-teal", value: "—", soon: true },
+    { label: t.stats.xp, Icon: StarIcon, tone: "text-blush", value: "—", soon: true },
+    { label: t.stats.streak, Icon: FlameIcon, tone: "text-danger/80", value: streak === null ? "—" : formatNumber(streak, locale), soon: false },
   ];
 
   return (
@@ -83,15 +86,15 @@ export default async function AccountPage() {
           {/* Progress summary — Phase 1 placeholder values */}
           <section>
             <ul className="grid grid-cols-3 gap-3">
-              {stats.map(({ label, Icon, tone }) => (
+              {stats.map(({ label, Icon, tone, value, soon }) => (
                 <li key={label} className="flex flex-col items-center rounded-card bg-surface px-2 py-4 text-center shadow-soft">
                   <Icon width={22} height={22} className={tone} />
-                  <span className="mt-2 font-display text-xl font-semibold text-ink-faint">—</span>
+                  <span className={`mt-2 font-display text-xl font-semibold ${soon ? "text-ink-faint" : "text-ink"}`}>{value}</span>
                   <span className="mt-0.5 text-xs text-ink-soft">{label}</span>
                 </li>
               ))}
             </ul>
-            <p className="mt-2 text-center text-xs text-ink-faint">{t.stats.soon}</p>
+            {stats.some((s) => s.soon) && <p className="mt-2 text-center text-xs text-ink-faint">{t.stats.soon}</p>}
           </section>
 
           {/* Motivational banner */}
@@ -104,8 +107,8 @@ export default async function AccountPage() {
         <div className="flex flex-col gap-4">
           <ListGroup>
             <ListRow href="/courses" Icon={BooksStackIcon} title={t.items.courses.title} body={t.items.courses.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
-            <ListRow href="/library" Icon={LibraryIcon} title={t.items.books.title} body={t.items.books.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
-            <ListRow href="/planner" Icon={PlannerIcon} title={t.items.planner.title} body={t.items.planner.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
+            <ListRow href="/library" Icon={LibraryIcon} title={t.items.books.title} body={t.items.books.body} tone="bg-sage-soft text-teal-deep" />
+            <ListRow href="/planner" Icon={PlannerIcon} title={t.items.planner.title} body={t.items.planner.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/account/achievements" Icon={TrophyIcon} title={t.items.achievements.title} body={t.items.achievements.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
           </ListGroup>
 

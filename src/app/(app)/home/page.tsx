@@ -7,18 +7,17 @@ import {
   BellIcon,
   BooksStackIcon,
   LanternIcon,
-  MicIcon,
-  PencilIcon,
   PlayIcon,
-  ReviewIcon,
   RobotIcon,
   ShoppingBagIcon,
-  WatchIcon,
 } from "@/components/icons";
+import { HomeTodayRing } from "@/components/planner/HomeTodayRing";
 import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
+import { ButtonLink } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
 import { fmt, type Messages } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
+import { getTodayTasks } from "@/lib/planner/queries";
 import { getProfile } from "@/lib/profile";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,16 +35,8 @@ const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGEl
   { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, tone: "bg-cream-deep text-ink" },
 ];
 
-type PlanKey = keyof Messages["home"]["today"]["items"];
-const PLAN: { key: PlanKey; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
-  { key: "watch", Icon: WatchIcon },
-  { key: "review", Icon: ReviewIcon },
-  { key: "practice", Icon: PencilIcon },
-  { key: "speak", Icon: MicIcon },
-];
-
 export default async function HomePage() {
-  const [{ m }, profile] = await Promise.all([getMessages(), getProfile()]);
+  const [{ m }, profile, { plan, tasks }] = await Promise.all([getMessages(), getProfile(), getTodayTasks()]);
   const t = m.home;
   const firstName = profile?.name?.split(/\s+/)[0] ?? null;
 
@@ -126,24 +117,33 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Today's Plan — Phase 1 placeholder (Planner comes later) */}
+        {/* Today's Plan — real tasks once a Planner plan exists (Phase 2) */}
         <section>
           <h2 className="font-display text-xl font-semibold">{t.today.title}</h2>
           <div className="mt-3 rounded-card bg-surface p-4 shadow-soft">
-            <ul className="grid grid-cols-4 gap-2">
-              {PLAN.map(({ key, Icon }) => (
-                <li key={key} className="flex flex-col items-center gap-2">
-                  <span className="relative grid size-14 place-items-center">
-                    <svg viewBox="0 0 36 36" className="absolute inset-0 -rotate-90" aria-hidden="true">
-                      <circle cx="18" cy="18" r="16" fill="none" strokeWidth="3" className="stroke-line" />
-                    </svg>
-                    <Icon width={22} height={22} className="text-ink-soft" />
-                  </span>
-                  <span className="text-xs font-medium text-ink-soft">{t.today.items[key]}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 border-t border-line pt-3 text-center text-xs text-ink-faint">{t.today.soon}</p>
+            {!plan ? (
+              <div className="flex flex-col items-center py-2 text-center">
+                <p className="text-sm text-ink-soft">{t.today.soon}</p>
+                <ButtonLink href="/planner" variant="secondary" className="mt-3 w-auto! px-6">
+                  {m.planner.setupCta}
+                </ButtonLink>
+              </div>
+            ) : tasks.length === 0 ? (
+              <p className="py-2 text-center text-sm text-ink-soft">{m.planner.today.empty}</p>
+            ) : (
+              <>
+                <ul className="grid grid-cols-4 gap-2">
+                  {tasks.map((task) => (
+                    <HomeTodayRing key={task.id} task={task} />
+                  ))}
+                </ul>
+                {tasks.every((task) => task.is_done) && (
+                  <p className="mt-4 border-t border-line pt-3 text-center text-xs font-medium text-success">
+                    {m.planner.today.allDone}
+                  </p>
+                )}
+              </>
+            )}
           </div>
         </section>
       </div>

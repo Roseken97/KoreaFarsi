@@ -4,7 +4,7 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "./env";
 import { SESSION_ONLY_COOKIE, applyRememberPolicy } from "./remember";
 
 /** Routes that require a signed-in user. Everything else is open to guests. */
-const PROTECTED_PREFIXES = ["/account", "/admin", "/library"];
+const PROTECTED_PREFIXES = ["/account", "/admin", "/library", "/planner"];
 
 /** Auth pages a signed-in user has no reason to see. */
 const GUEST_ONLY_PATHS = ["/auth/welcome", "/auth/login", "/auth/signup"];
