@@ -10,7 +10,7 @@
 | 2 | Home + Account | ✅ ساخته شده — منتظر تأیید رز |
 | 3 | Bookstore | ✅ ساخته شده با محصولات نمونه — منتظر تأیید رز و اطلاعات واقعی محصولات |
 | 4 | چت‌بات اطلاعاتی | ✅ ساخته شده، با سرور mock تست شد — منتظر کلید Claude API و منابع دانش |
-| 5 | PWA + Deploy | 🟡 PWA کامل و قابل نصب؛ انتشار روی Netlify و دامین نیازمند حساب‌های رز ([`DEPLOY.md`](./DEPLOY.md)) |
+| 5 | PWA + Deploy | 🟡 PWA کامل و قابل نصب؛ انتشار روی Vercel و دامین نیازمند حساب‌های رز ([`DEPLOY.md`](./DEPLOY.md)) |
 
 ## Stack
 
@@ -18,7 +18,7 @@ Next.js 16 (App Router, `src/proxy.ts` به‌جای middleware) · Tailwind CSS
 
 ## انتشار
 
-راهنمای قدم‌به‌قدم (GitHub، Supabase، Claude API، Netlify، دامین، تست گوشی): [`DEPLOY.md`](./DEPLOY.md)
+راهنمای قدم‌به‌قدم (GitHub، Supabase، Claude API، Vercel، دامین، تست گوشی): [`DEPLOY.md`](./DEPLOY.md)
 
 ## اجرای محلی
 
