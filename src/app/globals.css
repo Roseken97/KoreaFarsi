@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * KoreaFarsi design tokens — PROVISIONAL.
+ * Derived from PROJECT_CONTEXT.md §18 (warm cream, sage/teal, blush, navy text).
+ * Replace values here once exact colors are extracted from the UX sketches;
+ * every component reads from these tokens, so no component code needs to change.
+ */
+@theme {
+  --color-cream: #faf6ef;
+  --color-cream-deep: #f2eadc;
+  --color-surface: #ffffff;
+  --color-ink: #1f2a44;
+  --color-ink-soft: #5b6478;
+  --color-ink-faint: #9aa1b0;
+  --color-line: #e9e1d3;
+  --color-sage: #9db5a5;
+  --color-sage-soft: #e3ece5;
+  --color-teal: #4f8a87;
+  --color-teal-deep: #3d716e;
+  --color-blush: #eab8b8;
+  --color-blush-soft: #f8e6e4;
+  --color-danger: #c0564b;
+  --color-danger-soft: #fbeae7;
+  --color-success: #4f8a6a;
+  --color-success-soft: #e6f1ea;
+
+  --font-sans: var(--font-vazirmatn), system-ui, sans-serif;
+
+  --radius-card: 1.5rem;
+  --radius-field: 1rem;
+
+  --shadow-soft: 0 1px 2px rgb(31 42 68 / 0.04), 0 8px 24px -12px rgb(31 42 68 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(31 42 68 / 0.05), 0 16px 40px -16px rgb(31 42 68 / 0.2);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* iOS home-indicator safe area for the bottom nav */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+}
+
+@keyframes kf-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: kf-fade-up 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up {
+    animation: none;
+  }
 }
