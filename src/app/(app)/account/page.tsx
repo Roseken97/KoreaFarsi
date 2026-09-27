@@ -1,63 +1,122 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
+import type { ComponentType, SVGProps } from "react";
+import {
+  BellIcon,
+  BooksStackIcon,
+  FlameIcon,
+  GlobeIcon,
+  HelpIcon,
+  LevelIcon,
+  LibraryIcon,
+  PencilIcon,
+  PlannerIcon,
+  SettingsIcon,
+  SparkleIcon,
+  StarIcon,
+  TrophyIcon,
+} from "@/components/icons";
+import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
+import { Avatar } from "@/components/ui/Avatar";
+import { ListGroup, ListRow } from "@/components/ui/ListRow";
 import { Notice } from "@/components/ui/Notice";
 import { getMessages } from "@/lib/i18n/server";
+import { getProfile } from "@/lib/profile";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
-import { getCurrentUser } from "@/lib/supabase/server";
-import { SignOutButton } from "./SignOutButton";
+import { SignOutRow } from "./SignOutButton";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m } = await getMessages();
   return { title: m.account.metaTitle };
 }
 
-// Milestone 1 stub: sign-in state, language, sign-out.
-// The full Account screen (sketch 05) lands in Milestone 2.
+/** Account screen (sketch 05). Learning sections are placeholders in Phase 1. */
 export default async function AccountPage() {
-  const [{ m }, user] = await Promise.all([getMessages(), getCurrentUser()]);
-  if (isSupabaseConfigured && !user) redirect("/auth/login?next=/account");
+  const [{ m }, profile] = await Promise.all([getMessages(), getProfile()]);
+  if (isSupabaseConfigured && !profile) redirect("/auth/login?next=/account");
 
-  const name = (user?.user_metadata?.name as string | undefined) ?? "—";
+  const t = m.account;
+  const stats: { label: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; tone: string }[] = [
+    { label: t.stats.level, Icon: LevelIcon, tone: "text-teal" },
+    { label: t.stats.xp, Icon: StarIcon, tone: "text-blush" },
+    { label: t.stats.streak, Icon: FlameIcon, tone: "text-danger/80" },
+  ];
 
   return (
-    <section className="animate-fade-up max-w-xl">
-      <h1 className="font-display text-3xl font-semibold">{m.account.title}</h1>
+    <div className="animate-fade-up">
+      <PageHeader
+        actions={
+          <>
+            <HeaderIconLink href="/notifications" label={m.home.notifications}>
+              <BellIcon width={20} height={20} />
+            </HeaderIconLink>
+            <HeaderIconLink href="/account/settings" label={t.settings}>
+              <SettingsIcon width={20} height={20} />
+            </HeaderIconLink>
+          </>
+        }
+      />
 
       {!isSupabaseConfigured && (
-        <div className="mt-6">
-          <Notice>{m.account.notConfigured}</Notice>
+        <div className="mb-6">
+          <Notice>{t.notConfigured}</Notice>
         </div>
       )}
 
-      <dl className="mt-6 divide-y divide-line rounded-card bg-surface p-2 shadow-soft">
-        {user && (
-          <>
-            <Row label={m.account.name}>{name}</Row>
-            <Row label={m.account.email}>
-              <span dir="ltr">{user.email}</span>
-            </Row>
-          </>
-        )}
-        <Row label={m.language.label}>
-          <LanguageSwitch />
-        </Row>
-      </dl>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-start">
+        <div className="flex flex-col gap-4">
+          {/* Profile */}
+          <section className="flex items-center gap-4">
+            <Link href="/account/profile" className="relative" aria-label={t.editProfile}>
+              <Avatar name={profile?.name} email={profile?.user.email} size={72} className="shadow-soft" />
+              <span className="absolute -end-0.5 -bottom-0.5 grid size-7 place-items-center rounded-full bg-ink text-cream ring-2 ring-cream">
+                <PencilIcon width={14} height={14} />
+              </span>
+            </Link>
+            <div className="min-w-0">
+              <h1 className="truncate font-display text-2xl font-semibold">{profile?.name || t.title}</h1>
+              <p className="mt-0.5 text-sm text-ink-soft">{t.motto}</p>
+            </div>
+          </section>
 
-      {user && (
-        <div className="mt-6 max-w-xs">
-          <SignOutButton label={m.account.signOut} />
+          {/* Progress summary — Phase 1 placeholder values */}
+          <section>
+            <ul className="grid grid-cols-3 gap-3">
+              {stats.map(({ label, Icon, tone }) => (
+                <li key={label} className="flex flex-col items-center rounded-card bg-surface px-2 py-4 text-center shadow-soft">
+                  <Icon width={22} height={22} className={tone} />
+                  <span className="mt-2 font-display text-xl font-semibold text-ink-faint">—</span>
+                  <span className="mt-0.5 text-xs text-ink-soft">{label}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2 text-center text-xs text-ink-faint">{t.stats.soon}</p>
+          </section>
+
+          {/* Motivational banner */}
+          <section className="flex items-center gap-3 rounded-card bg-gradient-to-br from-blush-soft to-cream-deep p-4">
+            <SparkleIcon width={22} height={22} className="shrink-0 text-blush" />
+            <p className="text-sm font-medium text-ink">{t.banner}</p>
+          </section>
         </div>
-      )}
-    </section>
-  );
-}
 
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="flex items-center justify-between gap-4 px-4 py-4">
-      <dt className="text-sm text-ink-soft">{label}</dt>
-      <dd className="font-medium">{children}</dd>
+        <div className="flex flex-col gap-4">
+          <ListGroup>
+            <ListRow href="/courses" Icon={BooksStackIcon} title={t.items.courses.title} body={t.items.courses.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
+            <ListRow href="/library" Icon={LibraryIcon} title={t.items.books.title} body={t.items.books.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
+            <ListRow href="/planner" Icon={PlannerIcon} title={t.items.planner.title} body={t.items.planner.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
+            <ListRow href="/account/achievements" Icon={TrophyIcon} title={t.items.achievements.title} body={t.items.achievements.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
+          </ListGroup>
+
+          <ListGroup>
+            <ListRow href="/account/language" Icon={GlobeIcon} title={t.items.language.title} body={t.items.language.body} />
+            <ListRow href="/account/settings" Icon={SettingsIcon} title={t.items.settings.title} body={t.items.settings.body} />
+            <ListRow href="/account/help" Icon={HelpIcon} title={t.items.help.title} body={t.items.help.body} />
+            {profile && <SignOutRow label={t.signOut} />}
+          </ListGroup>
+        </div>
+      </div>
     </div>
   );
 }
