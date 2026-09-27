@@ -341,3 +341,12 @@ export const HangulIcon = (p: IconProps) => (
     </text>
   </Base>
 );
+
+/* ── Phase 2: Library ─────────────────────────────────────────── */
+
+export const DownloadIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 3.5v11M8 11l4 4 4-4" />
+    <path d="M5 17.5v2a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5v-2" />
+  </Base>
+);

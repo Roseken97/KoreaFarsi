@@ -8,6 +8,7 @@ import { getMessages } from "@/lib/i18n/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { getCurrentUser } from "@/lib/supabase/server";
 import { KnowledgeAdmin } from "./KnowledgeAdmin";
+import { AdminNav } from "@/components/admin/AdminNav";
 
 export const metadata: Metadata = { title: "Knowledge base", robots: { index: false } };
 
@@ -42,7 +43,7 @@ export default async function KnowledgePage() {
   const words = active.reduce((n, s) => n + countWords(s.content), 0);
 
   return (
-    <Shell title={t.title} subtitle={t.subtitle}>
+    <Shell title={t.title} subtitle={t.subtitle} nav={<AdminNav active="knowledge" />}>
       <p className="mb-4 text-sm font-medium text-ink-soft">
         {fmt(t.stats, { n: formatNumber(active.length, locale), w: formatNumber(words, locale) })}
       </p>
@@ -56,9 +57,10 @@ export default async function KnowledgePage() {
   );
 }
 
-function Shell({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
+function Shell({ title, subtitle, nav, children }: { title: string; subtitle?: string; nav?: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="animate-fade-up max-w-3xl">
+      {nav}
       <h1 className="font-display text-3xl font-semibold">{title}</h1>
       {subtitle && <p className="mt-1 mb-6 text-sm text-ink-soft">{subtitle}</p>}
       {!subtitle && <div className="mb-6" />}

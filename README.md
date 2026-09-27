@@ -10,7 +10,15 @@
 | 2 | Home + Account | ✅ ساخته شده — منتظر تأیید رز |
 | 3 | Bookstore | ✅ ساخته شده با محصولات نمونه — منتظر تأیید رز و اطلاعات واقعی محصولات |
 | 4 | چت‌بات اطلاعاتی | ✅ ساخته شده، با سرور mock تست شد — منتظر کلید Claude API و منابع دانش |
-| 5 | PWA + Deploy | 🟡 PWA کامل و قابل نصب؛ انتشار روی Vercel و دامین نیازمند حساب‌های رز ([`DEPLOY.md`](./DEPLOY.md)) |
+| 5 | PWA + Deploy | ✅ روی Vercel منتشر شد (نسخه‌ی آزمایشی رز آن را تأیید کرد) |
+
+## فاز ۲ (شروع شده)
+
+| بخش | وضعیت |
+|---|---|
+| کتابخانه‌ی دیجیتال (Library) | ✅ ساخته شد — بدون درگاه پرداخت؛ دسترسی دستی از `/admin/orders` |
+| Planner | ⏳ |
+| Courses واقعی | ⏳ — منتظر تصمیم میزبانی ویدیو |
 
 ## Stack
 
@@ -57,6 +65,14 @@ npm run dev                  # http://localhost:3000
 - `public/sw.js`: فقط صفحه‌ی آفلاین را cache می‌کند؛ صفحه‌ها و API هرگز cache نمی‌شوند (قیمت/سبد/چت همیشه تازه). برای به‌روزرسانی worker مقدار `VERSION` را عوض کنید.
 - تست شده: manifest، ثبت service worker، صفحه‌ی آفلاین، و «قابل نصب» در Chrome.
 
+## کتابخانه‌ی دیجیتال (فاز ۲)
+
+- **چرا دستی است:** درگاه پرداخت (زرین‌پال) هنوز نیست (طبق برنامه‌ی برنامه‌ی brief). به‌جایش، شما درخواست خرید را در `/admin/orders` می‌بینید، پرداخت را بیرون از سایت (مثلاً کارت‌به‌کارت) تأیید می‌کنید، و دکمه‌ی «اعطای دسترسی» را می‌زنید. از آن لحظه کتاب در کتابخانه‌ی همان کاربر ظاهر می‌شود.
+- **راه‌اندازی Storage (یک‌بار):** Supabase → **Storage** → یک bucket **خصوصی** به نام دقیقاً `library` بساز (Public را روشن نکن — فایل‌ها باید فقط با لینک موقت در دسترس باشند).
+- **آپلود فایل کتاب:** فایل PDF را در همان bucket آپلود کن، مسیرش (مثلاً `hangul-alphabet-book.pdf`) را در Supabase → Table Editor → `products` → ستون `digital_file_path` همان محصول بگذار.
+- **محدودیت فعلی:** اگر خریدار مهمان بوده (بدون ثبت‌نام)، اعطای خودکار دسترسی ممکن نیست — باید از او بخواهی ثبت‌نام کند و دوباره درخواست بدهد.
+- جدول `user_library` (migration `0006`) این اعطاها را نگه می‌دارد.
+
 ## کتاب‌فروشی: مدیریت محصولات (Phase 1، بدون پنل ادمین)
 
 - **بدون Supabase:** کتاب‌فروشی با ۸ محصول نمونه (`src/lib/bookstore/sample-products.json`) نمایش داده می‌شود.
@@ -84,6 +100,8 @@ src/
       bookstore/              کتاب‌فروشی (اسکچ ۱۳) · [slug] صفحه‌ی محصول · cart سبد + درخواست خرید
       ai-hub/                 چت‌بات اطلاعاتی
       admin/knowledge/        فرم افزودن منبع دانش (فقط ادمین)
+      admin/orders/           تأیید درخواست خرید + اعطای دسترسی کتابخانه (فقط ادمین)
+      library/                کتابخانه‌ی دیجیتال کاربر (فاز ۲)
       courses/ korea-life/    Placeholder (مقصد کارت‌های Home)
     api/chat/               لایه‌ی نازک API چت‌بات
     manifest.ts · offline/  PWA
@@ -92,10 +110,12 @@ src/
   lib/supabase/               client · server · proxy · env · remember (Remember me)
   lib/auth/                   پیام خطا · اعتبارسنجی
   lib/bookstore/              catalog (Supabase یا نمونه) · cart (localStorage) · actions (درخواست خرید)
+  lib/library/                کتابخانه‌ی دیجیتال: queries · actions (لینک دانلود امن) · admin-actions (اعطای دسترسی)
+  lib/supabase/admin.ts       کلاینت service-role مشترک (چت‌بات و کتابخانه از همین استفاده می‌کنند)
   lib/chat-agent/             ماژول مستقل چت‌بات: system-prompt · knowledge-loader · chat-handler · rate-limiter
 src/config/contact.ts        راه‌های ارتباطی (اینستاگرام/تلگرام/ایمیل) — باید پر شود
 design/brand/                 فایل اصلی لوگو (public/brand/logo-512.png نسخه‌ی وب است)
-supabase/migrations/          SQL (به ترتیب شماره اجرا شود)
+supabase/migrations/          SQL (به ترتیب شماره اجرا شود، تا 0006)
 supabase/seed/                داده‌ی نمونه (تولیدشده با scripts/)
 ```
 

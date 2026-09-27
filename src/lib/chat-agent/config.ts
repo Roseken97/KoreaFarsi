@@ -11,8 +11,6 @@ export const chatConfig = {
   model: process.env.CHAT_MODEL || "claude-sonnet-5",
   maxOutputTokens: 4096,
   dailyLimit: Math.max(1, Number(process.env.CHAT_DAILY_LIMIT) || 10),
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-  serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? "",
   ipSalt: process.env.CHAT_IP_SALT || "koreafarsi-default-salt",
   // Conversation context sent back to the model (older turns are dropped).
   maxHistoryMessages: 10,
@@ -23,4 +21,5 @@ export const chatConfig = {
 } as const;
 
 export const isChatConfigured = () => Boolean(chatConfig.anthropicApiKey);
-export const hasChatStore = () => Boolean(chatConfig.supabaseUrl && chatConfig.serviceRoleKey);
+// Re-exported for existing callers; the real check now lives with the shared admin client.
+export { hasServiceRole as hasChatStore } from "@/lib/supabase/admin";
