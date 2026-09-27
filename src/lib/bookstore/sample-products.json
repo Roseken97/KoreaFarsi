@@ -1,0 +1,208 @@
+[
+  {
+    "slug": "hangul-alphabet-book",
+    "title": "کتاب الفبای کره‌ای (هانگول)",
+    "title_en": "Korean Alphabet Book (Hangul)",
+    "description": "از تاریخچه‌ی هانگول و شاه سجونگ تا حروف صدادار، بی‌صدا و ساخت هجا؛ با توضیح فارسی و تمرین نوشتاری.",
+    "description_en": "From the story of Hangul and King Sejong to vowels, consonants and syllable blocks — explained in Persian, with writing practice.",
+    "category": "book",
+    "collection": "alphabet",
+    "level": "starter",
+    "price": 180000,
+    "prices": {
+      "pdf": 180000,
+      "physical": 390000
+    },
+    "compare_at_prices": {},
+    "format": [
+      "pdf",
+      "physical"
+    ],
+    "bundle_items": [],
+    "is_available": true,
+    "is_coming_soon": false,
+    "is_featured": true,
+    "sort_order": 10
+  },
+  {
+    "slug": "hangul-workbook",
+    "title": "کتاب کار الفبای کره‌ای",
+    "title_en": "Hangul Workbook",
+    "description": "تمرین‌های مرحله‌به‌مرحله برای خواندن و نوشتن هانگول، هماهنگ با کتاب الفبا.",
+    "description_en": "Step-by-step reading and writing drills, aligned with the Alphabet Book.",
+    "category": "book",
+    "collection": "workbook",
+    "level": "starter",
+    "price": 120000,
+    "prices": {
+      "pdf": 120000
+    },
+    "compare_at_prices": {},
+    "format": [
+      "pdf"
+    ],
+    "bundle_items": [],
+    "is_available": true,
+    "is_coming_soon": false,
+    "is_featured": true,
+    "sort_order": 20
+  },
+  {
+    "slug": "korean-1-1",
+    "title": "کره‌ای کره‌فارسی ۱-۱",
+    "title_en": "KoreaFarsi Korean 1-1",
+    "description": "کتاب چهارمهارتی سطح ۱-۱: واژگان، دستور، شنیدن، صحبت، خواندن و نوشتن، با چرخه‌ی تکرار واژگان.",
+    "description_en": "Four-skills book, level 1-1: vocabulary, grammar, listening, speaking, reading and writing, built on vocabulary recycling.",
+    "category": "book",
+    "collection": "four_skills",
+    "level": "1-1",
+    "price": 250000,
+    "prices": {
+      "pdf": 250000,
+      "physical": 520000
+    },
+    "compare_at_prices": {},
+    "format": [
+      "pdf",
+      "physical"
+    ],
+    "bundle_items": [],
+    "is_available": true,
+    "is_coming_soon": false,
+    "is_featured": true,
+    "sort_order": 30
+  },
+  {
+    "slug": "korean-1-2",
+    "title": "کره‌ای کره‌فارسی ۱-۲",
+    "title_en": "KoreaFarsi Korean 1-2",
+    "description": "ادامه‌ی مسیر سطح ۱ با موقعیت‌های روزمره‌ی بیشتر و مرور نظام‌مند واژگان سطح ۱-۱.",
+    "description_en": "Continues level 1 with more everyday situations and a structured review of 1-1 vocabulary.",
+    "category": "book",
+    "collection": "four_skills",
+    "level": "1-2",
+    "price": 250000,
+    "prices": {
+      "pdf": 250000,
+      "physical": 520000
+    },
+    "compare_at_prices": {},
+    "format": [
+      "pdf",
+      "physical"
+    ],
+    "bundle_items": [],
+    "is_available": false,
+    "is_coming_soon": true,
+    "is_featured": true,
+    "sort_order": 40
+  },
+  {
+    "slug": "koreakey-pro-planner",
+    "title": "پلنر واژگان KoreaKey Pro",
+    "title_en": "KoreaKey Pro Vocabulary Planner",
+    "description": "پلنر یادگیری واژگان در شش مرحله: واژه، هم‌آیی، جمله، نوشتن، مأموریت صحبت و مرور.",
+    "description_en": "A six-step vocabulary planner: words, collocations, sentences, writing, speaking missions and review.",
+    "category": "planner",
+    "collection": "planner",
+    "level": "all",
+    "price": 150000,
+    "prices": {
+      "pdf": 150000,
+      "physical": 340000
+    },
+    "compare_at_prices": {},
+    "format": [
+      "pdf",
+      "physical"
+    ],
+    "bundle_items": [],
+    "is_available": true,
+    "is_coming_soon": false,
+    "is_featured": false,
+    "sort_order": 50
+  },
+  {
+    "slug": "complete-set-level-1",
+    "title": "مجموعه‌ی کامل سطح ۱ (۱-۱ و ۱-۲)",
+    "title_en": "Complete Set — Levels 1-1 + 1-2",
+    "description": "هر دو کتاب سطح ۱ به‌همراه پلنر KoreaKey Pro، با ۲۰٪ تخفیف.",
+    "description_en": "Both level 1 books plus the KoreaKey Pro planner, 20% off.",
+    "category": "bundle",
+    "collection": "four_skills",
+    "level": "1-1",
+    "price": 520000,
+    "prices": {
+      "pdf": 520000,
+      "physical": 1104000
+    },
+    "compare_at_prices": {
+      "pdf": 650000,
+      "physical": 1380000
+    },
+    "format": [
+      "pdf",
+      "physical"
+    ],
+    "bundle_items": [
+      "korean-1-1",
+      "korean-1-2",
+      "koreakey-pro-planner"
+    ],
+    "is_available": false,
+    "is_coming_soon": true,
+    "is_featured": false,
+    "sort_order": 60
+  },
+  {
+    "slug": "hangul-starter-pack",
+    "title": "بسته‌ی شروع هانگول",
+    "title_en": "Hangul Starter Pack",
+    "description": "کتاب الفبا و کتاب کار با هم، برای شروع کامل از صفر.",
+    "description_en": "The Alphabet Book and Workbook together — a complete start from zero.",
+    "category": "bundle",
+    "collection": "alphabet",
+    "level": "starter",
+    "price": 250000,
+    "prices": {
+      "pdf": 250000
+    },
+    "compare_at_prices": {
+      "pdf": 300000
+    },
+    "format": [
+      "pdf"
+    ],
+    "bundle_items": [
+      "hangul-alphabet-book",
+      "hangul-workbook"
+    ],
+    "is_available": true,
+    "is_coming_soon": false,
+    "is_featured": false,
+    "sort_order": 70
+  },
+  {
+    "slug": "koreafarsi-tote",
+    "title": "کیف پارچه‌ای کره‌فارسی",
+    "title_en": "KoreaFarsi Tote Bag",
+    "description": "کیف پارچه‌ای با طرح لوگوی کره‌فارسی.",
+    "description_en": "Canvas tote with the KoreaFarsi logo.",
+    "category": "merch",
+    "collection": "merch",
+    "level": null,
+    "price": 280000,
+    "prices": {
+      "physical": 280000
+    },
+    "compare_at_prices": {},
+    "format": [
+      "physical"
+    ],
+    "bundle_items": [],
+    "is_available": false,
+    "is_coming_soon": true,
+    "is_featured": false,
+    "sort_order": 80
+  }
+]

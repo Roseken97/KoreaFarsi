@@ -279,3 +279,65 @@ export const SendIcon = ({ className = "", ...p }: IconProps) => (
     <path d="m20.5 3.5-10.2 10.2" />
   </Base>
 );
+
+/* ── Milestone 3: Bookstore ─────────────────────────────────── */
+
+export const SearchIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="11" cy="11" r="6.5" />
+    <path d="m16 16 4.5 4.5" />
+  </Base>
+);
+
+export const CloseIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6 6l12 12M18 6 6 18" />
+  </Base>
+);
+
+export const PlusIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 5.5v13M5.5 12h13" />
+  </Base>
+);
+
+export const MinusIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M5.5 12h13" />
+  </Base>
+);
+
+export const TrashIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4.5 7h15M9.5 7V5h5v2M6.5 7l1 12.5h9l1-12.5M10.5 11v5M13.5 11v5" />
+  </Base>
+);
+
+export const CheckIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m5.5 12.5 4 4 9-9" />
+  </Base>
+);
+
+export const TagIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 12.2V5a1 1 0 0 1 1-1h7.2l7.3 7.3a1 1 0 0 1 0 1.4l-7.1 7.1a1 1 0 0 1-1.4 0z" />
+    <circle cx="8.5" cy="8.5" r="1.3" />
+  </Base>
+);
+
+export const LayersIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m12 4 8.5 4.5L12 13 3.5 8.5z" />
+    <path d="m3.5 12.5 8.5 4.5 8.5-4.5M3.5 16.5 12 21l8.5-4.5" />
+  </Base>
+);
+
+/** Hangul glyph as an icon (Korean Alphabet collection). */
+export const HangulIcon = (p: IconProps) => (
+  <Base {...p}>
+    <text x="12" y="17" textAnchor="middle" fontSize="14" fontWeight="600" fill="currentColor" stroke="none">
+      가
+    </text>
+  </Base>
+);

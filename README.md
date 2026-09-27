@@ -8,7 +8,7 @@
 |---|---|---|
 | 1 | Setup + Auth + Shell | ✅ ساخته شده، هم‌راستا با UX_SPECS — منتظر PDF اسکچ‌ها و تأیید رز |
 | 2 | Home + Account | ✅ ساخته شده — منتظر تأیید رز |
-| 3 | Bookstore | ⏳ |
+| 3 | Bookstore | ✅ ساخته شده با محصولات نمونه — منتظر تأیید رز و اطلاعات واقعی محصولات |
 | 4 | چت‌بات اطلاعاتی | ⏳ |
 | 5 | PWA + Deploy | ⏳ |
 
@@ -37,6 +37,16 @@ npm run dev                  # http://localhost:3000
 5. **Authentication → Sign In / Providers → Google** (اختیاری): Client ID/Secret از Google Cloud Console.
    تا این مرحله انجام نشود، دکمه‌ی «ادامه با گوگل» پیام «این روش ورود هنوز فعال نشده» می‌دهد.
 
+## کتاب‌فروشی: مدیریت محصولات (Phase 1، بدون پنل ادمین)
+
+- **بدون Supabase:** کتاب‌فروشی با ۸ محصول نمونه (`src/lib/bookstore/sample-products.json`) نمایش داده می‌شود.
+- **با Supabase:** بعد از اجرای migrationها، برای تست `supabase/seed/sample_products.sql` را در SQL Editor اجرا کنید.
+  حذف همه‌ی نمونه‌ها: `delete from public.products where is_sample;`
+- **افزودن محصول واقعی:** Supabase → Table Editor → `products` → Insert row. قیمت‌ها به **تومان** هستند؛ قیمت هر نوع در `prices` (مثلاً `{"pdf": 180000, "physical": 390000}`) و قیمت قبل از تخفیف در `compare_at_prices`.
+- **کاور:** در Storage یک bucket عمومی (مثلاً `covers`) بسازید، تصویر را آپلود و URL عمومی را در `cover_image_url` بگذارید. بدون کاور، اپ یک جلد طراحی‌شده می‌سازد.
+- **درخواست‌های خرید:** Table Editor → `purchase_requests` (ستون `status` برای پیگیری: new / contacted / done / cancelled).
+- بعد از تغییر JSON نمونه: `node scripts/generate-sample-seed.mjs`
+
 ## ساختار
 
 ```
@@ -51,14 +61,17 @@ src/
       account/                Account (اسکچ ۰۵) + profile · language · settings · help · achievements
       notifications/          Placeholder
       planner/ library/ dictionary/            Placeholder (آیتم‌های منو)
-      courses/ bookstore/ ai-hub/ korea-life/  Placeholder (مقصد کارت‌های Home)
+      bookstore/              کتاب‌فروشی (اسکچ ۱۳) · [slug] صفحه‌ی محصول · cart سبد + درخواست خرید
+      courses/ ai-hub/ korea-life/  Placeholder (مقصد کارت‌های Home)
   components/                 ui · shell · auth · brand · icons
   lib/i18n/                   en (پیش‌فرض) · fa · cookie زبان
   lib/supabase/               client · server · proxy · env · remember (Remember me)
   lib/auth/                   پیام خطا · اعتبارسنجی
+  lib/bookstore/              catalog (Supabase یا نمونه) · cart (localStorage) · actions (درخواست خرید)
 src/config/contact.ts        راه‌های ارتباطی (اینستاگرام/تلگرام/ایمیل) — باید پر شود
 design/brand/                 فایل اصلی لوگو (public/brand/logo-512.png نسخه‌ی وب است)
-supabase/migrations/          SQL
+supabase/migrations/          SQL (به ترتیب شماره اجرا شود)
+supabase/seed/                داده‌ی نمونه (تولیدشده با scripts/)
 ```
 
 ## قراردادها
