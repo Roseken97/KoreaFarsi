@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display, Vazirmatn } from "next/font/google";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { I18nProvider } from "@/lib/i18n/client";
 import { dirOf } from "@/lib/i18n/config";
 import { getLocale } from "@/lib/i18n/server";
@@ -14,7 +15,17 @@ const vazirmatn = Vazirmatn({ variable: "--font-vazirmatn", subsets: ["arabic", 
 export const metadata: Metadata = {
   title: { default: "KoreaFarsi", template: "%s | KoreaFarsi" },
   description: "A Bridge to a Brighter You — learn Korean with a path designed for Persian speakers.",
-  icons: { icon: "/brand/logo-512.png", apple: "/brand/logo-512.png" },
+  applicationName: "KoreaFarsi",
+  icons: {
+    icon: [
+      { url: "/icons/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/icons/apple-touch-icon.png",
+  },
+  // iOS: open full-screen from the home screen, no Safari address bar.
+  appleWebApp: { capable: true, title: "KoreaFarsi", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
@@ -34,6 +45,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full">
         <I18nProvider locale={locale}>{children}</I18nProvider>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

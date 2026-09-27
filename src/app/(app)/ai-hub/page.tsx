@@ -1,7 +1,17 @@
-import { ComingSoon, placeholderMetadata } from "@/components/shell/ComingSoon";
+import type { Metadata } from "next";
+import { ChatBox } from "@/components/chat/ChatBox";
+import { getMessages } from "@/lib/i18n/server";
 
-export const generateMetadata = placeholderMetadata("aiHub");
+export async function generateMetadata(): Promise<Metadata> {
+  const { m } = await getMessages();
+  return { title: m.chat.metaTitle };
+}
 
-export default function Page() {
-  return <ComingSoon section="aiHub" />;
+/** AI Hub → informational chatbot (Phase 1). Voice AI Practice is a later phase. */
+export default function AiHubPage() {
+  return (
+    <div className="animate-fade-up mx-auto max-w-3xl">
+      <ChatBox />
+    </div>
+  );
 }
