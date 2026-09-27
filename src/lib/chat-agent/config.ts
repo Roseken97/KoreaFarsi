@@ -5,8 +5,10 @@
  */
 export const chatConfig = {
   anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? "",
-  // Brief names claude-sonnet-4-6; override with CHAT_MODEL without touching code.
-  model: process.env.CHAT_MODEL || "claude-sonnet-4-6",
+  // Brief named claude-sonnet-4-6; switched to claude-sonnet-5 (current
+  // generation, same tier, cheaper per-token — see chat with Rose 2026-09-27).
+  // Override with CHAT_MODEL without touching code.
+  model: process.env.CHAT_MODEL || "claude-sonnet-5",
   maxOutputTokens: 4096,
   dailyLimit: Math.max(1, Number(process.env.CHAT_DAILY_LIMIT) || 10),
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",

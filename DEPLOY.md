@@ -34,7 +34,7 @@
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | anon key |
 | `SUPABASE_SERVICE_ROLE_KEY` | service_role key (محرمانه) |
 | `ANTHROPIC_API_KEY` | کلید Claude API |
-| `CHAT_MODEL` | `claude-sonnet-4-6` (طبق brief؛ برای تغییر مدل فقط همین را عوض کن) |
+| `CHAT_MODEL` | `claude-sonnet-5` (نسخه‌ی جدیدتر و ارزان‌تر مدل brief؛ برای تغییر مدل فقط همین را عوض کن) |
 | `CHAT_DAILY_LIMIT` | `10` |
 | `ADMIN_EMAILS` | ایمیل خودت (برای دسترسی به پایگاه دانش) |
 | `CHAT_IP_SALT` | یک رشته‌ی تصادفی طولانی |
