@@ -31,6 +31,7 @@ export type AnnouncementInput = {
   body: string;
   body_en: string;
   href: string;
+  image_url: string | null;
   is_active: boolean;
   sort_order: number;
 };
@@ -54,6 +55,7 @@ export async function saveAnnouncement(input: AnnouncementInput): Promise<AdminR
     body: input.body.trim() || null,
     body_en: input.body_en.trim() || null,
     href: input.href.trim() || null,
+    image_url: input.image_url,
     is_active: input.is_active,
     sort_order: input.sort_order,
   };

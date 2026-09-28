@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import Image from "next/image";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Notice } from "@/components/ui/Notice";
 import { deleteAnnouncement, saveAnnouncement, type AdminResult, type AnnouncementInput } from "@/lib/announcements/admin-actions";
 import type { Announcement, AnnouncementPlacement } from "@/lib/announcements/types";
+import { createUploadTicket } from "@/lib/products/admin-actions";
+import { createClient } from "@/lib/supabase/client";
 
 const EMPTY: AnnouncementInput = {
   id: null,
@@ -16,6 +19,7 @@ const EMPTY: AnnouncementInput = {
   body: "",
   body_en: "",
   href: "",
+  image_url: null,
   is_active: true,
   sort_order: 0,
 };
@@ -29,6 +33,7 @@ function toInput(a: Announcement): AnnouncementInput {
     body: a.body ?? "",
     body_en: a.body_en ?? "",
     href: a.href ?? "",
+    image_url: a.image_url,
     is_active: a.is_active,
     sort_order: a.sort_order,
   };
@@ -44,11 +49,30 @@ export function AnnouncementsAdmin({ announcements }: { announcements: Announcem
   const [form, setForm] = useState<AnnouncementInput>(EMPTY);
   const [status, setStatus] = useState<{ tone: "error" | "success"; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const errorText = (r: AdminResult) => (r.ok ? "" : r.error === "title" ? "Please enter a title." : r.error === "forbidden" ? "This page is only available to KoreaFarsi admins." : "Couldn't save. Please try again.");
 
   function set<K extends keyof AnnouncementInput>(key: K, value: AnnouncementInput[K]) {
     setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  async function onImage(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setUploading(true);
+    const ticket = await createUploadTicket("cover", `announcements/${form.id ?? Date.now()}`, file.name);
+    if (!ticket.ok) {
+      setUploading(false);
+      return setStatus({ tone: "error", text: "Couldn't start the upload." });
+    }
+    const supabase = createClient();
+    const { error } = await supabase.storage.from(ticket.bucket).uploadToSignedUrl(ticket.path, ticket.token, file);
+    setUploading(false);
+    if (error) return setStatus({ tone: "error", text: `Upload failed: ${error.message}` });
+    const { data } = supabase.storage.from("covers").getPublicUrl(ticket.path);
+    set("image_url", data.publicUrl);
   }
 
   async function onSubmit(e: FormEvent) {
@@ -100,12 +124,31 @@ export function AnnouncementsAdmin({ announcements }: { announcements: Announcem
 
         <Field label="Link (optional — tapping the banner opens this)" value={form.href} onChange={(e) => set("href", e.target.value)} ltr />
 
+        <Labeled label="Banner image (optional — fills the hero card)">
+          {form.image_url ? (
+            <div className="flex items-center gap-3 rounded-field border border-line bg-cream p-2">
+              <div className="relative size-14 shrink-0 overflow-hidden rounded-xl bg-cream-deep">
+                <Image src={form.image_url} alt="" fill sizes="56px" className="object-cover" />
+              </div>
+              <span className="min-w-0 flex-1 truncate text-xs text-ink-soft" dir="ltr">
+                {form.image_url}
+              </span>
+              <button type="button" onClick={() => set("image_url", null)} className="shrink-0 text-xs font-medium text-danger">
+                Remove
+              </button>
+            </div>
+          ) : (
+            <input type="file" accept="image/*" onChange={onImage} disabled={uploading} className="block w-full text-sm file:me-3 file:rounded-full file:border-0 file:bg-cream-deep file:px-4 file:py-2 file:text-ink disabled:opacity-50" />
+          )}
+          {uploading && <span className="text-xs text-ink-faint">Uploading…</span>}
+        </Labeled>
+
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={form.is_active} onChange={(e) => set("is_active", e.target.checked)} className="size-4" />
           Active
         </label>
 
-        <Button type="submit" loading={saving}>
+        <Button type="submit" loading={saving} disabled={uploading}>
           {form.id ? "Save changes" : "Create announcement"}
         </Button>
       </form>

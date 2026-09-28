@@ -9,6 +9,7 @@ export type Announcement = {
   body: string | null;
   body_en: string | null;
   href: string | null;
+  image_url: string | null;
   is_active: boolean;
   sort_order: number;
 };

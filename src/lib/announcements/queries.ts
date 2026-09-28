@@ -3,9 +3,9 @@ import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import type { Announcement, AnnouncementPlacement } from "./types";
 
-/** The one banner to show in a Hero for this placement, if any ("all" rows show everywhere). */
-export async function getActiveAnnouncement(placement: AnnouncementPlacement): Promise<Announcement | null> {
-  if (!isSupabaseConfigured) return null;
+/** Every active banner for this Hero, in display order ("all" rows show everywhere too). Shown back-to-back in a carousel. */
+export async function getActiveAnnouncements(placement: AnnouncementPlacement): Promise<Announcement[]> {
+  if (!isSupabaseConfigured) return [];
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("announcements")
@@ -13,12 +13,10 @@ export async function getActiveAnnouncement(placement: AnnouncementPlacement): P
     .eq("is_active", true)
     .in("placement", placement === "all" ? ["all"] : ["all", placement])
     .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .order("created_at", { ascending: false });
   if (error) {
     console.error("[announcements] active:", error.message);
-    return null;
+    return [];
   }
-  return (data ?? null) as Announcement | null;
+  return (data ?? []) as Announcement[];
 }
