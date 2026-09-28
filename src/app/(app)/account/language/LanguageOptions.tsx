@@ -8,8 +8,8 @@ import { useI18n } from "@/lib/i18n/client";
 import { LOCALES, type Locale } from "@/lib/i18n/config";
 
 const NATIVE: Record<Locale, { name: string; hint: string; dir: "ltr" | "rtl" }> = {
-  en: { name: "English", hint: "Left to right", dir: "ltr" },
-  fa: { name: "فارسی", hint: "راست به چپ", dir: "rtl" },
+  en: { name: "한국어 · English", hint: "Left to right", dir: "ltr" },
+  fa: { name: "한국어 · فارسی", hint: "راست به چپ", dir: "rtl" },
 };
 
 export function LanguageOptions() {
