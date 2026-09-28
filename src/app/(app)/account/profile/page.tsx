@@ -20,7 +20,7 @@ export default async function EditProfilePage() {
     <div className="animate-fade-up max-w-lg">
       <SubPageHeader title={m.account.profile.title} backHref="/account" backLabel={m.account.title} />
       {profile ? (
-        <ProfileForm userId={profile.user.id} initialName={profile.name ?? ""} email={profile.user.email ?? ""} />
+        <ProfileForm userId={profile.user.id} initialName={profile.name ?? ""} email={profile.user.email ?? ""} initialAvatarKey={profile.avatarKey} />
       ) : (
         <Notice>{m.account.notConfigured}</Notice>
       )}

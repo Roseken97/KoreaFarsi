@@ -205,7 +205,12 @@ export const fa: Messages = {
     profile: {
       metaTitle: "ویرایش پروفایل",
       title: "ویرایش پروفایل",
+      chooseAvatar: "انتخاب آواتار",
       emailNote: "ایمیل از این‌جا قابل تغییر نیست.",
+      userId: "شناسه‌ی کاربری",
+      userIdNote: "اگر با پشتیبانی تماس گرفتی، این را در اختیارشان بگذار.",
+      copy: "کپی",
+      copied: "کپی شد",
       save: "ذخیره",
       saved: "پروفایل به‌روز شد.",
     },

@@ -1,8 +1,9 @@
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { isAvatarKey, type AvatarKey } from "@/lib/avatars";
 
-export type Profile = { user: User; name: string | null };
+export type Profile = { user: User; name: string | null; avatarKey: AvatarKey | null };
 
 /**
  * Signed-in user + display name. `profiles.name` is the source of truth;
@@ -15,8 +16,9 @@ export async function getProfile(): Promise<Profile | null> {
   const { data: auth } = await supabase.auth.getUser();
   if (!auth.user) return null;
 
-  const { data: row } = await supabase.from("profiles").select("name").eq("id", auth.user.id).maybeSingle();
+  const { data: row } = await supabase.from("profiles").select("name, avatar_key").eq("id", auth.user.id).maybeSingle();
   const meta = auth.user.user_metadata ?? {};
   const name = (row?.name as string | null) || (meta.name as string | undefined) || (meta.full_name as string | undefined) || null;
-  return { user: auth.user, name };
+  const avatarKey = isAvatarKey(row?.avatar_key) ? row.avatar_key : null;
+  return { user: auth.user, name, avatarKey };
 }

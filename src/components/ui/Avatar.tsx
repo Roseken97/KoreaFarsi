@@ -1,18 +1,36 @@
 import { AccountIcon } from "@/components/icons";
+import { AVATAR_STYLE, type AvatarKey } from "@/lib/avatars";
 
-/** Initials avatar (photo upload comes later with Supabase Storage). */
+/** A chosen preset avatar (see src/lib/avatars.ts), or initials as the default. */
 export function Avatar({
   name,
   email,
+  avatarKey,
   size = 40,
   className = "",
 }: {
   name?: string | null;
   email?: string | null;
+  avatarKey?: AvatarKey | null;
   size?: number;
   className?: string;
 }) {
   const signedIn = Boolean(name || email);
+
+  if (avatarKey) {
+    const style = AVATAR_STYLE[avatarKey];
+    return (
+      <span
+        lang="ko"
+        className={`inline-grid shrink-0 place-items-center rounded-full font-semibold ring-2 ring-surface ${style.bg} ${style.text} ${className}`}
+        style={{ width: size, height: size, fontSize: size * 0.42 }}
+        aria-hidden="true"
+      >
+        {style.glyph}
+      </span>
+    );
+  }
+
   return (
     <span
       className={`inline-grid shrink-0 place-items-center rounded-full bg-blush-soft font-semibold text-ink uppercase ring-2 ring-surface ${className}`}

@@ -55,7 +55,7 @@ export default async function HomePage() {
               <BellIcon width={20} height={20} />
             </HeaderIconLink>
             <Link href={profile ? "/account" : "/auth/welcome"} aria-label={t.profile}>
-              <Avatar name={profile?.name} email={profile?.user.email} size={40} className="shadow-soft" />
+              <Avatar name={profile?.name} email={profile?.user.email} avatarKey={profile?.avatarKey} size={40} className="shadow-soft" />
             </Link>
           </>
         }

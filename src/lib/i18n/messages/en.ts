@@ -208,7 +208,12 @@ export const en = {
     profile: {
       metaTitle: "Edit profile",
       title: "Edit Profile",
+      chooseAvatar: "Choose an avatar",
       emailNote: "Your email can't be changed here.",
+      userId: "User ID",
+      userIdNote: "Share this if you contact support about your account.",
+      copy: "Copy",
+      copied: "Copied",
       save: "Save",
       saved: "Profile updated.",
     },
