@@ -342,6 +342,22 @@ export const HeadphonesIcon = (p: IconProps) => (
   </Base>
 );
 
+/** Bookmark (save this lesson — Lesson Overview header). */
+export const BookmarkIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6.5 4.5h11a1 1 0 0 1 1 1V20l-6.5-3.5L5.5 20V5.5a1 1 0 0 1 1-1z" />
+  </Base>
+);
+
+/** Target/bullseye (learning objectives — Lesson Overview "In this lesson, you will be able to"). */
+export const TargetIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="8" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="12" cy="12" r="0.5" fill="currentColor" />
+  </Base>
+);
+
 /** Hangul glyph as an icon (Korean Alphabet collection). */
 export const HangulIcon = (p: IconProps) => (
   <Base {...p}>

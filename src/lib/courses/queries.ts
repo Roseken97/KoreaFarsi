@@ -120,3 +120,13 @@ export async function getLessonWithCourse(courseSlug: string, lessonId: string) 
   if (!lesson) return null;
   return { outline, lesson };
 }
+
+/** Whether the signed-in user bookmarked this lesson (Lesson Overview header). */
+export async function isLessonBookmarked(lessonId: string): Promise<boolean> {
+  if (!isSupabaseConfigured) return false;
+  const supabase = await createClient();
+  const user = await getCurrentUser();
+  if (!user) return false;
+  const { data } = await supabase.from("lesson_bookmarks").select("id").eq("user_id", user.id).eq("lesson_id", lessonId).maybeSingle();
+  return Boolean(data);
+}

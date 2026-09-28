@@ -498,6 +498,22 @@ export const en = {
         unavailable: "This lesson's video isn't uploaded yet.",
         generic: "Couldn't load the video. Please try again.",
       },
+      overview: {
+        lessonLabel: "Lesson {n}",
+        objectivesTitle: "In this lesson, you will be able to",
+        meta: { time: "Estimated time", level: "Level", activities: "Lesson structure" },
+        activitiesCount: "{n} Activities",
+        journeyTitle: "Lesson Journey",
+        journey: {
+          content: { title: "Teacher Content", subtitle: "Watch and learn with explanation" },
+          vocabulary: { title: "Vocabulary", subtitle: "New words and useful expressions" },
+          practice: { title: "Practice", subtitle: "Interactive exercises" },
+          conversation: { title: "Conversation", subtitle: "Real-life speaking practice" },
+        },
+        materialsTitle: "Useful Materials",
+        materials: { downloadKeep: "Download and keep", listenOffline: "Listen offline" },
+        startLesson: "Start Lesson",
+      },
     },
   },
   library: {

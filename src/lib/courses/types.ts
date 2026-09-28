@@ -1,5 +1,6 @@
 export type VocabularyEntry = { ko: string; fa: string; en?: string };
 export type SlideContent = { title: string; title_en?: string; body: string; body_en?: string; ko?: string; chart?: "consonants" | "vowels" };
+export type LessonMaterial = { title: string; title_en?: string; file_path: string };
 
 /** Preset icon choices for a course's "What You Will Learn" row (mapped to real icons in skillIcons.tsx). */
 export type SkillIconKey = "listening" | "reading" | "writing" | "speaking" | "vocabulary" | "grammar" | "pronunciation" | "culture";
@@ -35,6 +36,7 @@ export type CourseLesson = {
   course_id: string;
   title: string;
   title_en: string | null;
+  title_ko: string | null;
   sort_order: number;
   duration_minutes: number;
   content_type: "video" | "slides";
@@ -44,6 +46,9 @@ export type CourseLesson = {
   script_en: string | null;
   vocabulary: VocabularyEntry[];
   notes: string | null;
+  objectives: string | null;
+  objectives_en: string | null;
+  materials: LessonMaterial[];
 };
 
 export type UnitWithLessons = CourseUnit & { lessons: CourseLesson[] };

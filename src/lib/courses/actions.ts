@@ -61,6 +61,50 @@ export async function getCourseResourceUrl(resourceId: string): Promise<VideoUrl
   return { ok: true, url: signed.signedUrl };
 }
 
+/** Signed download URL for a lesson's Useful Materials file, gated the same way lesson video access is. */
+export async function getLessonMaterialUrl(lessonId: string, filePath: string): Promise<VideoUrlResult> {
+  if (!isSupabaseConfigured) return { ok: false, error: "unauthenticated" };
+  const user = await getCurrentUser();
+  if (!user) return { ok: false, error: "unauthenticated" };
+  if (!hasServiceRole()) return { ok: false, error: "generic" };
+
+  const admin = supabaseAdmin()!;
+  const { data: lesson, error: lessonError } = await admin.from("course_lessons").select("materials, course_id").eq("id", lessonId).single();
+  if (lessonError || !lesson) return { ok: false, error: "unavailable" };
+  const isKnownMaterial = ((lesson.materials ?? []) as { file_path: string }[]).some((m) => m.file_path === filePath);
+  if (!isKnownMaterial) return { ok: false, error: "unavailable" };
+
+  const { data: course } = await admin.from("courses").select("product_id").eq("id", lesson.course_id).single();
+  if (course?.product_id) {
+    const { data: entry } = await admin.from("user_library").select("id").eq("user_id", user.id).eq("product_id", course.product_id).maybeSingle();
+    if (!entry) return { ok: false, error: "forbidden" };
+  }
+
+  const { data: signed, error: signError } = await admin.storage.from("courses").createSignedUrl(filePath, RESOURCE_URL_TTL_SECONDS);
+  if (signError || !signed) {
+    console.error("[courses] failed to sign material URL:", signError?.message);
+    return { ok: false, error: "generic" };
+  }
+  return { ok: true, url: signed.signedUrl };
+}
+
+export type BookmarkResult = { ok: true; bookmarked: boolean } | { ok: false; error: "unauthenticated" | "generic" };
+
+export async function toggleLessonBookmark(lessonId: string, bookmarked: boolean): Promise<BookmarkResult> {
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) return { ok: false, error: "unauthenticated" };
+
+  const { error } = bookmarked
+    ? await supabase.from("lesson_bookmarks").upsert({ user_id: auth.user.id, lesson_id: lessonId }, { onConflict: "user_id,lesson_id" })
+    : await supabase.from("lesson_bookmarks").delete().eq("user_id", auth.user.id).eq("lesson_id", lessonId);
+  if (error) {
+    console.error("[courses] toggle bookmark:", error.message);
+    return { ok: false, error: "generic" };
+  }
+  return { ok: true, bookmarked };
+}
+
 export type ReviewResult = { ok: true } | { ok: false; error: "unauthenticated" | "forbidden" | "generic" };
 
 /** Create/update the signed-in user's own review for a course (unique per user+course). Requires the same access as watching its lessons. */

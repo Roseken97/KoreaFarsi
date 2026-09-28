@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getAdminUser } from "@/lib/admin";
 import { hasServiceRole, supabaseAdmin } from "@/lib/supabase/admin";
-import type { Course, CourseLesson, CourseResource, CourseSkill, CourseUnit, SlideContent, VocabularyEntry } from "./types";
+import type { Course, CourseLesson, CourseResource, CourseSkill, CourseUnit, LessonMaterial, SlideContent, VocabularyEntry } from "./types";
 
 export type AdminResult = { ok: true } | { ok: false; error: "forbidden" | "slug" | "title" | "generic" };
 export type UploadTicketResult = { ok: true; path: string; token: string; bucket: "courses" } | { ok: false; error: "forbidden" | "generic" };
@@ -145,6 +145,7 @@ export type LessonInput = {
   course_id: string;
   title: string;
   title_en: string;
+  title_ko: string;
   sort_order: number;
   duration_minutes: number;
   content_type: "video" | "slides";
@@ -154,6 +155,9 @@ export type LessonInput = {
   script_en: string;
   vocabulary: VocabularyEntry[];
   notes: string;
+  objectives: string;
+  objectives_en: string;
+  materials: LessonMaterial[];
 };
 
 export async function saveLesson(input: LessonInput): Promise<AdminResult> {
@@ -166,6 +170,7 @@ export async function saveLesson(input: LessonInput): Promise<AdminResult> {
     course_id: input.course_id,
     title,
     title_en: input.title_en.trim() || null,
+    title_ko: input.title_ko.trim() || null,
     sort_order: input.sort_order,
     duration_minutes: input.duration_minutes,
     content_type: input.content_type,
@@ -175,6 +180,9 @@ export async function saveLesson(input: LessonInput): Promise<AdminResult> {
     script_en: input.script_en.trim() || null,
     vocabulary: input.vocabulary,
     notes: input.notes.trim() || null,
+    objectives: input.objectives.trim() || null,
+    objectives_en: input.objectives_en.trim() || null,
+    materials: input.materials,
   };
   const { error } = input.id ? await store.from("course_lessons").update(row).eq("id", input.id) : await store.from("course_lessons").insert(row);
   if (error) return { ok: false, error: "generic" };

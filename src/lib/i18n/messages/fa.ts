@@ -495,6 +495,22 @@ export const fa: Messages = {
         unavailable: "ویدیوی این درس هنوز بارگذاری نشده.",
         generic: "بارگذاری ویدیو انجام نشد. دوباره تلاش کن.",
       },
+      overview: {
+        lessonLabel: "درس {n}",
+        objectivesTitle: "در این درس یاد می‌گیری",
+        meta: { time: "زمان تقریبی", level: "سطح", activities: "ساختار درس" },
+        activitiesCount: "{n} بخش",
+        journeyTitle: "مسیر درس",
+        journey: {
+          content: { title: "محتوای آموزشی", subtitle: "تماشا کن و همراه با توضیح یاد بگیر" },
+          vocabulary: { title: "واژگان", subtitle: "کلمات و عبارات جدید و کاربردی" },
+          practice: { title: "تمرین", subtitle: "تمرین‌های تعاملی" },
+          conversation: { title: "مکالمه", subtitle: "تمرین صحبت‌کردن در موقعیت واقعی" },
+        },
+        materialsTitle: "منابع مفید",
+        materials: { downloadKeep: "دانلود و نگه‌داری کن", listenOffline: "آفلاین گوش بده" },
+        startLesson: "شروع درس",
+      },
     },
   },
   library: {

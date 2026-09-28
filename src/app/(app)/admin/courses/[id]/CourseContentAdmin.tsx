@@ -17,7 +17,7 @@ import {
   type LessonInput,
   type ResourceInput,
 } from "@/lib/courses/admin-actions";
-import type { Course, CourseLesson, CourseResource, CourseUnit, SlideContent, VocabularyEntry } from "@/lib/courses/types";
+import type { Course, CourseLesson, CourseResource, CourseUnit, LessonMaterial, SlideContent, VocabularyEntry } from "@/lib/courses/types";
 import { createClient } from "@/lib/supabase/client";
 
 const EMPTY_LESSON = (unitId: string, courseId: string, sortOrder: number): LessonInput => ({
@@ -26,6 +26,7 @@ const EMPTY_LESSON = (unitId: string, courseId: string, sortOrder: number): Less
   course_id: courseId,
   title: "",
   title_en: "",
+  title_ko: "",
   sort_order: sortOrder,
   duration_minutes: 0,
   content_type: "video",
@@ -35,6 +36,9 @@ const EMPTY_LESSON = (unitId: string, courseId: string, sortOrder: number): Less
   script_en: "",
   vocabulary: [],
   notes: "",
+  objectives: "",
+  objectives_en: "",
+  materials: [],
 });
 
 function toLessonInput(l: CourseLesson): LessonInput {
@@ -44,6 +48,7 @@ function toLessonInput(l: CourseLesson): LessonInput {
     course_id: l.course_id,
     title: l.title,
     title_en: l.title_en ?? "",
+    title_ko: l.title_ko ?? "",
     sort_order: l.sort_order,
     duration_minutes: l.duration_minutes,
     content_type: l.content_type,
@@ -53,6 +58,9 @@ function toLessonInput(l: CourseLesson): LessonInput {
     script_en: l.script_en ?? "",
     vocabulary: l.vocabulary,
     notes: l.notes ?? "",
+    objectives: l.objectives ?? "",
+    objectives_en: l.objectives_en ?? "",
+    materials: l.materials,
   };
 }
 
@@ -370,8 +378,18 @@ function LessonForm({
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label="Title (Persian)" value={form.title} onChange={(e) => set("title", e.target.value)} required />
         <Field label="Title (English)" value={form.title_en} onChange={(e) => set("title_en", e.target.value)} ltr />
+        <Field label="Korean phrase (shown big on Lesson Overview, optional)" value={form.title_ko} onChange={(e) => set("title_ko", e.target.value)} ltr />
         <Field label="Duration (minutes)" type="number" value={form.duration_minutes} onChange={(e) => set("duration_minutes", Number(e.target.value))} ltr />
       </div>
+
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="font-medium">Learning objectives (Persian) — one per line, &quot;In this lesson you will be able to…&quot;</span>
+        <textarea rows={3} value={form.objectives} onChange={(e) => set("objectives", e.target.value)} dir="auto" className={textareaClass} />
+      </label>
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="font-medium">Learning objectives (English) — one per line</span>
+        <textarea rows={3} value={form.objectives_en} onChange={(e) => set("objectives_en", e.target.value)} dir="ltr" className={textareaClass} />
+      </label>
 
       <div className="flex flex-col gap-1.5 text-sm">
         <span className="font-medium">Content</span>
@@ -426,6 +444,8 @@ function LessonForm({
         <span className="font-medium">Notes</span>
         <textarea rows={2} value={form.notes} onChange={(e) => set("notes", e.target.value)} dir="auto" className={textareaClass} />
       </label>
+
+      <MaterialsEditor materials={form.materials} courseSlug={courseSlug} onChange={(materials) => set("materials", materials)} onError={onError} />
 
       <div className="flex gap-2">
         <Button type="submit" loading={saving} disabled={uploading} className="w-auto! px-6">
@@ -506,4 +526,67 @@ function SlideEditor({ slides, onChange }: { slides: SlideContent[]; onChange: (
   );
 }
 
+function MaterialsEditor({
+  materials,
+  courseSlug,
+  onChange,
+  onError,
+}: {
+  materials: LessonMaterial[];
+  courseSlug: string;
+  onChange: (materials: LessonMaterial[]) => void;
+  onError: (text: string) => void;
+}) {
+  const [uploading, setUploading] = useState(false);
+
+  function update(i: number, patch: Partial<LessonMaterial>) {
+    onChange(materials.map((m, idx) => (idx === i ? { ...m, ...patch } : m)));
+  }
+  function remove(i: number) {
+    onChange(materials.filter((_, idx) => idx !== i));
+  }
+
+  async function addFile(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setUploading(true);
+    const ticket = await createVideoUploadTicket(courseSlug, file.name);
+    if (!ticket.ok) {
+      setUploading(false);
+      return onError("Couldn't start the file upload.");
+    }
+    const supabase = createClient();
+    const { error } = await supabase.storage.from(ticket.bucket).uploadToSignedUrl(ticket.path, ticket.token, file);
+    setUploading(false);
+    if (error) return onError(`Upload failed: ${error.message}`);
+    onChange([...materials, { title: file.name, file_path: ticket.path }]);
+  }
+
+  return (
+    <div className="flex flex-col gap-3 text-sm">
+      <span className="font-medium">Useful Materials (PDF, audio, …) shown on the Lesson Overview screen</span>
+      {materials.map((mat, i) => (
+        <div key={i} className="flex flex-col gap-2 rounded-field border border-line bg-surface p-3">
+          <div className="flex items-center justify-between gap-2">
+            <span className="min-w-0 flex-1 truncate text-xs text-ink-faint" dir="ltr">
+              {mat.file_path}
+            </span>
+            <button type="button" onClick={() => remove(i)} className="shrink-0 font-medium text-danger">
+              Remove
+            </button>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <input placeholder="Title (Persian)" value={mat.title} onChange={(e) => update(i, { title: e.target.value })} dir="auto" className={inputClass} />
+            <input placeholder="Title (English)" value={mat.title_en ?? ""} onChange={(e) => update(i, { title_en: e.target.value })} dir="ltr" className={inputClass} />
+          </div>
+        </div>
+      ))}
+      <input type="file" onChange={addFile} disabled={uploading} className="block w-full text-sm file:me-3 file:rounded-full file:border-0 file:bg-cream-deep file:px-4 file:py-2 file:text-ink disabled:opacity-50" />
+      {uploading && <span className="text-xs text-ink-faint">Uploading…</span>}
+    </div>
+  );
+}
+
+const inputClass = "h-10 rounded-field border border-line bg-cream px-3 text-sm outline-none focus:border-teal focus:ring-4 focus:ring-teal/15";
 const textareaClass = "rounded-field border border-line bg-surface px-3 py-2 text-sm leading-6 outline-none focus:border-teal focus:ring-4 focus:ring-teal/15";
