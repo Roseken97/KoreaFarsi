@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { CheckCircleIcon } from "@/components/icons";
@@ -50,16 +51,17 @@ export function PlanWizard() {
         <legend className="mb-2 text-sm font-medium text-ink">{t.levelLabel}</legend>
         <div className="flex flex-wrap gap-2">
           {PLAN_LEVELS.map((l) => (
-            <button
+            <motion.button
               key={l}
               type="button"
+              whileTap={{ scale: 0.92 }}
               onClick={() => setLevel(l)}
               className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                 level === l ? "border-ink bg-ink text-cream" : "border-line bg-surface text-ink-soft hover:text-ink"
               }`}
             >
               {m.bookstore.levels[l]}
-            </button>
+            </motion.button>
           ))}
         </div>
       </fieldset>
@@ -68,16 +70,17 @@ export function PlanWizard() {
         <legend className="mb-2 text-sm font-medium text-ink">{t.daysLabel}</legend>
         <div className="flex flex-wrap gap-2">
           {dayOrder(locale).map((d) => (
-            <button
+            <motion.button
               key={d}
               type="button"
+              whileTap={{ scale: 0.92 }}
               onClick={() => toggle(days, setDays, d)}
               className={`grid size-11 place-items-center rounded-full border text-sm font-semibold transition ${
                 days.includes(d) ? "border-teal bg-sage-soft text-teal-deep" : "border-line bg-surface text-ink-faint"
               }`}
             >
               {m.planner.day[d]}
-            </button>
+            </motion.button>
           ))}
         </div>
       </fieldset>
@@ -86,16 +89,17 @@ export function PlanWizard() {
         <legend className="mb-2 text-sm font-medium text-ink">{t.minutesLabel}</legend>
         <div className="flex flex-wrap gap-2">
           {MINUTE_OPTIONS.map((min) => (
-            <button
+            <motion.button
               key={min}
               type="button"
+              whileTap={{ scale: 0.92 }}
               onClick={() => setMinutes(min)}
               className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                 minutes === min ? "border-ink bg-ink text-cream" : "border-line bg-surface text-ink-soft hover:text-ink"
               }`}
             >
               {min}
-            </button>
+            </motion.button>
           ))}
         </div>
       </fieldset>
@@ -107,9 +111,10 @@ export function PlanWizard() {
             const Icon = CATEGORY_ICON[c];
             const active = categories.includes(c);
             return (
-              <button
+              <motion.button
                 key={c}
                 type="button"
+                whileTap={{ scale: 0.92 }}
                 onClick={() => toggle(categories, setCategories, c)}
                 className={`flex flex-col items-center gap-1.5 rounded-field border px-3 py-3 transition ${
                   active ? "border-teal bg-sage-soft text-teal-deep" : "border-line bg-surface text-ink-faint"
@@ -118,7 +123,7 @@ export function PlanWizard() {
                 <Icon width={20} height={20} />
                 <span className="text-xs font-medium">{m.planner.categoryLabel[c]}</span>
                 {active && <CheckCircleIcon width={14} height={14} />}
-              </button>
+              </motion.button>
             );
           })}
         </div>
