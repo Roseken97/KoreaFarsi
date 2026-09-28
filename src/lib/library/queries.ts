@@ -20,6 +20,7 @@ export async function getMyLibrary(): Promise<LibraryEntry[]> {
     console.error("[library] failed to load user_library:", error.message);
     return [];
   }
-  // Supabase types this join as an array; a foreign-key join always returns at most one row.
-  return (data ?? []).map((row) => ({ ...row, product: (row.product as never as LibraryEntry["product"][])[0] }));
+  // user_library.product_id -> products.id is many-to-one, so PostgREST embeds
+  // `product` as a single object (not an array) — no unwrapping needed.
+  return (data ?? []) as unknown as LibraryEntry[];
 }
