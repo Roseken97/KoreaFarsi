@@ -347,6 +347,18 @@ function SlideEditor({ slides, onChange }: { slides: SlideContent[]; onChange: (
             <textarea rows={2} value={s.body_en ?? ""} onChange={(e) => update(i, { body_en: e.target.value })} placeholder="Body (English)" dir="ltr" className={textareaClass} />
           </div>
           <Field label="Korean text on this slide (optional)" value={s.ko ?? ""} onChange={(e) => update(i, { ko: e.target.value })} ltr />
+          <label className="flex flex-col gap-1.5">
+            <span className="text-xs font-medium">Alphabet chart on this slide (optional)</span>
+            <select
+              value={s.chart ?? ""}
+              onChange={(e) => update(i, { chart: (e.target.value || undefined) as SlideContent["chart"] })}
+              className="h-11 rounded-field border border-line bg-surface px-3 text-sm outline-none focus:border-teal focus:ring-4 focus:ring-teal/15"
+            >
+              <option value="">— None —</option>
+              <option value="consonants">Consonants (19)</option>
+              <option value="vowels">Vowels (21)</option>
+            </select>
+          </label>
         </div>
       ))}
       <button type="button" onClick={add} className="self-start text-sm font-medium text-teal-deep">

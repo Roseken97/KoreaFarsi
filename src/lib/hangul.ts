@@ -50,3 +50,17 @@ export function romanize(word: string): string {
     .map(({ char, jamo }) => (jamo ? jamo.map((j) => j.roman).join("") : char))
     .join("");
 }
+
+/** Consonants shown together, e.g. for an alphabet chart (double consonants included). */
+export const CONSONANT_CHART = INITIALS.map((char, i) => ({ char, roman: INITIAL_ROMAN[i] || "ng" }));
+/** Simple + combined vowels shown together, e.g. for an alphabet chart. */
+export const VOWEL_CHART = MEDIALS.map((char, i) => ({ char, roman: MEDIAL_ROMAN[i] }));
+
+/** Romanization for a single, standalone jamo letter (not part of a syllable block) — for alphabet charts. Null if not a recognized letter. */
+export function jamoRoman(char: string): string | null {
+  const asInitial = INITIALS.indexOf(char);
+  if (asInitial >= 0) return INITIAL_ROMAN[asInitial] || "ng";
+  const asMedial = MEDIALS.indexOf(char);
+  if (asMedial >= 0) return MEDIAL_ROMAN[asMedial];
+  return null;
+}

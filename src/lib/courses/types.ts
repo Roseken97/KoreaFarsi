@@ -1,5 +1,5 @@
 export type VocabularyEntry = { ko: string; fa: string; en?: string };
-export type SlideContent = { title: string; title_en?: string; body: string; body_en?: string; ko?: string };
+export type SlideContent = { title: string; title_en?: string; body: string; body_en?: string; ko?: string; chart?: "consonants" | "vowels" };
 
 /** Mirrors public.courses (supabase/migrations/0009_courses.sql). */
 export type Course = {

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { CheckIcon, ChevronIcon } from "@/components/icons";
 import { HangulBreakdown } from "@/components/courses/HangulBreakdown";
+import { HangulChart } from "@/components/courses/HangulChart";
 import { VocabFlashcards } from "@/components/courses/VocabFlashcards";
 import { Button } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
@@ -92,6 +93,7 @@ export function LessonView({
               <p className="mt-3 text-[15px] leading-7 whitespace-pre-line text-ink-soft" dir="auto">
                 {locale === "en" ? slide.body_en || slide.body : slide.body}
               </p>
+              {slide.chart && <HangulChart chart={slide.chart} />}
               {slide.ko && <HangulBreakdown word={slide.ko} className="mt-6" />}
             </div>
             <div className="flex items-center justify-between">
