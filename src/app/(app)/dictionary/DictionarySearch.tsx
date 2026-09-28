@@ -9,7 +9,7 @@ const RECENT_KEY = "kf_dictionary_recent";
 const MAX_RECENT = 8;
 
 function naverUrl(query: string) {
-  return `https://en.dict.naver.com/#/search?query=${encodeURIComponent(query)}`;
+  return `https://ko.dict.naver.com/#/search?query=${encodeURIComponent(query)}`;
 }
 
 function loadRecent(): string[] {

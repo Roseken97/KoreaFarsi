@@ -389,7 +389,7 @@ export const fa: Messages = {
   dictionaryPage: {
     metaTitle: "دیکشنری",
     title: "دیکشنری",
-    subtitle: "یک کلمه‌ی کره‌ای یا انگلیسی رو توی Naver Dictionary جستجو کن.",
+    subtitle: "یک کلمه‌ی کره‌ای رو توی دیکشنری کره‌ای Naver جستجو کن.",
     placeholder: "کلمه رو بنویس…",
     search: "جستجو",
     hint: "توی تب جدید، Naver Dictionary باز می‌شه.",
