@@ -106,7 +106,7 @@ export default async function AccountPage() {
 
         <div className="flex flex-col gap-4">
           <ListGroup>
-            <ListRow href="/courses" Icon={BooksStackIcon} title={t.items.courses.title} body={t.items.courses.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
+            <ListRow href="/courses" Icon={BooksStackIcon} title={t.items.courses.title} body={t.items.courses.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/library" Icon={LibraryIcon} title={t.items.books.title} body={t.items.books.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/planner" Icon={PlannerIcon} title={t.items.planner.title} body={t.items.planner.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/account/achievements" Icon={TrophyIcon} title={t.items.achievements.title} body={t.items.achievements.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />

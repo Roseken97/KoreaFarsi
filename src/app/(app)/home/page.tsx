@@ -15,7 +15,8 @@ import { HomeTodayRing } from "@/components/planner/HomeTodayRing";
 import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
-import { fmt, type Messages } from "@/lib/i18n/config";
+import { getContinueCard } from "@/lib/courses/queries";
+import { fmt, formatNumber, type Locale, type Messages } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
 import { getTodayTasks } from "@/lib/planner/queries";
 import { getProfile } from "@/lib/profile";
@@ -36,7 +37,12 @@ const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGEl
 ];
 
 export default async function HomePage() {
-  const [{ m }, profile, { plan, tasks }] = await Promise.all([getMessages(), getProfile(), getTodayTasks()]);
+  const [{ m, locale }, profile, { plan, tasks }, continueCard] = await Promise.all([
+    getMessages(),
+    getProfile(),
+    getTodayTasks(),
+    getContinueCard(),
+  ]);
   const t = m.home;
   const firstName = profile?.name?.split(/\s+/)[0] ?? null;
 
@@ -99,22 +105,47 @@ export default async function HomePage() {
       </section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        {/* Continue Your Journey — Phase 1 empty state (no courses yet) */}
+        {/* Continue Your Journey — real once a course exists (Phase 2, Part 4) */}
         <section>
           <h2 className="font-display text-xl font-semibold">{t.continue.title}</h2>
-          <div className="mt-3 flex items-center gap-4 rounded-card bg-surface p-4 shadow-soft">
-            <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-sage-soft text-teal-deep">
-              <BooksStackIcon width={26} height={26} />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="font-semibold text-ink">{t.continue.emptyTitle}</p>
-              <p className="mt-0.5 text-[13px] leading-5 text-ink-soft">{t.continue.emptyBody}</p>
-              <div className="mt-2.5 h-1.5 rounded-full bg-line" />
+          {continueCard ? (
+            <Link
+              href={continueCard.nextLessonId ? `/courses/${continueCard.course.slug}/lessons/${continueCard.nextLessonId}` : `/courses/${continueCard.course.slug}`}
+              className="mt-3 flex items-center gap-4 rounded-card bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift"
+            >
+              <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-sage-soft text-teal-deep">
+                <BooksStackIcon width={26} height={26} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-semibold text-ink" dir="auto">
+                  {locale === "en" ? continueCard.course.title_en || continueCard.course.title : continueCard.course.title}
+                </p>
+                <p className="mt-0.5 text-[13px] leading-5 text-ink-soft">
+                  {continueCard.total > 0 ? fmt(m.courses.progress, { done: formatNumber(continueCard.done, locale as Locale), total: formatNumber(continueCard.total, locale as Locale) }) : m.courses.startCta}
+                </p>
+                <div className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-line">
+                  <div className="h-full rounded-full bg-teal" style={{ width: `${continueCard.total ? (continueCard.done / continueCard.total) * 100 : 0}%` }} />
+                </div>
+              </div>
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-teal text-white" aria-hidden="true">
+                <PlayIcon width={18} height={18} />
+              </span>
+            </Link>
+          ) : (
+            <div className="mt-3 flex items-center gap-4 rounded-card bg-surface p-4 shadow-soft">
+              <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-sage-soft text-teal-deep">
+                <BooksStackIcon width={26} height={26} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-ink">{t.continue.emptyTitle}</p>
+                <p className="mt-0.5 text-[13px] leading-5 text-ink-soft">{t.continue.emptyBody}</p>
+                <div className="mt-2.5 h-1.5 rounded-full bg-line" />
+              </div>
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-line text-surface" aria-hidden="true">
+                <PlayIcon width={18} height={18} />
+              </span>
             </div>
-            <span className="grid size-11 shrink-0 place-items-center rounded-full bg-line text-surface" aria-hidden="true">
-              <PlayIcon width={18} height={18} />
-            </span>
-          </div>
+          )}
         </section>
 
         {/* Today's Plan — real tasks once a Planner plan exists (Phase 2) */}

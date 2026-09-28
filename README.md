@@ -18,7 +18,8 @@
 |---|---|
 | کتابخانه‌ی دیجیتال (Library) | ✅ ساخته شد — بدون درگاه پرداخت؛ دسترسی دستی از `/admin/orders` |
 | Planner | ✅ ساخته شد — فرم کوتاه → تسک‌های روزانه‌ی واقعی، وصل به Home و Streak در Account |
-| Courses واقعی | ⏳ — منتظر تصمیم میزبانی ویدیو |
+| پنل ادمین محصولات (`/admin/products`) | ✅ ساخته شد — آپلود کاور/فایل دیجیتال مستقیم از سایت |
+| Courses واقعی | ✅ ساخته شد — Unit/Lesson/ویدیو (Supabase Storage)، دسترسی از طریق محصول (اختیاری)، پیشرفت واقعی؛ فیلتر سطح و قفل ترتیبی درس‌به‌درس ساخته نشده (پایین‌تر توضیح داده شده) |
 
 ## Stack
 
@@ -42,7 +43,7 @@ npm run dev                  # http://localhost:3000
 
 1. در [supabase.com](https://supabase.com) یک پروژه بسازید.
 2. **Project Settings → API**: مقدار `Project URL` و `anon`/`publishable` key را در `.env.local` بگذارید.
-3. **SQL Editor**: فایل‌های `supabase/migrations/` را به ترتیب شماره اجرا کنید (`0001` تا `0008`).
+3. **SQL Editor**: فایل‌های `supabase/migrations/` را به ترتیب شماره اجرا کنید (`0001` تا `0009`).
 4. **Authentication → URL Configuration**:
    - Site URL: `http://localhost:3000` (بعداً دامین اصلی)
    - Redirect URLs: `http://localhost:3000/auth/callback` (و بعداً `https://<domain>/auth/callback`)
@@ -93,7 +94,16 @@ npm run dev                  # http://localhost:3000
 - قیمت‌ها به **تومان** هستند. فیلدهای پیشرفته‌تر (`prices`/`compare_at_prices` per-format، `bundle_items`) فعلاً فقط از Table Editor قابل تنظیم‌اند — فرم ادمین فقط قیمت پایه را می‌گیرد.
 - **درخواست‌های خرید:** `/admin/orders` (ستون `status` برای پیگیری: new / contacted / done / cancelled).
 - بعد از تغییر JSON نمونه: `node scripts/generate-sample-seed.mjs`
-- **ویدیو برای دوره‌ها (Courses):** این آپلود مستقیم به Supabase Storage یک راه‌حل ساده و بدون سرویس جانبی است، اما بدون adaptive bitrate streaming/transcoding — برای فایل‌های حجیم یا کیفیت‌های مختلف مناسب نیست. اگر Courses واقعی با ویدیوهای زیاد و بلند جلو رفت، بازبینی این تصمیم (Mux/Bunny در مقابل Supabase Storage) لازم می‌شود.
+
+## دوره‌ها (Courses) — فاز ۲
+
+واحد/درس/ویدیو واقعی (اسکچ‌های ۰۶، ۰۸، ۰۹، ۱۰). ساختار: هر **Course** چند **Unit** دارد، هر Unit چند **Lesson** (ویدیو + متن درس + واژگان + نکات).
+
+- **مدیریت:** `/admin/courses` برای ساخت/ویرایش دوره؛ روی «Manage content →» بروید تا Unit/Lesson اضافه کنید و ویدیوی هر درس را مستقیم آپلود کنید (همان روش آپلود مستقیم به Storage که در بخش محصولات توضیح داده شد — محدودیت حجمی روی ویدیو نیست).
+- **ذخیره‌ی ویدیو:** طبق تصمیم گرفته‌شده، ویدیوها در Supabase Storage (bucket خصوصی `courses`، ساخته‌شده در migration `0009`) نگه‌داری می‌شوند — نه یک سرویس ویدیوی اختصاصی مثل Mux/Bunny. **محدودیت آگاهانه:** بدون adaptive bitrate streaming و بدون transcoding خودکار؛ اگر تعداد/حجم ویدیوها خیلی زیاد شد یا کیفیت پخش روی اینترنت ضعیف مشکل‌ساز شد، این تصمیم باید دوباره بررسی شود.
+- **دسترسی به دوره:** یک دوره می‌تواند به یک محصول کتاب‌فروشی (دسته‌ی `course`) وصل شود — در این حالت فقط کاربرانی که `/admin/orders` برایشان دسترسی داده شده می‌توانند ویدیوها را ببینند (دقیقاً همان مکانیزم Library). دوره‌ی بدون محصول وصل‌شده، برای هر کاربر واردشده باز است.
+- **پیشرفت:** جدول `lesson_progress` (migration `0009`) با تیک‌زدن «Mark as done» در صفحه‌ی درس پر می‌شود؛ کارت «Continue Your Journey» در Home از همین‌جا خوانده می‌شود.
+- **محدودیت فعلی:** فیلتر سطح (Beginner/Intermediate/Advanced) در لیست دوره‌ها و قفل ترتیبی درس‌به‌درس (طبق اسکچ) ساخته نشده — همه‌ی درس‌های یک دوره‌ی بازشده آزادانه قابل دسترسی‌اند، فقط اولین درسِ ناتمام با رنگ متفاوت مشخص می‌شود.
 
 ## ساختار
 
@@ -126,11 +136,12 @@ src/
   lib/library/                کتابخانه‌ی دیجیتال: queries · actions (لینک دانلود امن) · admin-actions (اعطای دسترسی)
   lib/products/admin-actions.ts  پنل /admin/products: ساخت/ویرایش محصول · آپلود کاور و فایل دیجیتال
   lib/planner/                برنامه‌ریز: queries (تولید/خواندن تسک، محاسبه‌ی streak) · actions (ذخیره‌ی برنامه، تیک زدن تسک)
+  lib/courses/                دوره‌ها: queries (outline/دسترسی/پیشرفت) · actions (لینک ویدیوی امن، تیک‌زدن درس) · admin-actions (مدیریت Course/Unit/Lesson + آپلود ویدیو)
   lib/supabase/admin.ts       کلاینت service-role مشترک (چت‌بات و کتابخانه از همین استفاده می‌کنند)
   lib/chat-agent/             ماژول مستقل چت‌بات: system-prompt · knowledge-loader · chat-handler · rate-limiter
 src/config/contact.ts        راه‌های ارتباطی (اینستاگرام/تلگرام/ایمیل) — باید پر شود
 design/brand/                 فایل اصلی لوگو (public/brand/logo-512.png نسخه‌ی وب است)
-supabase/migrations/          SQL (به ترتیب شماره اجرا شود، تا 0008)
+supabase/migrations/          SQL (به ترتیب شماره اجرا شود، تا 0009)
 supabase/seed/                داده‌ی نمونه (تولیدشده با scripts/)
 ```
 
