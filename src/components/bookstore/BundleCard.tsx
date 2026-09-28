@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MotionSurface } from "@/components/motion/MotionCard";
 import { formatPrice } from "@/lib/bookstore/format";
 import { compareAtFor, discountPercent, isPurchasable, priceFor, titles, type Format, type Product } from "@/lib/bookstore/types";
 import { fmt, formatNumber } from "@/lib/i18n/config";
@@ -21,7 +22,7 @@ export function BundleCard({ product }: { product: Product }) {
   const discount = discountPercent(product, format);
 
   return (
-    <article className="flex gap-4 rounded-card border border-line/60 bg-gradient-to-br from-surface to-blush-soft/50 p-4 shadow-soft">
+    <MotionSurface className="flex gap-4 rounded-[20px] border border-line/60 bg-gradient-to-br from-surface to-blush-soft/50 p-4 shadow-soft">
       <Link href={`/bookstore/${product.slug}`} className="w-24 shrink-0 md:w-28">
         <ProductCover product={product} sizes="112px" />
       </Link>
@@ -50,6 +51,6 @@ export function BundleCard({ product }: { product: Product }) {
           </div>
         </div>
       </div>
-    </article>
+    </MotionSurface>
   );
 }

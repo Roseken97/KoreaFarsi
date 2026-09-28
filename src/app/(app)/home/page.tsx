@@ -11,6 +11,7 @@ import {
   RobotIcon,
   ShoppingBagIcon,
 } from "@/components/icons";
+import { MotionCard } from "@/components/motion/MotionCard";
 import { HomeTodayRing } from "@/components/planner/HomeTodayRing";
 import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
@@ -96,10 +97,10 @@ export default async function HomePage() {
         {CARDS.map(({ key, href, Icon, bg, text }) => {
           const card = t.cards[key];
           return (
-            <Link
+            <MotionCard
               key={key}
               href={href}
-              className="group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[24px] p-4 shadow-soft transition hover:-translate-y-1 hover:shadow-lift"
+              className="group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[24px] p-4 shadow-soft"
             >
               <span className={`absolute inset-0 ${bg}`} aria-hidden="true" />
               <span className="absolute -end-4 -top-4 size-20 rounded-full bg-white/10" aria-hidden="true" />
@@ -113,7 +114,7 @@ export default async function HomePage() {
                 <span className={`block font-display text-base leading-tight font-semibold ${text}`}>{card.title}</span>
                 <span className={`mt-0.5 block text-[11px] leading-4 ${text} opacity-75`}>{card.body}</span>
               </span>
-            </Link>
+            </MotionCard>
           );
         })}
       </section>
@@ -123,9 +124,10 @@ export default async function HomePage() {
         <section>
           <h2 className="font-display text-xl font-semibold">{t.continue.title}</h2>
           {continueCard ? (
-            <Link
+            <MotionCard
               href={continueCard.nextLessonId ? `/courses/${continueCard.course.slug}/lessons/${continueCard.nextLessonId}` : `/courses/${continueCard.course.slug}`}
-              className="mt-3 flex items-center gap-4 rounded-[24px] bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift"
+              className="mt-3 flex items-center gap-4 rounded-[24px] bg-surface p-4 shadow-soft"
+              tilt={false}
             >
               <div className="relative grid size-16 shrink-0 place-items-center">
                 <svg viewBox="0 0 40 40" className="absolute inset-0 -rotate-90">
@@ -158,7 +160,7 @@ export default async function HomePage() {
               <span className="grid size-11 shrink-0 place-items-center rounded-full bg-teal text-white" aria-hidden="true">
                 <PlayIcon width={18} height={18} />
               </span>
-            </Link>
+            </MotionCard>
           ) : (
             <div className="mt-3 flex items-center gap-4 rounded-[24px] bg-surface p-4 shadow-soft">
               <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-sage-soft text-teal-deep">

@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { BooksStackIcon, ChevronIcon } from "@/components/icons";
+import { MotionCard } from "@/components/motion/MotionCard";
 import type { Course } from "@/lib/courses/types";
 import { fmt, formatNumber } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
@@ -36,7 +36,7 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
             const title = locale === "en" ? c.title_en || c.title : c.title;
             return (
               <li key={c.id}>
-                <Link href={`/courses/${c.slug}`} className="flex items-center gap-4 rounded-card bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 hover:shadow-lift">
+                <MotionCard href={`/courses/${c.slug}`} tilt={false} className="flex items-center gap-4 rounded-[20px] bg-surface p-4 shadow-soft">
                   {c.cover_image_url ? (
                     <div className="relative size-16 shrink-0 overflow-hidden rounded-2xl bg-cream-deep">
                       <Image src={c.cover_image_url} alt="" fill sizes="64px" className="object-cover" />
@@ -55,7 +55,7 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
                     </p>
                   </div>
                   <ChevronIcon width={18} height={18} className="shrink-0 text-ink-faint rtl:-scale-x-100" />
-                </Link>
+                </MotionCard>
               </li>
             );
           })}
