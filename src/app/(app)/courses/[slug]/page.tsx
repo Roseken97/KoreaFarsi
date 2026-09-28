@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BooksStackIcon, CheckIcon, ShieldIcon } from "@/components/icons";
+import { MotionCard } from "@/components/motion/MotionCard";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
@@ -116,9 +117,9 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                       return (
                         <li key={lesson.id}>
                           {unlocked ? (
-                            <Link href={`/courses/${course.slug}/lessons/${lesson.id}`} className={`${rowClass} transition hover:bg-cream`}>
+                            <MotionCard href={`/courses/${course.slug}/lessons/${lesson.id}`} tilt={false} className={`${rowClass} hover:bg-cream`}>
                               {content}
-                            </Link>
+                            </MotionCard>
                           ) : (
                             <div className={`${rowClass} cursor-not-allowed opacity-70`} aria-disabled="true">
                               {content}

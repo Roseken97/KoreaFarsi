@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useState, useTransition } from "react";
 import { CheckIcon } from "@/components/icons";
 import { toggleTask } from "@/lib/planner/actions";
@@ -25,11 +26,15 @@ export function TaskItem({ task }: { task: PlannerTask }) {
 
   return (
     <li>
-      <button
+      <motion.button
         onClick={toggle}
         disabled={pending}
         aria-pressed={done}
-        className={`flex w-full items-center gap-3 rounded-field border px-3.5 py-3 text-start transition disabled:opacity-70 ${
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ type: "spring", stiffness: 300, damping: 24 }}
+        className={`flex w-full items-center gap-3 rounded-field border px-3.5 py-3 text-start transition-colors disabled:opacity-70 ${
           done ? "border-success-soft bg-success-soft" : "border-line bg-surface hover:border-teal/40"
         }`}
       >
@@ -42,7 +47,7 @@ export function TaskItem({ task }: { task: PlannerTask }) {
           {m.planner.categoryLabel[task.category]}
         </span>
         <span className="shrink-0 text-xs text-ink-faint">{fmt(m.planner.today.minutes, { n: task.minutes })}</span>
-      </button>
+      </motion.button>
     </li>
   );
 }
