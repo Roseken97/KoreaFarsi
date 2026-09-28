@@ -389,6 +389,16 @@ export const en = {
       generic: "Couldn't save. Please try again.",
     },
   },
+  dictionaryPage: {
+    metaTitle: "Dictionary",
+    title: "Dictionary",
+    subtitle: "Look up a Korean or English word in Naver Dictionary.",
+    placeholder: "Type a word…",
+    search: "Search",
+    hint: "Opens Naver Dictionary in a new tab.",
+    recent: "Recent searches",
+    clear: "Clear",
+  },
   productsAdmin: {
     metaTitle: "Products",
     title: "Products",
