@@ -333,6 +333,15 @@ export const LayersIcon = (p: IconProps) => (
   </Base>
 );
 
+/** Headphones (Listening skill, course detail "What You Will Learn"). */
+export const HeadphonesIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4.5 13.5v-2a7.5 7.5 0 0 1 15 0v2" />
+    <rect x="3.5" y="13" width="4" height="6" rx="1.5" />
+    <rect x="16.5" y="13" width="4" height="6" rx="1.5" />
+  </Base>
+);
+
 /** Hangul glyph as an icon (Korean Alphabet collection). */
 export const HangulIcon = (p: IconProps) => (
   <Base {...p}>
