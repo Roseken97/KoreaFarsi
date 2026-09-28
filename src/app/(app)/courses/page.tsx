@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SakuraBranch } from "@/components/brand/SakuraBranch";
+import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { getCourseLessonCounts, getCourses } from "@/lib/courses/queries";
 import { getMessages } from "@/lib/i18n/server";
@@ -17,7 +19,14 @@ export default async function CoursesPage() {
   return (
     <div className="animate-fade-up">
       <SubPageHeader title={m.courses.title} backHref="/home" backLabel={m.common.backHome} />
-      <p className="mb-6 text-sm text-ink-soft">{m.courses.subtitle}</p>
+      <p className="mb-5 text-sm text-ink-soft">{m.courses.subtitle}</p>
+
+      {/* Hero — Visual Element (sketch 06, callout #6): brand illustration, not filler */}
+      <section className="relative mb-6 h-28 overflow-hidden rounded-[24px] bg-gradient-to-br from-blush-soft via-cream to-sage-soft shadow-soft md:h-32">
+        <SakuraBranch className="absolute -top-3 -end-3 w-32 md:w-40 rtl:-scale-x-100" />
+        <SeoulSkyline className="absolute! inset-x-0 bottom-0 h-16 md:h-20" />
+      </section>
+
       <CoursesBrowser courses={courses} lessonCounts={counts} />
     </div>
   );
