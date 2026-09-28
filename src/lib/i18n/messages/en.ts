@@ -197,6 +197,7 @@ export const en = {
       books: { title: "My Books", body: "Your books and PDFs" },
       planner: { title: "My Planner", body: "Your personal study plan" },
       achievements: { title: "My Achievements", body: "Badges and milestones" },
+      admin: { title: "Admin Panel", body: "Products, courses, orders, knowledge base" },
       language: { title: "Language Settings", body: "English / فارسی" },
       settings: { title: "App Settings", body: "Notifications, appearance, privacy" },
       help: { title: "Help & Support", body: "Get in touch with the KoreaFarsi team" },

@@ -194,6 +194,7 @@ export const fa: Messages = {
       books: { title: "کتاب‌های من", body: "کتاب‌ها و PDFهای تو" },
       planner: { title: "برنامه‌ریز من", body: "برنامه‌ی مطالعه‌ی شخصی" },
       achievements: { title: "دستاوردهای من", body: "نشان‌ها و نقطه‌های عطف" },
+      admin: { title: "پنل ادمین", body: "محصولات، دوره‌ها، سفارش‌ها، دانش‌نامه" },
       language: { title: "تنظیمات زبان", body: "English / فارسی" },
       settings: { title: "تنظیمات برنامه", body: "اعلان‌ها، ظاهر، حریم خصوصی" },
       help: { title: "راهنما و پشتیبانی", body: "ارتباط با تیم کره‌فارسی" },
