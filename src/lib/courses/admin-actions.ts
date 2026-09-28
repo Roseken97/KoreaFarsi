@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getAdminUser } from "@/lib/admin";
 import { hasServiceRole, supabaseAdmin } from "@/lib/supabase/admin";
-import type { Course, CourseLesson, CourseResource, CourseUnit, SlideContent, VocabularyEntry } from "./types";
+import type { Course, CourseLesson, CourseResource, CourseSkill, CourseUnit, SlideContent, VocabularyEntry } from "./types";
 
 export type AdminResult = { ok: true } | { ok: false; error: "forbidden" | "slug" | "title" | "generic" };
 export type UploadTicketResult = { ok: true; path: string; token: string; bucket: "courses" } | { ok: false; error: "forbidden" | "generic" };
@@ -76,6 +76,7 @@ export type CourseInput = {
   cover_image_url: string | null;
   is_available: boolean;
   sort_order: number;
+  skills: CourseSkill[];
 };
 
 export async function saveCourse(input: CourseInput): Promise<AdminResult> {
@@ -97,6 +98,7 @@ export async function saveCourse(input: CourseInput): Promise<AdminResult> {
     cover_image_url: input.cover_image_url,
     is_available: input.is_available,
     sort_order: input.sort_order,
+    skills: input.skills,
   };
 
   const { error } = input.id ? await store.from("courses").update(row).eq("id", input.id) : await store.from("courses").insert(row);

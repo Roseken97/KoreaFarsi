@@ -69,12 +69,12 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
         </div>
       </section>
 
-      {/* Key info row (sketch callout #3) */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-y-3 rounded-[20px] bg-surface p-4 shadow-soft">
-        <KeyInfo icon={<LayersIcon width={20} height={20} />} value={formatNumber(total, locale)} label={t.detail.keyInfo.lessons} />
-        <KeyInfo icon={<LevelIcon width={20} height={20} />} value={levelLabel ?? "—"} label={t.detail.keyInfo.level} />
-        <KeyInfo icon={<WatchIcon width={20} height={20} />} value={totalMinutes > 0 ? fmt(t.detail.keyInfo.minutes, { n: formatNumber(totalMinutes, locale) }) : "—"} label={t.detail.keyInfo.duration} />
-        <KeyInfo icon={<BooksStackIcon width={20} height={20} />} value={t.detail.keyInfo.selfPaced} label={t.detail.keyInfo.selfPacedBody} />
+      {/* Key info row (sketch callout #3) — 4 sections split by a short vertical divider, close under the hero */}
+      <div className="mt-2 grid grid-cols-4 divide-x divide-line rounded-[20px] bg-surface p-3 shadow-soft">
+        <KeyInfo icon={<LayersIcon width={18} height={18} />} value={formatNumber(total, locale)} label={t.detail.keyInfo.lessons} />
+        <KeyInfo icon={<LevelIcon width={18} height={18} />} value={levelLabel ?? "—"} label={t.detail.keyInfo.level} />
+        <KeyInfo icon={<WatchIcon width={18} height={18} />} value={totalMinutes > 0 ? fmt(t.detail.keyInfo.minutes, { n: formatNumber(totalMinutes, locale) }) : "—"} label={t.detail.keyInfo.duration} />
+        <KeyInfo icon={<BooksStackIcon width={18} height={18} />} value={t.detail.keyInfo.selfPaced} label={t.detail.keyInfo.selfPacedBody} />
       </div>
 
       {!hasAccess ? (
@@ -106,11 +106,13 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
 
 function KeyInfo({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col items-center gap-1 px-1 text-center">
       <span className="text-ink-faint">{icon}</span>
-      <span className="flex flex-col leading-tight">
-        <span className="text-sm font-semibold text-ink">{value}</span>
-        <span className="text-[11px] text-ink-faint">{label}</span>
+      <span className="text-[13px] font-semibold whitespace-nowrap text-ink" dir="auto">
+        {value}
+      </span>
+      <span className="text-[10px] leading-[1.3] text-ink-faint" dir="auto">
+        {label}
       </span>
     </div>
   );

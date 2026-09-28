@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ComponentType, type SVGProps } from "react";
-import { CheckIcon, ChevronIcon, HeadphonesIcon, LibraryIcon, MicIcon, PencilIcon, ShieldIcon } from "@/components/icons";
+import { useState } from "react";
+import { CheckIcon, ChevronIcon, ShieldIcon } from "@/components/icons";
 import { MotionCard } from "@/components/motion/MotionCard";
-import type { CourseResource, CourseReview } from "@/lib/courses/types";
+import { SKILL_ICONS } from "@/lib/courses/skillIcons";
+import type { CourseResource, CourseReview, CourseSkill } from "@/lib/courses/types";
 import { flattenLessons, isLessonUnlocked, type CourseOutline } from "@/lib/courses/types";
 import { fmt, formatNumber, type Locale } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
@@ -44,23 +45,23 @@ export function CourseDetailTabs({
   const flat = flattenLessons(units);
   const firstOpenId = flat.find((l) => !progress[l.id])?.id ?? flat[0]?.id ?? null;
 
-  const skills: { Icon: ComponentType<SVGProps<SVGSVGElement>>; key: "listening" | "reading" | "writing" | "speaking" }[] = [
-    { Icon: HeadphonesIcon, key: "listening" },
-    { Icon: LibraryIcon, key: "reading" },
-    { Icon: PencilIcon, key: "writing" },
-    { Icon: MicIcon, key: "speaking" },
+  // Fallback for courses created before skills were editable per-course (0015).
+  const defaultSkills: CourseSkill[] = [
+    { icon: "listening", title: t.detail.skills.listening.title },
+    { icon: "reading", title: t.detail.skills.reading.title },
+    { icon: "writing", title: t.detail.skills.writing.title },
+    { icon: "speaking", title: t.detail.skills.speaking.title },
   ];
+  const skills = course.skills && course.skills.length > 0 ? course.skills : defaultSkills;
 
-  function LessonRow({ lesson, index }: { lesson: (typeof flat)[number]; index: number }) {
+  /** Numbered circle sits outside the lesson card, connected to the next one by a vertical line (sketch 07). */
+  function LessonRow({ lesson, index, isLast }: { lesson: (typeof flat)[number]; index: number; isLast: boolean }) {
     const isDone = Boolean(progress[lesson.id]);
     const isCurrent = !isDone && lesson.id === firstOpenId;
     const unlocked = isDone || isLessonUnlocked(units, progress, lesson.id);
-    const rowClass = `flex items-center gap-3 rounded-field border p-3 ${isCurrent ? "border-teal bg-teal/5" : "border-line bg-surface"}`;
+    const rowClass = `flex min-w-0 flex-1 items-center gap-3 rounded-field border bg-surface p-3 ${isCurrent ? "border-teal bg-teal/5" : "border-line"}`;
     const content = (
       <>
-        <span className={`grid size-8 shrink-0 place-items-center rounded-full text-xs font-semibold ${isDone ? "bg-success text-white" : "bg-cream-deep text-ink-soft"}`}>
-          {isDone ? <CheckIcon width={14} height={14} /> : formatNumber(index + 1, locale)}
-        </span>
         <span className={`min-w-0 flex-1 truncate text-sm font-medium ${unlocked ? "text-ink" : "text-ink-faint"}`} dir="auto">
           {locale === "en" ? lesson.title_en || lesson.title : lesson.title}
         </span>
@@ -71,13 +72,25 @@ export function CourseDetailTabs({
         )}
       </>
     );
-    return unlocked ? (
-      <MotionCard href={`/courses/${course.slug}/lessons/${lesson.id}`} tilt={false} className={`${rowClass} hover:bg-cream`}>
-        {content}
-      </MotionCard>
-    ) : (
-      <div className={`${rowClass} cursor-not-allowed opacity-70`} aria-disabled="true">
-        {content}
+    return (
+      <div className="relative flex gap-3">
+        {!isLast && <span className="absolute start-4 top-8 bottom-[-0.75rem] w-px bg-line" aria-hidden="true" />}
+        <span
+          className={`relative z-10 mt-0.5 grid size-8 shrink-0 place-items-center rounded-full border text-xs font-semibold ${
+            isDone ? "border-success bg-success text-white" : "border-line bg-surface text-ink-soft"
+          }`}
+        >
+          {isDone ? <CheckIcon width={14} height={14} /> : formatNumber(index + 1, locale)}
+        </span>
+        {unlocked ? (
+          <MotionCard href={`/courses/${course.slug}/lessons/${lesson.id}`} tilt={false} className={`${rowClass} hover:bg-cream`}>
+            {content}
+          </MotionCard>
+        ) : (
+          <div className={`${rowClass} cursor-not-allowed opacity-70`} aria-disabled="true">
+            {content}
+          </div>
+        )}
       </div>
     );
   }
@@ -92,17 +105,13 @@ export function CourseDetailTabs({
           </Link>
         )}
       </div>
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
-        <div className="h-full rounded-full bg-teal" style={{ width: `${total ? (done / total) * 100 : 0}%` }} />
-      </div>
-
-      {/* Tabs (sketch callout #4): Overview / Lessons / Resources / Reviews — two-layer track + riding pill */}
-      <div className="mt-6 flex gap-1 rounded-full bg-cream-deep p-1">
+      {/* Tabs (sketch callout #4): Overview / Lessons / Resources / Reviews — white track, saturated teal pill riding on top */}
+      <div className="mt-4 flex gap-1 rounded-full bg-surface p-1 shadow-soft">
         {(["overview", "lessons", "resources", "reviews"] as Tab[]).map((key) => (
           <button
             key={key}
             onClick={() => setTab(key)}
-            className={`flex-1 rounded-full px-2 py-2 text-xs font-medium transition sm:text-sm ${tab === key ? "bg-surface text-ink shadow-soft" : "text-ink-soft"}`}
+            className={`flex-1 rounded-full px-2 py-2 text-xs font-medium transition sm:text-sm ${tab === key ? "bg-teal text-white shadow-soft" : "text-ink-soft"}`}
           >
             {t.detail.tabs[key]}
           </button>
@@ -130,16 +139,21 @@ export function CourseDetailTabs({
 
           <section>
             <h2 className="font-display text-lg font-semibold">{t.detail.whatYouLearn}</h2>
-            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {skills.map(({ Icon, key }) => (
-                <div key={key} className="flex flex-col gap-2 rounded-[18px] bg-surface p-3.5 shadow-soft">
-                  <span className="grid size-9 place-items-center rounded-full bg-sage-soft text-teal-deep">
-                    <Icon width={18} height={18} />
-                  </span>
-                  <span className="text-sm font-semibold text-ink">{t.detail.skills[key].title}</span>
-                  <span className="text-[12px] leading-4 text-ink-faint">{t.detail.skills[key].body}</span>
-                </div>
-              ))}
+            <div className="mt-3 flex gap-3 overflow-x-auto pb-1">
+              {skills.map((skill, i) => {
+                const Icon = SKILL_ICONS[skill.icon];
+                const title = locale === "en" ? skill.title_en || skill.title : skill.title;
+                return (
+                  <div key={i} className="flex w-24 shrink-0 flex-col items-center gap-2 rounded-[16px] bg-surface p-3 text-center shadow-soft">
+                    <span className="grid size-9 place-items-center rounded-full bg-sage-soft text-teal-deep">
+                      <Icon width={18} height={18} />
+                    </span>
+                    <span className="text-[12px] leading-4 font-semibold text-ink" dir="auto">
+                      {title}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </section>
 
@@ -155,10 +169,10 @@ export function CourseDetailTabs({
             {flat.length === 0 ? (
               <p className="mt-3 rounded-card border border-dashed border-line p-6 text-center text-sm text-ink-soft">{t.empty}</p>
             ) : (
-              <ul className="mt-3 flex flex-col gap-2">
-                {flat.slice(0, 3).map((lesson, i) => (
+              <ul className="mt-3 flex flex-col gap-3">
+                {flat.slice(0, 3).map((lesson, i, arr) => (
                   <li key={lesson.id}>
-                    <LessonRow lesson={lesson} index={i} />
+                    <LessonRow lesson={lesson} index={i} isLast={i === arr.length - 1} />
                   </li>
                 ))}
               </ul>
@@ -177,10 +191,10 @@ export function CourseDetailTabs({
                 <h2 className="mb-2 font-display text-lg font-semibold" dir="auto">
                   {locale === "en" ? unit.title_en || unit.title : unit.title}
                 </h2>
-                <ul className="flex flex-col gap-2">
-                  {unit.lessons.map((lesson, i) => (
+                <ul className="flex flex-col gap-3">
+                  {unit.lessons.map((lesson, i, arr) => (
                     <li key={lesson.id}>
-                      <LessonRow lesson={{ ...lesson, unitTitle: unit.title, unitTitleEn: unit.title_en }} index={i} />
+                      <LessonRow lesson={{ ...lesson, unitTitle: unit.title, unitTitleEn: unit.title_en }} index={i} isLast={i === arr.length - 1} />
                     </li>
                   ))}
                 </ul>

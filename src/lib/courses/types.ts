@@ -1,7 +1,11 @@
 export type VocabularyEntry = { ko: string; fa: string; en?: string };
 export type SlideContent = { title: string; title_en?: string; body: string; body_en?: string; ko?: string; chart?: "consonants" | "vowels" };
 
-/** Mirrors public.courses (supabase/migrations/0009_courses.sql). */
+/** Preset icon choices for a course's "What You Will Learn" row (mapped to real icons in skillIcons.tsx). */
+export type SkillIconKey = "listening" | "reading" | "writing" | "speaking" | "vocabulary" | "grammar" | "pronunciation" | "culture";
+export type CourseSkill = { icon: SkillIconKey; title: string; title_en?: string };
+
+/** Mirrors public.courses (supabase/migrations/0009_courses.sql, skills added in 0015). */
 export type Course = {
   id: string;
   slug: string;
@@ -14,6 +18,7 @@ export type Course = {
   cover_image_url: string | null;
   is_available: boolean;
   sort_order: number;
+  skills: CourseSkill[];
 };
 
 export type CourseUnit = {
