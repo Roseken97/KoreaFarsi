@@ -17,6 +17,7 @@ export default async function CoursesPage() {
   return (
     <div className="animate-fade-up">
       <SubPageHeader title={m.courses.title} backHref="/home" backLabel={m.common.backHome} />
+      <p className="mb-6 text-sm text-ink-soft">{m.courses.subtitle}</p>
       <CoursesBrowser courses={courses} lessonCounts={counts} />
     </div>
   );

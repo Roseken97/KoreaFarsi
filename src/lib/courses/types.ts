@@ -50,6 +50,18 @@ export type CourseOutline = {
   progress: Record<string, boolean>; // lesson_id -> is_done
 };
 
+export type LevelBucket = "beginner" | "intermediate" | "advanced";
+
+/** Maps a course's free-text level (typed in /admin/courses) onto the 3 filter buckets from the sketch. */
+export function levelBucket(level: string | null): LevelBucket | null {
+  if (!level) return null;
+  const v = level.trim().toLowerCase();
+  if (["beginner", "starter", "مبتدی", "1-1", "1"].includes(v)) return "beginner";
+  if (["intermediate", "متوسط", "1-2", "2"].includes(v)) return "intermediate";
+  if (["advanced", "پیشرفته", "3"].includes(v)) return "advanced";
+  return null;
+}
+
 export function lessonCount(units: UnitWithLessons[]) {
   return units.reduce((n, u) => n + u.lessons.length, 0);
 }

@@ -434,8 +434,11 @@ export const fa: Messages = {
   courses: {
     metaTitle: "دوره‌های من",
     title: "دوره‌های من",
+    subtitle: "مسیر یادگیری‌ات رو انتخاب کن و سفرت رو شروع کن.",
     empty: "هنوز دوره‌ای اضافه نشده. بعداً دوباره سر بزن.",
     lessonsCount: "{n} درس",
+    allLevels: "همه",
+    levels: { beginner: "مبتدی", intermediate: "متوسط", advanced: "پیشرفته" },
     continueCta: "ادامه",
     startCta: "شروع دوره",
     progress: "{done} از {total} درس",

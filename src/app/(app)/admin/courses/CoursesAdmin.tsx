@@ -97,7 +97,7 @@ export function CoursesAdmin({ courses, products }: { courses: Course[]; product
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Slug" value={form.slug} onChange={(e) => set("slug", e.target.value)} ltr required />
-          <Field label="Level" value={form.level} onChange={(e) => set("level", e.target.value)} ltr />
+          <Field label="Level (type beginner / intermediate / advanced to match the course list filter)" value={form.level} onChange={(e) => set("level", e.target.value)} ltr />
           <Field label="Title (Persian)" value={form.title} onChange={(e) => set("title", e.target.value)} required />
           <Field label="Title (English)" value={form.title_en} onChange={(e) => set("title_en", e.target.value)} ltr />
         </div>

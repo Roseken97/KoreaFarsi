@@ -437,8 +437,11 @@ export const en = {
   courses: {
     metaTitle: "My Courses",
     title: "My Courses",
+    subtitle: "Choose your learning path and start your journey.",
     empty: "No courses yet. Check back soon.",
     lessonsCount: "{n} lessons",
+    allLevels: "All",
+    levels: { beginner: "Beginner", intermediate: "Intermediate", advanced: "Advanced" },
     continueCta: "Continue",
     startCta: "Start course",
     progress: "{done}/{total} lessons",
