@@ -501,6 +501,7 @@ export const en = {
       overview: {
         lessonLabel: "Lesson {n}",
         objectivesTitle: "In this lesson, you will be able to",
+        objectivesEmpty: "Learning objectives for this lesson haven't been added yet.",
         meta: { time: "Estimated time", level: "Level", activities: "Lesson structure" },
         activitiesCount: "{n} Activities",
         journeyTitle: "Lesson Journey",
@@ -511,6 +512,7 @@ export const en = {
           conversation: { title: "Conversation", subtitle: "Real-life speaking practice" },
         },
         materialsTitle: "Useful Materials",
+        materialsEmpty: "No downloadable materials for this lesson yet.",
         materials: { downloadKeep: "Download and keep", listenOffline: "Listen offline" },
         startLesson: "Start Lesson",
       },

@@ -115,11 +115,11 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
         </div>
       </div>
 
-      {objectives.length > 0 && (
-        <div className="mt-5 flex gap-3 rounded-[18px] bg-sage-soft p-4">
-          <TargetIcon width={20} height={20} className="mt-0.5 shrink-0 text-teal-deep" />
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-ink">{to.objectivesTitle}</p>
+      <div className="mt-5 flex gap-3 rounded-[18px] bg-sage-soft p-4">
+        <TargetIcon width={20} height={20} className="mt-0.5 shrink-0 text-teal-deep" />
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-ink">{to.objectivesTitle}</p>
+          {objectives.length > 0 ? (
             <ul className="mt-1.5 flex flex-col gap-1 text-[13px] leading-6 text-ink-soft">
               {objectives.map((line, i) => (
                 <li key={i} dir="auto">
@@ -127,9 +127,11 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
                 </li>
               ))}
             </ul>
-          </div>
+          ) : (
+            <p className="mt-1.5 text-[13px] leading-6 text-ink-faint">{to.objectivesEmpty}</p>
+          )}
         </div>
-      )}
+      </div>
 
       <div className="mt-4 grid grid-cols-3 divide-x divide-line rounded-[18px] bg-surface p-3 shadow-soft">
         <MetaItem icon={<WatchIcon width={18} height={18} />} value={lesson.duration_minutes > 0 ? `${formatNumber(lesson.duration_minutes, locale)}′` : "—"} label={to.meta.time} />
@@ -144,14 +146,14 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
         ))}
       </div>
 
-      {lesson.materials.length > 0 && (
-        <>
-          <h2 className="mt-6 font-display text-lg font-semibold">{to.materialsTitle}</h2>
-          <div className="mt-3">
-            <LessonMaterials lessonId={lessonId} materials={lesson.materials} locale={locale} />
-          </div>
-        </>
-      )}
+      <h2 className="mt-6 font-display text-lg font-semibold">{to.materialsTitle}</h2>
+      <div className="mt-3">
+        {lesson.materials.length > 0 ? (
+          <LessonMaterials lessonId={lessonId} materials={lesson.materials} locale={locale} />
+        ) : (
+          <p className="rounded-card border border-dashed border-line p-4 text-center text-sm text-ink-soft">{to.materialsEmpty}</p>
+        )}
+      </div>
 
       <Link
         href={`/courses/${slug}/lessons/${lessonId}/start`}

@@ -498,6 +498,7 @@ export const fa: Messages = {
       overview: {
         lessonLabel: "درس {n}",
         objectivesTitle: "در این درس یاد می‌گیری",
+        objectivesEmpty: "اهداف یادگیری این درس هنوز ثبت نشده.",
         meta: { time: "زمان تقریبی", level: "سطح", activities: "ساختار درس" },
         activitiesCount: "{n} بخش",
         journeyTitle: "مسیر درس",
@@ -508,6 +509,7 @@ export const fa: Messages = {
           conversation: { title: "مکالمه", subtitle: "تمرین صحبت‌کردن در موقعیت واقعی" },
         },
         materialsTitle: "منابع مفید",
+        materialsEmpty: "هنوز فایلی برای دانلود در این درس ثبت نشده.",
         materials: { downloadKeep: "دانلود و نگه‌داری کن", listenOffline: "آفلاین گوش بده" },
         startLesson: "شروع درس",
       },
