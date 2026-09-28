@@ -21,7 +21,8 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
 
   return (
     <div>
-      <div className="mb-5 flex items-center gap-5 overflow-x-auto pb-1">
+      {/* Filter tabs — two layers per the sketch: an outer track, and the active pill riding on top of it */}
+      <div className="mb-5 flex gap-1 overflow-x-auto rounded-full bg-cream-deep p-1">
         <Tab label={t.allLevels} selected={active === null} onClick={() => setActive(null)} />
         {LEVELS.map((level) => (
           <Tab key={level} label={t.levels[level]} selected={active === level} onClick={() => setActive(level)} />
@@ -85,7 +86,7 @@ function Tab({ label, selected, onClick }: { label: string; selected: boolean; o
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 rounded-full text-sm font-medium transition ${selected ? "bg-ink px-4 py-2 text-cream" : "px-1 py-2 text-ink-soft hover:text-ink"}`}
+      className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${selected ? "bg-surface text-ink shadow-soft" : "text-ink-soft hover:text-ink"}`}
     >
       {label}
     </button>

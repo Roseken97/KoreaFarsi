@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ComponentType, SVGProps } from "react";
 import { SakuraBranch } from "@/components/brand/SakuraBranch";
 import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
+import { Hero } from "@/components/shell/Hero";
 import {
   BellIcon,
   BooksStackIcon,
@@ -70,27 +71,29 @@ export default async function HomePage() {
         {firstName ? fmt(t.welcomeNamed, { name: firstName }) : t.welcomeGuest}
       </h1>
 
-      {/* Hero — bolder card language: big radius, decorative blobs, floating avatar chip */}
-      <section className="relative mt-6 h-48 overflow-hidden rounded-[28px] bg-gradient-to-br from-blush-soft via-cream to-sage-soft shadow-lift md:h-60">
-        <span className="absolute -top-10 -start-10 size-32 rounded-full bg-white/30 blur-2xl" aria-hidden="true" />
-        <span className="absolute end-6 top-10 size-16 rounded-full bg-blush/20 blur-xl" aria-hidden="true" />
-        <SakuraBranch className="absolute -top-2 -end-2 w-40 md:w-56 rtl:-scale-x-100" />
-        <SeoulSkyline className="absolute! inset-x-0 bottom-0 h-24 md:h-32" />
-        <div className="relative p-6 md:p-8">
-          <p className="max-w-[14rem] font-display text-2xl leading-snug font-semibold text-ink md:max-w-xs md:text-3xl">
-            {t.hero.message}
-          </p>
-          <p lang="ko" className="mt-2 text-sm text-ink-soft">
-            {t.hero.ko}
-          </p>
-        </div>
-        {plan && (
-          <div className="absolute bottom-3 start-3 flex items-center gap-2 rounded-full bg-surface/90 py-1.5 ps-1.5 pe-3.5 shadow-soft backdrop-blur">
-            <Avatar name={profile?.name} email={profile?.user.email} avatarKey={profile?.avatarKey} size={28} />
-            <span className="text-xs font-semibold text-ink">{t.today.title}</span>
+      {/* Hero — shows the active /admin/announcements banner, or this default message */}
+      <div className="mt-6">
+        <Hero placement="home" locale={locale}>
+          <span className="absolute -top-10 -start-10 size-32 rounded-full bg-white/30 blur-2xl" aria-hidden="true" />
+          <span className="absolute end-6 top-10 size-16 rounded-full bg-blush/20 blur-xl" aria-hidden="true" />
+          <SakuraBranch className="absolute -top-2 -end-2 w-40 md:w-56 rtl:-scale-x-100" />
+          <SeoulSkyline className="absolute! inset-x-0 bottom-0 h-24 md:h-32" />
+          <div className="relative p-6 md:p-8">
+            <p className="max-w-[14rem] font-display text-2xl leading-snug font-semibold text-ink md:max-w-xs md:text-3xl">
+              {t.hero.message}
+            </p>
+            <p lang="ko" className="mt-2 text-sm text-ink-soft">
+              {t.hero.ko}
+            </p>
           </div>
-        )}
-      </section>
+          {plan && (
+            <div className="absolute bottom-3 start-3 flex items-center gap-2 rounded-full bg-surface/90 py-1.5 ps-1.5 pe-3.5 shadow-soft backdrop-blur">
+              <Avatar name={profile?.name} email={profile?.user.email} avatarKey={profile?.avatarKey} size={28} />
+              <span className="text-xs font-semibold text-ink">{t.today.title}</span>
+            </div>
+          )}
+        </Hero>
+      </div>
 
       {/* Main sections — full-bleed color, glyph and label live in one card (cover-style) */}
       <section className="mt-6 grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
