@@ -392,7 +392,7 @@ export const en = {
   dictionaryPage: {
     metaTitle: "Dictionary",
     title: "Dictionary",
-    subtitle: "Look up a Korean word in Naver's Korean dictionary.",
+    subtitle: "Look up a Korean or English word in Naver Dictionary.",
     placeholder: "Type a word…",
     search: "Search",
     hint: "Opens Naver Dictionary in a new tab.",
