@@ -1,8 +1,9 @@
 import Link from "next/link";
 
 const TABS = [
-  { key: "knowledge", href: "/admin/knowledge", label: "Knowledge base" },
+  { key: "products", href: "/admin/products", label: "Products" },
   { key: "orders", href: "/admin/orders", label: "Orders" },
+  { key: "knowledge", href: "/admin/knowledge", label: "Knowledge base" },
 ] as const;
 
 /** Simple tab strip between the two internal admin pages. English-only (admin tool, not learner-facing). */

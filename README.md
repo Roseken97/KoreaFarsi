@@ -42,7 +42,7 @@ npm run dev                  # http://localhost:3000
 
 1. در [supabase.com](https://supabase.com) یک پروژه بسازید.
 2. **Project Settings → API**: مقدار `Project URL` و `anon`/`publishable` key را در `.env.local` بگذارید.
-3. **SQL Editor**: فایل‌های `supabase/migrations/` را به ترتیب شماره اجرا کنید (`0001` تا `0007`).
+3. **SQL Editor**: فایل‌های `supabase/migrations/` را به ترتیب شماره اجرا کنید (`0001` تا `0008`).
 4. **Authentication → URL Configuration**:
    - Site URL: `http://localhost:3000` (بعداً دامین اصلی)
    - Redirect URLs: `http://localhost:3000/auth/callback` (و بعداً `https://<domain>/auth/callback`)
@@ -76,21 +76,24 @@ npm run dev                  # http://localhost:3000
 
 ## کتابخانه‌ی دیجیتال (فاز ۲)
 
-- **چرا دستی است:** درگاه پرداخت (زرین‌پال) هنوز نیست (طبق برنامه‌ی برنامه‌ی brief). به‌جایش، شما درخواست خرید را در `/admin/orders` می‌بینید، پرداخت را بیرون از سایت (مثلاً کارت‌به‌کارت) تأیید می‌کنید، و دکمه‌ی «اعطای دسترسی» را می‌زنید. از آن لحظه کتاب در کتابخانه‌ی همان کاربر ظاهر می‌شود.
-- **راه‌اندازی Storage (یک‌بار):** Supabase → **Storage** → یک bucket **خصوصی** به نام دقیقاً `library` بساز (Public را روشن نکن — فایل‌ها باید فقط با لینک موقت در دسترس باشند).
-- **آپلود فایل کتاب:** فایل PDF را در همان bucket آپلود کن، مسیرش (مثلاً `hangul-alphabet-book.pdf`) را در Supabase → Table Editor → `products` → ستون `digital_file_path` همان محصول بگذار.
+- **چرا دستی است:** درگاه پرداخت (زرین‌پال) هنوز نیست (طبق برنامه‌ی brief). به‌جایش، شما درخواست خرید را در `/admin/orders` می‌بینید، پرداخت را بیرون از سایت (مثلاً کارت‌به‌کارت) تأیید می‌کنید، و دکمه‌ی «اعطای دسترسی» را می‌زنید. از آن لحظه کتاب در کتابخانه‌ی همان کاربر ظاهر می‌شود.
 - **محدودیت فعلی:** اگر خریدار مهمان بوده (بدون ثبت‌نام)، اعطای خودکار دسترسی ممکن نیست — باید از او بخواهی ثبت‌نام کند و دوباره درخواست بدهد.
 - جدول `user_library` (migration `0006`) این اعطاها را نگه می‌دارد.
 
-## کتاب‌فروشی: مدیریت محصولات (Phase 1، بدون پنل ادمین)
+## پنل ادمین: مدیریت محصولات (فاز ۲)
 
-- **بدون Supabase:** کتاب‌فروشی با ۸ محصول نمونه (`src/lib/bookstore/sample-products.json`) نمایش داده می‌شود.
+**`/admin/products`** — صفحه‌ای داخل خود سایت (نه Supabase dashboard) برای ساخت/ویرایش محصولات کتاب‌فروشی و آپلود مستقیم کاور و فایل دیجیتال (PDF، ویدیو، هر فرمتی).
+
+- **دسترسی:** با همان ایمیلی که در `ADMIN_EMAILS` گذاشتی وارد شو، بعد برو `/admin/products` (لینک از داخل اپ نیست، مستقیم آدرس را باز کن — کنار آن `/admin/orders` و `/admin/knowledge` هم هست).
+- **آپلود چطور کار می‌کند:** فایل مستقیماً از مرورگر به Supabase Storage آپلود می‌شود (نه از سرور Next.js رد می‌شود)، پس محدودیتی روی حجم فایل ویدیو نیست. کاور در bucket عمومی `covers` ذخیره می‌شود؛ فایل دیجیتال (PDF/ویدیو) در bucket خصوصی `library` (همان چیزی که کتابخانه با لینک موقت دانلودش می‌کند).
+- **راه‌اندازی Storage:** دیگر دستی نیست — migration `0008_storage_buckets.sql` هر دو bucket (`covers` عمومی، `library` خصوصی) را می‌سازد.
+- **بدون Supabase:** کتاب‌فروشی با ۸ محصول نمونه (`src/lib/bookstore/sample-products.json`) نمایش داده می‌شود؛ `/admin/products` پیام «Supabase وصل نیست» نشان می‌دهد.
 - **با Supabase:** بعد از اجرای migrationها، برای تست `supabase/seed/sample_products.sql` را در SQL Editor اجرا کنید.
   حذف همه‌ی نمونه‌ها: `delete from public.products where is_sample;`
-- **افزودن محصول واقعی:** Supabase → Table Editor → `products` → Insert row. قیمت‌ها به **تومان** هستند؛ قیمت هر نوع در `prices` (مثلاً `{"pdf": 180000, "physical": 390000}`) و قیمت قبل از تخفیف در `compare_at_prices`.
-- **کاور:** در Storage یک bucket عمومی (مثلاً `covers`) بسازید، تصویر را آپلود و URL عمومی را در `cover_image_url` بگذارید. بدون کاور، اپ یک جلد طراحی‌شده می‌سازد.
-- **درخواست‌های خرید:** Table Editor → `purchase_requests` (ستون `status` برای پیگیری: new / contacted / done / cancelled).
+- قیمت‌ها به **تومان** هستند. فیلدهای پیشرفته‌تر (`prices`/`compare_at_prices` per-format، `bundle_items`) فعلاً فقط از Table Editor قابل تنظیم‌اند — فرم ادمین فقط قیمت پایه را می‌گیرد.
+- **درخواست‌های خرید:** `/admin/orders` (ستون `status` برای پیگیری: new / contacted / done / cancelled).
 - بعد از تغییر JSON نمونه: `node scripts/generate-sample-seed.mjs`
+- **ویدیو برای دوره‌ها (Courses):** این آپلود مستقیم به Supabase Storage یک راه‌حل ساده و بدون سرویس جانبی است، اما بدون adaptive bitrate streaming/transcoding — برای فایل‌های حجیم یا کیفیت‌های مختلف مناسب نیست. اگر Courses واقعی با ویدیوهای زیاد و بلند جلو رفت، بازبینی این تصمیم (Mux/Bunny در مقابل Supabase Storage) لازم می‌شود.
 
 ## ساختار
 
@@ -121,12 +124,13 @@ src/
   lib/auth/                   پیام خطا · اعتبارسنجی
   lib/bookstore/              catalog (Supabase یا نمونه) · cart (localStorage) · actions (درخواست خرید)
   lib/library/                کتابخانه‌ی دیجیتال: queries · actions (لینک دانلود امن) · admin-actions (اعطای دسترسی)
+  lib/products/admin-actions.ts  پنل /admin/products: ساخت/ویرایش محصول · آپلود کاور و فایل دیجیتال
   lib/planner/                برنامه‌ریز: queries (تولید/خواندن تسک، محاسبه‌ی streak) · actions (ذخیره‌ی برنامه، تیک زدن تسک)
   lib/supabase/admin.ts       کلاینت service-role مشترک (چت‌بات و کتابخانه از همین استفاده می‌کنند)
   lib/chat-agent/             ماژول مستقل چت‌بات: system-prompt · knowledge-loader · chat-handler · rate-limiter
 src/config/contact.ts        راه‌های ارتباطی (اینستاگرام/تلگرام/ایمیل) — باید پر شود
 design/brand/                 فایل اصلی لوگو (public/brand/logo-512.png نسخه‌ی وب است)
-supabase/migrations/          SQL (به ترتیب شماره اجرا شود، تا 0006)
+supabase/migrations/          SQL (به ترتیب شماره اجرا شود، تا 0008)
 supabase/seed/                داده‌ی نمونه (تولیدشده با scripts/)
 ```
 

@@ -381,6 +381,11 @@ export const fa: Messages = {
       generic: "ذخیره انجام نشد. دوباره تلاش کن.",
     },
   },
+  productsAdmin: {
+    metaTitle: "Products",
+    title: "Products",
+    subtitle: "Create and edit the Bookstore catalog, and upload covers and digital files (PDF, video, …) directly.",
+  },
   orders: {
     metaTitle: "سفارش‌ها",
     title: "درخواست‌های خرید",

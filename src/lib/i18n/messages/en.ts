@@ -384,6 +384,11 @@ export const en = {
       generic: "Couldn't save. Please try again.",
     },
   },
+  productsAdmin: {
+    metaTitle: "Products",
+    title: "Products",
+    subtitle: "Create and edit the Bookstore catalog, and upload covers and digital files (PDF, video, …) directly.",
+  },
   orders: {
     metaTitle: "Orders",
     title: "Purchase Requests",
