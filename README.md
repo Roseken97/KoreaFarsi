@@ -43,7 +43,7 @@ npm run dev                  # http://localhost:3000
 
 1. در [supabase.com](https://supabase.com) یک پروژه بسازید.
 2. **Project Settings → API**: مقدار `Project URL` و `anon`/`publishable` key را در `.env.local` بگذارید.
-3. **SQL Editor**: فایل‌های `supabase/migrations/` را به ترتیب شماره اجرا کنید (`0001` تا `0010`).
+3. **SQL Editor**: فایل‌های `supabase/migrations/` را به ترتیب شماره اجرا کنید (`0001` تا `0011`).
 4. **Authentication → URL Configuration**:
    - Site URL: `http://localhost:3000` (بعداً دامین اصلی)
    - Redirect URLs: `http://localhost:3000/auth/callback` (و بعداً `https://<domain>/auth/callback`)
@@ -105,6 +105,8 @@ npm run dev                  # http://localhost:3000
 - **پیشرفت:** جدول `lesson_progress` (migration `0009`) با تیک‌زدن «Mark as done» در صفحه‌ی درس پر می‌شود؛ کارت «Continue Your Journey» در Home از همین‌جا خوانده می‌شود.
 - **فیلتر سطح:** تب‌های سطح در لیست دوره‌ها از روی مقدار واقعی فیلد `level` هر دوره ساخته می‌شود (همان مقداری که در `/admin/courses` تایپ می‌کنید) — اگر همه‌ی دوره‌ها یک سطح دارند، تب نمایش داده نمی‌شود.
 - **قفل ترتیبی:** یک درس تا وقتی همه‌ی درس‌های قبل از آن (به ترتیب Unit/Lesson) تمام نشده باشند باز نمی‌شود — هم در نمایش لیست، هم واقعاً در سرور (رفتن مستقیم به لینک درس قفل‌شده هم مسدود است).
+- **درس بدون ضبط ویدیو (Slides):** هر Lesson در `/admin/courses/[id]` یک دکمه‌ی «Video» یا «Slides» دارد. حالت Slides نیاز به فیلم‌برداری ندارد — چند اسلاید متنی (عنوان + توضیح فارسی/انگلیسی + یک کلمه‌ی کره‌ای اختیاری) می‌سازید و اپ خودش نمایششان می‌دهد (migration `0011`).
+- **واژگان تعاملی:** تب Vocabulary در صفحه‌ی درس حالا فلش‌کارت است (لمس برای دیدن معنی)، و کلمه‌ی کره‌ای هر اسلاید/فلش‌کارت با لمس به اجزای الفبا (جامو) تجزیه می‌شود — این تجزیه کاملاً با فرمول یونیکد کره‌ای محاسبه می‌شود (`src/lib/hangul.ts`)، بدون نیاز به هیچ فایل تصویری یا دیتای اضافه.
 
 ## ساختار
 
@@ -138,11 +140,12 @@ src/
   lib/products/admin-actions.ts  پنل /admin/products: ساخت/ویرایش محصول · آپلود کاور و فایل دیجیتال
   lib/planner/                برنامه‌ریز: queries (تولید/خواندن تسک، محاسبه‌ی streak) · actions (ذخیره‌ی برنامه، تیک زدن تسک)
   lib/courses/                دوره‌ها: queries (outline/دسترسی/پیشرفت) · actions (لینک ویدیوی امن، تیک‌زدن درس) · admin-actions (مدیریت Course/Unit/Lesson + آپلود ویدیو)
+  lib/hangul.ts                تجزیه‌ی حروف الفبای کره‌ای به اجزا (جامو) با فرمول یونیکد — بدون دیتا/فایل اضافه
   lib/supabase/admin.ts       کلاینت service-role مشترک (چت‌بات و کتابخانه از همین استفاده می‌کنند)
   lib/chat-agent/             ماژول مستقل چت‌بات: system-prompt · knowledge-loader · chat-handler · rate-limiter
 src/config/contact.ts        راه‌های ارتباطی (اینستاگرام/تلگرام/ایمیل) — باید پر شود
 design/brand/                 فایل اصلی لوگو (public/brand/logo-512.png نسخه‌ی وب است)
-supabase/migrations/          SQL (به ترتیب شماره اجرا شود، تا 0010)
+supabase/migrations/          SQL (به ترتیب شماره اجرا شود، تا 0011)
 supabase/seed/                داده‌ی نمونه (تولیدشده با scripts/)
 ```
 

@@ -445,7 +445,7 @@ export const en = {
     lockedBody: "Get access from the Bookstore, or contact KoreaFarsi if you've already purchased it.",
     getAccessCta: "View in Bookstore",
     lesson: {
-      tabs: { video: "Video", script: "Script", vocabulary: "Vocabulary", notes: "Notes" },
+      tabs: { video: "Video", slides: "Slides", script: "Script", vocabulary: "Vocabulary", notes: "Notes" },
       markDone: "Mark as done",
       markNotDone: "Mark as not done",
       done: "Completed",
@@ -453,6 +453,7 @@ export const en = {
       next: "Next",
       locked: "Finish the lessons before this one first.",
       noVideo: "The video for this lesson isn't uploaded yet.",
+      noSlides: "No slides for this lesson yet.",
       loadingVideo: "Preparing video…",
       noScript: "No script for this lesson yet.",
       noVocabulary: "No vocabulary for this lesson yet.",

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { CheckIcon, ChevronIcon } from "@/components/icons";
+import { HangulBreakdown } from "@/components/courses/HangulBreakdown";
+import { VocabFlashcards } from "@/components/courses/VocabFlashcards";
 import { Button } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
 import { toggleLessonDone } from "@/lib/courses/actions";
@@ -10,7 +12,7 @@ import type { CourseLesson } from "@/lib/courses/types";
 import type { Locale } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
 
-type Tab = "video" | "script" | "vocabulary" | "notes";
+type Tab = "video" | "slides" | "script" | "vocabulary" | "notes";
 type VideoError = "unauthenticated" | "forbidden" | "unavailable" | "generic" | null;
 
 export function LessonView({
@@ -34,11 +36,15 @@ export function LessonView({
 }) {
   const { m } = useI18n();
   const t = m.courses.lesson;
-  const [tab, setTab] = useState<Tab>("video");
+  const isSlides = lesson.content_type === "slides";
+  const [tab, setTab] = useState<Tab>(isSlides ? "slides" : "video");
+  const [slideIndex, setSlideIndex] = useState(0);
   const [done, setDone] = useState(isDone);
   const [pending, startTransition] = useTransition();
 
+  const tabs: Tab[] = [isSlides ? "slides" : "video", "script", "vocabulary", "notes"];
   const script = locale === "en" ? lesson.script_en || lesson.script : lesson.script;
+  const slide = lesson.slides[slideIndex];
 
   function toggle() {
     const next = !done;
@@ -52,7 +58,7 @@ export function LessonView({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-1 rounded-full bg-cream-deep p-1">
-        {(["video", "script", "vocabulary", "notes"] as const).map((key) => (
+        {tabs.map((key) => (
           <button
             key={key}
             onClick={() => setTab(key)}
@@ -74,24 +80,51 @@ export function LessonView({
           </div>
         ))}
 
+      {tab === "slides" &&
+        (lesson.slides.length === 0 ? (
+          <p className="rounded-card bg-surface p-4 text-sm text-ink-soft shadow-soft">{t.noSlides}</p>
+        ) : (
+          <div className="flex flex-col gap-4">
+            <div className="min-h-64 rounded-card bg-surface p-6 shadow-soft">
+              <h3 className="font-display text-xl font-semibold text-ink" dir="auto">
+                {locale === "en" ? slide.title_en || slide.title : slide.title}
+              </h3>
+              <p className="mt-3 text-[15px] leading-7 whitespace-pre-line text-ink-soft" dir="auto">
+                {locale === "en" ? slide.body_en || slide.body : slide.body}
+              </p>
+              {slide.ko && <HangulBreakdown word={slide.ko} className="mt-6" />}
+            </div>
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => setSlideIndex((i) => Math.max(0, i - 1))}
+                disabled={slideIndex === 0}
+                className="grid size-9 place-items-center rounded-full border border-line text-ink-soft disabled:opacity-30"
+              >
+                <ChevronIcon width={16} height={16} className="rotate-180 rtl:rotate-0" />
+              </button>
+              <div className="flex gap-1.5">
+                {lesson.slides.map((_, i) => (
+                  <span key={i} className={`size-1.5 rounded-full ${i === slideIndex ? "bg-teal" : "bg-line"}`} />
+                ))}
+              </div>
+              <button
+                onClick={() => setSlideIndex((i) => Math.min(lesson.slides.length - 1, i + 1))}
+                disabled={slideIndex === lesson.slides.length - 1}
+                className="grid size-9 place-items-center rounded-full border border-line text-ink-soft disabled:opacity-30"
+              >
+                <ChevronIcon width={16} height={16} className="rtl:rotate-180" />
+              </button>
+            </div>
+          </div>
+        ))}
+
       {tab === "script" && <p className="rounded-card bg-surface p-4 text-sm leading-7 whitespace-pre-line shadow-soft" dir="auto">{script || t.noScript}</p>}
 
       {tab === "vocabulary" &&
         (lesson.vocabulary.length === 0 ? (
           <p className="rounded-card bg-surface p-4 text-sm text-ink-soft shadow-soft">{t.noVocabulary}</p>
         ) : (
-          <ul className="flex flex-col gap-2">
-            {lesson.vocabulary.map((v, i) => (
-              <li key={i} className="flex items-center justify-between gap-3 rounded-field bg-surface px-4 py-3 shadow-soft">
-                <span lang="ko" className="font-medium text-ink">
-                  {v.ko}
-                </span>
-                <span className="text-sm text-ink-soft" dir="auto">
-                  {locale === "en" && v.en ? v.en : v.fa}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <VocabFlashcards entries={lesson.vocabulary} locale={locale} />
         ))}
 
       {tab === "notes" && <p className="rounded-card bg-surface p-4 text-sm leading-7 whitespace-pre-line shadow-soft" dir="auto">{lesson.notes || t.noNotes}</p>}

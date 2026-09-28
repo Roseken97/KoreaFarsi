@@ -1,4 +1,5 @@
 export type VocabularyEntry = { ko: string; fa: string; en?: string };
+export type SlideContent = { title: string; title_en?: string; body: string; body_en?: string; ko?: string };
 
 /** Mirrors public.courses (supabase/migrations/0009_courses.sql). */
 export type Course = {
@@ -31,7 +32,9 @@ export type CourseLesson = {
   title_en: string | null;
   sort_order: number;
   duration_minutes: number;
+  content_type: "video" | "slides";
   video_path: string | null;
+  slides: SlideContent[];
   script: string | null;
   script_en: string | null;
   vocabulary: VocabularyEntry[];

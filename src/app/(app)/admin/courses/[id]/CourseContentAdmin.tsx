@@ -14,7 +14,7 @@ import {
   type AdminResult,
   type LessonInput,
 } from "@/lib/courses/admin-actions";
-import type { Course, CourseLesson, CourseUnit, VocabularyEntry } from "@/lib/courses/types";
+import type { Course, CourseLesson, CourseUnit, SlideContent, VocabularyEntry } from "@/lib/courses/types";
 import { createClient } from "@/lib/supabase/client";
 
 const EMPTY_LESSON = (unitId: string, courseId: string, sortOrder: number): LessonInput => ({
@@ -25,7 +25,9 @@ const EMPTY_LESSON = (unitId: string, courseId: string, sortOrder: number): Less
   title_en: "",
   sort_order: sortOrder,
   duration_minutes: 0,
+  content_type: "video",
   video_path: null,
+  slides: [],
   script: "",
   script_en: "",
   vocabulary: [],
@@ -41,7 +43,9 @@ function toLessonInput(l: CourseLesson): LessonInput {
     title_en: l.title_en ?? "",
     sort_order: l.sort_order,
     duration_minutes: l.duration_minutes,
+    content_type: l.content_type,
     video_path: l.video_path,
+    slides: l.slides,
     script: l.script ?? "",
     script_en: l.script_en ?? "",
     vocabulary: l.vocabulary,
@@ -231,22 +235,42 @@ function LessonForm({
         <Field label="Duration (minutes)" type="number" value={form.duration_minutes} onChange={(e) => set("duration_minutes", Number(e.target.value))} ltr />
       </div>
 
-      <label className="flex flex-col gap-1.5 text-sm">
-        <span className="font-medium">Video</span>
-        {form.video_path ? (
-          <div className="flex items-center gap-2 rounded-field border border-line bg-surface px-3 py-2 text-xs text-ink-soft">
-            <span className="min-w-0 flex-1 truncate" dir="ltr">
-              {form.video_path}
-            </span>
-            <button type="button" onClick={() => set("video_path", null)} className="shrink-0 font-medium text-danger">
-              Remove
+      <div className="flex flex-col gap-1.5 text-sm">
+        <span className="font-medium">Content</span>
+        <div className="flex gap-2">
+          {(["video", "slides"] as const).map((ct) => (
+            <button
+              key={ct}
+              type="button"
+              onClick={() => set("content_type", ct)}
+              className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${form.content_type === ct ? "bg-ink text-cream" : "border border-line bg-surface text-ink-soft"}`}
+            >
+              {ct === "video" ? "Video (upload)" : "Slides (no recording)"}
             </button>
-          </div>
-        ) : (
-          <input type="file" accept="video/*" onChange={onVideo} disabled={uploading} className="block w-full text-sm file:me-3 file:rounded-full file:border-0 file:bg-cream-deep file:px-4 file:py-2 file:text-ink disabled:opacity-50" />
-        )}
-        {uploading && <span className="text-xs text-ink-faint">Uploading video…</span>}
-      </label>
+          ))}
+        </div>
+      </div>
+
+      {form.content_type === "video" ? (
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="font-medium">Video</span>
+          {form.video_path ? (
+            <div className="flex items-center gap-2 rounded-field border border-line bg-surface px-3 py-2 text-xs text-ink-soft">
+              <span className="min-w-0 flex-1 truncate" dir="ltr">
+                {form.video_path}
+              </span>
+              <button type="button" onClick={() => set("video_path", null)} className="shrink-0 font-medium text-danger">
+                Remove
+              </button>
+            </div>
+          ) : (
+            <input type="file" accept="video/*" onChange={onVideo} disabled={uploading} className="block w-full text-sm file:me-3 file:rounded-full file:border-0 file:bg-cream-deep file:px-4 file:py-2 file:text-ink disabled:opacity-50" />
+          )}
+          {uploading && <span className="text-xs text-ink-faint">Uploading video…</span>}
+        </label>
+      ) : (
+        <SlideEditor slides={form.slides} onChange={(slides) => set("slides", slides)} />
+      )}
 
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="font-medium">Script (Persian)</span>
@@ -274,6 +298,61 @@ function LessonForm({
         </Button>
       </div>
     </form>
+  );
+}
+
+function SlideEditor({ slides, onChange }: { slides: SlideContent[]; onChange: (slides: SlideContent[]) => void }) {
+  function update(i: number, patch: Partial<SlideContent>) {
+    onChange(slides.map((s, idx) => (idx === i ? { ...s, ...patch } : s)));
+  }
+  function remove(i: number) {
+    onChange(slides.filter((_, idx) => idx !== i));
+  }
+  function add() {
+    onChange([...slides, { title: "", body: "" }]);
+  }
+  function move(i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= slides.length) return;
+    const next = [...slides];
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  }
+
+  return (
+    <div className="flex flex-col gap-3 text-sm">
+      <span className="font-medium">Slides ({slides.length})</span>
+      {slides.map((s, i) => (
+        <div key={i} className="flex flex-col gap-2 rounded-field border border-line bg-surface p-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-ink-faint">Slide {i + 1}</span>
+            <div className="flex gap-1 text-xs">
+              <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="disabled:opacity-30">
+                ↑
+              </button>
+              <button type="button" onClick={() => move(i, 1)} disabled={i === slides.length - 1} className="disabled:opacity-30">
+                ↓
+              </button>
+              <button type="button" onClick={() => remove(i)} className="ms-2 font-medium text-danger">
+                Remove
+              </button>
+            </div>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <Field label="Title (Persian)" value={s.title} onChange={(e) => update(i, { title: e.target.value })} />
+            <Field label="Title (English)" value={s.title_en ?? ""} onChange={(e) => update(i, { title_en: e.target.value })} ltr />
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <textarea rows={2} value={s.body} onChange={(e) => update(i, { body: e.target.value })} placeholder="Body (Persian)" dir="auto" className={textareaClass} />
+            <textarea rows={2} value={s.body_en ?? ""} onChange={(e) => update(i, { body_en: e.target.value })} placeholder="Body (English)" dir="ltr" className={textareaClass} />
+          </div>
+          <Field label="Korean text on this slide (optional)" value={s.ko ?? ""} onChange={(e) => update(i, { ko: e.target.value })} ltr />
+        </div>
+      ))}
+      <button type="button" onClick={add} className="self-start text-sm font-medium text-teal-deep">
+        + Add slide
+      </button>
+    </div>
   );
 }
 

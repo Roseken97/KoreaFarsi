@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getAdminUser } from "@/lib/admin";
 import { hasServiceRole, supabaseAdmin } from "@/lib/supabase/admin";
-import type { Course, CourseLesson, CourseUnit, VocabularyEntry } from "./types";
+import type { Course, CourseLesson, CourseUnit, SlideContent, VocabularyEntry } from "./types";
 
 export type AdminResult = { ok: true } | { ok: false; error: "forbidden" | "slug" | "title" | "generic" };
 export type UploadTicketResult = { ok: true; path: string; token: string; bucket: "courses" } | { ok: false; error: "forbidden" | "generic" };
@@ -139,7 +139,9 @@ export type LessonInput = {
   title_en: string;
   sort_order: number;
   duration_minutes: number;
+  content_type: "video" | "slides";
   video_path: string | null;
+  slides: SlideContent[];
   script: string;
   script_en: string;
   vocabulary: VocabularyEntry[];
@@ -158,7 +160,9 @@ export async function saveLesson(input: LessonInput): Promise<AdminResult> {
     title_en: input.title_en.trim() || null,
     sort_order: input.sort_order,
     duration_minutes: input.duration_minutes,
+    content_type: input.content_type,
     video_path: input.video_path,
+    slides: input.slides,
     script: input.script.trim() || null,
     script_en: input.script_en.trim() || null,
     vocabulary: input.vocabulary,

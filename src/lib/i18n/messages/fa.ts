@@ -442,7 +442,7 @@ export const fa: Messages = {
     lockedBody: "از کتاب‌فروشی دسترسی بگیر، یا اگر قبلاً خریده‌ای با کره‌فارسی تماس بگیر.",
     getAccessCta: "دیدن در کتاب‌فروشی",
     lesson: {
-      tabs: { video: "ویدیو", script: "متن درس", vocabulary: "واژگان", notes: "نکات" },
+      tabs: { video: "ویدیو", slides: "اسلاید", script: "متن درس", vocabulary: "واژگان", notes: "نکات" },
       markDone: "علامت‌گذاری به‌عنوان تمام‌شده",
       markNotDone: "برداشتن علامت تمام‌شده",
       done: "تمام‌شده",
@@ -450,6 +450,7 @@ export const fa: Messages = {
       next: "بعدی",
       locked: "اول درس‌های قبلی را تمام کن.",
       noVideo: "ویدیوی این درس هنوز بارگذاری نشده.",
+      noSlides: "اسلایدی برای این درس ثبت نشده.",
       loadingVideo: "در حال آماده‌سازی ویدیو…",
       noScript: "متنی برای این درس ثبت نشده.",
       noVocabulary: "واژگانی برای این درس ثبت نشده.",
