@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { BooksStackIcon, ChevronIcon } from "@/components/icons";
+import { BooksStackIcon, ChevronIcon, LayersIcon } from "@/components/icons";
 import { MotionCard } from "@/components/motion/MotionCard";
 import { levelBucket, type LevelBucket } from "@/lib/courses/types";
 import type { Course } from "@/lib/courses/types";
@@ -21,7 +21,7 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
 
   return (
     <div>
-      <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
+      <div className="mb-5 flex items-center gap-5 overflow-x-auto pb-1">
         <Tab label={t.allLevels} selected={active === null} onClick={() => setActive(null)} />
         {LEVELS.map((level) => (
           <Tab key={level} label={t.levels[level]} selected={active === level} onClick={() => setActive(level)} />
@@ -37,18 +37,19 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
             const description = locale === "en" ? c.description_en || c.description : c.description;
             return (
               <li key={c.id}>
-                <MotionCard href={`/courses/${c.slug}`} tilt={false} className="flex items-center gap-4 rounded-[24px] bg-surface p-4 shadow-soft">
+                <MotionCard href={`/courses/${c.slug}`} tilt={false} className="flex items-center gap-4 rounded-[20px] border border-line/60 bg-surface p-3.5 shadow-soft">
                   {c.cover_image_url ? (
-                    <div className="relative size-24 shrink-0 overflow-hidden rounded-[18px] bg-cream-deep">
-                      <Image src={c.cover_image_url} alt="" fill sizes="96px" className="object-cover" />
+                    <div className="relative size-[92px] shrink-0 overflow-hidden rounded-2xl bg-cream-deep">
+                      <Image src={c.cover_image_url} alt="" fill sizes="92px" className="object-cover" />
                     </div>
                   ) : (
-                    <span className="grid size-24 shrink-0 place-items-center rounded-[18px] bg-sage-soft text-teal-deep">
-                      <BooksStackIcon width={34} height={34} />
-                    </span>
+                    <div className="relative grid size-[92px] shrink-0 place-items-center overflow-hidden rounded-2xl bg-sage-soft text-teal-deep">
+                      <span className="absolute start-2 top-2 text-[9px] font-semibold tracking-wide opacity-70">KoreaFarsi</span>
+                      <BooksStackIcon width={30} height={30} />
+                    </div>
                   )}
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-display text-lg font-semibold text-ink" dir="auto">
+                    <p className="truncate font-display text-base font-semibold text-ink" dir="auto">
                       {title}
                     </p>
                     {description && (
@@ -56,11 +57,20 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
                         {description}
                       </p>
                     )}
-                    <p className="mt-1.5 text-[12px] font-medium text-ink-faint">
-                      {[fmt(t.lessonsCount, { n: formatNumber(lessonCounts[c.id] ?? 0, locale) }), c.level].filter(Boolean).join(" · ")}
+                    <p className="mt-2 flex items-center gap-1.5 text-[12px] font-medium text-ink-faint">
+                      <LayersIcon width={13} height={13} />
+                      {fmt(t.lessonsCount, { n: formatNumber(lessonCounts[c.id] ?? 0, locale) })}
+                      {c.level && (
+                        <>
+                          <span className="opacity-50">|</span>
+                          {t.levels[levelBucket(c.level) ?? "beginner"] ?? c.level}
+                        </>
+                      )}
                     </p>
                   </div>
-                  <ChevronIcon width={18} height={18} className="shrink-0 text-ink-faint rtl:-scale-x-100" />
+                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-cream-deep text-ink-faint">
+                    <ChevronIcon width={16} height={16} className="rtl:-scale-x-100" />
+                  </span>
                 </MotionCard>
               </li>
             );
@@ -75,7 +85,7 @@ function Tab({ label, selected, onClick }: { label: string; selected: boolean; o
   return (
     <button
       onClick={onClick}
-      className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${selected ? "bg-ink text-cream" : "border border-line bg-surface text-ink-soft hover:text-ink"}`}
+      className={`shrink-0 rounded-full text-sm font-medium transition ${selected ? "bg-ink px-4 py-2 text-cream" : "px-1 py-2 text-ink-soft hover:text-ink"}`}
     >
       {label}
     </button>
