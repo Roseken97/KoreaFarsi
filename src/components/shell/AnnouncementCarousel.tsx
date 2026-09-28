@@ -46,27 +46,41 @@ export function AnnouncementCarousel({ items, locale, height }: { items: Announc
 function Card({ announcement, locale }: { announcement: Announcement; locale: Locale }) {
   const title = locale === "en" ? announcement.title_en || announcement.title : announcement.title;
   const body = locale === "en" ? announcement.body_en || announcement.body : announcement.body;
+  const hasImage = Boolean(announcement.image_url);
 
   const inner = (
     <div className="relative h-full w-full shrink-0 snap-start overflow-hidden bg-gradient-to-br from-blush-soft via-cream to-sage-soft">
-      {announcement.image_url && <Image src={announcement.image_url} alt="" fill sizes="100vw" className="object-cover" />}
-      {announcement.image_url && <span className="absolute inset-0 bg-gradient-to-t from-ink/55 via-ink/10 to-transparent" aria-hidden="true" />}
-      <div className="relative flex h-full flex-col justify-center p-6 md:p-8">
-        <p className={`max-w-[16rem] font-display text-xl leading-snug font-semibold md:max-w-sm md:text-2xl ${announcement.image_url ? "text-white" : "text-ink"}`} dir="auto">
-          {title}
-        </p>
-        {body && (
-          <p className={`mt-1.5 max-w-[18rem] text-sm leading-6 md:max-w-sm ${announcement.image_url ? "text-white/85" : "text-ink-soft"}`} dir="auto">
-            {body}
+      {hasImage && <Image src={announcement.image_url!} alt="" fill sizes="100vw" className="object-cover" />}
+
+      {hasImage ? (
+        // Image speaks for itself — only a small tap-target chip in the corner, no text laid over the artwork.
+        announcement.href && (
+          <>
+            <span className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-ink/45 to-transparent" aria-hidden="true" />
+            <span className="absolute end-3 bottom-3 inline-flex items-center gap-1 rounded-full bg-surface/95 px-3 py-1.5 text-xs font-semibold text-ink shadow-soft backdrop-blur">
+              {locale === "fa" ? "کلیک کنید" : "Tap to view"}
+              <ChevronIcon width={12} height={12} className="rtl:-scale-x-100" />
+            </span>
+          </>
+        )
+      ) : (
+        <div className="relative flex h-full flex-col justify-center p-6 md:p-8">
+          <p className="max-w-[16rem] font-display text-xl leading-snug font-semibold text-ink md:max-w-sm md:text-2xl" dir="auto">
+            {title}
           </p>
-        )}
-        {announcement.href && (
-          <span className="mt-3 inline-flex w-fit items-center gap-1 rounded-full bg-surface/90 px-3.5 py-1.5 text-xs font-semibold text-ink shadow-soft backdrop-blur">
-            {locale === "fa" ? "بیشتر بدانید" : "Learn more"}
-            <ChevronIcon width={13} height={13} className="rtl:-scale-x-100" />
-          </span>
-        )}
-      </div>
+          {body && (
+            <p className="mt-1.5 max-w-[18rem] text-sm leading-6 text-ink-soft md:max-w-sm" dir="auto">
+              {body}
+            </p>
+          )}
+          {announcement.href && (
+            <span className="mt-3 inline-flex w-fit items-center gap-1 rounded-full bg-surface/90 px-3.5 py-1.5 text-xs font-semibold text-ink shadow-soft backdrop-blur">
+              {locale === "fa" ? "بیشتر بدانید" : "Learn more"}
+              <ChevronIcon width={13} height={13} className="rtl:-scale-x-100" />
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 
