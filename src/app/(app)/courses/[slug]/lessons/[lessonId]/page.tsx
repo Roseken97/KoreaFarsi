@@ -5,7 +5,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
 import { getCourseVideoUrl } from "@/lib/courses/actions";
 import { getLessonWithCourse } from "@/lib/courses/queries";
-import { flattenLessons } from "@/lib/courses/types";
+import { flattenLessons, isLessonUnlocked } from "@/lib/courses/types";
 import { getMessages } from "@/lib/i18n/server";
 import { getCurrentUser } from "@/lib/supabase/server";
 import { LessonView } from "./LessonView";
@@ -32,6 +32,18 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
         <Notice tone="error">{user ? m.courses.lesson.errors.forbidden : m.courses.lesson.errors.unauthenticated}</Notice>
         <ButtonLink href={user ? "/bookstore" : "/auth/login"} className="mt-4 w-auto! px-8">
           {user ? t.getAccessCta : m.auth.login.submit}
+        </ButtonLink>
+      </div>
+    );
+  }
+
+  if (!isLessonUnlocked(outline.units, outline.progress, lessonId)) {
+    return (
+      <div className="animate-fade-up max-w-2xl">
+        <SubPageHeader title={t.title} backHref={`/courses/${slug}`} backLabel={t.title} />
+        <Notice>{t.lesson.locked}</Notice>
+        <ButtonLink href={`/courses/${slug}`} className="mt-4 w-auto! px-8">
+          {t.title}
         </ButtonLink>
       </div>
     );

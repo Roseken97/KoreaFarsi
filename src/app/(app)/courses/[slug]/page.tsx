@@ -6,7 +6,7 @@ import { BooksStackIcon, CheckIcon, ShieldIcon } from "@/components/icons";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
-import { completedCount, lessonCount } from "@/lib/courses/types";
+import { completedCount, isLessonUnlocked, lessonCount } from "@/lib/courses/types";
 import { getCourseOutline } from "@/lib/courses/queries";
 import { fmt, formatNumber } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
@@ -96,20 +96,34 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                     {unit.lessons.map((lesson, i) => {
                       const isDone = Boolean(progress[lesson.id]);
                       const isCurrent = !isDone && lesson.id === firstOpenId;
+                      const unlocked = isDone || isLessonUnlocked(units, progress, lesson.id);
+                      const rowClass = `flex items-center gap-3 rounded-field border p-3 ${isCurrent ? "border-teal bg-teal/5" : "border-line bg-surface"}`;
+                      const content = (
+                        <>
+                          <span className={`grid size-8 shrink-0 place-items-center rounded-full text-xs font-semibold ${isDone ? "bg-success text-white" : "bg-cream-deep text-ink-soft"}`}>
+                            {isDone ? <CheckIcon width={14} height={14} /> : formatNumber(i + 1, locale)}
+                          </span>
+                          <span className={`min-w-0 flex-1 truncate text-sm font-medium ${unlocked ? "text-ink" : "text-ink-faint"}`} dir="auto">
+                            {locale === "en" ? lesson.title_en || lesson.title : lesson.title}
+                          </span>
+                          {unlocked ? (
+                            lesson.duration_minutes > 0 && <span className="shrink-0 text-xs text-ink-faint">{lesson.duration_minutes}′</span>
+                          ) : (
+                            <ShieldIcon width={16} height={16} className="shrink-0 text-ink-faint" />
+                          )}
+                        </>
+                      );
                       return (
                         <li key={lesson.id}>
-                          <Link
-                            href={`/courses/${course.slug}/lessons/${lesson.id}`}
-                            className={`flex items-center gap-3 rounded-field border p-3 transition hover:bg-cream ${isCurrent ? "border-teal bg-teal/5" : "border-line bg-surface"}`}
-                          >
-                            <span className={`grid size-8 shrink-0 place-items-center rounded-full text-xs font-semibold ${isDone ? "bg-success text-white" : "bg-cream-deep text-ink-soft"}`}>
-                              {isDone ? <CheckIcon width={14} height={14} /> : formatNumber(i + 1, locale)}
-                            </span>
-                            <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink" dir="auto">
-                              {locale === "en" ? lesson.title_en || lesson.title : lesson.title}
-                            </span>
-                            {lesson.duration_minutes > 0 && <span className="shrink-0 text-xs text-ink-faint">{lesson.duration_minutes}′</span>}
-                          </Link>
+                          {unlocked ? (
+                            <Link href={`/courses/${course.slug}/lessons/${lesson.id}`} className={`${rowClass} transition hover:bg-cream`}>
+                              {content}
+                            </Link>
+                          ) : (
+                            <div className={`${rowClass} cursor-not-allowed opacity-70`} aria-disabled="true">
+                              {content}
+                            </div>
+                          )}
                         </li>
                       );
                     })}

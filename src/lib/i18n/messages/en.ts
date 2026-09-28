@@ -436,6 +436,7 @@ export const en = {
       done: "Completed",
       prev: "Previous",
       next: "Next",
+      locked: "Finish the lessons before this one first.",
       noVideo: "The video for this lesson isn't uploaded yet.",
       loadingVideo: "Preparing video…",
       noScript: "No script for this lesson yet.",

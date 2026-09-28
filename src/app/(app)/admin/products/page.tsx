@@ -7,7 +7,7 @@ import { getMessages } from "@/lib/i18n/server";
 import { hasServiceRole } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { getCurrentUser } from "@/lib/supabase/server";
-import { listProductsAdmin } from "@/lib/products/admin-actions";
+import { listProductsAdmin, listProductSlugsAdmin } from "@/lib/products/admin-actions";
 import { ProductsAdmin } from "./ProductsAdmin";
 
 export const metadata: Metadata = { title: "Products", robots: { index: false } };
@@ -34,11 +34,11 @@ export default async function ProductsPage() {
     );
   }
 
-  const products = await listProductsAdmin();
+  const [products, catalogSlugs] = await Promise.all([listProductsAdmin(), listProductSlugsAdmin()]);
 
   return (
     <Shell title={t.title} subtitle={t.subtitle} nav={<AdminNav active="products" />}>
-      <ProductsAdmin products={products} />
+      <ProductsAdmin products={products} catalogSlugs={catalogSlugs} />
     </Shell>
   );
 }

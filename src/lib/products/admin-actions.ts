@@ -62,6 +62,9 @@ export type ProductInput = {
   price: number;
   currency: string;
   format: Format[];
+  prices: Partial<Record<Format, number>>;
+  compare_at_prices: Partial<Record<Format, number>>;
+  bundle_items: string[];
   cover_image_url: string | null;
   digital_file_path: string | null;
   is_available: boolean;
@@ -91,6 +94,9 @@ export async function saveProduct(input: ProductInput): Promise<AdminResult> {
     price: input.price,
     currency: input.currency,
     format: input.format,
+    prices: input.prices,
+    compare_at_prices: input.compare_at_prices,
+    bundle_items: input.bundle_items,
     cover_image_url: input.cover_image_url,
     digital_file_path: input.digital_file_path,
     is_available: input.is_available,
@@ -107,6 +113,14 @@ export async function saveProduct(input: ProductInput): Promise<AdminResult> {
   revalidatePath("/admin/products");
   revalidatePath("/bookstore");
   return { ok: true };
+}
+
+/** For the bundle "included items" picker. */
+export async function listProductSlugsAdmin(): Promise<{ slug: string; title: string }[]> {
+  const store = await guard();
+  if (!store) return [];
+  const { data } = await store.from("products").select("slug, title").neq("category", "bundle").order("title", { ascending: true });
+  return data ?? [];
 }
 
 export async function deleteProduct(id: string): Promise<AdminResult> {

@@ -59,3 +59,14 @@ export function completedCount(units: UnitWithLessons[], progress: Record<string
 export function flattenLessons(units: UnitWithLessons[]) {
   return units.flatMap((u) => u.lessons.map((l) => ({ ...l, unitTitle: u.title, unitTitleEn: u.title_en })));
 }
+
+/**
+ * Sequential unlock: a lesson opens once every lesson before it (course-wide,
+ * in unit/lesson sort order) is done. The first lesson is always unlocked.
+ */
+export function isLessonUnlocked(units: UnitWithLessons[], progress: Record<string, boolean>, lessonId: string) {
+  const flat = flattenLessons(units);
+  const idx = flat.findIndex((l) => l.id === lessonId);
+  if (idx <= 0) return true;
+  return flat.slice(0, idx).every((l) => progress[l.id]);
+}

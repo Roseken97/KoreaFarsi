@@ -26,6 +26,9 @@ const EMPTY: ProductInput = {
   price: 0,
   currency: "IRT",
   format: [],
+  prices: {},
+  compare_at_prices: {},
+  bundle_items: [],
   cover_image_url: null,
   digital_file_path: null,
   is_available: true,
@@ -48,6 +51,9 @@ function toInput(p: Product): ProductInput {
     price: p.price,
     currency: p.currency,
     format: p.format,
+    prices: p.prices,
+    compare_at_prices: p.compare_at_prices,
+    bundle_items: p.bundle_items,
     cover_image_url: p.cover_image_url,
     digital_file_path: (p as unknown as { digital_file_path: string | null }).digital_file_path ?? null,
     is_available: p.is_available,
@@ -58,7 +64,7 @@ function toInput(p: Product): ProductInput {
 }
 
 /** Internal admin tool — kept English-only, unlike the learner-facing UI. */
-export function ProductsAdmin({ products }: { products: Product[] }) {
+export function ProductsAdmin({ products, catalogSlugs }: { products: Product[]; catalogSlugs: { slug: string; title: string }[] }) {
   const [form, setForm] = useState<ProductInput>(EMPTY);
   const [status, setStatus] = useState<{ tone: "error" | "success"; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
@@ -197,6 +203,55 @@ export function ProductsAdmin({ products }: { products: Product[] }) {
             ))}
           </div>
         </Labeled>
+
+        {form.format.length > 0 && (
+          <Labeled label="Per-format pricing (optional — overrides the base price above for that format)">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {form.format.map((f) => (
+                <div key={f} className="grid grid-cols-2 gap-2">
+                  <Field
+                    label={`Price — ${f}`}
+                    type="number"
+                    value={form.prices[f] ?? ""}
+                    onChange={(e) => set("prices", { ...form.prices, [f]: e.target.value ? Number(e.target.value) : undefined })}
+                    ltr
+                  />
+                  <Field
+                    label={`Compare-at — ${f}`}
+                    type="number"
+                    value={form.compare_at_prices[f] ?? ""}
+                    onChange={(e) => set("compare_at_prices", { ...form.compare_at_prices, [f]: e.target.value ? Number(e.target.value) : undefined })}
+                    ltr
+                  />
+                </div>
+              ))}
+            </div>
+          </Labeled>
+        )}
+
+        {form.category === "bundle" && (
+          <Labeled label="Bundle contents (select every item included)">
+            <div className="flex max-h-40 flex-col gap-1.5 overflow-y-auto rounded-field border border-line p-3">
+              {catalogSlugs.length === 0 ? (
+                <span className="text-sm text-ink-faint">No other products yet — create them first, then come back to build the bundle.</span>
+              ) : (
+                catalogSlugs.map((p) => (
+                  <label key={p.slug} className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={form.bundle_items.includes(p.slug)}
+                      onChange={() =>
+                        set("bundle_items", form.bundle_items.includes(p.slug) ? form.bundle_items.filter((s) => s !== p.slug) : [...form.bundle_items, p.slug])
+                      }
+                      className="size-4"
+                    />
+                    {p.title} <span className="text-ink-faint">({p.slug})</span>
+                  </label>
+                ))
+              )}
+            </div>
+          </Labeled>
+        )}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Labeled label="Cover image">
