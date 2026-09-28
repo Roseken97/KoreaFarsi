@@ -8,13 +8,16 @@ import { Notice } from "@/components/ui/Notice";
 import {
   createVideoUploadTicket,
   deleteLesson,
+  deleteResource,
   deleteUnit,
   saveLesson,
+  saveResource,
   saveUnit,
   type AdminResult,
   type LessonInput,
+  type ResourceInput,
 } from "@/lib/courses/admin-actions";
-import type { Course, CourseLesson, CourseUnit, SlideContent, VocabularyEntry } from "@/lib/courses/types";
+import type { Course, CourseLesson, CourseResource, CourseUnit, SlideContent, VocabularyEntry } from "@/lib/courses/types";
 import { createClient } from "@/lib/supabase/client";
 
 const EMPTY_LESSON = (unitId: string, courseId: string, sortOrder: number): LessonInput => ({
@@ -68,7 +71,7 @@ function textToVocab(text: string): VocabularyEntry[] {
 const errorText = (r: AdminResult) =>
   r.ok ? "" : r.error === "forbidden" ? "This page is only available to KoreaFarsi admins." : r.error === "title" ? "Please enter a title." : "Couldn't save. Please try again.";
 
-export function CourseContentAdmin({ course, units, lessons }: { course: Course; units: CourseUnit[]; lessons: CourseLesson[] }) {
+export function CourseContentAdmin({ course, units, lessons, resources }: { course: Course; units: CourseUnit[]; lessons: CourseLesson[]; resources: CourseResource[] }) {
   const [status, setStatus] = useState<{ tone: "error" | "success"; text: string } | null>(null);
   const [newUnitTitle, setNewUnitTitle] = useState("");
   const [newUnitTitleEn, setNewUnitTitleEn] = useState("");
@@ -99,7 +102,142 @@ export function CourseContentAdmin({ course, units, lessons }: { course: Course;
       {units.map((unit) => (
         <UnitBlock key={unit.id} unit={unit} course={course} lessons={lessons.filter((l) => l.unit_id === unit.id)} onError={(text) => setStatus({ tone: "error", text })} />
       ))}
+
+      <ResourcesSection course={course} resources={resources} onError={(text) => setStatus({ tone: "error", text })} />
     </div>
+  );
+}
+
+function ResourcesSection({ course, resources, onError }: { course: Course; resources: CourseResource[]; onError: (text: string) => void }) {
+  const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState<ResourceInput | null>(null);
+
+  return (
+    <section className="rounded-card border border-line bg-surface p-4 shadow-soft">
+      <h3 className="font-display text-lg font-semibold">Resources (Resources tab)</h3>
+      <p className="mt-0.5 text-xs text-ink-soft">Downloadable files (PDF, audio, worksheets, …) shown on the course&apos;s Resources tab.</p>
+
+      {resources.length > 0 && (
+        <ul className="mt-3 flex flex-col gap-2">
+          {resources.map((r) => (
+            <li key={r.id} className="flex items-center justify-between gap-3 rounded-field bg-cream px-3 py-2">
+              <span className="min-w-0 truncate text-sm font-medium" dir="auto">
+                {r.title}
+              </span>
+              <div className="flex shrink-0 items-center gap-2">
+                <button onClick={() => setEditing({ id: r.id, course_id: course.id, title: r.title, title_en: r.title_en ?? "", file_path: r.file_path, sort_order: r.sort_order })} className="text-xs font-medium text-teal-deep">
+                  Edit
+                </button>
+                <button
+                  onClick={async () => {
+                    if (!confirm(`Delete resource "${r.title}"?`)) return;
+                    const result = await deleteResource(r.id, course.id);
+                    if (!result.ok) onError(errorText(result));
+                  }}
+                  aria-label="Delete resource"
+                  className="grid size-7 place-items-center rounded-full text-ink-faint hover:bg-danger-soft hover:text-danger"
+                >
+                  <TrashIcon width={14} height={14} />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {editing ? (
+        <ResourceForm key={editing.id ?? "new"} input={editing} courseSlug={course.slug} onCancel={() => setEditing(null)} onSaved={() => setEditing(null)} onError={onError} />
+      ) : adding ? (
+        <ResourceForm key="new" input={{ id: null, course_id: course.id, title: "", title_en: "", file_path: null, sort_order: resources.length }} courseSlug={course.slug} onCancel={() => setAdding(false)} onSaved={() => setAdding(false)} onError={onError} />
+      ) : (
+        <button onClick={() => setAdding(true)} className="mt-3 text-sm font-medium text-teal-deep">
+          + Add resource
+        </button>
+      )}
+    </section>
+  );
+}
+
+function ResourceForm({
+  input,
+  courseSlug,
+  onCancel,
+  onSaved,
+  onError,
+}: {
+  input: ResourceInput;
+  courseSlug: string;
+  onCancel: () => void;
+  onSaved: () => void;
+  onError: (text: string) => void;
+}) {
+  const [form, setForm] = useState(input);
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  function set<K extends keyof ResourceInput>(key: K, value: ResourceInput[K]) {
+    setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  async function onFile(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setUploading(true);
+    const ticket = await createVideoUploadTicket(courseSlug, file.name);
+    if (!ticket.ok) {
+      setUploading(false);
+      return onError("Couldn't start the file upload.");
+    }
+    const supabase = createClient();
+    const { error } = await supabase.storage.from(ticket.bucket).uploadToSignedUrl(ticket.path, ticket.token, file);
+    setUploading(false);
+    if (error) return onError(`Upload failed: ${error.message}`);
+    set("file_path", ticket.path);
+  }
+
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    const result = await saveResource(form);
+    setSaving(false);
+    if (!result.ok) return onError(errorText(result));
+    onSaved();
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="mt-3 flex flex-col gap-3 rounded-field border border-line bg-cream p-3">
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Field label="Title (Persian)" value={form.title} onChange={(e) => set("title", e.target.value)} required />
+        <Field label="Title (English)" value={form.title_en} onChange={(e) => set("title_en", e.target.value)} ltr />
+      </div>
+
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="font-medium">File</span>
+        {form.file_path ? (
+          <div className="flex items-center gap-2 rounded-field border border-line bg-surface px-3 py-2 text-xs text-ink-soft">
+            <span className="min-w-0 flex-1 truncate" dir="ltr">
+              {form.file_path}
+            </span>
+            <button type="button" onClick={() => set("file_path", null)} className="shrink-0 font-medium text-danger">
+              Remove
+            </button>
+          </div>
+        ) : (
+          <input type="file" onChange={onFile} disabled={uploading} className="block w-full text-sm file:me-3 file:rounded-full file:border-0 file:bg-cream-deep file:px-4 file:py-2 file:text-ink disabled:opacity-50" />
+        )}
+        {uploading && <span className="text-xs text-ink-faint">Uploading…</span>}
+      </label>
+
+      <div className="flex gap-2">
+        <Button type="submit" loading={saving} disabled={uploading} className="w-auto! px-6">
+          Save resource
+        </Button>
+        <Button type="button" variant="secondary" onClick={onCancel} className="w-auto! px-6">
+          Cancel
+        </Button>
+      </div>
+    </form>
   );
 }
 

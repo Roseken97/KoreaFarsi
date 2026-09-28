@@ -1,7 +1,7 @@
 import "server-only";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient, getCurrentUser } from "@/lib/supabase/server";
-import type { Course, CourseOutline, CourseUnit, CourseLesson, UnitWithLessons } from "./types";
+import type { Course, CourseOutline, CourseUnit, CourseLesson, CourseResource, CourseReview, UnitWithLessons } from "./types";
 import { flattenLessons } from "./types";
 
 export async function getCourses(): Promise<Course[]> {
@@ -88,6 +88,29 @@ export async function getContinueCard(): Promise<ContinueCard | null> {
   const done = flat.filter((l) => outline.progress[l.id]).length;
   const next = flat.find((l) => !outline.progress[l.id]) ?? flat[0] ?? null;
   return { course, nextLessonId: next?.id ?? null, done, total: flat.length };
+}
+
+/** Resources tab: metadata only — the file itself needs a signed URL from getCourseResourceUrl (actions.ts). */
+export async function getCourseResources(courseId: string): Promise<CourseResource[]> {
+  if (!isSupabaseConfigured) return [];
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("course_resources").select("*").eq("course_id", courseId).order("sort_order", { ascending: true });
+  if (error) {
+    console.error("[courses] resources:", error.message);
+    return [];
+  }
+  return (data ?? []) as CourseResource[];
+}
+
+export async function getCourseReviews(courseId: string): Promise<CourseReview[]> {
+  if (!isSupabaseConfigured) return [];
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("course_reviews").select("*").eq("course_id", courseId).order("created_at", { ascending: false });
+  if (error) {
+    console.error("[courses] reviews:", error.message);
+    return [];
+  }
+  return (data ?? []) as CourseReview[];
 }
 
 export async function getLessonWithCourse(courseSlug: string, lessonId: string) {

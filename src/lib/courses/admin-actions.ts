@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getAdminUser } from "@/lib/admin";
 import { hasServiceRole, supabaseAdmin } from "@/lib/supabase/admin";
-import type { Course, CourseLesson, CourseUnit, SlideContent, VocabularyEntry } from "./types";
+import type { Course, CourseLesson, CourseResource, CourseUnit, SlideContent, VocabularyEntry } from "./types";
 
 export type AdminResult = { ok: true } | { ok: false; error: "forbidden" | "slug" | "title" | "generic" };
 export type UploadTicketResult = { ok: true; path: string; token: string; bucket: "courses" } | { ok: false; error: "forbidden" | "generic" };
@@ -35,13 +35,19 @@ export async function listCourseProductsAdmin(): Promise<{ id: string; slug: str
 export async function getCourseForAdmin(id: string) {
   const store = await guard();
   if (!store) return null;
-  const [{ data: course }, { data: units }, { data: lessons }] = await Promise.all([
+  const [{ data: course }, { data: units }, { data: lessons }, { data: resources }] = await Promise.all([
     store.from("courses").select("*").eq("id", id).maybeSingle(),
     store.from("course_units").select("*").eq("course_id", id).order("sort_order", { ascending: true }),
     store.from("course_lessons").select("*").eq("course_id", id).order("sort_order", { ascending: true }),
+    store.from("course_resources").select("*").eq("course_id", id).order("sort_order", { ascending: true }),
   ]);
   if (!course) return null;
-  return { course: course as Course, units: (units ?? []) as CourseUnit[], lessons: (lessons ?? []) as CourseLesson[] };
+  return {
+    course: course as Course,
+    units: (units ?? []) as CourseUnit[],
+    lessons: (lessons ?? []) as CourseLesson[],
+    resources: (resources ?? []) as CourseResource[],
+  };
 }
 
 export async function createVideoUploadTicket(courseSlug: string, fileName: string): Promise<UploadTicketResult> {
@@ -179,6 +185,31 @@ export async function deleteLesson(id: string, courseId: string): Promise<AdminR
   const store = await guard();
   if (!store) return { ok: false, error: "forbidden" };
   const { error } = await store.from("course_lessons").delete().eq("id", id);
+  if (error) return { ok: false, error: "generic" };
+  revalidatePath(`/admin/courses/${courseId}`);
+  return { ok: true };
+}
+
+export type ResourceInput = { id: string | null; course_id: string; title: string; title_en: string; file_path: string | null; sort_order: number };
+
+export async function saveResource(input: ResourceInput): Promise<AdminResult> {
+  const store = await guard();
+  if (!store) return { ok: false, error: "forbidden" };
+  const title = input.title.trim();
+  if (!title) return { ok: false, error: "title" };
+  if (!input.file_path) return { ok: false, error: "generic" };
+  const row = { course_id: input.course_id, title, title_en: input.title_en.trim() || null, file_path: input.file_path, sort_order: input.sort_order };
+  const { error } = input.id ? await store.from("course_resources").update(row).eq("id", input.id) : await store.from("course_resources").insert(row);
+  if (error) return { ok: false, error: "generic" };
+  revalidatePath(`/admin/courses/${input.course_id}`);
+  revalidatePath("/courses");
+  return { ok: true };
+}
+
+export async function deleteResource(id: string, courseId: string): Promise<AdminResult> {
+  const store = await guard();
+  if (!store) return { ok: false, error: "forbidden" };
+  const { error } = await store.from("course_resources").delete().eq("id", id);
   if (error) return { ok: false, error: "generic" };
   revalidatePath(`/admin/courses/${courseId}`);
   return { ok: true };

@@ -43,6 +43,28 @@ export type CourseLesson = {
 
 export type UnitWithLessons = CourseUnit & { lessons: CourseLesson[] };
 
+/** Mirrors public.course_resources (supabase/migrations/0014_course_resources_reviews.sql). */
+export type CourseResource = {
+  id: string;
+  course_id: string;
+  title: string;
+  title_en: string | null;
+  file_path: string;
+  sort_order: number;
+};
+
+/** Mirrors public.course_reviews. reviewer_name/avatar_key are denormalized at submit time. */
+export type CourseReview = {
+  id: string;
+  course_id: string;
+  user_id: string;
+  reviewer_name: string | null;
+  reviewer_avatar_key: string | null;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+};
+
 export type CourseOutline = {
   course: Course;
   units: UnitWithLessons[];

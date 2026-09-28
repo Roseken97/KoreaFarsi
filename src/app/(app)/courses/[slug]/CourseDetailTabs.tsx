@@ -4,9 +4,12 @@ import Link from "next/link";
 import { useState, type ComponentType, type SVGProps } from "react";
 import { CheckIcon, ChevronIcon, HeadphonesIcon, LibraryIcon, MicIcon, PencilIcon, ShieldIcon } from "@/components/icons";
 import { MotionCard } from "@/components/motion/MotionCard";
+import type { CourseResource, CourseReview } from "@/lib/courses/types";
 import { flattenLessons, isLessonUnlocked, type CourseOutline } from "@/lib/courses/types";
 import { fmt, formatNumber, type Locale } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
+import { ResourcesTab } from "./ResourcesTab";
+import { ReviewsTab } from "./ReviewsTab";
 
 type Tab = "overview" | "lessons" | "resources" | "reviews";
 
@@ -18,6 +21,9 @@ export function CourseDetailTabs({
   description,
   total,
   done,
+  resources,
+  reviews,
+  currentUserId,
 }: {
   course: CourseOutline["course"];
   units: CourseOutline["units"];
@@ -26,6 +32,9 @@ export function CourseDetailTabs({
   description: string | null;
   total: number;
   done: number;
+  resources: CourseResource[];
+  reviews: CourseReview[];
+  currentUserId: string | null;
 }) {
   const { m } = useI18n();
   const t = m.courses;
@@ -181,8 +190,8 @@ export function CourseDetailTabs({
         </div>
       )}
 
-      {tab === "resources" && <p className="mt-5 rounded-card bg-surface p-5 text-center text-sm text-ink-soft shadow-soft">{t.detail.resourcesSoon}</p>}
-      {tab === "reviews" && <p className="mt-5 rounded-card bg-surface p-5 text-center text-sm text-ink-soft shadow-soft">{t.detail.reviewsSoon}</p>}
+      {tab === "resources" && <ResourcesTab resources={resources} locale={locale} />}
+      {tab === "reviews" && <ReviewsTab courseId={course.id} courseSlug={course.slug} reviews={reviews} currentUserId={currentUserId} locale={locale} />}
     </>
   );
 }

@@ -7,9 +7,10 @@ import { BooksStackIcon, LayersIcon, LevelIcon, ShieldIcon, WatchIcon } from "@/
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { completedCount, lessonCount, levelBucket } from "@/lib/courses/types";
-import { getCourseOutline } from "@/lib/courses/queries";
+import { getCourseOutline, getCourseResources, getCourseReviews } from "@/lib/courses/queries";
 import { fmt, formatNumber } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
+import { getCurrentUser } from "@/lib/supabase/server";
 import { CourseDetailTabs } from "./CourseDetailTabs";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -33,6 +34,16 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
   const totalMinutes = units.reduce((sum, u) => sum + u.lessons.reduce((n, l) => n + l.duration_minutes, 0), 0);
   const levelLabel = course.level ? t.levels[levelBucket(course.level) ?? "beginner"] || course.level : null;
   const hasCover = Boolean(course.cover_image_url);
+
+  let resources: Awaited<ReturnType<typeof getCourseResources>> = [];
+  let reviews: Awaited<ReturnType<typeof getCourseReviews>> = [];
+  let currentUserId: string | null = null;
+  if (hasAccess) {
+    const [r, rv, currentUser] = await Promise.all([getCourseResources(course.id), getCourseReviews(course.id), getCurrentUser()]);
+    resources = r;
+    reviews = rv;
+    currentUserId = currentUser?.id ?? null;
+  }
 
   return (
     <div className="animate-fade-up max-w-2xl">
@@ -76,7 +87,18 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
           </ButtonLink>
         </div>
       ) : (
-        <CourseDetailTabs course={course} units={units} progress={progress} locale={locale} description={description} total={total} done={done} />
+        <CourseDetailTabs
+          course={course}
+          units={units}
+          progress={progress}
+          locale={locale}
+          description={description}
+          total={total}
+          done={done}
+          resources={resources}
+          reviews={reviews}
+          currentUserId={currentUserId}
+        />
       )}
     </div>
   );
