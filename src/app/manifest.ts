@@ -7,7 +7,9 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "KoreaFarsi — کوریافارسی",
     short_name: "KoreaFarsi",
     description: "A Bridge to a Brighter You — learn Korean with a path designed for Persian speakers.",
-    start_url: "/",
+    // "/" is now the public marketing site, not the app — installed-app launches
+    // should land on the branded splash (→ onboarding/home), not the landing page.
+    start_url: "/launch",
     scope: "/",
     display: "standalone",
     orientation: "portrait",

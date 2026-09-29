@@ -15,6 +15,29 @@ export const en = {
     subline: "More than a language, a closer you.",
     loading: "Loading your journey…",
   },
+  marketing: {
+    metaTitle: "KoreaFarsi — A Bridge to a Brighter You",
+    nav: { login: "Log in", start: "Get Started" },
+    hero: {
+      eyebrow: "Persian → Korean",
+      title: "Learn Korean on a path built for Persian speakers",
+      subtitle: "Courses, books, an AI study companion and a real planner — all in one place.",
+      cta: "Get Started",
+      ctaSecondary: "I already have an account",
+    },
+    features: {
+      title: "Everything you need to learn Korean",
+      items: {
+        courses: { title: "Video Courses", body: "Structured lessons with real progress tracking" },
+        bookstore: { title: "Bookstore", body: "Books and PDFs made for Persian speakers" },
+        aiHub: { title: "AI Practice", body: "Ask questions and practice real conversation" },
+        planner: { title: "Study Planner", body: "A study plan built around your real time" },
+        koreaLife: { title: "Korea Life", body: "Culture, travel, food and everyday life" },
+      },
+    },
+    ctaBand: { title: "Ready to start your journey?", body: "Create a free account in under a minute.", cta: "Get Started" },
+    footer: { rights: "All rights reserved." },
+  },
   onboarding: {
     skip: "Skip",
     next: "Next",
