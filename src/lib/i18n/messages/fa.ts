@@ -358,30 +358,13 @@ export const fa: Messages = {
     subtitle: "همراه شخصی یادگیری زبانت",
     greeting: "안녕하세요!",
     levelLabel: "سطح",
-    tabs: { speak: "صحبت‌کردن", chat: "چت", listen: "شنیدن", shadow: "سایه‌گویی", grammar: "گرامر" },
-    speak: {
-      heading: "بیا تمرین صحبت‌کردن کنیم",
-      body: "یک حالت رو انتخاب کن و با معلم هوش‌مصنوعی‌ت گفتگو رو شروع کن.",
-      modes: {
-        freeConversation: { title: "گفتگوی آزاد", body: "درباره‌ی موضوعات روزمره صحبت کن" },
-        scenarioPractice: { title: "تمرین موقعیتی", body: "موقعیت‌های واقعی زندگی" },
-        pronunciationCoach: { title: "اصلاح تلفظ", body: "بازخورد آنی بگیر" },
-        topicChallenge: { title: "چالش موضوعی", body: "با موضوعات هدایت‌شده تمرین کن" },
-      },
-    },
+    sections: { chat: "چت", speak: "صحبت‌کردن", listen: "شنیدن", shadow: "سایه‌گویی", grammar: "گرامر" },
+    chatCardBody: "درباره‌ی زبان کره‌ای، دانشگاه‌ها، بورسیه و زندگی در کره بپرس",
     tabComingSoon: {
+      speak: "تمرین صحبت‌کردن به‌زودی اضافه می‌شود.",
       listen: "تمرین شنیدن به‌زودی اضافه می‌شود.",
       shadow: "تمرین سایه‌گویی به‌زودی اضافه می‌شود.",
       grammar: "تمرین گرامر به‌زودی اضافه می‌شود.",
-    },
-    featureComingSoon: "این قابلیت به‌زودی اضافه می‌شود — طراحی‌ش آماده‌ست، فقط هنوز موتور صوتی پشتش ساخته نشده.",
-    recommended: {
-      title: "پیشنهاد برای تو",
-      items: {
-        cafe: { title: "توی کافه", tag: "زندگی روزمره" },
-        airport: { title: "توی فرودگاه", tag: "سفر" },
-        meetingPeople: { title: "آشنایی با آدم‌ها", tag: "اجتماعی" },
-      },
     },
     progress: {
       title: "پیشرفت تو",
