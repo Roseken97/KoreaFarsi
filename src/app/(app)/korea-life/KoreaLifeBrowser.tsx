@@ -1,13 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { ChevronIcon, LanternIcon } from "@/components/icons";
-import { MotionCard } from "@/components/motion/MotionCard";
+import { useState, type ComponentType, type SVGProps } from "react";
+import { BowlIcon, ChevronIcon, GlobeIcon, LanternIcon, SparkleIcon } from "@/components/icons";
+import { MotionCard, MotionSurface } from "@/components/motion/MotionCard";
 import type { KoreaLifeCategory, KoreaLifePost } from "@/lib/korealife/types";
 import { useI18n } from "@/lib/i18n/client";
 
 const CATEGORIES: KoreaLifeCategory[] = ["culture", "travel", "food", "life"];
+
+const CATEGORY_STYLE: Record<KoreaLifeCategory, { bg: string; text: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }> = {
+  culture: { bg: "bg-sage", text: "text-ink", Icon: LanternIcon },
+  travel: { bg: "bg-blush", text: "text-white", Icon: GlobeIcon },
+  food: { bg: "bg-ink", text: "text-cream", Icon: BowlIcon },
+  life: { bg: "bg-cream-deep", text: "text-ink", Icon: SparkleIcon },
+};
 
 export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
   const { m, locale } = useI18n();
@@ -17,11 +24,31 @@ export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
 
   return (
     <div>
-      <div className="mb-5 flex gap-1 overflow-x-auto rounded-full bg-cream-deep p-1">
-        <Tab label={t.allCategories} selected={active === null} onClick={() => setActive(null)} />
-        {CATEGORIES.map((c) => (
-          <Tab key={c} label={t.categories[c]} selected={active === c} onClick={() => setActive(c)} />
-        ))}
+      {/* Sections as cards (Home-style color tiles) instead of a tab strip */}
+      <div className="mb-6 grid grid-cols-2 gap-3">
+        {CATEGORIES.map((c) => {
+          const { bg, text, Icon } = CATEGORY_STYLE[c];
+          const selected = active === c;
+          const count = posts.filter((p) => p.category === c).length;
+          return (
+            <MotionSurface
+              key={c}
+              onClick={() => setActive(selected ? null : c)}
+              hover={false}
+              className={`group @container relative flex aspect-[3/2] cursor-pointer flex-col justify-between overflow-hidden rounded-[20px] p-3.5 shadow-soft transition ${selected ? "ring-2 ring-teal ring-offset-2 ring-offset-cream" : ""}`}
+            >
+              <span className={`absolute inset-0 ${bg}`} aria-hidden="true" />
+              <span className="absolute -end-3 -top-3 size-16 rounded-full bg-white/10" aria-hidden="true" />
+              <span className={`relative grid size-8 place-items-center rounded-full bg-white/20 ${text}`}>
+                <Icon width={16} height={16} />
+              </span>
+              <span className="relative">
+                <span className={`block font-display text-[15px] font-semibold ${text}`}>{t.categories[c]}</span>
+                <span className={`mt-0.5 block text-[11px] ${text} opacity-75`}>{count}</span>
+              </span>
+            </MotionSurface>
+          );
+        })}
       </div>
 
       {filtered.length === 0 ? (
@@ -64,16 +91,5 @@ export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
         </ul>
       )}
     </div>
-  );
-}
-
-function Tab({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex-1 shrink-0 rounded-full px-4 py-2 text-sm font-medium transition ${selected ? "bg-surface text-ink shadow-soft" : "text-ink-soft"}`}
-    >
-      {label}
-    </button>
   );
 }

@@ -358,6 +358,14 @@ export const TargetIcon = (p: IconProps) => (
   </Base>
 );
 
+/** Bowl (Korea Life "Food" category). */
+export const BowlIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 12h16a8 8 0 0 1-16 0z" />
+    <path d="M9 12V8M12 12V7M15 12V8" />
+  </Base>
+);
+
 /** Hangul glyph as an icon (Korean Alphabet collection). */
 export const HangulIcon = (p: IconProps) => (
   <Base {...p}>
