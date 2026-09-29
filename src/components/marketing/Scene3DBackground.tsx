@@ -55,7 +55,7 @@ function Rig() {
   return null;
 }
 
-/** Full-page WebGL backdrop: an amber node-lattice (the "Mainframe" look) drifting in real 3D space behind the marketing content. */
+/** Hero-only WebGL backdrop: a node-lattice drifting in real 3D space, confined to whatever section it's mounted in (not the whole page). */
 export function Scene3DBackground() {
   const reduceMotion = useMemo(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -63,7 +63,7 @@ export function Scene3DBackground() {
   );
 
   return (
-    <div className="fixed inset-0 -z-10" aria-hidden="true">
+    <div className="absolute inset-0 -z-10" aria-hidden="true">
       <Canvas
         dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}

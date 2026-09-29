@@ -37,7 +37,11 @@ export default async function MarketingLandingPage() {
   const t = m.marketing;
 
   const navItems = FEATURES.map(({ key, href }) => ({ key, href, label: t.features.items[key].title }));
-  const tabItems = [{ key: "features", href: "#features", label: t.nav.features }, ...navItems];
+  const tabItems = [
+    { key: "method", href: "#method", label: t.method.eyebrow },
+    { key: "features", href: "#features", label: t.nav.features },
+    ...navItems,
+  ];
   const siteDomain = CONTACT.website.replace(/^https?:\/\//, "");
   const heroPills = [
     { label: t.hero.cta, href: "/auth/welcome" },
@@ -47,11 +51,7 @@ export default async function MarketingLandingPage() {
   ];
 
   return (
-    <div className="relative min-h-dvh overflow-hidden">
-      <Scene3DBackground />
-      <div aria-hidden="true" className="pointer-events-none absolute -top-40 -start-32 size-96 rounded-full bg-blush/20 blur-3xl" />
-      <div aria-hidden="true" className="pointer-events-none absolute -end-24 top-96 size-96 rounded-full bg-sage/25 blur-3xl" />
-
+    <div className="relative min-h-dvh">
       <header className="relative z-20 mx-auto flex max-w-5xl items-center justify-between px-6 py-6">
         <Logo size={34} />
         <div className="flex items-center gap-4">
@@ -68,8 +68,11 @@ export default async function MarketingLandingPage() {
         </div>
       </header>
 
-      {/* Hero — large, and running directly on the shared 3D background instead of its own boxed art */}
-      <section className="relative z-10 flex min-h-[85dvh] flex-col items-center justify-center gap-7 px-6 pb-10 text-center">
+      {/* Hero — its own contained section; the 3D background lives only here, not across the whole page */}
+      <section className="relative z-10 flex min-h-[85dvh] flex-col items-center justify-center gap-7 overflow-hidden px-6 pb-10 text-center">
+        <Scene3DBackground />
+        <div aria-hidden="true" className="pointer-events-none absolute -top-40 -start-32 size-96 rounded-full bg-blush/20 blur-3xl" />
+        <div aria-hidden="true" className="pointer-events-none absolute -end-24 top-40 size-96 rounded-full bg-sage/25 blur-3xl" />
         <HeroLetterScene />
         <SiteMascotOverlay />
         <span
@@ -105,7 +108,34 @@ export default async function MarketingLandingPage() {
         ))}
       </nav>
 
-      {/* Features — its own tinted band so it reads as a distinct section, not a continuation of the hero */}
+      {/* Method — why/how KoreaFarsi teaches, told before the feature list so the feature list lands with context */}
+      <section id="method" className="relative scroll-mt-24 px-6 py-16">
+        <div className="mx-auto h-px max-w-5xl bg-line/70" />
+        <div className="mx-auto max-w-5xl pt-16">
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+            <div>
+              <span className="rounded-full bg-blush-soft px-4 py-1.5 text-xs font-semibold text-blush">{t.method.eyebrow}</span>
+              <h2 className="mt-4 font-display text-2xl font-semibold text-ink md:text-3xl">{t.method.title}</h2>
+              <p className="mt-4 text-[15px] leading-7 text-ink-soft">{t.method.intro}</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 rounded-[28px] bg-surface p-5 shadow-soft">
+              {t.method.steps.map((step, i) => (
+                <div key={step} className="flex items-center gap-2">
+                  <div className="flex w-20 flex-col items-center gap-1.5 rounded-2xl bg-cream px-2 py-3 text-center">
+                    <span className="grid size-7 place-items-center rounded-full bg-teal text-xs font-bold text-white">{i + 1}</span>
+                    <span className="text-xs leading-4 font-medium text-ink">{step}</span>
+                  </div>
+                  {i < t.method.steps.length - 1 && (
+                    <ChevronIcon width={14} height={14} className="shrink-0 text-ink-faint rtl:-scale-x-100" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features — its own tinted band so it reads as a distinct section */}
       <section id="features" className="relative scroll-mt-24 bg-gradient-to-b from-transparent via-cream-deep/60 to-transparent py-20">
         <div className="mx-auto max-w-5xl px-6">
           <div className="flex flex-col items-center gap-3 text-center">
@@ -135,36 +165,16 @@ export default async function MarketingLandingPage() {
         </div>
       </section>
 
-      {/* Method — real content about how KoreaFarsi actually teaches, not just an icon grid */}
-      <section className="relative mx-auto max-w-5xl px-6 py-16">
-        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <span className="rounded-full bg-blush-soft px-4 py-1.5 text-xs font-semibold text-blush">{t.method.eyebrow}</span>
-            <h2 className="mt-4 font-display text-2xl font-semibold text-ink md:text-3xl">{t.method.title}</h2>
-            <p className="mt-4 text-[15px] leading-7 text-ink-soft">{t.method.intro}</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2 rounded-[28px] bg-surface p-5 shadow-soft">
-            {t.method.steps.map((step, i) => (
-              <div key={step} className="flex items-center gap-2">
-                <div className="flex w-20 flex-col items-center gap-1.5 rounded-2xl bg-cream px-2 py-3 text-center">
-                  <span className="grid size-7 place-items-center rounded-full bg-teal text-xs font-bold text-white">{i + 1}</span>
-                  <span className="text-xs leading-4 font-medium text-ink">{step}</span>
-                </div>
-                {i < t.method.steps.length - 1 && (
-                  <ChevronIcon width={14} height={14} className="shrink-0 text-ink-faint rtl:-scale-x-100" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA band */}
-      <section className="relative mx-auto max-w-3xl px-6 pb-24 text-center">
-        <div className="relative overflow-hidden rounded-[28px] bg-ink px-8 py-12 text-cream shadow-lift">
+      <section className="relative px-6 pt-4 pb-24">
+        <div className="mx-auto h-px max-w-3xl bg-line/70" />
+        <div className="relative mx-auto mt-16 max-w-3xl overflow-hidden rounded-[28px] bg-ink px-8 py-12 text-center text-cream shadow-lift">
           <span aria-hidden="true" className="pointer-events-none absolute -top-16 -end-16 size-56 rounded-full bg-blush/25 blur-3xl" />
           <span aria-hidden="true" className="pointer-events-none absolute -bottom-20 -start-10 size-56 rounded-full bg-teal/30 blur-3xl" />
-          <h2 className="relative font-display text-2xl font-semibold md:text-3xl">{t.ctaBand.title}</h2>
+          <span className="relative inline-block rounded-full bg-cream/10 px-4 py-1.5 text-xs font-semibold text-cream/80">
+            {t.nav.start}
+          </span>
+          <h2 className="relative mt-4 font-display text-2xl font-semibold md:text-3xl">{t.ctaBand.title}</h2>
           <p className="relative mt-2 text-cream/80">{t.ctaBand.body}</p>
           <Link
             href="/auth/welcome"
