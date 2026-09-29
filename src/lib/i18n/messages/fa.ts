@@ -545,6 +545,7 @@ export const fa: Messages = {
       noScript: "متنی برای این درس ثبت نشده.",
       noVocabulary: "واژگانی برای این درس ثبت نشده.",
       noNotes: "نکته‌ای برای این درس ثبت نشده.",
+      continueSection: "ادامه",
       errors: {
         unauthenticated: "برای دیدن این درس وارد شو.",
         forbidden: "به این دوره دسترسی نداری.",

@@ -548,6 +548,7 @@ export const en = {
       noScript: "No script for this lesson yet.",
       noVocabulary: "No vocabulary for this lesson yet.",
       noNotes: "No notes for this lesson yet.",
+      continueSection: "Continue",
       errors: {
         unauthenticated: "Sign in to watch this lesson.",
         forbidden: "You don't have access to this course.",
