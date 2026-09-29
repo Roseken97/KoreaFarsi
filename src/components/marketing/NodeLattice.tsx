@@ -4,7 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-const AMBER = "#d9a45c";
+const NODE_COLOR = "#42474f";
 
 function makeNodes(count: number) {
   return Array.from({ length: count }, () => ({
@@ -14,7 +14,7 @@ function makeNodes(count: number) {
   }));
 }
 
-/** The amber node-network from the "Mainframe" reference, adapted to KoreaFarsi's light palette — replaces the floating icosahedron/octahedron/torus shapes. */
+/** The node-network from the "Mainframe" reference, in a dark charcoal grey for contrast against KoreaFarsi's light cream background. */
 export function NodeLattice({ reduceMotion }: { reduceMotion: boolean }) {
   const group = useRef<THREE.Group>(null);
 
@@ -49,10 +49,10 @@ export function NodeLattice({ reduceMotion }: { reduceMotion: boolean }) {
   return (
     <group ref={group}>
       <points geometry={pointsGeometry}>
-        <pointsMaterial color={AMBER} size={0.16} sizeAttenuation transparent opacity={0.85} />
+        <pointsMaterial color={NODE_COLOR} size={0.16} sizeAttenuation transparent opacity={0.9} />
       </points>
       <lineSegments geometry={lineGeometry}>
-        <lineBasicMaterial color={AMBER} transparent opacity={0.22} />
+        <lineBasicMaterial color={NODE_COLOR} transparent opacity={0.32} />
       </lineSegments>
     </group>
   );
