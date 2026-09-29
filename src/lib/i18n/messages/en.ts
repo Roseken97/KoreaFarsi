@@ -550,6 +550,12 @@ export const en = {
       noNotes: "No notes for this lesson yet.",
       continueSection: "Continue",
       pathTitle: "Learning Path",
+      pathHints: {
+        content: "Watch and learn with explanation",
+        script: "Read through the lesson's script",
+        vocabulary: "{n} words to learn",
+        notes: "Extra notes for this lesson",
+      },
       errors: {
         unauthenticated: "Sign in to watch this lesson.",
         forbidden: "You don't have access to this course.",

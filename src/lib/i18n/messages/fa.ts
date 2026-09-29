@@ -547,6 +547,12 @@ export const fa: Messages = {
       noNotes: "نکته‌ای برای این درس ثبت نشده.",
       continueSection: "ادامه",
       pathTitle: "مسیر یادگیری",
+      pathHints: {
+        content: "تماشا کن و همراه با توضیح یاد بگیر",
+        script: "متن درس رو بخون",
+        vocabulary: "{n} کلمه برای یادگیری",
+        notes: "نکات تکمیلی این درس",
+      },
       errors: {
         unauthenticated: "برای دیدن این درس وارد شو.",
         forbidden: "به این دوره دسترسی نداری.",

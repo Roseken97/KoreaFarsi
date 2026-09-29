@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useTransition, type ComponentType, type SVGProps } from "react";
-import { CheckIcon, ChevronIcon, DictionaryIcon, PencilIcon, PlayIcon, TagIcon } from "@/components/icons";
+import { CheckIcon, ChevronIcon, DictionaryIcon, PencilIcon, PlayIcon, ShieldIcon, TagIcon } from "@/components/icons";
 import { HangulBreakdown } from "@/components/courses/HangulBreakdown";
 import { HangulChart } from "@/components/courses/HangulChart";
 import { VocabFlashcards } from "@/components/courses/VocabFlashcards";
@@ -10,12 +10,12 @@ import { Button } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
 import { toggleLessonDone } from "@/lib/courses/actions";
 import type { CourseLesson } from "@/lib/courses/types";
-import type { Locale } from "@/lib/i18n/config";
+import { fmt, formatNumber, type Locale } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
 
 type VideoError = "unauthenticated" | "forbidden" | "unavailable" | "generic" | null;
 type StepKey = "content" | "script" | "vocabulary" | "notes";
-type Step = { key: StepKey; title: string; Icon: ComponentType<SVGProps<SVGSVGElement>> };
+type Step = { key: StepKey; title: string; subtitle: string; Icon: ComponentType<SVGProps<SVGSVGElement>> };
 
 export function LessonView({
   lesson,
@@ -48,10 +48,12 @@ export function LessonView({
   const script = locale === "en" ? lesson.script_en || lesson.script : lesson.script;
   const slide = lesson.slides[slideIndex];
 
-  const steps: Step[] = [{ key: "content", title: isSlides ? t.tabs.slides : t.tabs.video, Icon: PlayIcon }];
-  if (script) steps.push({ key: "script", title: t.tabs.script, Icon: PencilIcon });
-  if (lesson.vocabulary.length > 0) steps.push({ key: "vocabulary", title: t.tabs.vocabulary, Icon: TagIcon });
-  if (lesson.notes) steps.push({ key: "notes", title: t.tabs.notes, Icon: DictionaryIcon });
+  const steps: Step[] = [{ key: "content", title: isSlides ? t.tabs.slides : t.tabs.video, subtitle: t.pathHints.content, Icon: PlayIcon }];
+  if (script) steps.push({ key: "script", title: t.tabs.script, subtitle: t.pathHints.script, Icon: PencilIcon });
+  if (lesson.vocabulary.length > 0) {
+    steps.push({ key: "vocabulary", title: t.tabs.vocabulary, subtitle: fmt(t.pathHints.vocabulary, { n: formatNumber(lesson.vocabulary.length, locale) }), Icon: TagIcon });
+  }
+  if (lesson.notes) steps.push({ key: "notes", title: t.tabs.notes, subtitle: t.pathHints.notes, Icon: DictionaryIcon });
 
   function toggle() {
     const next = !done;
@@ -154,33 +156,45 @@ export function LessonView({
         </div>
       )}
 
-      {/* Learning path — titles only; the next step stays locked until the current one has been seen */}
+      {/* Learning path — vertical, connected; each box shows its own topic + details, next stays locked until the current one has been seen */}
       {steps.length > 1 && (
         <div>
           <p className="mb-2 text-xs font-semibold text-ink-faint">{t.pathTitle}</p>
-          <div className="flex items-start gap-0">
+          <div className="flex flex-col gap-3">
             {steps.map((step, i, arr) => {
               const locked = i > unlockedIndex;
               const passed = i < unlockedIndex;
               const current = i === activeIndex;
               return (
-                <div key={step.key} className="flex min-w-0 flex-1 flex-col items-center gap-1.5">
-                  <div className="flex w-full items-center">
-                    {i > 0 && <span className={`h-px flex-1 ${i <= unlockedIndex ? "bg-teal" : "bg-line"}`} />}
-                    <button
-                      onClick={() => !locked && setActiveIndex(i)}
-                      disabled={locked}
-                      className={`grid size-8 shrink-0 place-items-center rounded-full border text-xs font-semibold transition disabled:cursor-not-allowed ${
-                        current ? "border-teal bg-teal text-white" : passed ? "border-success bg-success text-white" : locked ? "border-line bg-surface text-ink-faint" : "border-teal bg-surface text-teal-deep"
-                      }`}
-                    >
-                      {passed ? <CheckIcon width={13} height={13} /> : i + 1}
-                    </button>
-                    {i < arr.length - 1 && <span className={`h-px flex-1 ${i < unlockedIndex ? "bg-teal" : "bg-line"}`} />}
-                  </div>
-                  <span className={`max-w-[4.5rem] truncate text-[10px] font-medium ${current ? "text-ink" : "text-ink-faint"}`} dir="auto">
-                    {step.title}
+                <div key={step.key} className="relative flex gap-3">
+                  {i < arr.length - 1 && <span className={`absolute start-4 top-8 bottom-[-0.75rem] w-px ${i < unlockedIndex ? "bg-teal" : "bg-line"}`} aria-hidden="true" />}
+                  <span
+                    className={`relative z-10 mt-0.5 grid size-8 shrink-0 place-items-center rounded-full border text-xs font-semibold ${
+                      current ? "border-teal bg-teal text-white" : passed ? "border-success bg-success text-white" : "border-line bg-surface text-ink-soft"
+                    }`}
+                  >
+                    {passed ? <CheckIcon width={13} height={13} /> : i + 1}
                   </span>
+                  <button
+                    onClick={() => !locked && setActiveIndex(i)}
+                    disabled={locked}
+                    className={`flex min-w-0 flex-1 items-center gap-3 rounded-field border p-3 text-start transition disabled:cursor-not-allowed ${
+                      current ? "border-teal bg-teal/5" : locked ? "border-line bg-cream-deep opacity-70" : "border-line bg-surface hover:bg-cream"
+                    }`}
+                  >
+                    <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${current ? "bg-teal text-white" : "bg-cream-deep text-ink-soft"}`}>
+                      <step.Icon width={16} height={16} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-semibold text-ink" dir="auto">
+                        {step.title}
+                      </span>
+                      <span className="block truncate text-[12px] text-ink-faint" dir="auto">
+                        {step.subtitle}
+                      </span>
+                    </span>
+                    {locked && <ShieldIcon width={14} height={14} className="shrink-0 text-ink-faint" />}
+                  </button>
                 </div>
               );
             })}
