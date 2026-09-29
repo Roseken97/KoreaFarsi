@@ -397,6 +397,30 @@ export const PeopleIcon = (p: IconProps) => (
   </Base>
 );
 
+/** YouTube (Help & Support contact channels). */
+export const YouTubeIcon = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="2.5" y="6" width="19" height="12" rx="4" />
+    <path d="M10.5 9.5v5l4.5-2.5z" fill="currentColor" stroke="none" />
+  </Base>
+);
+
+/** WhatsApp (Help & Support contact channels). */
+export const WhatsAppIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 3.5a8.3 8.3 0 0 0-7 12.7L4 20.5l4.5-1a8.3 8.3 0 1 0 3.5-16z" />
+    <path d="M8.7 8.3c.3-.6.6-.6.9-.6h.6c.2 0 .4 0 .6.5s.7 1.7.7 1.9 0 .3-.1.5-.2.3-.4.5-.3.4-.1.7c.2.3.8 1.3 1.7 2.1s1.5.9 1.8 1 .5 0 .7-.2.7-.8.9-1.1.4-.2.6-.1l1.6.8c.2.1.4.2.4.4s0 1.1-.5 1.6-1.5 1-2.3 1c-.7 0-2.4-.3-4.3-2.1s-2.9-3.9-3-4.6.1-1.5.5-2.1z" fill="currentColor" stroke="none" />
+  </Base>
+);
+
+/** Ticket (Help & Support tickets). */
+export const TicketIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 8.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1.2a1.8 1.8 0 0 0 0 3.6v1.2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1.2a1.8 1.8 0 0 0 0-3.6z" />
+    <path d="M9.5 6.5v11" strokeDasharray="2.2 2.2" />
+  </Base>
+);
+
 /** Hangul glyph as an icon (Korean Alphabet collection). */
 export const HangulIcon = (p: IconProps) => (
   <Base {...p}>
