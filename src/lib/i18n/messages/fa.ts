@@ -359,7 +359,7 @@ export const fa: Messages = {
     greeting: "안녕하세요!",
     levelLabel: "سطح",
     sections: { chat: "چت", speak: "صحبت‌کردن", listen: "شنیدن", shadow: "سایه‌گویی", grammar: "گرامر" },
-    chatCardBody: "درباره‌ی زبان کره‌ای، دانشگاه‌ها، بورسیه و زندگی در کره بپرس",
+    comingSoonLabel: "حالت‌های تمرین بیشتر (به‌زودی)",
     tabComingSoon: {
       speak: "تمرین صحبت‌کردن به‌زودی اضافه می‌شود.",
       listen: "تمرین شنیدن به‌زودی اضافه می‌شود.",

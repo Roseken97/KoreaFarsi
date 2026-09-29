@@ -24,7 +24,7 @@ function loadHistory(): Message[] {
   }
 }
 
-export function ChatBox() {
+export function ChatBox({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   const { m, locale } = useI18n();
   const t = m.chat;
   const [messages, setMessages] = useState<Message[]>([]);
@@ -130,24 +130,39 @@ export function ChatBox() {
 
   return (
     <div className="flex min-h-[calc(100dvh-12rem)] flex-col md:min-h-[calc(100dvh-6rem)]">
-      {/* Header */}
-      <header className="mb-4 flex items-center gap-3">
-        <LogoMark size={44} />
-        <div className="min-w-0 flex-1">
-          <h1 className="font-display text-2xl leading-tight font-semibold">{t.title}</h1>
-          <p className="text-xs text-ink-soft">{t.subtitle}</p>
-        </div>
-        {messages.length > 0 && (
-          <button
-            onClick={newChat}
-            disabled={busy}
-            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-2 text-xs font-medium text-ink-soft shadow-soft hover:text-ink disabled:opacity-50"
-          >
-            <ReviewIcon width={14} height={14} />
-            {t.newChat}
-          </button>
-        )}
-      </header>
+      {/* Header — skipped when embedded under a page that already shows its own title (e.g. AI Practice) */}
+      {hideHeader ? (
+        messages.length > 0 && (
+          <div className="mb-3 flex justify-end">
+            <button
+              onClick={newChat}
+              disabled={busy}
+              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-2 text-xs font-medium text-ink-soft shadow-soft hover:text-ink disabled:opacity-50"
+            >
+              <ReviewIcon width={14} height={14} />
+              {t.newChat}
+            </button>
+          </div>
+        )
+      ) : (
+        <header className="mb-4 flex items-center gap-3">
+          <LogoMark size={44} />
+          <div className="min-w-0 flex-1">
+            <h1 className="font-display text-2xl leading-tight font-semibold">{t.title}</h1>
+            <p className="text-xs text-ink-soft">{t.subtitle}</p>
+          </div>
+          {messages.length > 0 && (
+            <button
+              onClick={newChat}
+              disabled={busy}
+              className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-2 text-xs font-medium text-ink-soft shadow-soft hover:text-ink disabled:opacity-50"
+            >
+              <ReviewIcon width={14} height={14} />
+              {t.newChat}
+            </button>
+          )}
+        </header>
+      )}
 
       {/* Conversation */}
       <div className="flex flex-1 flex-col gap-3" aria-live="polite">

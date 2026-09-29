@@ -362,7 +362,7 @@ export const en = {
     greeting: "안녕하세요!",
     levelLabel: "Level",
     sections: { chat: "Chat", speak: "Speak", listen: "Listen", shadow: "Shadow", grammar: "Grammar" },
-    chatCardBody: "Ask about Korean, universities, scholarships and life in Korea",
+    comingSoonLabel: "More practice modes (coming soon)",
     tabComingSoon: {
       speak: "Speaking practice is coming in a future update.",
       listen: "Listening practice is coming in a future update.",

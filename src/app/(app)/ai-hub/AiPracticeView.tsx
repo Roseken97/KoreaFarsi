@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, type ComponentType, type ReactNode, type SVGProps } from "react";
 import { ChatBox } from "@/components/chat/ChatBox";
-import { BellIcon, ChatBubbleIcon, ChevronIcon, DictionaryIcon, HeadphonesIcon, MicIcon, RobotIcon, TrophyIcon, WatchIcon } from "@/components/icons";
+import { BellIcon, ChatBubbleIcon, DictionaryIcon, HeadphonesIcon, MicIcon, RobotIcon, TrophyIcon, WatchIcon } from "@/components/icons";
 import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
 import { Avatar } from "@/components/ui/Avatar";
 import type { AiPracticeStats } from "@/lib/ai-practice/queries";
@@ -11,10 +11,10 @@ import { formatNumber } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
 import type { Profile } from "@/lib/profile";
 
-type Section = "chat" | "speak" | "listen" | "shadow" | "grammar";
+type OtherSection = "speak" | "listen" | "shadow" | "grammar";
 type Level = "beginner" | "intermediate" | "advanced";
 
-const OTHER_SECTIONS: { key: Exclude<Section, "chat">; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
+const OTHER_SECTIONS: { key: OtherSection; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
   { key: "speak", Icon: MicIcon },
   { key: "listen", Icon: HeadphonesIcon },
   { key: "shadow", Icon: MicIcon },
@@ -23,11 +23,17 @@ const OTHER_SECTIONS: { key: Exclude<Section, "chat">; Icon: ComponentType<SVGPr
 
 const LEVELS: Level[] = ["beginner", "intermediate", "advanced"];
 
+/**
+ * AI Practice. Chat is the one real, working section, so it gets the page's
+ * main real estate (no header duplication, no "select it" step). The other
+ * modes are a small, clearly-secondary chip row — real numbers (Your
+ * Progress) never hide behind a not-yet-built feature.
+ */
 export function AiPracticeView({ profile, stats, unreadCount }: { profile: Profile | null; stats: AiPracticeStats; unreadCount: number }) {
   const { m, locale } = useI18n();
   const t = m.aiPractice;
-  const [selected, setSelected] = useState<Section>("chat");
   const [level, setLevel] = useState<Level>("beginner");
+  const [notice, setNotice] = useState<string | null>(null);
 
   return (
     <div className="animate-fade-up max-w-2xl">
@@ -58,81 +64,53 @@ export function AiPracticeView({ profile, stats, unreadCount }: { profile: Profi
         </div>
       </div>
 
-      {/* Chat — the one real, working section — as a wide horizontal card */}
-      <button
-        onClick={() => setSelected("chat")}
-        className={`mt-5 flex w-full items-center gap-3 rounded-[20px] border bg-surface p-4 text-start shadow-soft transition ${selected === "chat" ? "border-teal ring-2 ring-teal/20" : "border-line hover:bg-cream"}`}
-      >
-        <span className="grid size-11 shrink-0 place-items-center rounded-full bg-teal text-white">
-          <ChatBubbleIcon width={20} height={20} />
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-[15px] font-semibold text-ink">{t.sections.chat}</span>
-          <span className="block truncate text-[12px] text-ink-faint">{t.chatCardBody}</span>
-        </span>
-        <ChevronIcon width={16} height={16} className="shrink-0 text-ink-faint rtl:-scale-x-100" />
-      </button>
-
-      {/* Speak / Listen / Shadow / Grammar — same design, not yet functional */}
-      <div className="mt-3 grid grid-cols-2 gap-3">
-        {OTHER_SECTIONS.map(({ key, Icon }) => (
-          <button
-            key={key}
-            onClick={() => setSelected(key)}
-            className={`flex flex-col items-start gap-2 rounded-[18px] border bg-surface p-3.5 text-start shadow-soft transition ${selected === key ? "border-teal ring-2 ring-teal/20" : "border-line hover:bg-cream"}`}
+      {/* Your Progress — always visible; real numbers, never hidden behind a placeholder tab */}
+      <section className="mt-5 rounded-[18px] bg-surface p-4 shadow-soft">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="font-display text-base font-semibold">{t.progress.title}</h2>
+          <select
+            value={level}
+            onChange={(e) => setLevel(e.target.value as Level)}
+            className="rounded-full border border-line bg-cream px-3 py-1.5 text-xs font-medium text-ink-soft outline-none"
           >
-            <span className="grid size-9 place-items-center rounded-full bg-sage-soft text-teal-deep">
-              <Icon width={17} height={17} />
-            </span>
-            <span className="text-sm font-semibold text-ink">{t.sections[key]}</span>
-          </button>
-        ))}
-      </div>
+            {LEVELS.map((l) => (
+              <option key={l} value={l}>
+                {m.courses.levels[l]}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mt-3 grid grid-cols-3 divide-x divide-line">
+          <ProgressStat icon={<ChatBubbleIcon width={18} height={18} />} value={formatNumber(stats.conversations, locale)} label={t.progress.conversations} />
+          <ProgressStat icon={<WatchIcon width={18} height={18} />} value="—" label={t.progress.hours} />
+          <ProgressStat icon={<TrophyIcon width={18} height={18} />} value={formatNumber(stats.badges, locale)} label={t.progress.badges} />
+        </div>
+      </section>
 
+      {/* Speak / Listen / Shadow / Grammar — a small, clearly-secondary row, not full cards competing with the real feature */}
       <div className="mt-5">
-        {selected === "chat" ? (
-          <ChatBox />
-        ) : (
-          <ComingSoonPanel Icon={OTHER_SECTIONS.find((s) => s.key === selected)!.Icon} text={t.tabComingSoon[selected]} />
-        )}
+        <p className="mb-2 text-[11px] font-semibold tracking-wide text-ink-faint uppercase">{t.comingSoonLabel}</p>
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {OTHER_SECTIONS.map(({ key, Icon }) => (
+            <button
+              key={key}
+              onClick={() => setNotice(t.tabComingSoon[key])}
+              className="flex shrink-0 items-center gap-1.5 rounded-full border border-line bg-cream-deep px-3.5 py-2 text-xs font-medium text-ink-soft transition hover:bg-cream"
+            >
+              <Icon width={14} height={14} />
+              {t.sections[key]}
+            </button>
+          ))}
+        </div>
+        {notice && <p className="mt-2 text-xs text-ink-faint">{notice}</p>}
       </div>
 
-      {selected !== "chat" && (
-        <section className="mt-7 rounded-[18px] bg-surface p-4 shadow-soft">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="font-display text-base font-semibold">{t.progress.title}</h2>
-            <select
-              value={level}
-              onChange={(e) => setLevel(e.target.value as Level)}
-              className="rounded-full border border-line bg-cream px-3 py-1.5 text-xs font-medium text-ink-soft outline-none"
-            >
-              {LEVELS.map((l) => (
-                <option key={l} value={l}>
-                  {m.courses.levels[l]}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="mt-3 grid grid-cols-3 divide-x divide-line">
-            <ProgressStat icon={<ChatBubbleIcon width={18} height={18} />} value={formatNumber(stats.conversations, locale)} label={t.progress.conversations} />
-            <ProgressStat icon={<WatchIcon width={18} height={18} />} value="—" label={t.progress.hours} />
-            <ProgressStat icon={<TrophyIcon width={18} height={18} />} value={formatNumber(stats.badges, locale)} label={t.progress.badges} />
-          </div>
-        </section>
-      )}
+      {/* Chat — the real feature, front and center */}
+      <div className="mt-6">
+        <ChatBox hideHeader />
+      </div>
 
-      {selected !== "chat" && <p className="mt-6 text-center text-sm text-ink-faint italic">{t.quote}</p>}
-    </div>
-  );
-}
-
-function ComingSoonPanel({ Icon, text }: { Icon: ComponentType<SVGProps<SVGSVGElement>>; text: string }) {
-  return (
-    <div className="flex flex-col items-center gap-3 rounded-card bg-surface p-8 text-center shadow-soft">
-      <span className="grid size-14 place-items-center rounded-full bg-sage-soft text-teal-deep">
-        <Icon width={26} height={26} />
-      </span>
-      <p className="max-w-xs text-sm text-ink-soft">{text}</p>
+      <p className="mt-6 text-center text-sm text-ink-faint italic">{t.quote}</p>
     </div>
   );
 }
