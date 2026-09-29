@@ -4,11 +4,11 @@
  * TODO(Rose): fill in the real handles/links. Empty values are simply hidden.
  */
 export const CONTACT = {
-  website: "", // full URL, e.g. "https://koreafarsi.com"
-  instagram: "", // handle without @, e.g. "koreafarsi"
-  youtube: "", // handle without @, e.g. "koreafarsi"
-  telegram: "", // username without @
-  whatsapp: "", // international phone number, digits only (no +, no spaces), e.g. "989123456789"
+  website: "https://koreafarsi.ir",
+  instagram: "koreafarsi",
+  youtube: "koreafarsi",
+  telegram: "koreakey_support",
+  whatsapp: "", // international phone number, digits only (no +, no spaces), e.g. "989123456789" — off for now
   email: "",
 };
 
