@@ -5,6 +5,8 @@ import { BooksStackIcon, ChevronIcon, LanternIcon, PlannerIcon, RobotIcon, Shopp
 import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
 import { Tilt3D } from "@/components/marketing/Tilt3D";
 import { HeroLetterScene } from "@/components/marketing/HeroLetterScene";
+import { SiteNav } from "@/components/marketing/SiteNav";
+import { Scene3DBackgroundClient as Scene3DBackground } from "@/components/marketing/Scene3DBackgroundClient";
 import { ButtonLink } from "@/components/ui/Button";
 import { getMessages } from "@/lib/i18n/server";
 
@@ -26,19 +28,33 @@ export default async function MarketingLandingPage() {
   const { m } = await getMessages();
   const t = m.marketing;
 
+  const navItems = FEATURES.map(({ key, href }) => ({ key, href, label: t.features.items[key].title }));
+
   return (
     <div className="relative min-h-dvh overflow-hidden">
+      <Scene3DBackground />
       <div aria-hidden="true" className="pointer-events-none absolute -top-40 -start-32 size-96 rounded-full bg-blush/20 blur-3xl" />
       <div aria-hidden="true" className="pointer-events-none absolute -end-24 top-96 size-96 rounded-full bg-sage/25 blur-3xl" />
 
       <header className="relative mx-auto flex max-w-5xl items-center justify-between px-6 py-6">
         <Logo size={34} />
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
+          <SiteNav
+            items={navItems}
+            featuresLabel={t.nav.features}
+            loginLabel={t.nav.login}
+            startLabel={t.nav.start}
+            menuLabel={t.nav.menu}
+            closeLabel={t.nav.close}
+          />
           <LanguageSwitch />
-          <Link href="/auth/login" className="text-sm font-medium text-ink-soft hover:text-ink">
+          <Link href="/auth/login" className="hidden text-sm font-medium text-ink-soft hover:text-ink md:inline-block">
             {t.nav.login}
           </Link>
-          <Link href="/auth/welcome" className="rounded-full bg-teal px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-teal-deep">
+          <Link
+            href="/auth/welcome"
+            className="hidden rounded-full bg-teal px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-teal-deep md:inline-block"
+          >
             {t.nav.start}
           </Link>
         </div>
@@ -66,11 +82,15 @@ export default async function MarketingLandingPage() {
       </section>
 
       {/* Features */}
-      <section className="relative mx-auto max-w-5xl px-6 pb-20">
+      <section id="features" className="relative mx-auto max-w-5xl scroll-mt-24 px-6 pb-20">
         <h2 className="text-center font-display text-2xl font-semibold text-ink md:text-3xl">{t.features.title}</h2>
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map(({ key, Icon, href }) => (
-            <Tilt3D key={key} strength={6} className="flex flex-col items-start rounded-[24px] bg-surface p-6 shadow-soft">
+            <Tilt3D
+              key={key}
+              strength={6}
+              className="flex flex-col items-start rounded-[24px] border border-white/50 bg-surface/70 p-6 shadow-soft backdrop-blur-xl"
+            >
               <span className="grid size-12 place-items-center rounded-2xl bg-sage-soft text-teal-deep">
                 <Icon width={22} height={22} />
               </span>

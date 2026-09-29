@@ -295,6 +295,12 @@ export const CloseIcon = (p: IconProps) => (
   </Base>
 );
 
+export const MenuIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 7h16M4 12h16M4 17h16" />
+  </Base>
+);
+
 export const PlusIcon = (p: IconProps) => (
   <Base {...p}>
     <path d="M12 5.5v13M5.5 12h13" />

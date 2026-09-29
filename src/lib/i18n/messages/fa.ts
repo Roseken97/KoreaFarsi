@@ -14,7 +14,7 @@ export const fa: Messages = {
   },
   marketing: {
     metaTitle: "کوریافارسی — پلی به سوی نسخه‌ی بهتر تو",
-    nav: { login: "ورود", start: "شروع کن" },
+    nav: { login: "ورود", start: "شروع کن", features: "امکانات", menu: "منو", close: "بستن" },
     hero: {
       eyebrow: "فارسی ← کره‌ای",
       title: "کره‌ای رو با مسیری که برای فارسی‌زبان‌ها طراحی شده یاد بگیر",

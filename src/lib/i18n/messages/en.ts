@@ -17,7 +17,7 @@ export const en = {
   },
   marketing: {
     metaTitle: "KoreaFarsi — A Bridge to a Brighter You",
-    nav: { login: "Log in", start: "Get Started" },
+    nav: { login: "Log in", start: "Get Started", features: "Features", menu: "Menu", close: "Close" },
     hero: {
       eyebrow: "Persian → Korean",
       title: "Learn Korean on a path built for Persian speakers",
