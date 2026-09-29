@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { CopyIcon } from "@/components/icons";
+import { Magnetic } from "@/components/marketing/Magnetic";
 
 /** Reveals `text` one character at a time; `done` flips once the whole string has been typed. */
 function useTypewriter(text: string, speed = 38, startDelay = 600) {
@@ -94,15 +95,26 @@ export function HeroCopy({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.4, ease: "easeOut" }}
       >
-        {pills.map((pill) => (
-          <Link
-            key={pill.href}
-            href={pill.href}
-            className="mx-[0.2em] mb-[0.4em] inline-flex items-center justify-center rounded-full bg-ink px-4 py-[0.55em] text-[13px] font-medium whitespace-nowrap text-cream transition-colors duration-200 hover:bg-teal-deep sm:px-5 sm:text-[15px]"
-          >
-            {pill.label}
-          </Link>
-        ))}
+        {pills.map((pill, i) =>
+          i === 0 ? (
+            <Magnetic key={pill.href}>
+              <Link
+                href={pill.href}
+                className="mx-[0.2em] mb-[0.4em] inline-flex items-center justify-center rounded-full bg-ink px-4 py-[0.55em] text-[13px] font-medium whitespace-nowrap text-cream transition-colors duration-200 hover:bg-teal-deep sm:px-5 sm:text-[15px]"
+              >
+                {pill.label}
+              </Link>
+            </Magnetic>
+          ) : (
+            <Link
+              key={pill.href}
+              href={pill.href}
+              className="mx-[0.2em] mb-[0.4em] inline-flex items-center justify-center rounded-full bg-ink px-4 py-[0.55em] text-[13px] font-medium whitespace-nowrap text-cream transition-colors duration-200 hover:bg-teal-deep sm:px-5 sm:text-[15px]"
+            >
+              {pill.label}
+            </Link>
+          ),
+        )}
         <button
           type="button"
           onClick={copy}

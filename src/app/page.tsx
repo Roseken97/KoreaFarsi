@@ -8,6 +8,9 @@ import { MascotCorner } from "@/components/marketing/MascotCorner";
 import { Scene3DBackgroundClient as Scene3DBackground } from "@/components/marketing/Scene3DBackgroundClient";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { HeroCopy } from "@/components/marketing/HeroCopy";
+import { VocabMarquee } from "@/components/marketing/VocabMarquee";
+import { ScrollRevealText } from "@/components/marketing/ScrollRevealText";
+import { MethodStack } from "@/components/marketing/MethodStack";
 import { CONTACT } from "@/config/contact";
 import { getMessages } from "@/lib/i18n/server";
 
@@ -104,30 +107,18 @@ export default async function MarketingLandingPage() {
         ))}
       </nav>
 
+      <VocabMarquee eyebrow={t.vocabEyebrow} words={t.vocab} />
+
       {/* Method — why/how KoreaFarsi teaches, told before the feature list so the feature list lands with context */}
       <section id="method" className="relative scroll-mt-24 px-6 py-16">
         <div className="mx-auto h-px max-w-5xl bg-line/70" />
-        <div className="mx-auto max-w-5xl pt-16">
-          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-            <div>
-              <span className="rounded-full bg-blush-soft px-4 py-1.5 text-xs font-semibold text-blush">{t.method.eyebrow}</span>
-              <h2 className="mt-4 font-display text-2xl font-semibold text-ink md:text-3xl">{t.method.title}</h2>
-              <p className="mt-4 text-[15px] leading-7 text-ink-soft">{t.method.intro}</p>
-            </div>
-            <div className="flex flex-wrap items-center gap-2 rounded-[28px] bg-surface p-5 shadow-soft">
-              {t.method.steps.map((step, i) => (
-                <div key={step} className="flex items-center gap-2">
-                  <div className="flex w-20 flex-col items-center gap-1.5 rounded-2xl bg-cream px-2 py-3 text-center">
-                    <span className="grid size-7 place-items-center rounded-full bg-teal text-xs font-bold text-white">{i + 1}</span>
-                    <span className="text-xs leading-4 font-medium text-ink">{step}</span>
-                  </div>
-                  {i < t.method.steps.length - 1 && (
-                    <ChevronIcon width={14} height={14} className="shrink-0 text-ink-faint rtl:-scale-x-100" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="mx-auto max-w-xl pt-16 text-center">
+          <span className="rounded-full bg-blush-soft px-4 py-1.5 text-xs font-semibold text-blush">{t.method.eyebrow}</span>
+          <h2 className="mt-4 font-display text-2xl font-semibold text-ink md:text-3xl">{t.method.title}</h2>
+          <ScrollRevealText text={t.method.intro} className="mt-4 text-[15px] leading-7 text-ink-soft" />
+        </div>
+        <div className="mt-6">
+          <MethodStack steps={t.method.steps} details={t.method.stepDetails} />
         </div>
       </section>
 
