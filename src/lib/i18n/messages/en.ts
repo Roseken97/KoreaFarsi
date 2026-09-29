@@ -17,7 +17,7 @@ export const en = {
   },
   marketing: {
     metaTitle: "KoreaFarsi — A Bridge to a Brighter You",
-    nav: { login: "Log in", start: "Get Started", features: "Features", menu: "Menu", close: "Close" },
+    nav: { login: "Log in", start: "Get Started", features: "Features" },
     hero: {
       eyebrow: "Persian → Korean",
       title: "Learn Korean on a path built for Persian speakers",
@@ -35,6 +35,21 @@ export const en = {
         planner: { title: "Study Planner", body: "A study plan built around your real time" },
         koreaLife: { title: "Korea Life", body: "Culture, travel, food and everyday life" },
       },
+    },
+    method: {
+      eyebrow: "How we teach",
+      title: "KoreaFarsi means real use, not just recognition",
+      intro:
+        "KoreaFarsi isn't a textbook or a single course — it's a full learning ecosystem that connects content, practice, AI and planning. Every word you learn moves through a real path, so it doesn't just sit in memory — you actually use it.",
+      steps: [
+        "Vocabulary Learning",
+        "Collocations",
+        "Sentence Practice",
+        "Transformation & Creation",
+        "Writing",
+        "Speaking Mission",
+        "Review & Practice",
+      ],
     },
     ctaBand: { title: "Ready to start your journey?", body: "Create a free account in under a minute.", cta: "Get Started" },
     footer: { rights: "All rights reserved." },

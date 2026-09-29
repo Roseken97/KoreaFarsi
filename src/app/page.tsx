@@ -5,7 +5,6 @@ import { BooksStackIcon, ChevronIcon, LanternIcon, PlannerIcon, RobotIcon, Shopp
 import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
 import { Tilt3D } from "@/components/marketing/Tilt3D";
 import { HeroLetterScene } from "@/components/marketing/HeroLetterScene";
-import { SiteNav } from "@/components/marketing/SiteNav";
 import { Scene3DBackgroundClient as Scene3DBackground } from "@/components/marketing/Scene3DBackgroundClient";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { ButtonLink } from "@/components/ui/Button";
@@ -36,6 +35,7 @@ export default async function MarketingLandingPage() {
   const t = m.marketing;
 
   const navItems = FEATURES.map(({ key, href }) => ({ key, href, label: t.features.items[key].title }));
+  const tabItems = [{ key: "features", href: "#features", label: t.nav.features }, ...navItems];
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
@@ -43,36 +43,33 @@ export default async function MarketingLandingPage() {
       <div aria-hidden="true" className="pointer-events-none absolute -top-40 -start-32 size-96 rounded-full bg-blush/20 blur-3xl" />
       <div aria-hidden="true" className="pointer-events-none absolute -end-24 top-96 size-96 rounded-full bg-sage/25 blur-3xl" />
 
-      <header className="relative mx-auto flex max-w-5xl items-center justify-between px-6 py-6">
+      <header className="relative z-20 mx-auto flex max-w-5xl items-center justify-between px-6 py-6">
         <Logo size={34} />
-        <div className="flex items-center gap-5">
-          <SiteNav
-            items={navItems}
-            featuresLabel={t.nav.features}
-            loginLabel={t.nav.login}
-            startLabel={t.nav.start}
-            menuLabel={t.nav.menu}
-            closeLabel={t.nav.close}
-          />
+        <div className="flex items-center gap-4">
           <LanguageSwitch />
-          <Link href="/auth/login" className="hidden text-sm font-medium text-ink-soft hover:text-ink md:inline-block">
+          <Link href="/auth/login" className="hidden text-sm font-medium text-ink-soft hover:text-ink sm:inline-block">
             {t.nav.login}
           </Link>
           <Link
             href="/auth/welcome"
-            className="hidden rounded-full bg-teal px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-teal-deep md:inline-block"
+            className="rounded-full bg-teal px-4 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:bg-teal-deep sm:px-5"
           >
             {t.nav.start}
           </Link>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="relative mx-auto flex max-w-5xl flex-col items-center gap-7 px-6 pt-8 pb-16 text-center md:pt-14">
-        <span className="rounded-full bg-sage-soft px-4 py-1.5 text-xs font-semibold text-teal-deep">{t.hero.eyebrow}</span>
-        <h1 className="max-w-2xl font-display text-4xl leading-tight font-bold text-ink md:text-6xl">{t.hero.title}</h1>
-        <p className="max-w-xl text-lg leading-8 text-ink-soft">{t.hero.subtitle}</p>
-        <div className="flex flex-col items-center gap-3 sm:flex-row">
+      {/* Hero — large, and running directly on the shared 3D background instead of its own boxed art */}
+      <section className="relative z-10 flex min-h-[85dvh] flex-col items-center justify-center gap-7 px-6 pb-10 text-center">
+        <HeroLetterScene />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-1/2 mx-auto h-[26rem] max-w-2xl -translate-y-1/2 rounded-[64px] bg-cream/45 blur-3xl"
+        />
+        <span className="relative rounded-full bg-sage-soft px-4 py-1.5 text-xs font-semibold text-teal-deep">{t.hero.eyebrow}</span>
+        <h1 className="relative max-w-2xl font-display text-4xl leading-tight font-bold text-ink md:text-6xl">{t.hero.title}</h1>
+        <p className="relative max-w-xl text-lg leading-8 text-ink-soft">{t.hero.subtitle}</p>
+        <div className="relative flex flex-col items-center gap-3 sm:flex-row">
           <ButtonLink href="/auth/welcome" className="w-auto! px-8">
             {t.hero.cta}
           </ButtonLink>
@@ -80,13 +77,23 @@ export default async function MarketingLandingPage() {
             {t.hero.ctaSecondary}
           </Link>
         </div>
-
-        <Tilt3D strength={4} className="relative mt-4 h-72 w-full max-w-lg overflow-hidden rounded-[32px] bg-gradient-to-br from-blush-soft via-cream to-sage-soft shadow-lift md:h-96">
-          <span aria-hidden="true" className="absolute -top-8 -start-8 size-40 rounded-full bg-white/30 blur-2xl" />
-          <span aria-hidden="true" className="absolute end-10 top-10 size-20 rounded-full bg-blush/20 blur-xl" />
-          <HeroLetterScene />
-        </Tilt3D>
       </section>
+
+      {/* Quick-jump tabs — every major section reachable in one tap, right under the hero */}
+      <nav
+        aria-label={t.nav.features}
+        className="relative z-10 mx-auto flex max-w-3xl gap-2 overflow-x-auto px-6 pb-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {tabItems.map((item) => (
+          <Link
+            key={item.key}
+            href={item.href}
+            className="shrink-0 rounded-full bg-surface/90 px-4 py-2 text-sm font-medium text-ink-soft shadow-soft backdrop-blur transition hover:bg-surface hover:text-ink"
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
 
       {/* Features — its own tinted band so it reads as a distinct section, not a continuation of the hero */}
       <section id="features" className="relative scroll-mt-24 bg-gradient-to-b from-transparent via-cream-deep/60 to-transparent py-20">
@@ -113,6 +120,30 @@ export default async function MarketingLandingPage() {
                   <ChevronIcon width={14} height={14} className="rtl:-scale-x-100" />
                 </Link>
               </Tilt3D>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Method — real content about how KoreaFarsi actually teaches, not just an icon grid */}
+      <section className="relative mx-auto max-w-5xl px-6 py-16">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <span className="rounded-full bg-blush-soft px-4 py-1.5 text-xs font-semibold text-blush">{t.method.eyebrow}</span>
+            <h2 className="mt-4 font-display text-2xl font-semibold text-ink md:text-3xl">{t.method.title}</h2>
+            <p className="mt-4 text-[15px] leading-7 text-ink-soft">{t.method.intro}</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 rounded-[28px] bg-surface p-5 shadow-soft">
+            {t.method.steps.map((step, i) => (
+              <div key={step} className="flex items-center gap-2">
+                <div className="flex w-20 flex-col items-center gap-1.5 rounded-2xl bg-cream px-2 py-3 text-center">
+                  <span className="grid size-7 place-items-center rounded-full bg-teal text-xs font-bold text-white">{i + 1}</span>
+                  <span className="text-xs leading-4 font-medium text-ink">{step}</span>
+                </div>
+                {i < t.method.steps.length - 1 && (
+                  <ChevronIcon width={14} height={14} className="shrink-0 text-ink-faint rtl:-scale-x-100" />
+                )}
+              </div>
             ))}
           </div>
         </div>

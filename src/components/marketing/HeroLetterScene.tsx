@@ -11,21 +11,21 @@ const HANGUL = [
 
 const GLOW = ["var(--color-teal)", "var(--color-blush)", "var(--color-sage)"] as const;
 
-/** 8 fixed regions (outer ring of a 3x3 grid) so letters spread out instead of clustering. */
+/** Fixed regions hugging the edges — the hero is large now, so keep the center clear for the headline. */
 const SLOTS = [
-  { x: 16, y: 18 },
-  { x: 50, y: 13 },
-  { x: 84, y: 18 },
-  { x: 14, y: 50 },
-  { x: 86, y: 50 },
-  { x: 16, y: 84 },
-  { x: 50, y: 89 },
-  { x: 84, y: 84 },
+  { x: 9, y: 12 },
+  { x: 50, y: 6 },
+  { x: 91, y: 12 },
+  { x: 6, y: 50 },
+  { x: 94, y: 50 },
+  { x: 9, y: 90 },
+  { x: 50, y: 95 },
+  { x: 91, y: 90 },
 ];
 
 /** The mascot's wandering loop — visits every slot's neighborhood once per lap. */
-const PATH_X = [16, 50, 84, 86, 84, 50, 16, 14, 16];
-const PATH_Y = [18, 13, 18, 50, 84, 89, 84, 50, 18];
+const PATH_X = [9, 50, 91, 94, 91, 50, 9, 6, 9];
+const PATH_Y = [12, 6, 12, 50, 90, 95, 90, 50, 12];
 
 const COLLISION_RADIUS = 10;
 
@@ -134,10 +134,10 @@ export function HeroLetterScene() {
           style={{
             left: `${letter.x}%`,
             top: `${letter.y}%`,
-            width: 38,
-            height: 38,
-            marginLeft: -19,
-            marginTop: -19,
+            width: 46,
+            height: 46,
+            marginLeft: -23,
+            marginTop: -23,
             background: letter.glow,
             boxShadow: `0 6px 18px -4px ${letter.glow}`,
           }}
@@ -202,8 +202,8 @@ export function HeroLetterScene() {
 function MascotSprite() {
   return (
     <motion.svg
-      width={52}
-      height={52}
+      width={60}
+      height={60}
       viewBox="0 0 52 52"
       fill="none"
       animate={{ scale: [1, 1.06, 1], rotate: [-3, 3, -3] }}
