@@ -26,6 +26,11 @@ export const fa: Messages = {
       pills: { courses: "دوره‌ها رو ببین", aiPractice: "با هوش مصنوعی تمرین کن", login: "قبلاً حساب دارم" },
       copyPrefix: "کپی لینک:",
       copied: "کپی شد!",
+      install: {
+        label: "نصب اپلیکیشن",
+        iosLabel: "افزودن به صفحهٔ اصلی",
+        iosInstructions: "روی آیکون Share تو مرورگرت بزن، بعد «Add to Home Screen» رو انتخاب کن.",
+      },
     },
     features: {
       eyebrow: "همه‌چیز یکجا",

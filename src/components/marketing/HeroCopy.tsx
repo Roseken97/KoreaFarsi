@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { CopyIcon } from "@/components/icons";
 import { Magnetic } from "@/components/marketing/Magnetic";
+import { InstallAppButton } from "@/components/marketing/InstallAppButton";
 
 /** Reveals `text` one character at a time; `done` flips once the whole string has been typed. */
 function useTypewriter(text: string, speed = 38, startDelay = 600) {
@@ -49,6 +50,9 @@ export function HeroCopy({
   copyLabel,
   copyValue,
   copiedLabel,
+  installLabel,
+  installIosLabel,
+  installIosInstructions,
 }: {
   introLine1: string;
   introLine2: string;
@@ -59,6 +63,9 @@ export function HeroCopy({
   copyLabel: string;
   copyValue: string;
   copiedLabel: string;
+  installLabel: string;
+  installIosLabel: string;
+  installIosInstructions: string;
 }) {
   const { displayed, done } = useTypewriter(tagline);
   const [copied, setCopied] = useState(false);
@@ -123,6 +130,7 @@ export function HeroCopy({
           {copied ? copiedLabel : `${copyLabel} ${copyValue}`}
           <CopyIcon width={13} height={13} />
         </button>
+        <InstallAppButton label={installLabel} iosLabel={installIosLabel} iosInstructions={installIosInstructions} />
       </motion.div>
     </div>
   );

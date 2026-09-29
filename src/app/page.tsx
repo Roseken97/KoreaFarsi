@@ -88,6 +88,9 @@ export default async function MarketingLandingPage() {
           copyLabel={t.hero.copyPrefix}
           copyValue={siteDomain}
           copiedLabel={t.hero.copied}
+          installLabel={t.hero.install.label}
+          installIosLabel={t.hero.install.iosLabel}
+          installIosInstructions={t.hero.install.iosInstructions}
         />
       </section>
 

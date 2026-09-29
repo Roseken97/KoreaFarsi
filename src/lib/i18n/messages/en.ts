@@ -29,6 +29,11 @@ export const en = {
       pills: { courses: "See the courses", aiPractice: "Practice with AI", login: "I already have an account" },
       copyPrefix: "Copy link:",
       copied: "Copied!",
+      install: {
+        label: "Install App",
+        iosLabel: "Add to Home Screen",
+        iosInstructions: "Tap the Share icon in your browser, then choose \"Add to Home Screen\".",
+      },
     },
     features: {
       eyebrow: "What's inside",
