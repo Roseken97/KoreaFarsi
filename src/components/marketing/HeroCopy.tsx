@@ -81,7 +81,7 @@ export function HeroCopy({
   }
 
   return (
-    <div className="relative flex max-w-xl flex-col items-center text-center">
+    <div className="relative flex max-w-xl flex-col items-center text-center lg:items-start lg:text-start">
       <p aria-hidden="true" className="pointer-events-none mb-5 text-[clamp(15px,3.4vw,20px)] leading-[1.35] text-ink-soft/70 blur-[3px] select-none sm:mb-6">
         {introLine1}
         <br />
@@ -97,7 +97,7 @@ export function HeroCopy({
       </p>
 
       <motion.div
-        className="mt-6 flex flex-wrap justify-center gap-y-2"
+        className="mt-6 flex flex-wrap justify-center gap-y-2 lg:justify-start"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.4, ease: "easeOut" }}

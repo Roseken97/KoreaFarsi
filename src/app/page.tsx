@@ -70,28 +70,33 @@ export default async function MarketingLandingPage() {
         </div>
       </header>
 
-      {/* Hero — its own contained section; the 3D background lives only here, not across the whole page */}
-      <section className="relative z-10 flex min-h-[85dvh] flex-col items-center justify-center gap-7 overflow-hidden px-6 pb-10 text-center">
+      {/* Hero — its own contained section; the 3D background lives only here, not across the whole page.
+          Asymmetric split on large screens (text left, mascot right) instead of a centered stack. */}
+      <section className="relative z-10 flex min-h-[85dvh] items-center overflow-hidden px-6 pt-4 pb-10">
         <Scene3DBackground />
         <div aria-hidden="true" className="pointer-events-none absolute -top-40 -start-32 size-96 rounded-full bg-blush/20 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute -end-24 top-40 size-96 rounded-full bg-sage/25 blur-3xl" />
-        <div className="relative z-10 scale-125 sm:scale-150">
-          <MascotCorner />
+        <div className="relative z-10 mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <HeroCopy
+            introLine1={t.hero.introLine1}
+            introLine2={t.hero.introLine2}
+            eyebrow={t.hero.eyebrow}
+            title={t.hero.title}
+            tagline={t.hero.subtitle}
+            pills={heroPills}
+            copyLabel={t.hero.copyPrefix}
+            copyValue={siteDomain}
+            copiedLabel={t.hero.copied}
+            installLabel={t.hero.install.label}
+            installIosLabel={t.hero.install.iosLabel}
+            installIosInstructions={t.hero.install.iosInstructions}
+          />
+          <div className="order-first flex justify-center lg:order-last lg:justify-end">
+            <div className="scale-110 sm:scale-125 lg:scale-150">
+              <MascotCorner />
+            </div>
+          </div>
         </div>
-        <HeroCopy
-          introLine1={t.hero.introLine1}
-          introLine2={t.hero.introLine2}
-          eyebrow={t.hero.eyebrow}
-          title={t.hero.title}
-          tagline={t.hero.subtitle}
-          pills={heroPills}
-          copyLabel={t.hero.copyPrefix}
-          copyValue={siteDomain}
-          copiedLabel={t.hero.copied}
-          installLabel={t.hero.install.label}
-          installIosLabel={t.hero.install.iosLabel}
-          installIosInstructions={t.hero.install.iosInstructions}
-        />
       </section>
 
       {/* Quick-jump tabs — every major section reachable in one tap, right under the hero */}
@@ -125,19 +130,36 @@ export default async function MarketingLandingPage() {
         </div>
       </section>
 
-      {/* Features — its own tinted band so it reads as a distinct section */}
+      {/* Features — its own tinted band, laid out in two different rhythms (light 3-col row, then a bigger 2-col row) instead of one uniform grid */}
       <section id="features" className="relative scroll-mt-24 bg-gradient-to-b from-transparent via-cream-deep/60 to-transparent py-20">
         <div className="mx-auto max-w-5xl px-6">
           <div className="flex flex-col items-center gap-3 text-center">
             <span className="rounded-full bg-teal-mist px-4 py-1.5 text-xs font-semibold text-teal-deep">{t.features.eyebrow}</span>
             <h2 className="font-display text-2xl font-semibold text-ink md:text-3xl">{t.features.title}</h2>
           </div>
-          <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {FEATURES.map(({ key, Icon, href, accent }) => (
+
+          <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {FEATURES.slice(0, 3).map(({ key, Icon, href, accent }) => (
+              <div key={key} className="flex flex-col items-start gap-2">
+                <span className={`grid size-10 place-items-center rounded-xl ${ACCENT[accent].icon}`}>
+                  <Icon width={18} height={18} />
+                </span>
+                <h3 className="mt-1 font-display text-base font-semibold text-ink">{t.features.items[key].title}</h3>
+                <p className="text-sm leading-6 text-ink-soft">{t.features.items[key].body}</p>
+                <Link href={href} className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-teal-deep">
+                  {t.nav.start}
+                  <ChevronIcon width={14} height={14} className="rtl:-scale-x-100" />
+                </Link>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {FEATURES.slice(3).map(({ key, Icon, href, accent }) => (
               <Tilt3D
                 key={key}
                 strength={6}
-                className="group relative flex flex-col items-start overflow-hidden rounded-[24px] bg-surface p-6 shadow-soft transition hover:shadow-lift"
+                className="group relative flex flex-col items-start overflow-hidden rounded-[24px] bg-surface p-7 shadow-soft transition hover:shadow-lift"
               >
                 <span className={`absolute inset-x-0 top-0 h-1.5 ${ACCENT[accent].bar}`} />
                 <span className={`grid size-12 place-items-center rounded-2xl ${ACCENT[accent].icon}`}>
