@@ -26,6 +26,7 @@ export const en = {
       ctaSecondary: "I already have an account",
     },
     features: {
+      eyebrow: "What's inside",
       title: "Everything you need to learn Korean",
       items: {
         courses: { title: "Video Courses", body: "Structured lessons with real progress tracking" },

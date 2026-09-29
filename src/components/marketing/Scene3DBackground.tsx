@@ -22,10 +22,10 @@ type ShapeDef = {
 function makeShapes(count: number): ShapeDef[] {
   return Array.from({ length: count }, (_, i) => ({
     kind: KINDS[i % KINDS.length],
-    position: [(Math.random() - 0.5) * 15, (Math.random() - 0.5) * 20 - 2, (Math.random() - 0.5) * 6 - 3],
-    scale: 0.55 + Math.random() * 0.85,
+    position: [(Math.random() - 0.5) * 16, (Math.random() - 0.5) * 22 - 2, (Math.random() - 0.5) * 5 - 4],
+    scale: 0.5 + Math.random() * 0.7,
     color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
-    speed: 0.35 + Math.random() * 0.55,
+    speed: 0.3 + Math.random() * 0.45,
   }));
 }
 
@@ -42,7 +42,15 @@ function Shape({ def, reduceMotion }: { def: ShapeDef; reduceMotion: boolean }) 
         {def.kind === "icosahedron" && <icosahedronGeometry args={[1, 0]} />}
         {def.kind === "octahedron" && <octahedronGeometry args={[1, 0]} />}
         {def.kind === "torus" && <torusGeometry args={[0.8, 0.28, 8, 24]} />}
-        <meshStandardMaterial color={def.color} roughness={0.4} metalness={0.1} />
+        <meshStandardMaterial
+          color={def.color}
+          emissive={def.color}
+          emissiveIntensity={0.15}
+          roughness={0.6}
+          metalness={0.05}
+          transparent
+          opacity={0.72}
+        />
       </mesh>
     </Float>
   );
@@ -81,7 +89,7 @@ function Rig() {
 
 /** Full-page WebGL backdrop: soft brand-colored shapes drifting in real 3D space behind the marketing content. */
 export function Scene3DBackground() {
-  const shapes = useMemo(() => makeShapes(13), []);
+  const shapes = useMemo(() => makeShapes(9), []);
   const reduceMotion = useMemo(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     [],
@@ -95,15 +103,15 @@ export function Scene3DBackground() {
         camera={{ position: [0, 0, 9], fov: 50 }}
       >
         <color attach="background" args={["#faf6ef"]} />
-        <fog attach="fog" args={["#faf6ef", 8, 18]} />
-        <ambientLight intensity={0.75} />
-        <pointLight position={[6, 6, 8]} intensity={40} color="#ffffff" />
-        <pointLight position={[-6, -4, 4]} intensity={22} color="#de8b89" />
+        <fog attach="fog" args={["#faf6ef", 6, 14]} />
+        <ambientLight intensity={0.85} />
+        <pointLight position={[6, 6, 8]} intensity={28} color="#ffffff" />
+        <pointLight position={[-6, -4, 4]} intensity={14} color="#de8b89" />
         <Rig />
         {shapes.map((def, i) => (
           <Shape key={i} def={def} reduceMotion={reduceMotion} />
         ))}
-        {!reduceMotion && <Sparkles count={40} scale={[16, 20, 8]} size={2} speed={0.25} color="#ffffff" opacity={0.5} />}
+        {!reduceMotion && <Sparkles count={18} scale={[14, 18, 7]} size={2} speed={0.2} color="#ffffff" opacity={0.35} />}
       </Canvas>
     </div>
   );

@@ -23,6 +23,7 @@ export const fa: Messages = {
       ctaSecondary: "قبلاً حساب دارم",
     },
     features: {
+      eyebrow: "همه‌چیز یکجا",
       title: "هرچی برای یادگیری کره‌ای لازم داری",
       items: {
         courses: { title: "دوره‌های ویدیویی", body: "درس‌های ساختاریافته با پیگیری واقعی پیشرفت" },
