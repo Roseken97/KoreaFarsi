@@ -4,58 +4,9 @@
    mutated in place every frame by design; that's the standard react-three-fiber pattern, not a bug. */
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, Sparkles } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
 import { Mascot3D } from "./Mascot3D";
-
-const PALETTE = ["#4f8a87", "#de8b89", "#9db5a5", "#3d716e", "#f8e3e1"];
-const KINDS = ["icosahedron", "octahedron", "torus"] as const;
-
-type ShapeDef = {
-  kind: (typeof KINDS)[number];
-  position: [number, number, number];
-  scale: number;
-  color: string;
-  speed: number;
-};
-
-function makeShapes(count: number): ShapeDef[] {
-  return Array.from({ length: count }, (_, i) => ({
-    kind: KINDS[i % KINDS.length],
-    position: [(Math.random() - 0.5) * 16, (Math.random() - 0.5) * 22 - 2, (Math.random() - 0.5) * 5 - 4],
-    scale: 0.5 + Math.random() * 0.7,
-    color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
-    speed: 0.3 + Math.random() * 0.45,
-  }));
-}
-
-function Shape({ def, reduceMotion }: { def: ShapeDef; reduceMotion: boolean }) {
-  const ref = useRef<THREE.Mesh>(null);
-  useFrame((_, delta) => {
-    if (!ref.current || reduceMotion) return;
-    ref.current.rotation.x += delta * def.speed * 0.18;
-    ref.current.rotation.y += delta * def.speed * 0.26;
-  });
-  return (
-    <Float speed={reduceMotion ? 0 : def.speed} rotationIntensity={reduceMotion ? 0 : 0.35} floatIntensity={reduceMotion ? 0 : 1.3}>
-      <mesh ref={ref} position={def.position} scale={def.scale}>
-        {def.kind === "icosahedron" && <icosahedronGeometry args={[1, 0]} />}
-        {def.kind === "octahedron" && <octahedronGeometry args={[1, 0]} />}
-        {def.kind === "torus" && <torusGeometry args={[0.8, 0.28, 8, 24]} />}
-        <meshStandardMaterial
-          color={def.color}
-          emissive={def.color}
-          emissiveIntensity={0.15}
-          roughness={0.6}
-          metalness={0.05}
-          transparent
-          opacity={0.72}
-        />
-      </mesh>
-    </Float>
-  );
-}
+import { NodeLattice } from "./NodeLattice";
 
 /**
  * Camera reacts to the pointer like a scrub control: position follows the cursor closely,
@@ -105,9 +56,8 @@ function Rig() {
   return null;
 }
 
-/** Full-page WebGL backdrop: soft brand-colored shapes drifting in real 3D space behind the marketing content. */
+/** Full-page WebGL backdrop: an amber node-lattice (the "Mainframe" look) drifting in real 3D space behind the marketing content. */
 export function Scene3DBackground() {
-  const shapes = useMemo(() => makeShapes(9), []);
   const reduceMotion = useMemo(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     [],
@@ -127,10 +77,7 @@ export function Scene3DBackground() {
         <pointLight position={[-6, -4, 4]} intensity={14} color="#de8b89" />
         <Rig />
         <Mascot3D reduceMotion={reduceMotion} />
-        {shapes.map((def, i) => (
-          <Shape key={i} def={def} reduceMotion={reduceMotion} />
-        ))}
-        {!reduceMotion && <Sparkles count={18} scale={[14, 18, 7]} size={2} speed={0.2} color="#ffffff" opacity={0.35} />}
+        <NodeLattice reduceMotion={reduceMotion} />
       </Canvas>
     </div>
   );
