@@ -355,6 +355,46 @@ export const en = {
       },
     },
   },
+  aiPractice: {
+    metaTitle: "AI Practice",
+    title: "AI Practice",
+    subtitle: "Your personal language companion",
+    greeting: "안녕하세요!",
+    levelLabel: "Level",
+    tabs: { speak: "Speak", chat: "Chat", listen: "Listen", shadow: "Shadow", grammar: "Grammar" },
+    speak: {
+      heading: "Let's Practice Speaking",
+      body: "Choose a mode and start a conversation with your AI tutor.",
+      modes: {
+        freeConversation: { title: "Free Conversation", body: "Talk about everyday topics" },
+        scenarioPractice: { title: "Scenario Practice", body: "Real-life situations" },
+        pronunciationCoach: { title: "Pronunciation Coach", body: "Get instant feedback" },
+        topicChallenge: { title: "Topic Challenge", body: "Practice with guided topics" },
+      },
+    },
+    tabComingSoon: {
+      listen: "Listening practice is coming in a future update.",
+      shadow: "Shadowing practice is coming in a future update.",
+      grammar: "Grammar practice is coming in a future update.",
+    },
+    featureComingSoon: "This feature is coming in a future update — the design is ready, the AI voice behind it isn't built yet.",
+    recommended: {
+      title: "Recommended for You",
+      items: {
+        cafe: { title: "At a Café", tag: "Daily Life" },
+        airport: { title: "At the Airport", tag: "Travel" },
+        meetingPeople: { title: "Meeting People", tag: "Social" },
+      },
+    },
+    progress: {
+      title: "Your Progress",
+      conversations: "Conversations",
+      hours: "Hours",
+      badges: "Badges",
+      soon: "Soon",
+    },
+    quote: "A new language. A more confident you.",
+  },
   chat: {
     metaTitle: "KoreaFarsi AI",
     title: "Chat with KoreaFarsi",

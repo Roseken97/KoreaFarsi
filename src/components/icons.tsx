@@ -366,6 +366,37 @@ export const BowlIcon = (p: IconProps) => (
   </Base>
 );
 
+/** Chat bubble (AI Practice "Chat" tab / Free Conversation mode). */
+export const ChatBubbleIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.5v-3.5H6.5A2.5 2.5 0 0 1 4 13.5z" />
+  </Base>
+);
+
+/** Cup (AI Practice "At a Café" recommendation). */
+export const CupIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M5 6.5h11v7a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z" />
+    <path d="M16 8.5h1.5a2.5 2.5 0 0 1 0 5H16M8 4v1.3M11 4v1.3M14 4v1.3" />
+  </Base>
+);
+
+/** Plane (AI Practice "At the Airport" recommendation). */
+export const PlaneIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m10.5 13.5-6 1.5 1-2 5-2.5-2-5.5 1.7-.5 3.8 4.7 5-2.5a1.4 1.4 0 0 1 1.9.6v0a1.4 1.4 0 0 1-.6 1.9l-5 2.5 1 5.3-1.6.6z" />
+  </Base>
+);
+
+/** People (AI Practice "Meeting People" recommendation). */
+export const PeopleIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="8.5" cy="8.5" r="2.5" />
+    <circle cx="16" cy="9.5" r="2" />
+    <path d="M3.5 19c.7-3 2.8-4.7 5-4.7s4.3 1.7 5 4.7M14.5 14.8c1.9.2 3.5 1.7 4 4.2" />
+  </Base>
+);
+
 /** Hangul glyph as an icon (Korean Alphabet collection). */
 export const HangulIcon = (p: IconProps) => (
   <Base {...p}>

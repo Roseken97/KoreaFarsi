@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import type { ComponentType, SVGProps } from "react";
-import { BooksStackIcon, CheckCircleIcon, FlameIcon, LibraryIcon, StarIcon, TrophyIcon } from "@/components/icons";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { Notice } from "@/components/ui/Notice";
+import { BADGES, currentByCategory } from "@/lib/achievements/definitions";
 import { getAchievementStats } from "@/lib/achievements/queries";
 import { formatNumber } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
@@ -15,28 +14,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: m.account.achievementsPage.title };
 }
 
-type Category = "lessons" | "library" | "streak" | "reviews";
-type BadgeKey = "firstLesson" | "fiveLessons" | "twentyLessons" | "firstBook" | "fiveBooks" | "streak3" | "streak7" | "streak30" | "firstReview";
-
-const BADGES: { key: BadgeKey; Icon: ComponentType<SVGProps<SVGSVGElement>>; category: Category; threshold: number }[] = [
-  { key: "firstLesson", Icon: CheckCircleIcon, category: "lessons", threshold: 1 },
-  { key: "fiveLessons", Icon: BooksStackIcon, category: "lessons", threshold: 5 },
-  { key: "twentyLessons", Icon: TrophyIcon, category: "lessons", threshold: 20 },
-  { key: "firstBook", Icon: LibraryIcon, category: "library", threshold: 1 },
-  { key: "fiveBooks", Icon: LibraryIcon, category: "library", threshold: 5 },
-  { key: "streak3", Icon: FlameIcon, category: "streak", threshold: 3 },
-  { key: "streak7", Icon: FlameIcon, category: "streak", threshold: 7 },
-  { key: "streak30", Icon: FlameIcon, category: "streak", threshold: 30 },
-  { key: "firstReview", Icon: StarIcon, category: "reviews", threshold: 1 },
-];
-
 /** Real badges derived from existing progress data (lesson_progress, user_library, planner streak, course_reviews) — no separate achievements table needed. */
 export default async function AchievementsPage() {
   const [{ m, locale }, profile, stats] = await Promise.all([getMessages(), getProfile(), getAchievementStats()]);
   if (isSupabaseConfigured && !profile) redirect("/auth/login?next=/account/achievements");
   const t = m.account.achievementsPage;
 
-  const current: Record<Category, number> = { lessons: stats.lessonsDone, library: stats.libraryCount, streak: stats.streak, reviews: stats.reviewsCount };
+  const current = currentByCategory(stats);
   const unlockedCount = BADGES.filter((b) => current[b.category] >= b.threshold).length;
 
   return (
