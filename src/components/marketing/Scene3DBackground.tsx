@@ -7,6 +7,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, Sparkles } from "@react-three/drei";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+import { Mascot3D } from "./Mascot3D";
 
 const PALETTE = ["#4f8a87", "#de8b89", "#9db5a5", "#3d716e", "#f8e3e1"];
 const KINDS = ["icosahedron", "octahedron", "torus"] as const;
@@ -125,6 +126,7 @@ export function Scene3DBackground() {
         <pointLight position={[6, 6, 8]} intensity={28} color="#ffffff" />
         <pointLight position={[-6, -4, 4]} intensity={14} color="#de8b89" />
         <Rig />
+        <Mascot3D reduceMotion={reduceMotion} />
         {shapes.map((def, i) => (
           <Shape key={i} def={def} reduceMotion={reduceMotion} />
         ))}
