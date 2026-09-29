@@ -4,9 +4,8 @@ import { Logo } from "@/components/brand/Logo";
 import { BooksStackIcon, ChevronIcon, LanternIcon, PlannerIcon, RobotIcon, ShoppingBagIcon } from "@/components/icons";
 import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
 import { Tilt3D } from "@/components/marketing/Tilt3D";
-import { HeroLetterScene } from "@/components/marketing/HeroLetterScene";
+import { MascotCorner } from "@/components/marketing/MascotCorner";
 import { Scene3DBackgroundClient as Scene3DBackground } from "@/components/marketing/Scene3DBackgroundClient";
-import { SiteMascotOverlay } from "@/components/marketing/SiteMascotOverlay";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { HeroCopy } from "@/components/marketing/HeroCopy";
 import { CONTACT } from "@/config/contact";
@@ -73,12 +72,9 @@ export default async function MarketingLandingPage() {
         <Scene3DBackground />
         <div aria-hidden="true" className="pointer-events-none absolute -top-40 -start-32 size-96 rounded-full bg-blush/20 blur-3xl" />
         <div aria-hidden="true" className="pointer-events-none absolute -end-24 top-40 size-96 rounded-full bg-sage/25 blur-3xl" />
-        <HeroLetterScene />
-        <SiteMascotOverlay />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-1/2 mx-auto h-[26rem] max-w-2xl -translate-y-1/2 rounded-[64px] bg-cream/45 blur-3xl"
-        />
+        <div className="relative z-10 scale-125 sm:scale-150">
+          <MascotCorner />
+        </div>
         <HeroCopy
           introLine1={t.hero.introLine1}
           introLine2={t.hero.introLine2}
