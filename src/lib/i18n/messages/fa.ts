@@ -14,8 +14,7 @@ export const fa: Messages = {
   },
   marketing: {
     metaTitle: "کوریافارسی — پلی به سوی نسخه‌ی بهتر تو",
-    nav: { login: "ورود", start: "شروع کن", features: "امکانات", contact: "تماس با ما" },
-    contactIntro: "از هر کدوم از این راه‌ها می‌تونی بهمون برسی.",
+    nav: { login: "ورود", start: "شروع کن", features: "امکانات" },
     hero: {
       introLine1: "سلام، خوش اومدی به کوریافارسی،",
       introLine2: "پلی برای فارسی‌زبان‌هایی که کره‌ای یاد می‌گیرن",
