@@ -56,15 +56,28 @@ function Shape({ def, reduceMotion }: { def: ShapeDef; reduceMotion: boolean }) 
   );
 }
 
-/** Camera drifts gently with the pointer/scroll — tracked via window listeners so it still works while the canvas sits behind foreground content (pointer-events: none). */
+/**
+ * Camera reacts to the pointer like a scrub control: position follows the cursor closely,
+ * and a fast horizontal flick adds an extra decaying kick — tracked via window listeners so
+ * it still works while the canvas sits behind foreground content (pointer-events: none).
+ */
 function Rig() {
   const { camera } = useThree();
-  const target = useRef({ x: 0, y: 0, scroll: 0 });
+  const target = useRef({ x: 0, y: 0, scroll: 0, kick: 0, lastX: 0, lastT: 0 });
 
   useEffect(() => {
     function onMove(e: PointerEvent) {
-      target.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const now = performance.now();
+      const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const dt = now - target.current.lastT;
+      if (dt > 0 && target.current.lastT > 0) {
+        const vx = (nx - target.current.lastX) / (dt / 16.7);
+        target.current.kick = Math.max(-1, Math.min(1, target.current.kick + vx * 0.6));
+      }
+      target.current.x = nx;
       target.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
+      target.current.lastX = nx;
+      target.current.lastT = now;
     }
     function onScroll() {
       target.current.scroll = window.scrollY;
@@ -78,10 +91,14 @@ function Rig() {
   }, []);
 
   useFrame(() => {
-    const { x, y, scroll } = target.current;
-    camera.position.x += (x * 1.2 - camera.position.x) * 0.03;
-    camera.position.y += (-y * 0.8 - scroll * 0.0025 - camera.position.y) * 0.03;
-    camera.lookAt(0, -scroll * 0.0025, 0);
+    const state = target.current;
+    state.kick *= 0.9;
+    const targetX = state.x * 2.6 + state.kick * 1.4;
+    const targetY = -state.y * 1.8 - state.scroll * 0.003;
+    camera.position.x += (targetX - camera.position.x) * 0.09;
+    camera.position.y += (targetY - camera.position.y) * 0.09;
+    camera.lookAt(0, -state.scroll * 0.003, 0);
+    camera.rotation.z += (state.kick * 0.05 - camera.rotation.z) * 0.09;
   });
 
   return null;
