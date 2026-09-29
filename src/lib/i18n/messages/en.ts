@@ -142,6 +142,16 @@ export const en = {
     dictionary: "Dictionary",
     account: "Account",
   },
+  koreaLife: {
+    metaTitle: "Korea Life",
+    title: "Korea Life",
+    subtitle: "Culture, travel, food and everyday life in Korea.",
+    empty: "No articles yet. Check back soon.",
+    allCategories: "All",
+    categories: { culture: "Culture", travel: "Travel", food: "Food", life: "Life" },
+    readMore: "Read more",
+    notFound: "This article isn't available.",
+  },
   notifications: {
     metaTitle: "Notifications",
     title: "Notifications",

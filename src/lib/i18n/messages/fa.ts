@@ -139,6 +139,16 @@ export const fa: Messages = {
     dictionary: "دیکشنری",
     account: "حساب من",
   },
+  koreaLife: {
+    metaTitle: "زندگی در کره",
+    title: "زندگی در کره",
+    subtitle: "فرهنگ، سفر، غذا و زندگی روزمره در کره.",
+    empty: "هنوز مقاله‌ای ثبت نشده. بعداً دوباره سر بزن.",
+    allCategories: "همه",
+    categories: { culture: "فرهنگ", travel: "سفر", food: "غذا", life: "زندگی" },
+    readMore: "بیشتر بخوان",
+    notFound: "این مقاله در دسترس نیست.",
+  },
   notifications: {
     metaTitle: "اعلان‌ها",
     title: "اعلان‌ها",
