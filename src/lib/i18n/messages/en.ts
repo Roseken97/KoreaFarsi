@@ -142,6 +142,12 @@ export const en = {
     dictionary: "Dictionary",
     account: "Account",
   },
+  notifications: {
+    metaTitle: "Notifications",
+    title: "Notifications",
+    empty: "You have no notifications yet.",
+    markAllRead: "Mark all as read",
+  },
   placeholders: {
     planner: { title: "Planner", body: "Your personal study planner is coming in a future update." },
     library: { title: "Library", body: "Your digital library is coming in a future update." },

@@ -17,14 +17,15 @@ export function PageHeader({ actions }: { actions?: ReactNode }) {
   );
 }
 
-export function HeaderIconLink({ href, label, children }: { href: string; label: string; children: ReactNode }) {
+export function HeaderIconLink({ href, label, children, badge = false }: { href: string; label: string; children: ReactNode; badge?: boolean }) {
   return (
     <Link
       href={href}
       aria-label={label}
-      className="grid size-10 place-items-center rounded-full border border-line bg-surface text-ink-soft shadow-soft transition hover:text-ink"
+      className="relative grid size-10 place-items-center rounded-full border border-line bg-surface text-ink-soft shadow-soft transition hover:text-ink"
     >
       {children}
+      {badge && <span className="absolute end-1.5 top-1.5 size-2 rounded-full bg-danger ring-2 ring-surface" aria-hidden="true" />}
     </Link>
   );
 }

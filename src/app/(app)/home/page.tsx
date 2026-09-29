@@ -20,6 +20,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { getContinueCard } from "@/lib/courses/queries";
 import { fmt, formatNumber, type Locale, type Messages } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
+import { getUnreadNotificationCount } from "@/lib/notifications/queries";
 import { getTodayTasks } from "@/lib/planner/queries";
 import { getProfile } from "@/lib/profile";
 
@@ -39,11 +40,12 @@ const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGEl
 ];
 
 export default async function HomePage() {
-  const [{ m, locale }, profile, { plan, tasks }, continueCard] = await Promise.all([
+  const [{ m, locale }, profile, { plan, tasks }, continueCard, unreadCount] = await Promise.all([
     getMessages(),
     getProfile(),
     getTodayTasks(),
     getContinueCard(),
+    getUnreadNotificationCount(),
   ]);
   const t = m.home;
   const firstName = profile?.name?.split(/\s+/)[0] ?? null;
@@ -54,7 +56,7 @@ export default async function HomePage() {
       <PageHeader
         actions={
           <>
-            <HeaderIconLink href="/notifications" label={t.notifications}>
+            <HeaderIconLink href="/notifications" label={t.notifications} badge={unreadCount > 0}>
               <BellIcon width={20} height={20} />
             </HeaderIconLink>
             <Link href={profile ? "/account" : "/auth/welcome"} aria-label={t.profile}>

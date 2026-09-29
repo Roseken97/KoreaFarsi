@@ -139,6 +139,12 @@ export const fa: Messages = {
     dictionary: "دیکشنری",
     account: "حساب من",
   },
+  notifications: {
+    metaTitle: "اعلان‌ها",
+    title: "اعلان‌ها",
+    empty: "هنوز اعلانی نداری.",
+    markAllRead: "همه رو خوانده‌شده علامت بزن",
+  },
   placeholders: {
     planner: { title: "برنامه‌ریز", body: "برنامه‌ریز شخصی مطالعه در به‌روزرسانی‌های بعدی اضافه می‌شود." },
     library: { title: "کتابخانه", body: "کتابخانه‌ی دیجیتال در به‌روزرسانی‌های بعدی اضافه می‌شود." },
