@@ -6,6 +6,7 @@ import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
 import { Tilt3D } from "@/components/marketing/Tilt3D";
 import { HeroLetterScene } from "@/components/marketing/HeroLetterScene";
 import { Scene3DBackgroundClient as Scene3DBackground } from "@/components/marketing/Scene3DBackgroundClient";
+import { SiteMascotOverlay } from "@/components/marketing/SiteMascotOverlay";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { HeroCopy } from "@/components/marketing/HeroCopy";
 import { CONTACT } from "@/config/contact";
@@ -48,6 +49,7 @@ export default async function MarketingLandingPage() {
   return (
     <div className="relative min-h-dvh overflow-hidden">
       <Scene3DBackground />
+      <SiteMascotOverlay />
       <div aria-hidden="true" className="pointer-events-none absolute -top-40 -start-32 size-96 rounded-full bg-blush/20 blur-3xl" />
       <div aria-hidden="true" className="pointer-events-none absolute -end-24 top-96 size-96 rounded-full bg-sage/25 blur-3xl" />
 
