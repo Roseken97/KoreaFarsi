@@ -46,12 +46,14 @@ export function LessonView({
   const script = locale === "en" ? lesson.script_en || lesson.script : lesson.script;
   const slide = lesson.slides[slideIndex];
 
-  const sections: { key: SectionKey; Icon: ComponentType<SVGProps<SVGSVGElement>>; content: ReactNode }[] = [];
+  // `render` (not a ready-made element) so a locked section's content is never built — nothing about it
+  // is evaluated, let alone mounted — until the user actually reaches it.
+  const sections: { key: SectionKey; Icon: ComponentType<SVGProps<SVGSVGElement>>; render: () => ReactNode }[] = [];
   if (script) {
     sections.push({
       key: "script",
       Icon: PencilIcon,
-      content: (
+      render: () => (
         <p className="text-[15px] leading-7 whitespace-pre-line text-ink-soft" dir="auto">
           {script}
         </p>
@@ -59,13 +61,13 @@ export function LessonView({
     });
   }
   if (lesson.vocabulary.length > 0) {
-    sections.push({ key: "vocabulary", Icon: TagIcon, content: <VocabFlashcards entries={lesson.vocabulary} locale={locale} /> });
+    sections.push({ key: "vocabulary", Icon: TagIcon, render: () => <VocabFlashcards entries={lesson.vocabulary} locale={locale} /> });
   }
   if (lesson.notes) {
     sections.push({
       key: "notes",
       Icon: DictionaryIcon,
-      content: (
+      render: () => (
         <p className="text-[15px] leading-7 whitespace-pre-line text-ink-soft" dir="auto">
           {lesson.notes}
         </p>
@@ -146,9 +148,8 @@ export function LessonView({
               state={i < unlockedIndex ? "done" : i === unlockedIndex ? "current" : "locked"}
               continueLabel={t.continueSection}
               onContinue={() => setUnlockedIndex((u) => Math.max(u, i + 1))}
-            >
-              {section.content}
-            </SectionCard>
+              render={section.render}
+            />
           ))}
         </div>
       )}
@@ -186,7 +187,7 @@ function SectionCard({
   state,
   continueLabel,
   onContinue,
-  children,
+  render,
 }: {
   index: number;
   isLast: boolean;
@@ -195,7 +196,7 @@ function SectionCard({
   state: "done" | "current" | "locked";
   continueLabel: string;
   onContinue: () => void;
-  children: ReactNode;
+  render: () => ReactNode;
 }) {
   const unlocked = state !== "locked";
   return (
@@ -216,7 +217,7 @@ function SectionCard({
         </div>
         {unlocked && (
           <div className="mt-3">
-            {children}
+            {render()}
             {state === "current" && !isLast && (
               <button onClick={onContinue} className="mt-4 flex items-center gap-1 text-sm font-semibold text-teal-deep">
                 {continueLabel}
