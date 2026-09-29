@@ -231,6 +231,23 @@ export const fa: Messages = {
       channels: { instagram: "اینستاگرام", telegram: "تلگرام", email: "ایمیل" },
       noChannels: "راه‌های ارتباطی به‌زودی اضافه می‌شوند.",
     },
+    achievementsPage: {
+      title: "دستاوردهای من",
+      subtitle: "نشان‌هایی که با یادگیری مداوم باز می‌کنی.",
+      unlocked: "{done} از {total} باز شده",
+      progress: "{done}/{total}",
+      badges: {
+        firstLesson: { title: "اولین قدم", body: "اولین درست رو تمام کن" },
+        fiveLessons: { title: "یادگیرنده‌ی پیگیر", body: "۵ درس رو تمام کن" },
+        twentyLessons: { title: "قهرمان درس", body: "۲۰ درس رو تمام کن" },
+        firstBook: { title: "اولین کتاب", body: "اولین کتاب یا دوره‌ات رو بگیر" },
+        fiveBooks: { title: "کتابخانه‌ی کوچک", body: "۵ کتاب یا دوره داشته باش" },
+        streak3: { title: "شروع گرم", body: "۳ روز پیاپی مطالعه" },
+        streak7: { title: "یک هفته‌ی کامل", body: "۷ روز پیاپی مطالعه" },
+        streak30: { title: "ماه طلایی", body: "۳۰ روز پیاپی مطالعه" },
+        firstReview: { title: "صدای تو", body: "اولین نظرت رو برای یک دوره بنویس" },
+      },
+    },
   },
   bookstore: {
     metaTitle: "کتاب‌فروشی",

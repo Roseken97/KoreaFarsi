@@ -234,6 +234,23 @@ export const en = {
       channels: { instagram: "Instagram", telegram: "Telegram", email: "Email" },
       noChannels: "Contact details will be added soon.",
     },
+    achievementsPage: {
+      title: "My Achievements",
+      subtitle: "Badges you unlock as you keep learning.",
+      unlocked: "{done}/{total} unlocked",
+      progress: "{done}/{total}",
+      badges: {
+        firstLesson: { title: "First Step", body: "Complete your first lesson" },
+        fiveLessons: { title: "Steady Learner", body: "Complete 5 lessons" },
+        twentyLessons: { title: "Lesson Champion", body: "Complete 20 lessons" },
+        firstBook: { title: "First Book", body: "Get your first book or course" },
+        fiveBooks: { title: "Little Library", body: "Own 5 books or courses" },
+        streak3: { title: "Warming Up", body: "A 3-day study streak" },
+        streak7: { title: "Full Week", body: "A 7-day study streak" },
+        streak30: { title: "Golden Month", body: "A 30-day study streak" },
+        firstReview: { title: "Your Voice", body: "Write your first course review" },
+      },
+    },
   },
   bookstore: {
     metaTitle: "Bookstore",
