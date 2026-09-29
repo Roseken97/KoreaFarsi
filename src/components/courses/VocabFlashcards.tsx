@@ -8,7 +8,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { HangulBreakdown } from "./HangulBreakdown";
 
 /** Tap the card for a real 3D flip between the Korean word (with a tappable jamo breakdown) and its meaning. */
-export function VocabFlashcards({ entries, locale }: { entries: VocabularyEntry[]; locale: Locale }) {
+export function VocabFlashcards({ entries, locale, onFinished }: { entries: VocabularyEntry[]; locale: Locale; onFinished?: () => void }) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [dir, setDir] = useState(1);
@@ -67,8 +67,8 @@ export function VocabFlashcards({ entries, locale }: { entries: VocabularyEntry[
         </span>
         <motion.button
           whileTap={{ scale: 0.85 }}
-          onClick={() => go(1)}
-          disabled={index === entries.length - 1}
+          onClick={() => (index === entries.length - 1 ? onFinished?.() : go(1))}
+          disabled={index === entries.length - 1 && !onFinished}
           className="grid size-9 place-items-center rounded-full border border-line text-ink-soft disabled:opacity-30"
         >
           <ChevronIcon width={16} height={16} className="rtl:rotate-180" />

@@ -549,6 +549,7 @@ export const en = {
       noVocabulary: "No vocabulary for this lesson yet.",
       noNotes: "No notes for this lesson yet.",
       continueSection: "Continue",
+      pathTitle: "Learning Path",
       errors: {
         unauthenticated: "Sign in to watch this lesson.",
         forbidden: "You don't have access to this course.",
@@ -561,13 +562,6 @@ export const en = {
         objectivesEmpty: "Learning objectives for this lesson haven't been added yet.",
         meta: { time: "Estimated time", level: "Level", activities: "Lesson structure" },
         activitiesCount: "{n} Activities",
-        journeyTitle: "Lesson Journey",
-        journey: {
-          content: { title: "Teacher Content", subtitle: "Watch and learn with explanation" },
-          vocabulary: { title: "Vocabulary", subtitle: "New words and useful expressions" },
-          practice: { title: "Practice", subtitle: "Interactive exercises" },
-          conversation: { title: "Conversation", subtitle: "Real-life speaking practice" },
-        },
         materialsTitle: "Useful Materials",
         materialsEmpty: "No downloadable materials for this lesson yet.",
         materials: { downloadKeep: "Download and keep", listenOffline: "Listen offline" },

@@ -546,6 +546,7 @@ export const fa: Messages = {
       noVocabulary: "واژگانی برای این درس ثبت نشده.",
       noNotes: "نکته‌ای برای این درس ثبت نشده.",
       continueSection: "ادامه",
+      pathTitle: "مسیر یادگیری",
       errors: {
         unauthenticated: "برای دیدن این درس وارد شو.",
         forbidden: "به این دوره دسترسی نداری.",
@@ -558,13 +559,6 @@ export const fa: Messages = {
         objectivesEmpty: "اهداف یادگیری این درس هنوز ثبت نشده.",
         meta: { time: "زمان تقریبی", level: "سطح", activities: "ساختار درس" },
         activitiesCount: "{n} بخش",
-        journeyTitle: "مسیر درس",
-        journey: {
-          content: { title: "محتوای آموزشی", subtitle: "تماشا کن و همراه با توضیح یاد بگیر" },
-          vocabulary: { title: "واژگان", subtitle: "کلمات و عبارات جدید و کاربردی" },
-          practice: { title: "تمرین", subtitle: "تمرین‌های تعاملی" },
-          conversation: { title: "مکالمه", subtitle: "تمرین صحبت‌کردن در موقعیت واقعی" },
-        },
         materialsTitle: "منابع مفید",
         materialsEmpty: "هنوز فایلی برای دانلود در این درس ثبت نشده.",
         materials: { downloadKeep: "دانلود و نگه‌داری کن", listenOffline: "آفلاین گوش بده" },

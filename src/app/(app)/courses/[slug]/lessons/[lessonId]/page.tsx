@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SakuraBranch } from "@/components/brand/SakuraBranch";
 import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
-import { CheckIcon, ChevronIcon, LayersIcon, LevelIcon, MicIcon, PencilIcon, PlayIcon, TagIcon, TargetIcon, WatchIcon } from "@/components/icons";
+import { ChevronIcon, LayersIcon, LevelIcon, PlayIcon, TargetIcon, WatchIcon } from "@/components/icons";
 import { ButtonLink } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
 import { getLessonWithCourse, isLessonBookmarked } from "@/lib/courses/queries";
@@ -20,15 +20,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return { title: result?.lesson.title ?? "Lesson" };
 }
 
-type JourneyStep = { key: string; Icon: typeof PlayIcon; title: string; subtitle: string; duration: number | null };
-type JourneyMessages = { content: { title: string; subtitle: string }; vocabulary: { title: string; subtitle: string }; practice: { title: string; subtitle: string }; conversation: { title: string; subtitle: string } };
-
-function buildJourney(lesson: CourseLesson, locale: Locale, t: JourneyMessages): JourneyStep[] {
-  const steps: JourneyStep[] = [{ key: "content", Icon: PlayIcon, title: t.content.title, subtitle: t.content.subtitle, duration: lesson.duration_minutes || null }];
-  if (lesson.vocabulary.length > 0) steps.push({ key: "vocabulary", Icon: TagIcon, title: t.vocabulary.title, subtitle: t.vocabulary.subtitle, duration: null });
-  if (locale === "en" ? lesson.script_en || lesson.script : lesson.script) steps.push({ key: "practice", Icon: PencilIcon, title: t.practice.title, subtitle: t.practice.subtitle, duration: null });
-  if (lesson.notes) steps.push({ key: "conversation", Icon: MicIcon, title: t.conversation.title, subtitle: t.conversation.subtitle, duration: null });
-  return steps;
+/** How many steps the Start page's learning path will have — main content + whichever of script/vocabulary/notes exist. */
+function countLearningSteps(lesson: CourseLesson, locale: Locale): number {
+  let n = 1;
+  if (lesson.vocabulary.length > 0) n += 1;
+  if (locale === "en" ? lesson.script_en || lesson.script : lesson.script) n += 1;
+  if (lesson.notes) n += 1;
+  return n;
 }
 
 /** Lesson Overview (sketch 09) — shown before "Start Lesson" opens the actual content (tabs page, now at .../start). */
@@ -67,7 +65,6 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
 
   const unit = outline.units.find((u) => u.lessons.some((l) => l.id === lessonId))!;
   const lessonIndexInUnit = unit.lessons.findIndex((l) => l.id === lessonId);
-  const isDone = Boolean(outline.progress[lessonId]);
   const bookmarked = await isLessonBookmarked(lessonId);
 
   const title = locale === "en" ? lesson.title_en || lesson.title : lesson.title;
@@ -79,7 +76,7 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
     .map((line) => line.trim())
     .filter(Boolean);
 
-  const journey = buildJourney(lesson, locale, to.journey);
+  const activitiesCount = countLearningSteps(lesson, locale);
 
   return (
     <div className="animate-fade-up max-w-2xl">
@@ -136,14 +133,7 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
       <div className="mt-4 grid grid-cols-3 divide-x divide-line rounded-[18px] bg-surface p-3 shadow-soft">
         <MetaItem icon={<WatchIcon width={18} height={18} />} value={lesson.duration_minutes > 0 ? `${formatNumber(lesson.duration_minutes, locale)}′` : "—"} label={to.meta.time} />
         <MetaItem icon={<LevelIcon width={18} height={18} />} value={levelLabel ?? "—"} label={to.meta.level} />
-        <MetaItem icon={<LayersIcon width={18} height={18} />} value={fmt(to.activitiesCount, { n: formatNumber(journey.length, locale) })} label={to.meta.activities} />
-      </div>
-
-      <h2 className="mt-6 font-display text-lg font-semibold">{to.journeyTitle}</h2>
-      <div className="mt-3 flex flex-col gap-3">
-        {journey.map((step, i, arr) => (
-          <JourneyRow key={step.key} step={step} index={i} isLast={i === arr.length - 1} done={isDone} locale={locale} />
-        ))}
+        <MetaItem icon={<LayersIcon width={18} height={18} />} value={fmt(to.activitiesCount, { n: formatNumber(activitiesCount, locale) })} label={to.meta.activities} />
       </div>
 
       <h2 className="mt-6 font-display text-lg font-semibold">{to.materialsTitle}</h2>
@@ -185,35 +175,6 @@ function MetaItem({ icon, value, label }: { icon: React.ReactNode; value: string
       <span className="text-[10px] leading-[1.3] text-ink-faint" dir="auto">
         {label}
       </span>
-    </div>
-  );
-}
-
-function JourneyRow({ step, index, isLast, done, locale }: { step: JourneyStep; index: number; isLast: boolean; done: boolean; locale: Locale }) {
-  const { Icon } = step;
-  return (
-    <div className="relative flex gap-3">
-      {!isLast && <span className="absolute start-4 top-8 bottom-[-0.75rem] w-px bg-line" aria-hidden="true" />}
-      <span className="relative z-10 mt-0.5 grid size-8 shrink-0 place-items-center rounded-full border border-line bg-surface text-xs font-semibold text-ink-soft">
-        {formatNumber(index + 1, locale)}
-      </span>
-      <div className="flex min-w-0 flex-1 items-center gap-3 rounded-field border border-line bg-surface p-3">
-        <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-cream-deep text-ink-soft">
-          <Icon width={17} height={17} />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-ink" dir="auto">
-            {step.title}
-          </p>
-          <p className="truncate text-[12px] text-ink-faint" dir="auto">
-            {step.subtitle}
-          </p>
-        </div>
-        {step.duration != null && <span className="shrink-0 text-xs text-ink-faint">{formatNumber(step.duration, locale)}′</span>}
-        <span className={`grid size-6 shrink-0 place-items-center rounded-full border ${done ? "border-success bg-success text-white" : "border-line"}`}>
-          {done && <CheckIcon width={12} height={12} />}
-        </span>
-      </div>
     </div>
   );
 }
