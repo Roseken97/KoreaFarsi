@@ -49,7 +49,6 @@ export default async function MarketingLandingPage() {
   return (
     <div className="relative min-h-dvh overflow-hidden">
       <Scene3DBackground />
-      <SiteMascotOverlay />
       <div aria-hidden="true" className="pointer-events-none absolute -top-40 -start-32 size-96 rounded-full bg-blush/20 blur-3xl" />
       <div aria-hidden="true" className="pointer-events-none absolute -end-24 top-96 size-96 rounded-full bg-sage/25 blur-3xl" />
 
@@ -72,6 +71,7 @@ export default async function MarketingLandingPage() {
       {/* Hero — large, and running directly on the shared 3D background instead of its own boxed art */}
       <section className="relative z-10 flex min-h-[85dvh] flex-col items-center justify-center gap-7 px-6 pb-10 text-center">
         <HeroLetterScene />
+        <SiteMascotOverlay />
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-1/2 mx-auto h-[26rem] max-w-2xl -translate-y-1/2 rounded-[64px] bg-cream/45 blur-3xl"
