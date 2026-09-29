@@ -1,38 +1,57 @@
 "use client";
 
-import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
-import { useRef } from "react";
-
-function Word({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) {
-  const opacity = useTransform(progress, range, [0.25, 1]);
-  return (
-    <motion.span style={{ opacity }} className="inline-block">
-      {children}&nbsp;
-    </motion.span>
-  );
-}
+import { useEffect, useRef } from "react";
 
 /**
- * Word-level (not character-level) scroll reveal: Persian letters join within a word, so
- * splitting per character — like the reference's English demo — would break that joining.
- * Splitting on spaces keeps every word intact while still revealing progressively on scroll.
+ * Same scroll-progress formula as the reference (progress mapped from the paragraph's position
+ * between 80% and 20% of the viewport height, driven by a raw scroll listener), applied at the
+ * WORD level instead of per character — Persian letters join within a word, so splitting per
+ * character like the English reference would break that joining.
  */
 export function ScrollRevealText({ text, className }: { text: string; className?: string }) {
   const ref = useRef<HTMLParagraphElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.4"] });
   const words = text.split(" ");
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const spans = el.querySelectorAll<HTMLSpanElement>("span[data-word]");
+    let ticking = false;
+
+    function apply() {
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * 0.8;
+      const end = vh * 0.2;
+      let progress = (start - r.top) / (start - end);
+      progress = Math.max(0, Math.min(1, progress));
+      const n = spans.length;
+      spans.forEach((span, i) => {
+        const wordProgress = i / n;
+        span.style.opacity = progress >= wordProgress ? "1" : "0.25";
+      });
+      ticking = false;
+    }
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(apply);
+        ticking = true;
+      }
+    }
+    apply();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [text]);
 
   return (
     <p ref={ref} className={className}>
-      {words.map((word, i) => {
-        const start = i / words.length;
-        const end = start + 1 / words.length;
-        return (
-          <Word key={i} progress={scrollYProgress} range={[start, end]}>
-            {word}
-          </Word>
-        );
-      })}
+      {words.map((word, i) => (
+        <span key={i} data-word style={{ opacity: 0.25, transition: "opacity 0.15s linear" }} className="inline-block">
+          {word}
+          {i < words.length - 1 ? " " : ""}
+        </span>
+      ))}
     </p>
   );
 }

@@ -1,47 +1,74 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type Word = { ko: string; gloss: string };
 
 const ACCENTS = ["bg-teal-mist text-teal-deep", "bg-blush-soft text-blush", "bg-sage-soft text-teal-deep"];
 
-function Row({ words, direction }: { words: Word[]; direction: 1 | -1 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const x = useTransform(scrollYProgress, [0, 1], [0, direction * -280]);
-  const tripled = [...words, ...words, ...words];
-
+function Tile({ w, i }: { w: Word; i: number }) {
   return (
-    <div ref={ref} className="overflow-hidden">
-      <motion.div className="flex w-max gap-3" style={{ x }}>
-        {tripled.map((w, i) => (
-          <div
-            key={i}
-            className={`flex shrink-0 flex-col items-center gap-1 rounded-2xl px-6 py-4 ${ACCENTS[i % ACCENTS.length]}`}
-          >
-            <span className="font-display text-xl font-semibold">{w.ko}</span>
-            <span className="text-xs font-medium opacity-80">{w.gloss}</span>
-          </div>
-        ))}
-      </motion.div>
+    <div className={`flex shrink-0 flex-col items-center gap-1 rounded-2xl px-6 py-4 ${ACCENTS[i % ACCENTS.length]}`}>
+      <span className="font-display text-xl font-semibold">{w.ko}</span>
+      <span className="text-xs font-medium opacity-80">{w.gloss}</span>
     </div>
   );
 }
 
-/** A scroll-driven two-row marquee previewing real vocabulary from the curriculum — same scroll-linked technique as the reference, real content instead of stock images. */
+/**
+ * Same scroll-offset formula as the reference: offset = (scrollY - sectionTop + innerHeight) * 0.3,
+ * applied continuously off the raw page scroll position (not normalized to the section's own transit),
+ * so it keeps the same big, continuous sweep instead of a short in-view-only drift.
+ */
 export function VocabMarquee({ eyebrow, words }: { eyebrow: string; words: Word[] }) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const track1Ref = useRef<HTMLDivElement>(null);
+  const track2Ref = useRef<HTMLDivElement>(null);
+
   const mid = Math.ceil(words.length / 2);
-  const row1 = words.slice(0, mid);
-  const row2 = words.slice(mid);
+  const row1 = [...words.slice(0, mid), ...words.slice(0, mid), ...words.slice(0, mid)];
+  const row2 = [...words.slice(mid), ...words.slice(mid), ...words.slice(mid)];
+
+  useEffect(() => {
+    let ticking = false;
+    function apply() {
+      const section = sectionRef.current;
+      if (!section) return;
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      const offset = (window.scrollY - sectionTop + window.innerHeight) * 0.3;
+      if (track1Ref.current) track1Ref.current.style.transform = `translateX(${offset - 400}px)`;
+      if (track2Ref.current) track2Ref.current.style.transform = `translateX(${-(offset - 400)}px)`;
+      ticking = false;
+    }
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(apply);
+        ticking = true;
+      }
+    }
+    apply();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <section className="relative py-14">
+    <section ref={sectionRef} className="relative overflow-hidden py-14">
       <p className="mb-6 text-center text-xs font-semibold tracking-wide text-ink-faint uppercase">{eyebrow}</p>
       <div className="flex flex-col gap-3">
-        <Row words={row1} direction={1} />
-        <Row words={row2} direction={-1} />
+        <div className="overflow-hidden">
+          <div ref={track1Ref} className="flex w-max gap-3" style={{ willChange: "transform" }}>
+            {row1.map((w, i) => (
+              <Tile key={i} w={w} i={i} />
+            ))}
+          </div>
+        </div>
+        <div className="overflow-hidden">
+          <div ref={track2Ref} className="flex w-max gap-3" style={{ willChange: "transform" }}>
+            {row2.map((w, i) => (
+              <Tile key={i} w={w} i={i} />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
