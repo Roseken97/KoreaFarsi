@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SakuraBranch } from "@/components/brand/SakuraBranch";
-import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
 import { Logo } from "@/components/brand/Logo";
 import { BooksStackIcon, ChevronIcon, LanternIcon, PlannerIcon, RobotIcon, ShoppingBagIcon } from "@/components/icons";
 import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
 import { Tilt3D } from "@/components/marketing/Tilt3D";
+import { HeroLetterScene } from "@/components/marketing/HeroLetterScene";
 import { ButtonLink } from "@/components/ui/Button";
 import { getMessages } from "@/lib/i18n/server";
 
@@ -59,11 +58,10 @@ export default async function MarketingLandingPage() {
           </Link>
         </div>
 
-        <Tilt3D className="relative mt-4 h-64 w-full max-w-lg overflow-hidden rounded-[32px] bg-gradient-to-br from-blush-soft via-cream to-sage-soft shadow-lift md:h-80">
+        <Tilt3D strength={4} className="relative mt-4 h-72 w-full max-w-lg overflow-hidden rounded-[32px] bg-gradient-to-br from-blush-soft via-cream to-sage-soft shadow-lift md:h-96">
           <span aria-hidden="true" className="absolute -top-8 -start-8 size-40 rounded-full bg-white/30 blur-2xl" />
           <span aria-hidden="true" className="absolute end-10 top-10 size-20 rounded-full bg-blush/20 blur-xl" />
-          <SakuraBranch className="absolute -top-3 -end-3 w-48 md:w-64 rtl:-scale-x-100" />
-          <SeoulSkyline className="absolute! inset-x-0 bottom-0 h-32 md:h-40" />
+          <HeroLetterScene />
         </Tilt3D>
       </section>
 
