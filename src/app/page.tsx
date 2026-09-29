@@ -7,7 +7,8 @@ import { Tilt3D } from "@/components/marketing/Tilt3D";
 import { HeroLetterScene } from "@/components/marketing/HeroLetterScene";
 import { Scene3DBackgroundClient as Scene3DBackground } from "@/components/marketing/Scene3DBackgroundClient";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
-import { ButtonLink } from "@/components/ui/Button";
+import { HeroCopy } from "@/components/marketing/HeroCopy";
+import { CONTACT } from "@/config/contact";
 import { getMessages } from "@/lib/i18n/server";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,6 +37,13 @@ export default async function MarketingLandingPage() {
 
   const navItems = FEATURES.map(({ key, href }) => ({ key, href, label: t.features.items[key].title }));
   const tabItems = [{ key: "features", href: "#features", label: t.nav.features }, ...navItems];
+  const siteDomain = CONTACT.website.replace(/^https?:\/\//, "");
+  const heroPills = [
+    { label: t.hero.cta, href: "/auth/welcome" },
+    { label: t.hero.pills.courses, href: "/courses" },
+    { label: t.hero.pills.aiPractice, href: "/ai-hub" },
+    { label: t.hero.pills.login, href: "/auth/login" },
+  ];
 
   return (
     <div className="relative min-h-dvh overflow-hidden">
@@ -66,17 +74,17 @@ export default async function MarketingLandingPage() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-1/2 mx-auto h-[26rem] max-w-2xl -translate-y-1/2 rounded-[64px] bg-cream/45 blur-3xl"
         />
-        <span className="relative rounded-full bg-sage-soft px-4 py-1.5 text-xs font-semibold text-teal-deep">{t.hero.eyebrow}</span>
-        <h1 className="relative max-w-2xl font-display text-4xl leading-tight font-bold text-ink md:text-6xl">{t.hero.title}</h1>
-        <p className="relative max-w-xl text-lg leading-8 text-ink-soft">{t.hero.subtitle}</p>
-        <div className="relative flex flex-col items-center gap-3 sm:flex-row">
-          <ButtonLink href="/auth/welcome" className="w-auto! px-8">
-            {t.hero.cta}
-          </ButtonLink>
-          <Link href="/auth/login" className="text-sm font-semibold text-teal-deep">
-            {t.hero.ctaSecondary}
-          </Link>
-        </div>
+        <HeroCopy
+          introLine1={t.hero.introLine1}
+          introLine2={t.hero.introLine2}
+          eyebrow={t.hero.eyebrow}
+          title={t.hero.title}
+          tagline={t.hero.subtitle}
+          pills={heroPills}
+          copyLabel={t.hero.copyPrefix}
+          copyValue={siteDomain}
+          copiedLabel={t.hero.copied}
+        />
       </section>
 
       {/* Quick-jump tabs — every major section reachable in one tap, right under the hero */}

@@ -19,11 +19,16 @@ export const en = {
     metaTitle: "KoreaFarsi — A Bridge to a Brighter You",
     nav: { login: "Log in", start: "Get Started", features: "Features" },
     hero: {
+      introLine1: "Hey there, welcome to KoreaFarsi,",
+      introLine2: "a bridge for Persian speakers learning Korean",
       eyebrow: "Persian → Korean",
       title: "Learn Korean on a path built for Persian speakers",
       subtitle: "Courses, books, an AI study companion and a real planner — all in one place.",
       cta: "Get Started",
       ctaSecondary: "I already have an account",
+      pills: { courses: "See the courses", aiPractice: "Practice with AI", login: "I already have an account" },
+      copyPrefix: "Copy link:",
+      copied: "Copied!",
     },
     features: {
       eyebrow: "What's inside",
