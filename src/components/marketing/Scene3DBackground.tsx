@@ -5,7 +5,6 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import { Mascot3D } from "./Mascot3D";
 import { NodeLattice } from "./NodeLattice";
 
 /**
@@ -71,12 +70,11 @@ export function Scene3DBackground() {
         camera={{ position: [0, 0, 9], fov: 50 }}
       >
         <color attach="background" args={["#faf6ef"]} />
-        <fog attach="fog" args={["#faf6ef", 6, 14]} />
+        <fog attach="fog" args={["#faf6ef", 10, 20]} />
         <ambientLight intensity={0.85} />
         <pointLight position={[6, 6, 8]} intensity={28} color="#ffffff" />
         <pointLight position={[-6, -4, 4]} intensity={14} color="#de8b89" />
         <Rig />
-        <Mascot3D reduceMotion={reduceMotion} />
         <NodeLattice reduceMotion={reduceMotion} />
       </Canvas>
     </div>

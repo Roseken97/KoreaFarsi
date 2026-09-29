@@ -4,7 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-const NODE_COLOR = "#42474f";
+const NODE_COLOR = "#16213a";
 
 function makeNodes(count: number) {
   return Array.from({ length: count }, () => ({
@@ -49,10 +49,10 @@ export function NodeLattice({ reduceMotion }: { reduceMotion: boolean }) {
   return (
     <group ref={group}>
       <points geometry={pointsGeometry}>
-        <pointsMaterial color={NODE_COLOR} size={0.16} sizeAttenuation transparent opacity={0.9} />
+        <pointsMaterial color={NODE_COLOR} size={0.22} sizeAttenuation transparent opacity={1} />
       </points>
       <lineSegments geometry={lineGeometry}>
-        <lineBasicMaterial color={NODE_COLOR} transparent opacity={0.32} />
+        <lineBasicMaterial color={NODE_COLOR} transparent opacity={0.5} />
       </lineSegments>
     </group>
   );
