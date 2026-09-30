@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — soft, calm salon palette: warm ivory, dusty rose, deep plum ink.
+ * Components only use these names, so re-theming = editing this block.
+ */
+@theme {
+  --color-bg: #fbf7f4;
+  --color-surface: #ffffff;
+  --color-ink: #2d2226;
+  --color-ink-soft: #6f5f65;
+  --color-ink-faint: #a3959a;
+  --color-line: #ece2dd;
+
+  --color-rose: #b5707c;
+  --color-rose-deep: #8f4d5a;
+  --color-rose-soft: #f6e8e9;
+  --color-rose-mist: #fbf2f2;
+  --color-gold: #c3a27a;
+
+  --color-ok: #3f8f6b;
+  --color-ok-soft: #e5f3ec;
+  --color-warn: #b7791f;
+  --color-warn-soft: #fbf0dc;
+  --color-danger: #c2474f;
+  --color-danger-soft: #fbe7e8;
+
+  --font-sans: var(--font-vazirmatn), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.25rem;
+  --shadow-soft: 0 1px 2px rgb(45 34 38 / 0.04), 0 8px 24px -12px rgb(45 34 38 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(45 34 38 / 0.05), 0 16px 32px -16px rgb(143 77 90 / 0.35);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Hide the horizontal scrollbar on the day strip but keep it scrollable */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-rise {
+  animation: rise 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise {
+    animation: none;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-rose);
+  outline-offset: 2px;
+}
