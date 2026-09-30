@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display, Vazirmatn } from "next/font/google";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { SITE_URL } from "@/config/site";
 import { I18nProvider } from "@/lib/i18n/client";
 import { dirOf } from "@/lib/i18n/config";
 import { getLocale } from "@/lib/i18n/server";
@@ -13,9 +14,18 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const vazirmatn = Vazirmatn({ variable: "--font-vazirmatn", subsets: ["arabic", "latin"], preload: false });
 
 export const metadata: Metadata = {
+  // Makes relative image/URL metadata absolute, so Telegram/Instagram link previews resolve.
+  metadataBase: new URL(SITE_URL),
   title: { default: "KoreaFarsi", template: "%s | KoreaFarsi" },
   description: "A Bridge to a Brighter You — learn Korean with a path designed for Persian speakers.",
   applicationName: "KoreaFarsi",
+  openGraph: {
+    type: "website",
+    siteName: "KoreaFarsi",
+    url: "/",
+    images: [{ url: "/brand/logo-512.png", width: 512, height: 512, alt: "KoreaFarsi" }],
+  },
+  twitter: { card: "summary" },
   icons: {
     icon: [
       { url: "/icons/favicon-48.png", sizes: "48x48", type: "image/png" },

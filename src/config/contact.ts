@@ -3,8 +3,10 @@
  * Bookstore purchase flow (M3) and the chatbot fallback (M4) later.
  * TODO(Rose): fill in the real handles/links. Empty values are simply hidden.
  */
+import { SITE_URL } from "./site";
+
 export const CONTACT = {
-  website: "https://koreafarsi.ir",
+  website: SITE_URL,
   instagram: "koreafarsi",
   youtube: "koreafarsi",
   telegram: "koreakey_support",

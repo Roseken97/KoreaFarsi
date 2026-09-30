@@ -43,14 +43,30 @@
 
 ## ۵. اتصال Supabase به آدرس سایت
 Supabase → **Authentication → URL Configuration**:
-- **Site URL**: آدرس نهایی (فعلاً `https://…vercel.app`، بعداً دامین خودت)
-- **Redirect URLs**: `https://…vercel.app/auth/callback` و بعداً `https://دامین‌تو/auth/callback`
+- **Site URL**: `https://koreafarsi.ir`
+- **Redirect URLs** (همه را نگه دار):
+  - `https://koreafarsi.ir/auth/callback`
+  - `https://www.koreafarsi.ir/auth/callback`
+  - `https://…vercel.app/auth/callback` (پشتیبان، تا وقتی دامین کامل تست نشده)
 
-## ۶. دامین شخصی 🔑
-1. Vercel → Project → **Settings → Domains** → دامین را اضافه کن.
-2. Vercel رکوردهای DNS لازم را نشان می‌دهد (معمولاً یک رکورد `A` برای دامین اصلی و یک `CNAME` برای `www`).
-3. این رکوردها را در پنل DNS جایی که دامین را خریده‌ای وارد کن. **هاست cPanel فعلی لازم نیست.**
-4. بعد از فعال شدن (از چند دقیقه تا ۲۴ ساعت)، مرحله‌ی ۵ را با دامین جدید تکرار کن.
+> اگر Site URL روی `vercel.app` بماند، لینک تأیید ایمیل ثبت‌نام کاربر را به آدرس قدیمی می‌برد.
+
+## ۶. دامین شخصی: `koreafarsi.ir` 🔑
+1. Vercel → Project → **Settings → Domains** → `koreafarsi.ir` را اضافه کن و گزینه‌ی افزودن `www.koreafarsi.ir` را هم بپذیر.
+   - `koreafarsi.ir` دامین اصلی باشد و `www` روی آن **Redirect (308)** شود.
+2. Vercel رکوردهای DNS را نشان می‌دهد. **دقیقاً همان مقادیری را وارد کن که Vercel نشان می‌دهد**؛ معمولاً:
+
+   | Type | Name | Value |
+   |---|---|---|
+   | `A` | `@` | `76.76.21.21` |
+   | `CNAME` | `www` | `cname.vercel-dns.com` |
+
+3. این رکوردها را جایی وارد کن که Nameserverهای دامین به آن اشاره می‌کنند (اگر دامین همراه هاست خریده شده، معمولاً cPanel → **Zone Editor**). **هاست cPanel فعلی برای اجرای سایت لازم نیست.**
+   - رکورد `A` قبلیِ `@` و رکورد قبلیِ `www` (مثلاً IP هاست) را **حذف یا ویرایش کن**؛ دو رکورد هم‌زمان باعث باز شدنِ گاه‌به‌گاه سایت می‌شود.
+   - رکوردهای ایمیل (`MX`، `TXT`) را دست نزن.
+4. وقتی در Vercel کنار هر دو دامین **Valid Configuration** آمد (از چند دقیقه تا ۲۴ ساعت)، SSL خودکار صادر می‌شود. بعد مرحله‌ی ۵ را با `koreafarsi.ir` انجام بده.
+5. آدرس کانونی سایت در کد: `src/config/site.ts` (برای پیش‌نمایش لینک، `robots.txt` و `sitemap.xml`). بعد از فعال شدن، `https://koreafarsi.ir/sitemap.xml` را در [Google Search Console](https://search.google.com/search-console) ثبت کن.
+6. PWA را از روی دامین جدید **دوباره** روی گوشی نصب کن؛ نسخه‌ی نصب‌شده از `vercel.app` منتقل نمی‌شود.
 
 ## ۷. تست نهایی روی گوشی
 | تست | Android (Chrome) | iPhone (Safari) |
