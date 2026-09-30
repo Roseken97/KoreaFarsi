@@ -1,31 +1,46 @@
 @import "tailwindcss";
 
 /*
- * KoreaFarsi design tokens — PARTLY PROVISIONAL.
- * ink + blush are sampled from the official logo (navy #121e30, rose #de8b89).
- * cream / sage / teal follow PROJECT_CONTEXT.md §18 until checked against the sketches PDF.
- * Replace values here once exact colors are extracted from the UX sketches;
- * every component reads from these tokens, so no component code needs to change.
+ * KoreaFarsi design tokens — "Color Reference V1" (vivid / warm / premium / playful).
+ * Every component reads from these tokens, so no component code needs to change
+ * when the palette does. ink/cream/line/teal/blush keep their existing names (so
+ * nothing breaks) but now carry the new V1 hex values; violet/coral/yellow/sky are
+ * new accent families for the more playful multi-color card style.
  */
 @theme {
-  --color-cream: #faf6ef;
-  --color-cream-deep: #f2eadc;
+  --color-cream: #fff8ef;
+  --color-cream-deep: #f4efe8;
   --color-surface: #ffffff;
-  --color-ink: #16213a;
-  --color-ink-soft: #5b6478;
-  --color-ink-faint: #9aa1b0;
-  --color-line: #e9e1d3;
-  --color-sage: #9db5a5;
-  --color-sage-soft: #e3ece5;
-  --color-teal: #4f8a87;
-  --color-teal-deep: #3d716e;
-  --color-teal-mist: #dcecee;
-  --color-blush: #de8b89;
-  --color-blush-soft: #f8e3e1;
-  --color-danger: #c0564b;
-  --color-danger-soft: #fbeae7;
-  --color-success: #4f8a6a;
-  --color-success-soft: #e6f1ea;
+  --color-ink: #29263d;
+  --color-ink-soft: #6e6878;
+  --color-ink-faint: #9691a0;
+  --color-line: #e6dfd7;
+
+  --color-sage: #bfe8d9;
+  --color-sage-soft: #e4f8f1;
+  --color-teal: #20b8b0;
+  --color-teal-deep: #16847f;
+  --color-teal-mist: #e3f7f5;
+  --color-blush: #e85a9f;
+  --color-blush-soft: #fceaf3;
+
+  --color-violet: #7b43d6;
+  --color-violet-deep: #5e2aae;
+  --color-violet-soft: #eee7fb;
+  --color-coral: #f46a45;
+  --color-coral-deep: #c84b2d;
+  --color-coral-soft: #fdece7;
+  --color-yellow: #ffb72b;
+  --color-yellow-deep: #d88e00;
+  --color-yellow-soft: #fff4d9;
+  --color-sky: #5d8fe8;
+  --color-sky-deep: #3768bb;
+  --color-sky-soft: #eaf0fc;
+
+  --color-danger: #e85a5a;
+  --color-danger-soft: #fbeaea;
+  --color-success: #20b8b0;
+  --color-success-soft: #e3f7f5;
 
   --font-sans: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;
   --font-display: var(--font-playfair), Georgia, serif;
@@ -33,8 +48,8 @@
   --radius-card: 1.5rem;
   --radius-field: 1rem;
 
-  --shadow-soft: 0 1px 2px rgb(31 42 68 / 0.04), 0 8px 24px -12px rgb(31 42 68 / 0.12);
-  --shadow-lift: 0 2px 4px rgb(31 42 68 / 0.05), 0 16px 40px -16px rgb(31 42 68 / 0.2);
+  --shadow-soft: 0 1px 2px rgb(41 38 61 / 0.05), 0 8px 24px -12px rgb(41 38 61 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(41 38 61 / 0.06), 0 16px 40px -16px rgb(41 38 61 / 0.22);
 }
 
 html {

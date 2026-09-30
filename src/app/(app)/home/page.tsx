@@ -33,10 +33,10 @@ type CardKey = keyof Messages["home"]["cards"];
 
 /** The four main sections (sketch 02 Home). My Courses / Korea Life are placeholders in Phase 1. */
 const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; bg: string; text: string }[] = [
-  { key: "courses", href: "/courses", Icon: BooksStackIcon, bg: "bg-sage", text: "text-ink" },
-  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, bg: "bg-blush", text: "text-white" },
+  { key: "courses", href: "/courses", Icon: BooksStackIcon, bg: "bg-violet", text: "text-white" },
+  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, bg: "bg-coral", text: "text-white" },
   { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, bg: "bg-ink", text: "text-cream" },
-  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, bg: "bg-cream-deep", text: "text-ink" },
+  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, bg: "bg-yellow", text: "text-ink" },
 ];
 
 export default async function HomePage() {
