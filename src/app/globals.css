@@ -10,7 +10,7 @@
 @theme {
   --color-cream: #fff8ef;
   --color-cream-deep: #f4efe8;
-  --color-surface: #ffffff;
+  --color-surface: #fff8ef;
   --color-ink: #29263d;
   --color-ink-soft: #6e6878;
   --color-ink-faint: #9691a0;
@@ -45,11 +45,11 @@
   --font-sans: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;
   --font-display: var(--font-playfair), Georgia, serif;
 
-  --radius-card: 1.5rem;
-  --radius-field: 1rem;
+  --radius-card: 1rem;
+  --radius-field: 0.75rem;
 
-  --shadow-soft: 0 1px 2px rgb(41 38 61 / 0.05), 0 8px 24px -12px rgb(41 38 61 / 0.14);
-  --shadow-lift: 0 2px 4px rgb(41 38 61 / 0.06), 0 16px 40px -16px rgb(41 38 61 / 0.22);
+  --shadow-soft: 0 4px 12px rgb(41 38 61 / 0.06);
+  --shadow-lift: 0 8px 24px rgb(41 38 61 / 0.1);
 }
 
 html {
@@ -62,9 +62,9 @@ html[lang="fa"] {
   --font-display: var(--font-vazirmatn), system-ui, sans-serif;
 }
 
+/* Flat warm cream — the design system explicitly avoids "unnecessary gradients or textures"; cards sit on this same tone and separate only by shadow. */
 body {
-  background: linear-gradient(160deg, #ffffff 0%, var(--color-sage-soft) 55%, var(--color-teal-mist) 100%);
-  background-attachment: fixed;
+  background: var(--color-cream);
   color: var(--color-ink);
   font-family: var(--font-sans);
 }

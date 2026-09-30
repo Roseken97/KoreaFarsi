@@ -144,7 +144,7 @@ export default async function HomePage() {
                     fill="none"
                     strokeWidth="4"
                     strokeLinecap="round"
-                    className="stroke-teal"
+                    className="stroke-violet"
                     pathLength={100}
                     strokeDasharray="100"
                     strokeDashoffset={100 - donePct}
@@ -162,7 +162,7 @@ export default async function HomePage() {
                   {continueCard.total > 0 ? fmt(m.courses.progress, { done: formatNumber(continueCard.done, locale as Locale), total: formatNumber(continueCard.total, locale as Locale) }) : m.courses.startCta}
                 </p>
               </div>
-              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-teal text-white" aria-hidden="true">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-violet text-white" aria-hidden="true">
                 <PlayIcon width={18} height={18} />
               </span>
             </MotionCard>
