@@ -147,7 +147,7 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
 
       <Link
         href={`/courses/${slug}/lessons/${lessonId}/start`}
-        className="mt-6 inline-flex h-13 w-full items-center justify-center gap-2 rounded-field bg-ink px-5 text-[15px] font-semibold text-cream shadow-soft transition hover:bg-ink/85 active:scale-[0.99]"
+        className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-field bg-violet px-5 text-[15px] font-semibold text-white shadow-soft transition hover:bg-violet-deep active:scale-[0.99]"
       >
         <PlayIcon width={18} height={18} />
         {to.startLesson}

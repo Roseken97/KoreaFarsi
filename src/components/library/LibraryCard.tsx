@@ -48,7 +48,7 @@ export function LibraryCard({ entry }: { entry: LibraryEntry }) {
           <button
             onClick={download}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-cream transition hover:bg-ink/85 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-full bg-violet px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-deep disabled:opacity-50"
           >
             <DownloadIcon width={16} height={16} />
             {loading ? t.preparing : t.download}

@@ -146,7 +146,7 @@ function ReviewForm({
       />
       {status && <p className={`text-xs font-medium ${status.tone === "error" ? "text-danger" : "text-success"}`}>{status.text}</p>}
       <div className="flex items-center gap-3">
-        <button onClick={submit} disabled={saving} className="rounded-full bg-ink px-5 py-2 text-sm font-semibold text-cream transition hover:bg-ink/85 disabled:opacity-50">
+        <button onClick={submit} disabled={saving} className="rounded-full bg-violet px-5 py-2 text-sm font-semibold text-white transition hover:bg-violet-deep disabled:opacity-50">
           {existing ? labels.update : labels.submit}
         </button>
         {existing && (

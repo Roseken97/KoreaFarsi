@@ -230,7 +230,7 @@ export function ChatBox({ hideHeader = false }: { hideHeader?: boolean } = {}) {
             type="submit"
             disabled={disabled || !input.trim()}
             aria-label={t.send}
-            className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-cream transition hover:bg-ink/85 disabled:opacity-40"
+            className="grid size-11 shrink-0 place-items-center rounded-full bg-violet text-white transition hover:bg-violet-deep disabled:opacity-40"
           >
             <SendIcon width={20} height={20} />
           </button>

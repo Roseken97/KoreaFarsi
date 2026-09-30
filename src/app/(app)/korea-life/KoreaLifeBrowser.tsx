@@ -12,7 +12,7 @@ const CATEGORIES: KoreaLifeCategory[] = ["culture", "travel", "food", "life"];
 const CATEGORY_STYLE: Record<KoreaLifeCategory, { bg: string; text: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }> = {
   culture: { bg: "bg-sage", text: "text-ink", Icon: LanternIcon },
   travel: { bg: "bg-blush", text: "text-white", Icon: GlobeIcon },
-  food: { bg: "bg-ink", text: "text-cream", Icon: BowlIcon },
+  food: { bg: "bg-coral", text: "text-white", Icon: BowlIcon },
   life: { bg: "bg-cream-deep", text: "text-ink", Icon: SparkleIcon },
 };
 

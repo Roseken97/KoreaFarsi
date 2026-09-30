@@ -35,7 +35,7 @@ type CardKey = keyof Messages["home"]["cards"];
 const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; bg: string; text: string }[] = [
   { key: "courses", href: "/courses", Icon: BooksStackIcon, bg: "bg-violet", text: "text-white" },
   { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, bg: "bg-coral", text: "text-white" },
-  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, bg: "bg-ink", text: "text-cream" },
+  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, bg: "bg-teal", text: "text-white" },
   { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, bg: "bg-yellow", text: "text-ink" },
 ];
 
@@ -105,7 +105,7 @@ export default async function HomePage() {
             <MotionCard
               key={key}
               href={href}
-              className="group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[24px] p-4 shadow-soft"
+              className="group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[24px] p-4 shadow-lift"
             >
               <span className={`absolute inset-0 ${bg}`} aria-hidden="true" />
               <span className="absolute -end-4 -top-4 size-20 rounded-full bg-white/10" aria-hidden="true" />

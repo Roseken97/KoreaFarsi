@@ -10,7 +10,7 @@
 @theme {
   --color-cream: #fff8ef;
   --color-cream-deep: #f4efe8;
-  --color-surface: #fff8ef;
+  --color-surface: #ffffff;
   --color-ink: #29263d;
   --color-ink-soft: #6e6878;
   --color-ink-faint: #9691a0;
@@ -48,8 +48,8 @@
   --radius-card: 1rem;
   --radius-field: 0.75rem;
 
-  --shadow-soft: 0 4px 12px rgb(41 38 61 / 0.06);
-  --shadow-lift: 0 8px 24px rgb(41 38 61 / 0.1);
+  --shadow-soft: 0 2px 6px rgb(41 38 61 / 0.05), 0 10px 24px -8px rgb(41 38 61 / 0.14);
+  --shadow-lift: 0 4px 10px rgb(41 38 61 / 0.07), 0 20px 40px -12px rgb(41 38 61 / 0.22);
 }
 
 html {
@@ -62,7 +62,7 @@ html[lang="fa"] {
   --font-display: var(--font-vazirmatn), system-ui, sans-serif;
 }
 
-/* Flat warm cream — the design system explicitly avoids "unnecessary gradients or textures"; cards sit on this same tone and separate only by shadow. */
+/* Flat warm cream page background — white card surfaces sit visibly above it (shadow-lift + white vs. cream) instead of blending in. */
 body {
   background: var(--color-cream);
   color: var(--color-ink);

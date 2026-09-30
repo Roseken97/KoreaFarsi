@@ -76,7 +76,7 @@ export default async function AccountPage() {
           <section className="flex items-center gap-4">
             <Link href="/account/profile" className="relative" aria-label={t.editProfile}>
               <Avatar name={profile?.name} email={profile?.user.email} avatarKey={profile?.avatarKey} size={72} className="shadow-soft" />
-              <span className="absolute -end-0.5 -bottom-0.5 grid size-7 place-items-center rounded-full bg-ink text-cream ring-2 ring-cream">
+              <span className="absolute -end-0.5 -bottom-0.5 grid size-7 place-items-center rounded-full bg-violet text-white ring-2 ring-cream">
                 <PencilIcon width={14} height={14} />
               </span>
             </Link>
@@ -113,7 +113,7 @@ export default async function AccountPage() {
             <ListRow href="/library" Icon={LibraryIcon} title={t.items.books.title} body={t.items.books.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/planner" Icon={PlannerIcon} title={t.items.planner.title} body={t.items.planner.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/account/achievements" Icon={TrophyIcon} title={t.items.achievements.title} body={t.items.achievements.body} tone="bg-sage-soft text-teal-deep" />
-            {isAdmin && <ListRow href="/admin/products" Icon={ShieldIcon} title={t.items.admin.title} body={t.items.admin.body} tone="bg-ink text-cream" />}
+            {isAdmin && <ListRow href="/admin/products" Icon={ShieldIcon} title={t.items.admin.title} body={t.items.admin.body} tone="bg-violet text-white" />}
           </ListGroup>
 
           <ListGroup>

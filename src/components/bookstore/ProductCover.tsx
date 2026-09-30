@@ -6,7 +6,7 @@ import type { Collection, Product } from "@/lib/bookstore/types";
  * cover in brand colors (so sample / not-yet-photographed products still look intentional).
  */
 const COVER_STYLE: Record<Collection | "default", { bg: string; glyph: string; text: string }> = {
-  alphabet: { bg: "bg-ink", glyph: "한글", text: "text-cream" },
+  alphabet: { bg: "bg-violet", glyph: "한글", text: "text-white" },
   four_skills: { bg: "bg-teal-deep", glyph: "한국어", text: "text-cream" },
   workbook: { bg: "bg-blush-soft", glyph: "연습", text: "text-ink" },
   planner: { bg: "bg-sage-soft", glyph: "계획", text: "text-teal-deep" },

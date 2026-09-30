@@ -42,7 +42,7 @@ export function AddToCartButton({
         disabled={disabled}
         aria-label={added ? m.bookstore.added : m.bookstore.addToCart}
         className={`grid size-9 shrink-0 place-items-center rounded-full transition disabled:cursor-not-allowed disabled:opacity-40 ${
-          added ? "bg-success text-white" : "bg-ink text-cream hover:bg-ink/85"
+          added ? "bg-success text-white" : "bg-violet text-white hover:bg-violet-deep"
         }`}
       >
         {added ? <CheckIcon width={18} height={18} /> : <ShoppingBagIcon width={18} height={18} />}

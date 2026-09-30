@@ -14,7 +14,7 @@ import { markOnboarded } from "@/lib/onboarding";
  * panel for an <Image> once the 4 artworks exist. Copy lives in the i18n files.
  */
 const VISUALS = [
-  "bg-ink text-cream",
+  "bg-violet text-white",
   "bg-blush-soft text-ink",
   "bg-sage-soft text-teal-deep",
   "bg-cream-deep text-ink",
