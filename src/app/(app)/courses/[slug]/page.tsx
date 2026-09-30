@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BooksStackIcon, CheckIcon, ShieldIcon } from "@/components/icons";
+import { SakuraBranch } from "@/components/brand/SakuraBranch";
+import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
+import { BooksStackIcon, LayersIcon, LevelIcon, ShieldIcon, WatchIcon } from "@/components/icons";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { ButtonLink } from "@/components/ui/Button";
-import { Notice } from "@/components/ui/Notice";
-import { completedCount, isLessonUnlocked, lessonCount } from "@/lib/courses/types";
-import { getCourseOutline } from "@/lib/courses/queries";
+import { completedCount, lessonCount, levelBucket } from "@/lib/courses/types";
+import { getCourseOutline, getCourseResources, getCourseReviews } from "@/lib/courses/queries";
 import { fmt, formatNumber } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
+import { getCurrentUser } from "@/lib/supabase/server";
+import { CourseDetailTabs } from "./CourseDetailTabs";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -17,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return { title: outline?.course.title ?? "Course" };
 }
 
-/** Course Lesson List (sketch 08). Unit tabs from the sketch are shown as stacked sections instead — simpler, same information. */
+/** Course Detail (sketch 07): hero uses the course's own cover image, then key info + tabs (Overview/Lessons/Resources/Reviews). */
 export default async function CourseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [{ m, locale }, outline] = await Promise.all([getMessages(), getCourseOutline(slug)]);
@@ -29,36 +31,51 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
   const description = locale === "en" ? course.description_en || course.description : course.description;
   const total = lessonCount(units);
   const done = completedCount(units, progress);
-  const flat = units.flatMap((u) => u.lessons);
-  const firstOpenId = flat.find((l) => !progress[l.id])?.id ?? flat[0]?.id ?? null;
+  const totalMinutes = units.reduce((sum, u) => sum + u.lessons.reduce((n, l) => n + l.duration_minutes, 0), 0);
+  const levelLabel = course.level ? t.levels[levelBucket(course.level) ?? "beginner"] || course.level : null;
+  const hasCover = Boolean(course.cover_image_url);
+
+  let resources: Awaited<ReturnType<typeof getCourseResources>> = [];
+  let reviews: Awaited<ReturnType<typeof getCourseReviews>> = [];
+  let currentUserId: string | null = null;
+  if (hasAccess) {
+    const [r, rv, currentUser] = await Promise.all([getCourseResources(course.id), getCourseReviews(course.id), getCurrentUser()]);
+    resources = r;
+    reviews = rv;
+    currentUserId = currentUser?.id ?? null;
+  }
 
   return (
     <div className="animate-fade-up max-w-2xl">
       <SubPageHeader title={t.title} backHref="/courses" backLabel={t.title} />
 
-      <section className="flex items-center gap-4">
-        {course.cover_image_url ? (
-          <div className="relative size-20 shrink-0 overflow-hidden rounded-2xl bg-cream-deep shadow-soft">
-            <Image src={course.cover_image_url} alt="" fill sizes="80px" className="object-cover" />
-          </div>
+      {/* Hero — Visual Element: the course's own selected cover image (sketch 07, callout #9) */}
+      <section className="relative h-56 w-full overflow-hidden rounded-[24px] shadow-lift md:h-64">
+        {hasCover ? (
+          <Image src={course.cover_image_url!} alt="" fill sizes="(min-width: 768px) 42rem, 100vw" className="object-cover" />
         ) : (
-          <span className="grid size-20 shrink-0 place-items-center rounded-2xl bg-sage-soft text-teal-deep shadow-soft">
-            <BooksStackIcon width={32} height={32} />
-          </span>
+          <div className="absolute inset-0 bg-gradient-to-br from-blush-soft via-cream to-sage-soft">
+            <SakuraBranch className="absolute -top-2 -end-2 w-40 rtl:-scale-x-100" />
+            <SeoulSkyline className="absolute! inset-x-0 bottom-0 h-24" />
+          </div>
         )}
-        <div className="min-w-0">
-          <h1 className="font-display text-2xl font-semibold" dir="auto">
+        {hasCover && <span className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/15 to-transparent" aria-hidden="true" />}
+        <div className="relative flex h-full flex-col justify-end p-5 md:p-6">
+          <p className={`text-xs font-semibold tracking-wide uppercase ${hasCover ? "text-white/80" : "text-ink-soft"}`}>KoreaFarsi</p>
+          <h1 className={`mt-1 font-display text-2xl leading-tight font-bold md:text-3xl ${hasCover ? "text-white" : "text-ink"}`} dir="auto">
             {title}
           </h1>
-          {course.level && <p className="mt-0.5 text-sm text-ink-soft">{course.level}</p>}
+          {levelLabel && <p className={`mt-1 text-sm font-medium ${hasCover ? "text-white/85" : "text-ink-soft"}`}>{levelLabel}</p>}
         </div>
       </section>
 
-      {description && (
-        <p className="mt-4 text-[15px] leading-7 text-ink-soft" dir="auto">
-          {description}
-        </p>
-      )}
+      {/* Key info row (sketch callout #3) — 4 sections split by a short vertical divider, close under the hero */}
+      <div className="mt-2 grid grid-cols-4 divide-x divide-line rounded-[20px] bg-surface p-3 shadow-soft">
+        <KeyInfo icon={<LayersIcon width={18} height={18} />} value={formatNumber(total, locale)} label={t.detail.keyInfo.lessons} />
+        <KeyInfo icon={<LevelIcon width={18} height={18} />} value={levelLabel ?? "—"} label={t.detail.keyInfo.level} />
+        <KeyInfo icon={<WatchIcon width={18} height={18} />} value={totalMinutes > 0 ? fmt(t.detail.keyInfo.minutes, { n: formatNumber(totalMinutes, locale) }) : "—"} label={t.detail.keyInfo.duration} />
+        <KeyInfo icon={<BooksStackIcon width={18} height={18} />} value={t.detail.keyInfo.selfPaced} label={t.detail.keyInfo.selfPacedBody} />
+      </div>
 
       {!hasAccess ? (
         <div className="mt-6 flex flex-col items-center gap-3 rounded-card bg-surface p-6 text-center shadow-soft">
@@ -70,70 +87,33 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
           </ButtonLink>
         </div>
       ) : (
-        <>
-          <div className="mt-6 flex items-center justify-between text-sm">
-            <span className="font-medium text-ink-soft">{fmt(t.progress, { done: formatNumber(done, locale), total: formatNumber(total, locale) })}</span>
-            {firstOpenId && (
-              <Link href={`/courses/${course.slug}/lessons/${firstOpenId}`} className="font-semibold text-teal-deep">
-                {done > 0 ? t.continueCta : t.startCta}
-              </Link>
-            )}
-          </div>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
-            <div className="h-full rounded-full bg-teal" style={{ width: `${total ? (done / total) * 100 : 0}%` }} />
-          </div>
-
-          <div className="mt-6 flex flex-col gap-6">
-            {units.length === 0 ? (
-              <Notice>{t.empty}</Notice>
-            ) : (
-              units.map((unit) => (
-                <section key={unit.id}>
-                  <h2 className="mb-2 font-display text-lg font-semibold" dir="auto">
-                    {locale === "en" ? unit.title_en || unit.title : unit.title}
-                  </h2>
-                  <ul className="flex flex-col gap-2">
-                    {unit.lessons.map((lesson, i) => {
-                      const isDone = Boolean(progress[lesson.id]);
-                      const isCurrent = !isDone && lesson.id === firstOpenId;
-                      const unlocked = isDone || isLessonUnlocked(units, progress, lesson.id);
-                      const rowClass = `flex items-center gap-3 rounded-field border p-3 ${isCurrent ? "border-teal bg-teal/5" : "border-line bg-surface"}`;
-                      const content = (
-                        <>
-                          <span className={`grid size-8 shrink-0 place-items-center rounded-full text-xs font-semibold ${isDone ? "bg-success text-white" : "bg-cream-deep text-ink-soft"}`}>
-                            {isDone ? <CheckIcon width={14} height={14} /> : formatNumber(i + 1, locale)}
-                          </span>
-                          <span className={`min-w-0 flex-1 truncate text-sm font-medium ${unlocked ? "text-ink" : "text-ink-faint"}`} dir="auto">
-                            {locale === "en" ? lesson.title_en || lesson.title : lesson.title}
-                          </span>
-                          {unlocked ? (
-                            lesson.duration_minutes > 0 && <span className="shrink-0 text-xs text-ink-faint">{lesson.duration_minutes}′</span>
-                          ) : (
-                            <ShieldIcon width={16} height={16} className="shrink-0 text-ink-faint" />
-                          )}
-                        </>
-                      );
-                      return (
-                        <li key={lesson.id}>
-                          {unlocked ? (
-                            <Link href={`/courses/${course.slug}/lessons/${lesson.id}`} className={`${rowClass} transition hover:bg-cream`}>
-                              {content}
-                            </Link>
-                          ) : (
-                            <div className={`${rowClass} cursor-not-allowed opacity-70`} aria-disabled="true">
-                              {content}
-                            </div>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </section>
-              ))
-            )}
-          </div>
-        </>
+        <CourseDetailTabs
+          course={course}
+          units={units}
+          progress={progress}
+          locale={locale}
+          description={description}
+          total={total}
+          done={done}
+          resources={resources}
+          reviews={reviews}
+          currentUserId={currentUserId}
+        />
       )}
+    </div>
+  );
+}
+
+function KeyInfo({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
+  return (
+    <div className="flex flex-col items-center gap-1 px-1 text-center">
+      <span className="text-ink-faint">{icon}</span>
+      <span className="text-[13px] font-semibold whitespace-nowrap text-ink" dir="auto">
+        {value}
+      </span>
+      <span className="text-[10px] leading-[1.3] text-ink-faint" dir="auto">
+        {label}
+      </span>
     </div>
   );
 }

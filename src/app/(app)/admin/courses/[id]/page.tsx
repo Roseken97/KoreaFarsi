@@ -39,7 +39,7 @@ export default async function CourseContentPage({ params }: { params: Promise<{ 
   return (
     <Shell>
       <SubPageHeader title={data.course.title} backHref="/admin/courses" backLabel="Courses" />
-      <CourseContentAdmin course={data.course} units={data.units} lessons={data.lessons} />
+      <CourseContentAdmin course={data.course} units={data.units} lessons={data.lessons} resources={data.resources} />
     </Shell>
   );
 }

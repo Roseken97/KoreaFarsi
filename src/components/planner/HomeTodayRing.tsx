@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useState, useTransition } from "react";
 import { CheckIcon } from "@/components/icons";
 import { toggleTask } from "@/lib/planner/actions";
@@ -25,11 +26,14 @@ export function HomeTodayRing({ task }: { task: PlannerTask }) {
 
   return (
     <li className="flex flex-col items-center gap-2">
-      <button
+      <motion.button
         onClick={toggle}
         disabled={pending}
         aria-pressed={done}
         aria-label={m.planner.categoryLabel[task.category]}
+        whileTap={{ scale: 0.88 }}
+        animate={done ? { scale: [1, 1.15, 1] } : {}}
+        transition={{ type: "spring", stiffness: 400, damping: 20 }}
         className="relative grid size-14 place-items-center disabled:opacity-70"
       >
         <svg viewBox="0 0 36 36" className="absolute inset-0 -rotate-90" aria-hidden="true">
@@ -39,7 +43,7 @@ export function HomeTodayRing({ task }: { task: PlannerTask }) {
           )}
         </svg>
         {done ? <CheckIcon width={20} height={20} className="text-success" /> : <Icon width={22} height={22} className="text-ink-soft" />}
-      </button>
+      </motion.button>
       <span className={`text-xs font-medium ${done ? "text-success" : "text-ink-soft"}`}>{m.planner.categoryLabel[task.category]}</span>
     </li>
   );

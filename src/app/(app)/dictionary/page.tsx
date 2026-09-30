@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: m.dictionaryPage.metaTitle };
 }
 
-/** Dictionary → search box that hands the word to Naver's Korean-Korean dictionary in a new tab; no scraping/embedding (against Naver's terms and fragile). */
+/** Dictionary → search box that hands the word to Naver's Korean<->English dictionary in a new tab; no scraping/embedding (against Naver's terms and fragile). */
 export default async function DictionaryPage() {
   const { m } = await getMessages();
   const t = m.dictionaryPage;

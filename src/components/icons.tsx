@@ -295,6 +295,19 @@ export const CloseIcon = (p: IconProps) => (
   </Base>
 );
 
+export const MenuIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 7h16M4 12h16M4 17h16" />
+  </Base>
+);
+
+export const CopyIcon = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="9" y="9" width="11" height="11" rx="2" />
+    <path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
+  </Base>
+);
+
 export const PlusIcon = (p: IconProps) => (
   <Base {...p}>
     <path d="M12 5.5v13M5.5 12h13" />
@@ -330,6 +343,94 @@ export const LayersIcon = (p: IconProps) => (
   <Base {...p}>
     <path d="m12 4 8.5 4.5L12 13 3.5 8.5z" />
     <path d="m3.5 12.5 8.5 4.5 8.5-4.5M3.5 16.5 12 21l8.5-4.5" />
+  </Base>
+);
+
+/** Headphones (Listening skill, course detail "What You Will Learn"). */
+export const HeadphonesIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4.5 13.5v-2a7.5 7.5 0 0 1 15 0v2" />
+    <rect x="3.5" y="13" width="4" height="6" rx="1.5" />
+    <rect x="16.5" y="13" width="4" height="6" rx="1.5" />
+  </Base>
+);
+
+/** Bookmark (save this lesson — Lesson Overview header). */
+export const BookmarkIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6.5 4.5h11a1 1 0 0 1 1 1V20l-6.5-3.5L5.5 20V5.5a1 1 0 0 1 1-1z" />
+  </Base>
+);
+
+/** Target/bullseye (learning objectives — Lesson Overview "In this lesson, you will be able to"). */
+export const TargetIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="8" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="12" cy="12" r="0.5" fill="currentColor" />
+  </Base>
+);
+
+/** Bowl (Korea Life "Food" category). */
+export const BowlIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 12h16a8 8 0 0 1-16 0z" />
+    <path d="M9 12V8M12 12V7M15 12V8" />
+  </Base>
+);
+
+/** Chat bubble (AI Practice "Chat" tab / Free Conversation mode). */
+export const ChatBubbleIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H9l-4 3.5v-3.5H6.5A2.5 2.5 0 0 1 4 13.5z" />
+  </Base>
+);
+
+/** Cup (AI Practice "At a Café" recommendation). */
+export const CupIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M5 6.5h11v7a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z" />
+    <path d="M16 8.5h1.5a2.5 2.5 0 0 1 0 5H16M8 4v1.3M11 4v1.3M14 4v1.3" />
+  </Base>
+);
+
+/** Plane (AI Practice "At the Airport" recommendation). */
+export const PlaneIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m10.5 13.5-6 1.5 1-2 5-2.5-2-5.5 1.7-.5 3.8 4.7 5-2.5a1.4 1.4 0 0 1 1.9.6v0a1.4 1.4 0 0 1-.6 1.9l-5 2.5 1 5.3-1.6.6z" />
+  </Base>
+);
+
+/** People (AI Practice "Meeting People" recommendation). */
+export const PeopleIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="8.5" cy="8.5" r="2.5" />
+    <circle cx="16" cy="9.5" r="2" />
+    <path d="M3.5 19c.7-3 2.8-4.7 5-4.7s4.3 1.7 5 4.7M14.5 14.8c1.9.2 3.5 1.7 4 4.2" />
+  </Base>
+);
+
+/** YouTube (Help & Support contact channels). */
+export const YouTubeIcon = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="2.5" y="6" width="19" height="12" rx="4" />
+    <path d="M10.5 9.5v5l4.5-2.5z" fill="currentColor" stroke="none" />
+  </Base>
+);
+
+/** WhatsApp (Help & Support contact channels). */
+export const WhatsAppIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M12 3.5a8.3 8.3 0 0 0-7 12.7L4 20.5l4.5-1a8.3 8.3 0 1 0 3.5-16z" />
+    <path d="M8.7 8.3c.3-.6.6-.6.9-.6h.6c.2 0 .4 0 .6.5s.7 1.7.7 1.9 0 .3-.1.5-.2.3-.4.5-.3.4-.1.7c.2.3.8 1.3 1.7 2.1s1.5.9 1.8 1 .5 0 .7-.2.7-.8.9-1.1.4-.2.6-.1l1.6.8c.2.1.4.2.4.4s0 1.1-.5 1.6-1.5 1-2.3 1c-.7 0-2.4-.3-4.3-2.1s-2.9-3.9-3-4.6.1-1.5.5-2.1z" fill="currentColor" stroke="none" />
+  </Base>
+);
+
+/** Ticket (Help & Support tickets). */
+export const TicketIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 8.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1.2a1.8 1.8 0 0 0 0 3.6v1.2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1.2a1.8 1.8 0 0 0 0-3.6z" />
+    <path d="M9.5 6.5v11" strokeDasharray="2.2 2.2" />
   </Base>
 );
 

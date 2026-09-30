@@ -13,6 +13,7 @@ import {
   PencilIcon,
   PlannerIcon,
   SettingsIcon,
+  ShieldIcon,
   SparkleIcon,
   StarIcon,
   TrophyIcon,
@@ -21,8 +22,10 @@ import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
 import { Avatar } from "@/components/ui/Avatar";
 import { ListGroup, ListRow } from "@/components/ui/ListRow";
 import { Notice } from "@/components/ui/Notice";
+import { getAdminUser } from "@/lib/admin";
 import { formatNumber } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
+import { getUnreadNotificationCount } from "@/lib/notifications/queries";
 import { computeStreak, getActivePlan } from "@/lib/planner/queries";
 import { getProfile } from "@/lib/profile";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
@@ -38,7 +41,7 @@ export default async function AccountPage() {
   const [{ m, locale }, profile, plan] = await Promise.all([getMessages(), getProfile(), getActivePlan()]);
   if (isSupabaseConfigured && !profile) redirect("/auth/login?next=/account");
 
-  const streak = plan ? await computeStreak(plan.id) : null;
+  const [streak, isAdmin, unreadCount] = await Promise.all([plan ? computeStreak(plan.id) : Promise.resolve(null), getAdminUser(), getUnreadNotificationCount()]);
   const t = m.account;
   const stats: { label: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; tone: string; value: string; soon: boolean }[] = [
     { label: t.stats.level, Icon: LevelIcon, tone: "text-teal", value: "—", soon: true },
@@ -51,7 +54,7 @@ export default async function AccountPage() {
       <PageHeader
         actions={
           <>
-            <HeaderIconLink href="/notifications" label={m.home.notifications}>
+            <HeaderIconLink href="/notifications" label={m.home.notifications} badge={unreadCount > 0}>
               <BellIcon width={20} height={20} />
             </HeaderIconLink>
             <HeaderIconLink href="/account/settings" label={t.settings}>
@@ -109,7 +112,8 @@ export default async function AccountPage() {
             <ListRow href="/courses" Icon={BooksStackIcon} title={t.items.courses.title} body={t.items.courses.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/library" Icon={LibraryIcon} title={t.items.books.title} body={t.items.books.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/planner" Icon={PlannerIcon} title={t.items.planner.title} body={t.items.planner.body} tone="bg-sage-soft text-teal-deep" />
-            <ListRow href="/account/achievements" Icon={TrophyIcon} title={t.items.achievements.title} body={t.items.achievements.body} badge={t.soonBadge} tone="bg-sage-soft text-teal-deep" />
+            <ListRow href="/account/achievements" Icon={TrophyIcon} title={t.items.achievements.title} body={t.items.achievements.body} tone="bg-sage-soft text-teal-deep" />
+            {isAdmin && <ListRow href="/admin/products" Icon={ShieldIcon} title={t.items.admin.title} body={t.items.admin.body} tone="bg-ink text-cream" />}
           </ListGroup>
 
           <ListGroup>

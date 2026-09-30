@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronIcon } from "@/components/icons";
+import { MotionSurface } from "@/components/motion/MotionCard";
 import { formatPrice, levelLabel } from "@/lib/bookstore/format";
 import { compareAtFor, discountPercent, isPurchasable, lowestPrice, titles, type Product } from "@/lib/bookstore/types";
 import { fmt, formatNumber } from "@/lib/i18n/config";
@@ -27,7 +28,7 @@ export function ProductCard({ product }: { product: Product }) {
   const level = levelLabel(product.level, m);
 
   return (
-    <article className="group relative flex flex-col rounded-card border border-line/60 bg-surface p-3 shadow-soft transition hover:shadow-lift">
+    <MotionSurface className="group relative flex flex-col rounded-[20px] border border-line/60 bg-surface p-3 shadow-soft transition hover:shadow-lift">
       <Link href={href} className="relative block">
         <ProductCover product={product} sizes="(min-width: 1024px) 220px, 45vw" />
         <span className="absolute start-2 top-2 flex flex-col items-start gap-1">
@@ -80,6 +81,6 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
       </div>
-    </article>
+    </MotionSurface>
   );
 }

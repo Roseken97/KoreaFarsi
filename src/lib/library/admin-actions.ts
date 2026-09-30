@@ -28,7 +28,7 @@ export async function grantPurchaseRequestAccess(requestId: string): Promise<Gra
   if (!request.user_id) return { ok: false, error: "no_account" };
 
   const slugs = [...new Set((request.items as { slug: string }[]).map((i) => i.slug))];
-  const { data: products, error: productsError } = await admin.from("products").select("id, slug").in("slug", slugs);
+  const { data: products, error: productsError } = await admin.from("products").select("id, slug, title, title_en").in("slug", slugs);
   if (productsError) return { ok: false, error: "generic" };
 
   const rows = (products ?? []).map((p) => ({
@@ -46,6 +46,15 @@ export async function grantPurchaseRequestAccess(requestId: string): Promise<Gra
       console.error("[admin/orders] grant failed:", insertError.message);
       return { ok: false, error: "generic" };
     }
+
+    await admin.from("notifications").insert(
+      (products ?? []).map((p) => ({
+        user_id: request.user_id as string,
+        title: `«${p.title}» به کتابخانه‌ات اضافه شد`,
+        title_en: `"${p.title_en || p.title}" was added to your library`,
+        href: "/library",
+      })),
+    );
   }
 
   await admin.from("purchase_requests").update({ status: "done" }).eq("id", requestId);

@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Notice } from "@/components/ui/Notice";
 import { deleteCourse, saveCourse, type AdminResult, type CourseInput } from "@/lib/courses/admin-actions";
-import type { Course } from "@/lib/courses/types";
+import { SKILL_ICON_KEYS, SKILL_ICONS } from "@/lib/courses/skillIcons";
+import type { Course, CourseSkill, SkillIconKey } from "@/lib/courses/types";
 import { createUploadTicket } from "@/lib/products/admin-actions";
 import { createClient } from "@/lib/supabase/client";
 
@@ -23,6 +24,7 @@ const EMPTY: CourseInput = {
   cover_image_url: null,
   is_available: true,
   sort_order: 0,
+  skills: [],
 };
 
 function toInput(c: Course): CourseInput {
@@ -38,6 +40,7 @@ function toInput(c: Course): CourseInput {
     cover_image_url: c.cover_image_url,
     is_available: c.is_available,
     sort_order: c.sort_order,
+    skills: c.skills ?? [],
   };
 }
 
@@ -97,7 +100,7 @@ export function CoursesAdmin({ courses, products }: { courses: Course[]; product
 
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Slug" value={form.slug} onChange={(e) => set("slug", e.target.value)} ltr required />
-          <Field label="Level" value={form.level} onChange={(e) => set("level", e.target.value)} ltr />
+          <Field label="Level (type beginner / intermediate / advanced to match the course list filter)" value={form.level} onChange={(e) => set("level", e.target.value)} ltr />
           <Field label="Title (Persian)" value={form.title} onChange={(e) => set("title", e.target.value)} required />
           <Field label="Title (English)" value={form.title_en} onChange={(e) => set("title_en", e.target.value)} ltr />
         </div>
@@ -136,6 +139,10 @@ export function CoursesAdmin({ courses, products }: { courses: Course[]; product
             <input type="file" accept="image/*" onChange={onCover} disabled={uploading} className="block w-full text-sm file:me-3 file:rounded-full file:border-0 file:bg-cream-deep file:px-4 file:py-2 file:text-ink disabled:opacity-50" />
           )}
           {uploading && <span className="text-xs text-ink-faint">Uploading…</span>}
+        </Labeled>
+
+        <Labeled label="What You Will Learn (shown as a scrollable row on the course page)">
+          <SkillsEditor skills={form.skills} onChange={(skills) => set("skills", skills)} />
         </Labeled>
 
         <label className="flex items-center gap-2 text-sm">
@@ -204,3 +211,66 @@ function Labeled({ label, children }: { label: string; children: React.ReactNode
     </div>
   );
 }
+
+function SkillsEditor({ skills, onChange }: { skills: CourseSkill[]; onChange: (skills: CourseSkill[]) => void }) {
+  function update(i: number, patch: Partial<CourseSkill>) {
+    onChange(skills.map((s, idx) => (idx === i ? { ...s, ...patch } : s)));
+  }
+  function remove(i: number) {
+    onChange(skills.filter((_, idx) => idx !== i));
+  }
+  function add() {
+    onChange([...skills, { icon: "listening", title: "", title_en: "" }]);
+  }
+  function move(i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= skills.length) return;
+    const next = [...skills];
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  }
+
+  return (
+    <div className="flex flex-col gap-3 text-sm">
+      {skills.map((s, i) => {
+        const Icon = SKILL_ICONS[s.icon];
+        return (
+          <div key={i} className="flex flex-col gap-2 rounded-field border border-line bg-surface p-3">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-ink-faint">
+                <Icon width={14} height={14} /> Skill {i + 1}
+              </span>
+              <div className="flex gap-1 text-xs">
+                <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="disabled:opacity-30">
+                  ↑
+                </button>
+                <button type="button" onClick={() => move(i, 1)} disabled={i === skills.length - 1} className="disabled:opacity-30">
+                  ↓
+                </button>
+                <button type="button" onClick={() => remove(i)} className="ms-2 font-medium text-danger">
+                  Remove
+                </button>
+              </div>
+            </div>
+            <select value={s.icon} onChange={(e) => update(i, { icon: e.target.value as SkillIconKey })} className={selectClass}>
+              {SKILL_ICON_KEYS.map((key) => (
+                <option key={key} value={key}>
+                  {key}
+                </option>
+              ))}
+            </select>
+            <div className="grid gap-2 sm:grid-cols-2">
+              <input placeholder="Title (Persian)" value={s.title} onChange={(e) => update(i, { title: e.target.value })} dir="auto" className={inputClass} />
+              <input placeholder="Title (English)" value={s.title_en ?? ""} onChange={(e) => update(i, { title_en: e.target.value })} dir="ltr" className={inputClass} />
+            </div>
+          </div>
+        );
+      })}
+      <button type="button" onClick={add} className="self-start text-sm font-medium text-teal-deep">
+        + Add skill
+      </button>
+    </div>
+  );
+}
+
+const inputClass = "h-10 rounded-field border border-line bg-cream px-3 text-sm outline-none focus:border-teal focus:ring-4 focus:ring-teal/15";

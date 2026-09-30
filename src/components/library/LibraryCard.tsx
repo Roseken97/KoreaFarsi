@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ProductCover } from "@/components/bookstore/ProductCover";
 import { DownloadIcon } from "@/components/icons";
+import { MotionSurface } from "@/components/motion/MotionCard";
 import { getLibraryDownloadUrl } from "@/lib/library/actions";
 import type { LibraryEntry } from "@/lib/library/types";
 import { titles } from "@/lib/bookstore/types";
@@ -28,7 +29,7 @@ export function LibraryCard({ entry }: { entry: LibraryEntry }) {
   }
 
   return (
-    <article className="flex gap-4 rounded-card border border-line/60 bg-surface p-3 shadow-soft">
+    <MotionSurface hover={false} className="flex gap-4 rounded-[20px] border border-line/60 bg-surface p-3 shadow-soft">
       <div className="w-20 shrink-0 sm:w-24">
         <ProductCover product={entry.product} sizes="96px" />
       </div>
@@ -55,6 +56,6 @@ export function LibraryCard({ entry }: { entry: LibraryEntry }) {
         </div>
         {error && <p className="mt-2 text-xs text-danger">{error}</p>}
       </div>
-    </article>
+    </MotionSurface>
   );
 }

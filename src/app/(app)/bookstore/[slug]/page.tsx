@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/bookstore/Badges";
+import { MotionCard } from "@/components/motion/MotionCard";
 import { BookstoreHeader } from "@/components/bookstore/BookstoreHeader";
 import { ProductCover } from "@/components/bookstore/ProductCover";
 import { ProductPurchase } from "@/components/bookstore/ProductPurchase";
@@ -65,13 +65,13 @@ export default async function ProductPage(props: PageProps<"/bookstore/[slug]">)
               <ul className="divide-y divide-line/70 overflow-hidden rounded-card bg-surface shadow-soft">
                 {included.map((p) => (
                   <li key={p.id}>
-                    <Link href={`/bookstore/${p.slug}`} className="flex items-center gap-3 p-3 transition hover:bg-cream/70">
+                    <MotionCard href={`/bookstore/${p.slug}`} tilt={false} className="flex items-center gap-3 p-3 hover:bg-cream/70">
                       <span className="w-10 shrink-0">
                         <ProductCover product={p} sizes="40px" mini />
                       </span>
                       <span className="min-w-0 flex-1 truncate text-sm font-medium">{titles(p, locale).primary}</span>
                       <ChevronIcon width={16} height={16} className="text-ink-faint" />
-                    </Link>
+                    </MotionCard>
                   </li>
                 ))}
               </ul>

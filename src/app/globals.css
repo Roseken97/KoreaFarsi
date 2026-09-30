@@ -19,6 +19,7 @@
   --color-sage-soft: #e3ece5;
   --color-teal: #4f8a87;
   --color-teal-deep: #3d716e;
+  --color-teal-mist: #dcecee;
   --color-blush: #de8b89;
   --color-blush-soft: #f8e3e1;
   --color-danger: #c0564b;
@@ -47,7 +48,8 @@ html[lang="fa"] {
 }
 
 body {
-  background: var(--color-cream);
+  background: linear-gradient(160deg, #ffffff 0%, var(--color-sage-soft) 55%, var(--color-teal-mist) 100%);
+  background-attachment: fixed;
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
@@ -76,4 +78,18 @@ body {
   .animate-fade-up {
     animation: none;
   }
+}
+
+@keyframes kf-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: kf-blink 1s step-end infinite;
 }

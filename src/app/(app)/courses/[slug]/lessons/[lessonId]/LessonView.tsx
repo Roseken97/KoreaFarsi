@@ -1,17 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition } from "react";
-import { CheckIcon, ChevronIcon } from "@/components/icons";
+import { useState, useTransition, type ComponentType, type SVGProps } from "react";
+import { CheckIcon, ChevronIcon, DictionaryIcon, PencilIcon, PlayIcon, ShieldIcon, TagIcon } from "@/components/icons";
+import { HangulBreakdown } from "@/components/courses/HangulBreakdown";
+import { HangulChart } from "@/components/courses/HangulChart";
+import { VocabFlashcards } from "@/components/courses/VocabFlashcards";
 import { Button } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
 import { toggleLessonDone } from "@/lib/courses/actions";
 import type { CourseLesson } from "@/lib/courses/types";
-import type { Locale } from "@/lib/i18n/config";
+import { fmt, formatNumber, type Locale } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
 
-type Tab = "video" | "script" | "vocabulary" | "notes";
 type VideoError = "unauthenticated" | "forbidden" | "unavailable" | "generic" | null;
+type StepKey = "content" | "script" | "vocabulary" | "notes";
+type Step = { key: StepKey; title: string; subtitle: string; Icon: ComponentType<SVGProps<SVGSVGElement>> };
 
 export function LessonView({
   lesson,
@@ -34,11 +38,22 @@ export function LessonView({
 }) {
   const { m } = useI18n();
   const t = m.courses.lesson;
-  const [tab, setTab] = useState<Tab>("video");
+  const isSlides = lesson.content_type === "slides";
+  const [slideIndex, setSlideIndex] = useState(0);
   const [done, setDone] = useState(isDone);
   const [pending, startTransition] = useTransition();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [unlockedIndex, setUnlockedIndex] = useState(0);
 
   const script = locale === "en" ? lesson.script_en || lesson.script : lesson.script;
+  const slide = lesson.slides[slideIndex];
+
+  const steps: Step[] = [{ key: "content", title: isSlides ? t.tabs.slides : t.tabs.video, subtitle: t.pathHints.content, Icon: PlayIcon }];
+  if (script) steps.push({ key: "script", title: t.tabs.script, subtitle: t.pathHints.script, Icon: PencilIcon });
+  if (lesson.vocabulary.length > 0) {
+    steps.push({ key: "vocabulary", title: t.tabs.vocabulary, subtitle: fmt(t.pathHints.vocabulary, { n: formatNumber(lesson.vocabulary.length, locale) }), Icon: TagIcon });
+  }
+  if (lesson.notes) steps.push({ key: "notes", title: t.tabs.notes, subtitle: t.pathHints.notes, Icon: DictionaryIcon });
 
   function toggle() {
     const next = !done;
@@ -49,23 +64,60 @@ export function LessonView({
     });
   }
 
+  /** Called once the current step has actually been seen (video ended, last slide/flashcard, or the reader taps Next). */
+  function advance() {
+    const next = Math.min(activeIndex + 1, steps.length - 1);
+    setUnlockedIndex((u) => Math.max(u, next));
+    setActiveIndex(next);
+  }
+
+  const activeKey = steps[activeIndex].key;
+  const isLastStep = activeIndex === steps.length - 1;
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-1 rounded-full bg-cream-deep p-1">
-        {(["video", "script", "vocabulary", "notes"] as const).map((key) => (
-          <button
-            key={key}
-            onClick={() => setTab(key)}
-            className={`flex-1 rounded-full px-3 py-2 text-sm font-medium transition ${tab === key ? "bg-surface text-ink shadow-soft" : "text-ink-soft"}`}
-          >
-            {t.tabs[key]}
-          </button>
-        ))}
-      </div>
-
-      {tab === "video" &&
-        (videoUrl ? (
-          <video src={videoUrl} controls className="aspect-video w-full rounded-card bg-ink shadow-soft" />
+      {/* Display — content switches to whichever step is active in the path below */}
+      {activeKey === "content" &&
+        (isSlides ? (
+          lesson.slides.length === 0 ? (
+            <p className="rounded-card bg-surface p-4 text-sm text-ink-soft shadow-soft">{t.noSlides}</p>
+          ) : (
+            <div className="flex flex-col gap-4">
+              <div className="min-h-64 rounded-card bg-surface p-6 shadow-soft">
+                <h3 className="font-display text-xl font-semibold text-ink" dir="auto">
+                  {locale === "en" ? slide.title_en || slide.title : slide.title}
+                </h3>
+                <p className="mt-3 text-[15px] leading-7 whitespace-pre-line text-ink-soft" dir="auto">
+                  {locale === "en" ? slide.body_en || slide.body : slide.body}
+                </p>
+                {slide.chart && <HangulChart chart={slide.chart} />}
+                {slide.ko && <HangulBreakdown word={slide.ko} className="mt-6" />}
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setSlideIndex((i) => Math.max(0, i - 1))}
+                  disabled={slideIndex === 0}
+                  className="grid size-9 place-items-center rounded-full border border-line text-ink-soft disabled:opacity-30"
+                >
+                  <ChevronIcon width={16} height={16} className="rotate-180 rtl:rotate-0" />
+                </button>
+                <div className="flex gap-1.5">
+                  {lesson.slides.map((_, i) => (
+                    <span key={i} className={`size-1.5 rounded-full ${i === slideIndex ? "bg-teal" : "bg-line"}`} />
+                  ))}
+                </div>
+                <button
+                  onClick={() => (slideIndex === lesson.slides.length - 1 ? advance() : setSlideIndex((i) => i + 1))}
+                  disabled={slideIndex === lesson.slides.length - 1 && isLastStep}
+                  className="grid size-9 place-items-center rounded-full border border-line text-ink-soft disabled:opacity-30"
+                >
+                  <ChevronIcon width={16} height={16} className="rtl:rotate-180" />
+                </button>
+              </div>
+            </div>
+          )
+        ) : videoUrl ? (
+          <video src={videoUrl} controls onEnded={isLastStep ? undefined : advance} className="aspect-video w-full rounded-card bg-ink shadow-soft" />
         ) : (
           <div className="grid aspect-video w-full place-items-center rounded-card bg-cream-deep">
             <Notice tone={videoError === "generic" ? "error" : "info"}>
@@ -74,27 +126,81 @@ export function LessonView({
           </div>
         ))}
 
-      {tab === "script" && <p className="rounded-card bg-surface p-4 text-sm leading-7 whitespace-pre-line shadow-soft" dir="auto">{script || t.noScript}</p>}
+      {activeKey === "script" && (
+        <div className="rounded-card bg-surface p-4 shadow-soft">
+          <p className="text-[15px] leading-7 whitespace-pre-line text-ink-soft" dir="auto">
+            {script || t.noScript}
+          </p>
+          {!isLastStep && (
+            <button onClick={advance} className="mt-4 flex items-center gap-1 text-sm font-semibold text-teal-deep">
+              {t.continueSection}
+              <ChevronIcon width={14} height={14} className="rtl:-scale-x-100" />
+            </button>
+          )}
+        </div>
+      )}
 
-      {tab === "vocabulary" &&
-        (lesson.vocabulary.length === 0 ? (
-          <p className="rounded-card bg-surface p-4 text-sm text-ink-soft shadow-soft">{t.noVocabulary}</p>
-        ) : (
-          <ul className="flex flex-col gap-2">
-            {lesson.vocabulary.map((v, i) => (
-              <li key={i} className="flex items-center justify-between gap-3 rounded-field bg-surface px-4 py-3 shadow-soft">
-                <span lang="ko" className="font-medium text-ink">
-                  {v.ko}
-                </span>
-                <span className="text-sm text-ink-soft" dir="auto">
-                  {locale === "en" && v.en ? v.en : v.fa}
-                </span>
-              </li>
-            ))}
-          </ul>
-        ))}
+      {activeKey === "vocabulary" && <VocabFlashcards entries={lesson.vocabulary} locale={locale} onFinished={isLastStep ? undefined : advance} />}
 
-      {tab === "notes" && <p className="rounded-card bg-surface p-4 text-sm leading-7 whitespace-pre-line shadow-soft" dir="auto">{lesson.notes || t.noNotes}</p>}
+      {activeKey === "notes" && (
+        <div className="rounded-card bg-surface p-4 shadow-soft">
+          <p className="text-[15px] leading-7 whitespace-pre-line text-ink-soft" dir="auto">
+            {lesson.notes || t.noNotes}
+          </p>
+          {!isLastStep && (
+            <button onClick={advance} className="mt-4 flex items-center gap-1 text-sm font-semibold text-teal-deep">
+              {t.continueSection}
+              <ChevronIcon width={14} height={14} className="rtl:-scale-x-100" />
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Learning path — vertical, connected; each box shows its own topic + details, next stays locked until the current one has been seen */}
+      {steps.length > 1 && (
+        <div>
+          <p className="mb-2 text-xs font-semibold text-ink-faint">{t.pathTitle}</p>
+          <div className="flex flex-col gap-3">
+            {steps.map((step, i, arr) => {
+              const locked = i > unlockedIndex;
+              const passed = i < unlockedIndex;
+              const current = i === activeIndex;
+              return (
+                <div key={step.key} className="relative flex gap-3">
+                  {i < arr.length - 1 && <span className={`absolute start-4 top-8 bottom-[-0.75rem] w-px ${i < unlockedIndex ? "bg-teal" : "bg-line"}`} aria-hidden="true" />}
+                  <span
+                    className={`relative z-10 mt-0.5 grid size-8 shrink-0 place-items-center rounded-full border text-xs font-semibold ${
+                      current ? "border-teal bg-teal text-white" : passed ? "border-success bg-success text-white" : "border-line bg-surface text-ink-soft"
+                    }`}
+                  >
+                    {passed ? <CheckIcon width={13} height={13} /> : i + 1}
+                  </span>
+                  <button
+                    onClick={() => !locked && setActiveIndex(i)}
+                    disabled={locked}
+                    className={`flex min-w-0 flex-1 items-center gap-3 rounded-field border p-3 text-start transition disabled:cursor-not-allowed ${
+                      current ? "border-teal bg-teal/5" : locked ? "border-line bg-cream-deep opacity-70" : "border-line bg-surface hover:bg-cream"
+                    }`}
+                  >
+                    <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${current ? "bg-teal text-white" : "bg-cream-deep text-ink-soft"}`}>
+                      <step.Icon width={16} height={16} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-semibold text-ink" dir="auto">
+                        {step.title}
+                      </span>
+                      <span className="block truncate text-[12px] text-ink-faint" dir="auto">
+                        {step.subtitle}
+                      </span>
+                    </span>
+                    {locked && <ShieldIcon width={14} height={14} className="shrink-0 text-ink-faint" />}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <Button variant={done ? "secondary" : "primary"} onClick={toggle} disabled={pending}>
         <CheckIcon width={18} height={18} />

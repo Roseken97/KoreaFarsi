@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AnimatePresence, motion } from "motion/react";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { StatusScreen } from "@/components/auth/StatusScreen";
 import { CheckCircleIcon, MinusIcon, PlusIcon, ShoppingBagIcon, TrashIcon } from "@/components/icons";
@@ -61,10 +62,19 @@ export function CartView({ products, contactFallback }: { products: Product[]; c
       ) : (
         <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start">
           <ul className="divide-y divide-line/70 overflow-hidden rounded-card bg-surface shadow-soft">
-            {rows.map(({ line, product }) => {
+            <AnimatePresence initial={false}>
+              {rows.map(({ line, product }) => {
               const unit = priceFor(product, line.format);
               return (
-                <li key={`${line.slug}-${line.format}`} className="flex gap-3 p-4">
+                <motion.li
+                  key={`${line.slug}-${line.format}`}
+                  layout
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="flex gap-3 overflow-hidden p-4"
+                >
                   <Link href={`/bookstore/${product.slug}`} className="w-14 shrink-0">
                     <ProductCover product={product} sizes="56px" mini />
                   </Link>
@@ -96,16 +106,18 @@ export function CartView({ products, contactFallback }: { products: Product[]; c
                       <span className="text-sm font-semibold">{formatPrice(unit * line.quantity, locale, m)}</span>
                     </div>
                   </div>
-                  <button
+                  <motion.button
+                    whileTap={{ scale: 0.85 }}
                     onClick={() => remove(line.slug, line.format)}
                     aria-label={t.cart.remove}
                     className="grid size-8 shrink-0 place-items-center self-start rounded-full text-ink-faint hover:bg-danger-soft hover:text-danger"
                   >
                     <TrashIcon width={16} height={16} />
-                  </button>
-                </li>
+                  </motion.button>
+                </motion.li>
               );
-            })}
+              })}
+            </AnimatePresence>
           </ul>
 
           <aside className="flex flex-col gap-4 rounded-card bg-surface p-5 shadow-soft lg:sticky lg:top-10">

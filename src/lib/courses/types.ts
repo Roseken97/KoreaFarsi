@@ -1,6 +1,12 @@
 export type VocabularyEntry = { ko: string; fa: string; en?: string };
+export type SlideContent = { title: string; title_en?: string; body: string; body_en?: string; ko?: string; chart?: "consonants" | "vowels" };
+export type LessonMaterial = { title: string; title_en?: string; file_path: string };
 
-/** Mirrors public.courses (supabase/migrations/0009_courses.sql). */
+/** Preset icon choices for a course's "What You Will Learn" row (mapped to real icons in skillIcons.tsx). */
+export type SkillIconKey = "listening" | "reading" | "writing" | "speaking" | "vocabulary" | "grammar" | "pronunciation" | "culture";
+export type CourseSkill = { icon: SkillIconKey; title: string; title_en?: string };
+
+/** Mirrors public.courses (supabase/migrations/0009_courses.sql, skills added in 0015). */
 export type Course = {
   id: string;
   slug: string;
@@ -13,6 +19,7 @@ export type Course = {
   cover_image_url: string | null;
   is_available: boolean;
   sort_order: number;
+  skills: CourseSkill[];
 };
 
 export type CourseUnit = {
@@ -29,16 +36,44 @@ export type CourseLesson = {
   course_id: string;
   title: string;
   title_en: string | null;
+  title_ko: string | null;
   sort_order: number;
   duration_minutes: number;
+  content_type: "video" | "slides";
   video_path: string | null;
+  slides: SlideContent[];
   script: string | null;
   script_en: string | null;
   vocabulary: VocabularyEntry[];
   notes: string | null;
+  objectives: string | null;
+  objectives_en: string | null;
+  materials: LessonMaterial[];
 };
 
 export type UnitWithLessons = CourseUnit & { lessons: CourseLesson[] };
+
+/** Mirrors public.course_resources (supabase/migrations/0014_course_resources_reviews.sql). */
+export type CourseResource = {
+  id: string;
+  course_id: string;
+  title: string;
+  title_en: string | null;
+  file_path: string;
+  sort_order: number;
+};
+
+/** Mirrors public.course_reviews. reviewer_name/avatar_key are denormalized at submit time. */
+export type CourseReview = {
+  id: string;
+  course_id: string;
+  user_id: string;
+  reviewer_name: string | null;
+  reviewer_avatar_key: string | null;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+};
 
 export type CourseOutline = {
   course: Course;
@@ -46,6 +81,18 @@ export type CourseOutline = {
   hasAccess: boolean;
   progress: Record<string, boolean>; // lesson_id -> is_done
 };
+
+export type LevelBucket = "beginner" | "intermediate" | "advanced";
+
+/** Maps a course's free-text level (typed in /admin/courses) onto the 3 filter buckets from the sketch. */
+export function levelBucket(level: string | null): LevelBucket | null {
+  if (!level) return null;
+  const v = level.trim().toLowerCase();
+  if (["beginner", "starter", "مبتدی", "1-1", "1"].includes(v)) return "beginner";
+  if (["intermediate", "متوسط", "1-2", "2"].includes(v)) return "intermediate";
+  if (["advanced", "پیشرفته", "3"].includes(v)) return "advanced";
+  return null;
+}
 
 export function lessonCount(units: UnitWithLessons[]) {
   return units.reduce((n, u) => n + u.lessons.length, 0);

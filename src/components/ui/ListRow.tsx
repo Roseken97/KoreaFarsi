@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { ComponentType, ReactNode, SVGProps } from "react";
 import { ChevronIcon } from "@/components/icons";
+import { MotionCard } from "@/components/motion/MotionCard";
 
 type RowProps = {
   Icon: ComponentType<SVGProps<SVGSVGElement>>;
@@ -37,10 +37,10 @@ const rowClass = "flex w-full items-center gap-3 px-4 py-3.5 text-start transiti
 export function ListRow({ href, ...props }: RowProps & { href: string }) {
   return (
     <li>
-      <Link href={href} className={rowClass}>
+      <MotionCard href={href} tilt={false} className={rowClass}>
         <RowContent {...props} />
         <ChevronIcon width={18} height={18} className="text-ink-faint" />
-      </Link>
+      </MotionCard>
     </li>
   );
 }
