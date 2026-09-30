@@ -3,6 +3,8 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { onCancelled, onConfirmed, sendTest } from "@/lib/notify";
 import {
   checkPassword,
   clearLoginFailures,
@@ -71,7 +73,8 @@ export async function changeStatus(form: FormData) {
   const id = Number(form.get("id"));
   const status = String(form.get("status")) as BookingStatus;
   if (!Number.isInteger(id) || !ADMIN_STATUSES.includes(status)) return;
-  setBookingStatus(id, status);
+  const before = setBookingStatus(id, status);
+  if (status === "cancelled" && before?.status === "confirmed") after(() => onCancelled(before));
   revalidatePath("/settings/admin");
 }
 
@@ -97,6 +100,8 @@ export async function addManualBooking(_: ManualState, form: FormData): Promise<
   if (!phone) return { error: "شماره موبایل معتبر نیست." };
   const r = createPendingBooking({ serviceId, date, start, name, phone, note: str(form, "note"), manual: true });
   if (!r.ok) return { error: r.error === "slot_taken" ? "این ساعت آزاد نیست." : "خدمت نامعتبر است." };
+  const booking = r.booking;
+  after(() => onConfirmed(booking, { online: false }));
   revalidatePath("/settings/admin");
   return { ok: true };
 }
@@ -191,4 +196,40 @@ export async function saveGeneral(_: SaveState, form: FormData): Promise<SaveSta
   });
   revalidatePath("/", "layout");
   return { ok: true, at: Date.now() };
+}
+
+// ─── SMS ─────────────────────────────────────────────────────────────────
+
+export async function saveSms(_: SaveState, form: FormData): Promise<SaveState> {
+  await guard();
+  const s = getSettings();
+  const on = (k: string) => form.get(k) === "on";
+  const ownerRaw = str(form, "ownerMobile", 20);
+  const ownerMobile = ownerRaw ? normalizePhone(ownerRaw) : "";
+  if (ownerMobile === null) return { error: "شماره موبایل مدیر معتبر نیست." };
+  if (on("owner") && !ownerMobile) return { error: "برای اطلاع‌رسانی به مدیر، شماره موبایل مدیر را وارد کنید." };
+  const tpl = (k: keyof Settings["sms"]["templates"]) => str(form, `tpl_${k}`, 600) || s.sms.templates[k];
+  saveSettings({
+    ...s,
+    sms: {
+      confirm: on("confirm"),
+      reminder: on("reminder"),
+      reminderHours: int(form, "reminderHours", 1, 72, s.sms.reminderHours),
+      cancel: on("cancel"),
+      owner: on("owner"),
+      ownerMobile,
+      templates: { confirm: tpl("confirm"), reminder: tpl("reminder"), cancel: tpl("cancel"), owner: tpl("owner") },
+    },
+  });
+  revalidatePath("/settings/admin/sms");
+  return { ok: true, at: Date.now() };
+}
+
+export async function smsTest(_: SaveState, form: FormData): Promise<SaveState> {
+  await guard();
+  const to = normalizePhone(str(form, "to", 20));
+  if (!to) return { error: "شماره موبایل معتبر نیست." };
+  const r = await sendTest(to);
+  revalidatePath("/settings/admin/sms");
+  return r.ok ? { ok: true, at: Date.now() } : { error: r.error };
 }

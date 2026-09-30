@@ -1,4 +1,5 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, after, type NextRequest } from "next/server";
+import { onConfirmed } from "@/lib/notify";
 import { appUrl, verifyPayment } from "@/lib/payment";
 import { getBookingByAuthority, markFailed, markPaid } from "@/lib/store";
 
@@ -22,7 +23,10 @@ export async function GET(req: NextRequest) {
   }
 
   const v = await verifyPayment({ authority, amount: booking.amount });
-  if (v.ok) markPaid(booking.code, v.refId);
-  else markFailed(booking.code);
+  if (v.ok) {
+    const paid = markPaid(booking.code, v.refId);
+    // SMS after the redirect is sent, so a slow SMS API never delays the customer.
+    if (paid?.status === "confirmed") after(() => onConfirmed(paid, { online: true }));
+  } else markFailed(booking.code);
   return NextResponse.redirect(target);
 }

@@ -68,6 +68,22 @@ function migrate(db: DatabaseSync) {
     CREATE INDEX IF NOT EXISTS bookings_authority ON bookings(authority);
   `);
 
+  // v2: SMS notifications
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS sms_log (
+      id         INTEGER PRIMARY KEY AUTOINCREMENT,
+      booking_id INTEGER,
+      phone      TEXT NOT NULL,
+      kind       TEXT NOT NULL,
+      message    TEXT NOT NULL,
+      ok         INTEGER NOT NULL,
+      error      TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE INDEX IF NOT EXISTS sms_log_created ON sms_log(created_at);
+  `);
+  addColumn(db, "bookings", "reminder_sent_at", "TEXT");
+
   const count = db.prepare("SELECT COUNT(*) AS n FROM services").get() as { n: number };
   if (count.n === 0) {
     const ins = db.prepare(
@@ -79,6 +95,11 @@ function migrate(db: DatabaseSync) {
     ins.run("لیفت و لمینت مژه", "فر و حالت‌دهی مژه‌ی طبیعی بدون اکستنشن", 60, 650000, 4);
     ins.run("برداشتن مژه", "برداشتن اصولی و بی‌آسیب اکستنشن", 30, 200000, 5);
   }
+}
+
+function addColumn(db: DatabaseSync, table: string, column: string, type: string) {
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[];
+  if (!cols.some((c) => c.name === column)) db.exec(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`);
 }
 
 export function db(): DatabaseSync {

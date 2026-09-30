@@ -7,6 +7,7 @@ const TABS = [
   { href: "/settings/admin", label: "نوبت‌ها" },
   { href: "/settings/admin/services", label: "خدمات و قیمت" },
   { href: "/settings/admin/schedule", label: "ساعات کاری" },
+  { href: "/settings/admin/sms", label: "پیامک" },
   { href: "/settings/admin/general", label: "تنظیمات سالن" },
 ];
 

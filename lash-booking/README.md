@@ -62,6 +62,8 @@ npm run build && npm start   # PORT defaults to 3100
 src/lib/db.ts          SQLite schema + seed data
 src/lib/store.ts       every query + free-slot calculation (the only file that touches the DB)
 src/lib/payment.ts     payment providers (mock / zarinpal)
+src/lib/sms.ts         سرویس‌دهنده‌های پیامک (mock / kavenegar / smsir)
+src/lib/notify.ts      متن پیامک‌ها + زمان‌بند یادآوری
 src/lib/auth.ts        admin session (signed httpOnly cookie)
 src/lib/time.ts        Tehran timezone, Jalali dates, Persian digits, Toman
 src/app/page.tsx       home page + booking flow (components/BookingWizard.tsx)

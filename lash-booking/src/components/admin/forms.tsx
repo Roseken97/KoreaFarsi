@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
-import { addManualBooking, adminSlots, login, type LoginState, type ManualState, type SaveState } from "@/app/settings/admin/actions";
+import { addManualBooking, adminSlots, login, smsTest, type LoginState, type ManualState, type SaveState } from "@/app/settings/admin/actions";
 import { faTime, minToHHMM } from "@/lib/time";
 import { Field, Icon, btnPrimary, inputCls } from "../ui";
 
@@ -139,5 +139,44 @@ export function ConfirmButton({ children, message, className }: { children: Reac
     >
       {children}
     </button>
+  );
+}
+
+/** Persian SMS: 70 chars in one part, 67 per part once it's split. */
+function smsParts(len: number) {
+  return len <= 70 ? 1 : Math.ceil(len / 67);
+}
+
+export function TemplateField({ name, label, defaultValue, sample }: { name: string; label: string; defaultValue: string; sample: Record<string, string> }) {
+  const [v, setV] = useState(defaultValue);
+  const preview = v.replace(/\{(\w+)\}/g, (m, k: string) => sample[k] ?? m);
+  const parts = smsParts(preview.length);
+  return (
+    <div>
+      <Field label={label} hint={`حدود ${faDigitsLocal(preview.length)} نویسه · ${faDigitsLocal(parts)} پیامک`}>
+        <textarea name={name} value={v} onChange={(e) => setV(e.target.value)} rows={3} className={`${inputCls} leading-7`} />
+      </Field>
+      <p className="mt-2 whitespace-pre-line rounded-xl bg-rose-mist px-3 py-2 text-xs leading-6 text-ink-soft">{preview}</p>
+    </div>
+  );
+}
+
+function faDigitsLocal(n: number) {
+  return String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[Number(d)]);
+}
+
+export function SmsTestForm({ defaultTo }: { defaultTo: string }) {
+  const [state, action] = useActionState<SaveState, FormData>(smsTest, {});
+  return (
+    <form action={action} className="flex flex-wrap items-end gap-2">
+      <div className="min-w-48 flex-1">
+        <Field label="ارسال پیامک آزمایشی به">
+          <input name="to" defaultValue={defaultTo} className={`${inputCls} text-left`} dir="ltr" inputMode="tel" placeholder="09xxxxxxxxx" required />
+        </Field>
+      </div>
+      <SubmitButton className={`${btnPrimary} py-3`}>ارسال</SubmitButton>
+      {state.ok && <p key={state.at} className="w-full text-sm text-ok">ارسال شد (نتیجه در گزارش پایین همین صفحه).</p>}
+      {state.error && <p className="w-full text-sm text-danger" dir="auto">{state.error}</p>}
+    </form>
   );
 }

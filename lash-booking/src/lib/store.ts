@@ -29,6 +29,36 @@ export type Settings = {
   /** Index 0 = Saturday … 6 = Friday. */
   week: DayHours[];
   policy: string;
+  sms: SmsSettings;
+};
+
+export type SmsSettings = {
+  /** Confirmation right after payment / manual booking. */
+  confirm: boolean;
+  /** Reminder `reminderHours` before the appointment. */
+  reminder: boolean;
+  reminderHours: number;
+  /** Tell the customer when the salon cancels their booking. */
+  cancel: boolean;
+  /** Notify the owner of every new online booking. */
+  owner: boolean;
+  ownerMobile: string;
+  templates: { confirm: string; reminder: string; cancel: string; owner: string };
+};
+
+export const DEFAULT_SMS: SmsSettings = {
+  confirm: true,
+  reminder: true,
+  reminderHours: 24,
+  cancel: true,
+  owner: false,
+  ownerMobile: "",
+  templates: {
+    confirm: "{name} عزیز، نوبت {service} شما برای {date} ساعت {time} قطعی شد.\nکد پیگیری: {code}\n{salon}",
+    reminder: "{name} عزیز، یادآوری نوبت {service}: {date} ساعت {time}.\nلطفاً بدون آرایش چشم تشریف بیاورید.\n{salon}",
+    cancel: "{name} عزیز، نوبت {service} شما در {date} ساعت {time} لغو شد. برای هماهنگی با ما تماس بگیرید.\n{salon}",
+    owner: "نوبت جدید: {name} ({phone})\n{service} - {date} ساعت {time}",
+  },
 };
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -55,6 +85,7 @@ export const DEFAULT_SETTINGS: Settings = {
   ],
   policy:
     "بیعانه برای قطعی شدن نوبت است و مابقی مبلغ در سالن پرداخت می‌شود. لغو تا ۲۴ ساعت قبل از نوبت، با هماهنگی تلفنی ممکن است. لطفاً بدون آرایش چشم و ۵ دقیقه زودتر تشریف بیاورید.",
+  sms: DEFAULT_SMS,
 };
 
 export type Service = {
@@ -87,6 +118,7 @@ export type Booking = {
   ref_id: string | null;
   expires_at: number | null;
   paid_at: string | null;
+  reminder_sent_at: string | null;
   created_at: string;
 };
 
@@ -97,7 +129,12 @@ export function getSettings(): Settings {
   if (!row) return DEFAULT_SETTINGS;
   try {
     const saved = JSON.parse(row.value) as Partial<Settings>;
-    return { ...DEFAULT_SETTINGS, ...saved, week: saved.week?.length === 7 ? saved.week : DEFAULT_SETTINGS.week };
+    return {
+      ...DEFAULT_SETTINGS,
+      ...saved,
+      week: saved.week?.length === 7 ? saved.week : DEFAULT_SETTINGS.week,
+      sms: { ...DEFAULT_SMS, ...saved.sms, templates: { ...DEFAULT_SMS.templates, ...saved.sms?.templates } },
+    };
   } catch {
     return DEFAULT_SETTINGS;
   }
@@ -297,8 +334,53 @@ export function markFailed(code: string) {
   db().prepare("UPDATE bookings SET status = 'expired', expires_at = NULL WHERE code = ? AND status = 'pending'").run(code);
 }
 
-export function setBookingStatus(id: number, status: BookingStatus) {
+/** Returns the booking as it was before the change (callers use it to decide on notifications). */
+export function setBookingStatus(id: number, status: BookingStatus): Booking | undefined {
+  const before = db().prepare("SELECT * FROM bookings WHERE id = ?").get(id) as unknown as Booking | undefined;
   db().prepare("UPDATE bookings SET status = ?, expires_at = NULL WHERE id = ?").run(status, id);
+  return before;
+}
+
+// ─── SMS bookkeeping ──────────────────────────────────────────────────────
+
+/**
+ * Confirmed bookings whose reminder time has come and that haven't been reminded.
+ * Tehran date/minute arithmetic stays in SQL-free JS: we pull the next 3 days and filter.
+ */
+export function bookingsDueForReminder(hoursBefore: number, now = tehranNow()): Booking[] {
+  const rows = db()
+    .prepare(
+      "SELECT * FROM bookings WHERE status = 'confirmed' AND reminder_sent_at IS NULL AND date >= ? AND date <= ? ORDER BY date, start_min",
+    )
+    .all(now.date, addDays(now.date, Math.ceil(hoursBefore / 24) + 1)) as unknown as Booking[];
+  const nowAbs = dayNumber(now.date) * 1440 + now.minutes;
+  return rows.filter((b) => {
+    const startAbs = dayNumber(b.date) * 1440 + b.start_min;
+    // Due once inside the window, but not if the appointment is under 30 minutes away.
+    return nowAbs >= startAbs - hoursBefore * 60 && nowAbs <= startAbs - 30;
+  });
+}
+
+function dayNumber(iso: string): number {
+  return Math.round(Date.parse(`${iso}T00:00:00Z`) / 86_400_000);
+}
+
+/** Claims a booking's reminder atomically; false if another tick already did. */
+export function claimReminder(id: number): boolean {
+  const r = db().prepare("UPDATE bookings SET reminder_sent_at = datetime('now') WHERE id = ? AND reminder_sent_at IS NULL").run(id);
+  return Number(r.changes) === 1;
+}
+
+export function logSms(e: { bookingId: number | null; phone: string; kind: string; message: string; ok: boolean; error?: string }) {
+  db()
+    .prepare("INSERT INTO sms_log (booking_id, phone, kind, message, ok, error) VALUES (?,?,?,?,?,?)")
+    .run(e.bookingId, e.phone, e.kind, e.message, e.ok ? 1 : 0, e.error ?? null);
+}
+
+export type SmsLogRow = { id: number; booking_id: number | null; phone: string; kind: string; message: string; ok: number; error: string | null; created_at: string };
+
+export function recentSms(limit = 50): SmsLogRow[] {
+  return db().prepare("SELECT * FROM sms_log ORDER BY id DESC LIMIT ?").all(limit) as unknown as SmsLogRow[];
 }
 
 export type BookingFilter = "upcoming" | "today" | "past" | "attention" | "all";
