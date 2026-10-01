@@ -34,11 +34,17 @@ export function Sidebar() {
                 <Link
                   href={href}
                   aria-current={active ? "page" : undefined}
-                  className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-[15px] font-medium transition ${
-                    active ? "bg-sage-soft text-teal-deep" : "text-ink-soft hover:bg-cream-deep hover:text-ink"
+                  className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-[15px] font-medium transition ${
+                    active ? "text-violet-deep" : "text-ink-soft hover:bg-cream-deep hover:text-ink"
                   }`}
                 >
-                  <Icon width={22} height={22} />
+                  <span
+                    className={`grid size-9 shrink-0 place-items-center rounded-full border-2 transition ${
+                      active ? "border-violet bg-violet text-white shadow-[0_6px_16px_-4px_rgb(123_67_214_/_0.55)]" : "border-violet/20 text-violet"
+                    }`}
+                  >
+                    <Icon width={18} height={18} />
+                  </span>
                   {label}
                 </Link>
               </li>
