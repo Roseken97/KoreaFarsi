@@ -44,7 +44,7 @@ export default async function AchievementsPage() {
               return (
                 <div
                   key={key}
-                  className={`flex flex-col items-center gap-2 rounded-[18px] p-4 text-center shadow-soft ${unlocked ? "bg-surface" : "bg-cream-deep opacity-70"}`}
+                  className={`flex flex-col items-center gap-2 rounded-card p-4 text-center shadow-soft ${unlocked ? "bg-surface" : "bg-cream-deep opacity-70"}`}
                 >
                   <span className={`grid size-12 place-items-center rounded-full ${unlocked ? "bg-sage-soft text-teal-deep" : "bg-surface text-ink-faint"}`}>
                     <Icon width={22} height={22} />

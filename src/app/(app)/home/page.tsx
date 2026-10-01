@@ -115,7 +115,7 @@ export default async function HomePage() {
               key={key}
               href={href}
               style={{ backgroundImage: MESH[color] }}
-              className={`card-grain group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[28px] p-4 ${MESH_SHADOW[color]}`}
+              className={`card-grain group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-hero p-4 ${MESH_SHADOW[color]}`}
             >
               <span
                 lang="ko"
@@ -150,7 +150,7 @@ export default async function HomePage() {
           {continueCard ? (
             <MotionCard
               href={continueCard.nextLessonId ? `/courses/${continueCard.course.slug}/lessons/${continueCard.nextLessonId}` : `/courses/${continueCard.course.slug}`}
-              className="mt-3 flex items-center gap-4 rounded-[24px] bg-surface p-4 shadow-soft"
+              className="mt-3 flex items-center gap-4 rounded-card bg-surface p-4 shadow-soft"
               tilt={false}
             >
               <div className="relative grid size-16 shrink-0 place-items-center">
@@ -192,7 +192,7 @@ export default async function HomePage() {
               </span>
             </MotionCard>
           ) : (
-            <div className="mt-3 flex items-center gap-4 rounded-[24px] bg-surface p-4 shadow-soft">
+            <div className="mt-3 flex items-center gap-4 rounded-card bg-surface p-4 shadow-soft">
               <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-sage-soft text-teal-deep">
                 <BooksStackIcon width={26} height={26} />
               </span>
@@ -211,7 +211,7 @@ export default async function HomePage() {
         {/* Today's Plan — real tasks once a Planner plan exists (Phase 2) */}
         <section>
           <h2 className="font-display text-xl font-semibold">{t.today.title}</h2>
-          <div className="mt-3 rounded-[24px] bg-surface p-4 shadow-soft">
+          <div className="mt-3 rounded-card bg-surface p-4 shadow-soft">
             {!plan ? (
               <div className="flex flex-col items-center py-2 text-center">
                 <p className="text-sm text-ink-soft">{t.today.soon}</p>

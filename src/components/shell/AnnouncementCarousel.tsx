@@ -25,7 +25,7 @@ export function AnnouncementCarousel({ items, locale, height }: { items: Announc
   }
 
   return (
-    <div className={`relative overflow-hidden rounded-[28px] shadow-lift ${height}`}>
+    <div className={`relative overflow-hidden rounded-hero shadow-lift ${height}`}>
       <div ref={trackRef} onScroll={onScroll} className="flex h-full snap-x snap-mandatory overflow-x-auto scroll-smooth">
         {items.map((a) => (
           <Card key={a.id} announcement={a} locale={locale} />

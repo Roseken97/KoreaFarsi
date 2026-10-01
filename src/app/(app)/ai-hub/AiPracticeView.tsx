@@ -56,7 +56,7 @@ export function AiPracticeView({ profile, stats, unreadCount }: { profile: Profi
           <h1 className="font-display text-3xl font-semibold">{t.title}</h1>
           <p className="mt-1 text-sm text-ink-soft">{t.subtitle}</p>
         </div>
-        <div className="relative shrink-0 rounded-[20px] bg-sage-soft px-3.5 py-3">
+        <div className="relative shrink-0 rounded-card bg-sage-soft px-3.5 py-3">
           <span className="absolute -top-2.5 -end-1.5 rounded-full bg-surface px-2 py-0.5 text-[11px] font-medium text-ink shadow-soft" dir="ltr" lang="ko">
             {t.greeting}
           </span>
@@ -65,7 +65,7 @@ export function AiPracticeView({ profile, stats, unreadCount }: { profile: Profi
       </div>
 
       {/* Your Progress — always visible; real numbers, never hidden behind a placeholder tab */}
-      <section className="mt-5 rounded-[18px] bg-surface p-4 shadow-soft">
+      <section className="mt-5 rounded-card bg-surface p-4 shadow-soft">
         <div className="flex items-center justify-between gap-2">
           <h2 className="font-display text-base font-semibold">{t.progress.title}</h2>
           <select

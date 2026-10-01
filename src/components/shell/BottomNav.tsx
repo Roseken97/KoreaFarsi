@@ -11,7 +11,7 @@ export function BottomNav() {
 
   return (
     <nav aria-label={m.nav.label} className="pb-safe fixed inset-x-0 bottom-0 z-40 px-3 pb-3 md:hidden">
-      <ul className="mx-auto flex max-w-lg items-end justify-around rounded-[24px] border border-line/60 bg-surface/95 px-2 pt-7 pb-2.5 shadow-lift backdrop-blur-xl">
+      <ul className="mx-auto flex max-w-lg items-end justify-around rounded-hero border border-line/60 bg-surface/95 px-2 pt-7 pb-2.5 shadow-lift backdrop-blur-xl">
         {NAV_ITEMS.map(({ href, labelKey, Icon }) => {
           const label = m.nav[labelKey];
           const active = isActive(pathname, href);

@@ -29,7 +29,7 @@ export function LibraryCard({ entry }: { entry: LibraryEntry }) {
   }
 
   return (
-    <MotionSurface hover={false} className="flex gap-4 rounded-[20px] border border-line/60 bg-surface p-3 shadow-soft">
+    <MotionSurface hover={false} className="flex gap-4 rounded-card border border-line/60 bg-surface p-3 shadow-soft">
       <div className="w-20 shrink-0 sm:w-24">
         <ProductCover product={entry.product} sizes="96px" />
       </div>

@@ -37,7 +37,7 @@ export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
               onClick={() => setActive(selected ? null : c)}
               hover={false}
               style={mesh ? { backgroundImage: MESH[mesh] } : undefined}
-              className={`group @container relative flex aspect-[3/2] cursor-pointer flex-col justify-between overflow-hidden rounded-[20px] p-3.5 transition ${mesh ? `card-grain ${MESH_SHADOW[mesh]}` : `${bg} shadow-soft`} ${selected ? "ring-2 ring-teal ring-offset-2 ring-offset-cream" : ""}`}
+              className={`group @container relative flex aspect-[3/2] cursor-pointer flex-col justify-between overflow-hidden rounded-hero p-3.5 transition ${mesh ? `card-grain ${MESH_SHADOW[mesh]}` : `${bg} shadow-soft`} ${selected ? "ring-2 ring-teal ring-offset-2 ring-offset-cream" : ""}`}
             >
               <span className="absolute -end-3 -top-3 size-16 rounded-full bg-white/10" aria-hidden="true" />
               <span className={`relative grid size-8 place-items-center rounded-full bg-white/20 ${text}`}>
@@ -61,7 +61,7 @@ export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
             const excerpt = locale === "en" ? p.excerpt_en || p.excerpt : p.excerpt;
             return (
               <li key={p.id}>
-                <MotionCard href={`/korea-life/${p.slug}`} tilt={false} className="flex items-center gap-4 rounded-[20px] border border-line/60 bg-surface p-3.5 shadow-soft">
+                <MotionCard href={`/korea-life/${p.slug}`} tilt={false} className="flex items-center gap-4 rounded-card border border-line/60 bg-surface p-3.5 shadow-soft">
                   {p.cover_image_url ? (
                     <div className="relative size-[80px] shrink-0 overflow-hidden rounded-2xl bg-cream-deep">
                       <Image src={p.cover_image_url} alt="" fill sizes="80px" className="object-cover" />

@@ -41,7 +41,7 @@ export function ReviewsTab({
   return (
     <div className="mt-5 flex flex-col gap-5">
       {reviews.length > 0 && (
-        <div className="flex items-center gap-3 rounded-[18px] bg-surface p-4 shadow-soft">
+        <div className="flex items-center gap-3 rounded-card bg-surface p-4 shadow-soft">
           <span className="font-display text-3xl font-bold text-ink" dir="ltr">
             {average.toFixed(1)}
           </span>
@@ -61,7 +61,7 @@ export function ReviewsTab({
       ) : (
         <ul className="flex flex-col gap-3">
           {others.map((r) => (
-            <li key={r.id} className="flex gap-3 rounded-[18px] bg-surface p-4 shadow-soft">
+            <li key={r.id} className="flex gap-3 rounded-card bg-surface p-4 shadow-soft">
               <Avatar name={r.reviewer_name} avatarKey={isAvatarKey(r.reviewer_avatar_key) ? r.reviewer_avatar_key : null} size={36} />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
@@ -124,7 +124,7 @@ function ReviewForm({
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-[18px] border border-line bg-surface p-4">
+    <div className="flex flex-col gap-3 rounded-card border border-line bg-surface p-4">
       <h3 className="font-display text-base font-semibold">{existing ? formTitleEdit : formTitleNew}</h3>
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="font-medium text-ink-soft">{labels.ratingLabel}</span>

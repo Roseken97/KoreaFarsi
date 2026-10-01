@@ -43,7 +43,7 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
             const meshColor = LEVEL_MESH[levelBucket(c.level) ?? "beginner"];
             return (
               <li key={c.id}>
-                <MotionCard href={`/courses/${c.slug}`} tilt={false} className="flex items-center gap-4 rounded-[20px] border border-line/60 bg-surface p-3.5 shadow-soft">
+                <MotionCard href={`/courses/${c.slug}`} tilt={false} className="flex items-center gap-4 rounded-card border border-line/60 bg-surface p-3.5 shadow-soft">
                   {c.cover_image_url ? (
                     <div className="relative size-[92px] shrink-0 overflow-hidden rounded-2xl bg-cream-deep">
                       <Image src={c.cover_image_url} alt="" fill sizes="92px" className="object-cover" />
