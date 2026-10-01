@@ -5,6 +5,7 @@ import { SakuraBranch } from "@/components/brand/SakuraBranch";
 import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
 import { Hero } from "@/components/shell/Hero";
 import {
+  ArrowForwardIcon,
   BellIcon,
   BooksStackIcon,
   LanternIcon,
@@ -32,16 +33,46 @@ export async function generateMetadata(): Promise<Metadata> {
 type CardKey = keyof Messages["home"]["cards"];
 
 /**
- * Claymorphism recipe (matte flat color + a soft shadow tinted with the
- * shape's own color, no gradient/glass): flat `bg`, a tight near shadow for
- * lift plus a softer far shadow tinted with the section color for the glow,
- * and a neutral ink-tinted contact shadow underneath for grounding.
+ * Polished-colorful recipe: a layered mesh gradient (base color + two tinted
+ * radial blobs from neighboring palette hues) instead of a flat single fill,
+ * a grain texture to kill the flat-vector look, a restrained realistic
+ * shadow (not a neon glow), and an editorial layout — icon chip top-start,
+ * a large low-opacity Korean glyph as a background watermark, title/body
+ * anchored bottom-start, and a small "go" affordance top-end.
  */
-const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; bg: string; text: string; clay: string }[] = [
-  { key: "courses", href: "/courses", Icon: BooksStackIcon, bg: "bg-violet", text: "text-white", clay: "shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_16px_28px_-10px_rgb(123_67_214_/_0.55)]" },
-  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, bg: "bg-coral", text: "text-white", clay: "shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_16px_28px_-10px_rgb(244_106_69_/_0.55)]" },
-  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, bg: "bg-teal", text: "text-white", clay: "shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_16px_28px_-10px_rgb(32_184_176_/_0.55)]" },
-  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, bg: "bg-yellow", text: "text-ink", clay: "shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_16px_28px_-10px_rgb(255_183_43_/_0.55)]" },
+const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; mesh: string; shadow: string; text: string }[] = [
+  {
+    key: "courses",
+    href: "/courses",
+    Icon: BooksStackIcon,
+    text: "text-white",
+    mesh: "radial-gradient(120% 100% at 0% 0%, rgb(232 90 159 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(93 143 232 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-violet), var(--color-violet-deep))",
+    shadow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(123_67_214_/_0.4)]",
+  },
+  {
+    key: "bookstore",
+    href: "/bookstore",
+    Icon: ShoppingBagIcon,
+    text: "text-white",
+    mesh: "radial-gradient(120% 100% at 0% 0%, rgb(255 183 43 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(232 90 159 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-coral), var(--color-coral-deep))",
+    shadow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(244_106_69_/_0.4)]",
+  },
+  {
+    key: "aiHub",
+    href: "/ai-hub",
+    Icon: RobotIcon,
+    text: "text-white",
+    mesh: "radial-gradient(120% 100% at 0% 0%, rgb(93 143 232 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(123 67 214 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-teal), var(--color-teal-deep))",
+    shadow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(32_184_176_/_0.4)]",
+  },
+  {
+    key: "koreaLife",
+    href: "/korea-life",
+    Icon: LanternIcon,
+    text: "text-ink",
+    mesh: "radial-gradient(120% 100% at 0% 0%, rgb(244 106 69 / 0.3), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(232 90 159 / 0.25), transparent 60%), linear-gradient(135deg, var(--color-yellow), var(--color-yellow-deep))",
+    shadow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(255_183_43_/_0.4)]",
+  },
 ];
 
 export default async function HomePage() {
@@ -102,23 +133,34 @@ export default async function HomePage() {
         </Hero>
       </div>
 
-      {/* Main sections — claymorphism: flat matte color, puffy color-tinted shadow, soft highlight, no gradient/glass */}
+      {/* Main sections — polished colorful: mesh gradient + grain, editorial layout, Korean glyph as a watermark */}
       <section className="mt-6 grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-4">
-        {CARDS.map(({ key, href, Icon, bg, text, clay }) => {
+        {CARDS.map(({ key, href, Icon, mesh, shadow, text }) => {
           const card = t.cards[key];
           return (
             <MotionCard
               key={key}
               href={href}
-              className={`group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[28px] p-4 ${bg} ${clay}`}
+              style={{ backgroundImage: mesh }}
+              className={`card-grain group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[28px] p-4 ${shadow}`}
             >
-              <span className="absolute -top-8 -start-8 size-28 rounded-full bg-white/15 blur-2xl" aria-hidden="true" />
-              <span className={`relative grid size-9 place-items-center rounded-full bg-white/25 shadow-[inset_0_1px_2px_rgb(41_38_61_/_0.12)] ${text}`}>
-                <Icon width={18} height={18} />
-              </span>
-              <span lang="ko" className={`relative text-center text-[16cqw] leading-none font-bold tracking-tight ${text} opacity-90`}>
+              <span
+                lang="ko"
+                className={`pointer-events-none absolute -bottom-3 -end-2 text-[15cqw] leading-none font-bold tracking-tight whitespace-nowrap ${text} opacity-[0.16]`}
+                aria-hidden="true"
+              >
                 {card.ko}
               </span>
+
+              <div className="relative flex items-start justify-between">
+                <span className={`grid size-9 place-items-center rounded-xl bg-white/20 ${text}`}>
+                  <Icon width={18} height={18} />
+                </span>
+                <span className={`grid size-7 place-items-center rounded-full bg-white/15 transition-transform duration-300 group-hover:translate-x-0.5 ${text} rtl:rotate-180 rtl:group-hover:-translate-x-0.5`}>
+                  <ArrowForwardIcon width={14} height={14} />
+                </span>
+              </div>
+
               <span className="relative">
                 <span className={`block font-display text-base leading-tight font-semibold ${text}`}>{card.title}</span>
                 <span className={`mt-0.5 block text-[11px] leading-4 ${text} opacity-75`}>{card.body}</span>
