@@ -26,13 +26,13 @@ export function BottomNav() {
                 <span
                   className={
                     active
-                      ? "-mt-9 grid size-13 place-items-center rounded-full border-2 border-violet bg-violet text-white shadow-[0_8px_20px_-6px_rgb(123_67_214_/_0.6)]"
+                      ? "-mt-9 grid size-13 place-items-center rounded-full border-2 border-sky bg-sky text-white shadow-[0_8px_20px_-6px_rgb(93_143_232_/_0.6)]"
                       : "grid size-5 place-items-center text-ink-faint"
                   }
                 >
                   <Icon width={active ? 24 : 20} height={active ? 24 : 20} />
                 </span>
-                <span className={`text-[11px] ${active ? "font-semibold text-violet-deep" : "font-medium text-ink-faint"}`}>
+                <span className={`text-[11px] ${active ? "font-semibold text-sky-deep" : "font-medium text-ink-faint"}`}>
                   {label}
                 </span>
               </Link>
