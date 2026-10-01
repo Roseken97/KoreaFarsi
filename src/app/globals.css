@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Lets the bottom nav's notch cutout slide smoothly instead of snapping. */
+@property --notch-x {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 10%;
+}
+
 /*
  * KoreaFarsi design tokens — "Color Reference V1" (vivid / warm / premium / playful).
  * Every component reads from these tokens, so no component code needs to change
@@ -84,6 +91,17 @@ body {
   opacity: 0.1;
   mix-blend-mode: overlay;
   pointer-events: none;
+}
+
+/*
+ * Bottom-nav notch: cuts an actual round dip into the bar's top edge at
+ * --notch-x (set per active tab), so the floating active circle looks
+ * recessed/nested into the bar instead of just sitting on top of it.
+ */
+.navbar-notch {
+  mask-image: radial-gradient(circle 34px at var(--notch-x) 0%, transparent 97%, black 100%);
+  -webkit-mask-image: radial-gradient(circle 34px at var(--notch-x) 0%, transparent 97%, black 100%);
+  transition: --notch-x 300ms ease;
 }
 
 @keyframes kf-fade-up {
