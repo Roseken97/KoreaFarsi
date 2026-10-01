@@ -57,7 +57,7 @@ export function PlanWizard() {
               whileTap={{ scale: 0.92 }}
               onClick={() => setLevel(l)}
               className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-                level === l ? "border-ink bg-ink text-cream" : "border-line bg-surface text-ink-soft hover:text-ink"
+                level === l ? "border-violet bg-violet text-white" : "border-line bg-surface text-ink-soft hover:text-ink"
               }`}
             >
               {m.bookstore.levels[l]}
@@ -95,7 +95,7 @@ export function PlanWizard() {
               whileTap={{ scale: 0.92 }}
               onClick={() => setMinutes(min)}
               className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-                minutes === min ? "border-ink bg-ink text-cream" : "border-line bg-surface text-ink-soft hover:text-ink"
+                minutes === min ? "border-violet bg-violet text-white" : "border-line bg-surface text-ink-soft hover:text-ink"
               }`}
             >
               {min}
