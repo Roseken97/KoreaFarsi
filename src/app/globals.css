@@ -62,7 +62,8 @@ html[lang="fa"] {
   --font-display: var(--font-vazirmatn), system-ui, sans-serif;
 }
 
-/* Flat warm cream page background — white card surfaces sit visibly above it (shadow-lift + white vs. cream) instead of blending in. */
+/* Default page background (the marketing site at "/" keeps its own warm-cream
+   look); the app shell below overrides this to pure white. */
 body {
   background: var(--color-cream);
   color: var(--color-ink);
