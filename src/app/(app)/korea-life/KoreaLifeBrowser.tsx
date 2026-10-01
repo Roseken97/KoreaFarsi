@@ -10,11 +10,11 @@ import { MESH, MESH_SHADOW, type MeshColor } from "@/lib/ui/mesh";
 
 const CATEGORIES: KoreaLifeCategory[] = ["culture", "travel", "food", "life"];
 
-const CATEGORY_STYLE: Record<KoreaLifeCategory, { bg: string; mesh?: MeshColor; text: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }> = {
-  culture: { bg: "bg-sage", text: "text-ink", Icon: LanternIcon },
-  travel: { bg: "bg-blush", text: "text-white", Icon: GlobeIcon },
-  food: { bg: "bg-clay", mesh: "clay", text: "text-white", Icon: BowlIcon },
-  life: { bg: "bg-cream-deep", text: "text-ink", Icon: SparkleIcon },
+const CATEGORY_STYLE: Record<KoreaLifeCategory, { mesh: MeshColor; text: string; labelText: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }> = {
+  culture: { mesh: "violet", text: "text-white", labelText: "text-violet-deep", Icon: LanternIcon },
+  travel: { mesh: "indigo", text: "text-white", labelText: "text-indigo-deep", Icon: GlobeIcon },
+  food: { mesh: "clay", text: "text-white", labelText: "text-clay-deep", Icon: BowlIcon },
+  life: { mesh: "gold", text: "text-ink", labelText: "text-gold-deep", Icon: SparkleIcon },
 };
 
 export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
@@ -28,7 +28,7 @@ export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
       {/* Sections as cards (Home-style color tiles) instead of a tab strip */}
       <div className="mb-6 grid grid-cols-2 gap-3">
         {CATEGORIES.map((c) => {
-          const { bg, mesh, text, Icon } = CATEGORY_STYLE[c];
+          const { mesh, text, Icon } = CATEGORY_STYLE[c];
           const selected = active === c;
           const count = posts.filter((p) => p.category === c).length;
           return (
@@ -36,8 +36,8 @@ export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
               key={c}
               onClick={() => setActive(selected ? null : c)}
               hover={false}
-              style={mesh ? { backgroundImage: MESH[mesh] } : undefined}
-              className={`group @container relative flex aspect-[3/2] cursor-pointer flex-col justify-between overflow-hidden rounded-hero p-3.5 transition ${mesh ? `card-grain ${MESH_SHADOW[mesh]}` : `${bg} shadow-soft`} ${selected ? "ring-2 ring-teal ring-offset-2 ring-offset-cream" : ""}`}
+              style={{ backgroundImage: MESH[mesh] }}
+              className={`card-grain group @container relative flex aspect-[3/2] cursor-pointer flex-col justify-between overflow-hidden rounded-hero p-3.5 transition ${MESH_SHADOW[mesh]} ${selected ? "ring-2 ring-violet ring-offset-2 ring-offset-cream" : ""}`}
             >
               <span className="absolute -end-3 -top-3 size-16 rounded-full bg-white/10" aria-hidden="true" />
               <span className={`relative grid size-8 place-items-center rounded-full bg-white/20 ${text}`}>
@@ -72,7 +72,7 @@ export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
                     </span>
                   )}
                   <div className="min-w-0 flex-1">
-                    <span className="text-[11px] font-semibold tracking-wide text-teal-deep uppercase">{t.categories[p.category]}</span>
+                    <span className={`text-[11px] font-semibold tracking-wide uppercase ${CATEGORY_STYLE[p.category].labelText}`}>{t.categories[p.category]}</span>
                     <p className="truncate font-display text-base font-semibold text-ink" dir="auto">
                       {title}
                     </p>
