@@ -155,6 +155,12 @@ export default async function HomePage() {
             >
               <div className="relative grid size-16 shrink-0 place-items-center">
                 <svg viewBox="0 0 40 40" className="absolute inset-0 -rotate-90">
+                  <defs>
+                    <linearGradient id="continue-ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="var(--color-violet)" />
+                      <stop offset="100%" stopColor="var(--color-coral)" />
+                    </linearGradient>
+                  </defs>
                   <circle cx="20" cy="20" r="17" fill="none" strokeWidth="4" className="stroke-line" />
                   <circle
                     cx="20"
@@ -163,7 +169,7 @@ export default async function HomePage() {
                     fill="none"
                     strokeWidth="4"
                     strokeLinecap="round"
-                    className="stroke-violet"
+                    stroke="url(#continue-ring-gradient)"
                     pathLength={100}
                     strokeDasharray="100"
                     strokeDashoffset={100 - donePct}

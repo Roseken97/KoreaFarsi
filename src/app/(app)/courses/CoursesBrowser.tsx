@@ -8,8 +8,12 @@ import { levelBucket, type LevelBucket } from "@/lib/courses/types";
 import type { Course } from "@/lib/courses/types";
 import { fmt, formatNumber } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
+import { MESH, MESH_SHADOW, type MeshColor } from "@/lib/ui/mesh";
 
 const LEVELS: LevelBucket[] = ["beginner", "intermediate", "advanced"];
+
+/** Each level gets its own identity color so the course list reads at a glance, not just by label. */
+const LEVEL_MESH: Record<LevelBucket, MeshColor> = { beginner: "teal", intermediate: "coral", advanced: "violet" };
 
 /** Course list, matching UX_SPECS sketch 06: All/Beginner/Intermediate/Advanced tabs + bigger cards with a description line. */
 export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; lessonCounts: Record<string, number> }) {
@@ -36,6 +40,7 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
           {filtered.map((c) => {
             const title = locale === "en" ? c.title_en || c.title : c.title;
             const description = locale === "en" ? c.description_en || c.description : c.description;
+            const meshColor = LEVEL_MESH[levelBucket(c.level) ?? "beginner"];
             return (
               <li key={c.id}>
                 <MotionCard href={`/courses/${c.slug}`} tilt={false} className="flex items-center gap-4 rounded-[20px] border border-line/60 bg-surface p-3.5 shadow-soft">
@@ -44,8 +49,11 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
                       <Image src={c.cover_image_url} alt="" fill sizes="92px" className="object-cover" />
                     </div>
                   ) : (
-                    <div className="relative grid size-[92px] shrink-0 place-items-center overflow-hidden rounded-2xl bg-sage-soft text-teal-deep">
-                      <span className="absolute start-2 top-2 text-[9px] font-semibold tracking-wide opacity-70">KoreaFarsi</span>
+                    <div
+                      style={{ backgroundImage: MESH[meshColor] }}
+                      className={`card-grain relative grid size-[92px] shrink-0 place-items-center overflow-hidden rounded-2xl text-white ${MESH_SHADOW[meshColor]}`}
+                    >
+                      <span className="absolute start-2 top-2 text-[9px] font-semibold tracking-wide opacity-80">KoreaFarsi</span>
                       <BooksStackIcon width={30} height={30} />
                     </div>
                   )}
