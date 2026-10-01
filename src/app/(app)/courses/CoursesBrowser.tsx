@@ -13,7 +13,7 @@ import { MESH, MESH_SHADOW, type MeshColor } from "@/lib/ui/mesh";
 const LEVELS: LevelBucket[] = ["beginner", "intermediate", "advanced"];
 
 /** Each level gets its own identity color so the course list reads at a glance, not just by label. */
-const LEVEL_MESH: Record<LevelBucket, MeshColor> = { beginner: "teal", intermediate: "coral", advanced: "violet" };
+const LEVEL_MESH: Record<LevelBucket, MeshColor> = { beginner: "indigo", intermediate: "clay", advanced: "violet" };
 
 /** Course list, matching UX_SPECS sketch 06: All/Beginner/Intermediate/Advanced tabs + bigger cards with a description line. */
 export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; lessonCounts: Record<string, number> }) {

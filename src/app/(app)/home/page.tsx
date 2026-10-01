@@ -43,9 +43,9 @@ type CardKey = keyof Messages["home"]["cards"];
  */
 const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; color: keyof typeof MESH; text: string }[] = [
   { key: "courses", href: "/courses", Icon: BooksStackIcon, color: "violet", text: "text-white" },
-  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, color: "coral", text: "text-white" },
-  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, color: "teal", text: "text-white" },
-  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, color: "yellow", text: "text-ink" },
+  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, color: "clay", text: "text-white" },
+  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, color: "indigo", text: "text-white" },
+  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, color: "gold", text: "text-ink" },
 ];
 
 export default async function HomePage() {
@@ -158,7 +158,7 @@ export default async function HomePage() {
                   <defs>
                     <linearGradient id="continue-ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="var(--color-violet)" />
-                      <stop offset="100%" stopColor="var(--color-coral)" />
+                      <stop offset="100%" stopColor="var(--color-clay)" />
                     </linearGradient>
                   </defs>
                   <circle cx="20" cy="20" r="17" fill="none" strokeWidth="4" className="stroke-line" />

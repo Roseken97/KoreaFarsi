@@ -31,7 +31,7 @@ export function WeekOverview({ days, byDate, m }: { days: Date[]; byDate: Record
                   background:
                     tasks.length === 0
                       ? "var(--color-line)"
-                      : `conic-gradient(from 0deg, var(--color-violet) 0%, var(--color-teal) ${pct}%, var(--color-line) ${pct}%)`,
+                      : `conic-gradient(from 0deg, var(--color-violet) 0%, var(--color-indigo) ${pct}%, var(--color-line) ${pct}%)`,
                 }}
               >
                 <span className="grid size-8 place-items-center rounded-full bg-surface sm:size-10">

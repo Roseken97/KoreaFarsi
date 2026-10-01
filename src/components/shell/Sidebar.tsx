@@ -40,7 +40,7 @@ export function Sidebar() {
                 >
                   <span
                     className={`grid size-9 shrink-0 place-items-center rounded-full border-2 transition ${
-                      active ? "border-violet bg-violet text-white shadow-[0_6px_16px_-4px_rgb(123_67_214_/_0.55)]" : "border-violet/20 text-violet"
+                      active ? "border-violet bg-violet text-white shadow-[0_6px_16px_-4px_rgb(91_140_123_/_0.55)]" : "border-violet/20 text-violet"
                     }`}
                   >
                     <Icon width={18} height={18} />

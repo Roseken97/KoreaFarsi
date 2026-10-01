@@ -13,6 +13,6 @@ export const CATEGORY_ICON: Record<TaskCategory, ComponentType<SVGProps<SVGSVGEl
 export const CATEGORY_COLOR: Record<TaskCategory, { text: string; stroke: string }> = {
   watch: { text: "text-sky-deep", stroke: "stroke-sky" },
   review: { text: "text-violet-deep", stroke: "stroke-violet" },
-  practice: { text: "text-coral-deep", stroke: "stroke-coral" },
-  speak: { text: "text-teal-deep", stroke: "stroke-teal" },
+  practice: { text: "text-clay-deep", stroke: "stroke-clay" },
+  speak: { text: "text-indigo-deep", stroke: "stroke-indigo" },
 };

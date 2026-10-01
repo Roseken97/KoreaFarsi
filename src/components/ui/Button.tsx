@@ -9,7 +9,7 @@ const base =
   "disabled:cursor-not-allowed disabled:opacity-55";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-violet text-white shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_14px_24px_-10px_rgb(123_67_214_/_0.6)] hover:bg-violet-deep active:scale-[0.99]",
+  primary: "bg-violet text-white shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_14px_24px_-10px_rgb(91_140_123_/_0.6)] hover:bg-violet-deep active:scale-[0.99]",
   secondary: "border-2 border-teal bg-surface text-teal-deep hover:bg-teal-mist",
   ghost: "text-ink hover:underline",
 };

@@ -2,19 +2,23 @@
  * Shared "polished colorful" mesh-gradient backgrounds: a base color-to-deep
  * linear gradient plus two tinted radial blobs from neighboring palette
  * hues, instead of one flat fill. Pair with the `.card-grain` class (in
- * globals.css) for the matte texture. Kept to the four vivid identity
- * colors that have a `-deep` partner (violet/coral/teal/yellow) — pale
- * category tones (sage, blush-soft, cream-deep, ...) stay flat.
+ * globals.css) for the matte texture.
+ *
+ * violet/clay/indigo/gold are the harmonized identity family — analogous,
+ * muted, Korean-pigment-inspired tones built around the celadon signature
+ * (violet). Each one's tint blobs borrow from its two neighbors in that
+ * family, so the four read as one cohesive palette rather than four
+ * competing hues. coral/teal/yellow/sky are kept for their other uses
+ * elsewhere (secondary button, success, bottom-nav accent, ...) but are no
+ * longer used as identity/category colors.
  */
 export const MESH = {
   violet:
-    "radial-gradient(120% 100% at 0% 0%, rgb(232 90 159 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(93 143 232 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-violet), var(--color-violet-deep))",
-  coral:
-    "radial-gradient(120% 100% at 0% 0%, rgb(255 183 43 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(232 90 159 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-coral), var(--color-coral-deep))",
-  teal: "radial-gradient(120% 100% at 0% 0%, rgb(93 143 232 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(123 67 214 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-teal), var(--color-teal-deep))",
-  yellow:
-    "radial-gradient(120% 100% at 0% 0%, rgb(244 106 69 / 0.3), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(232 90 159 / 0.25), transparent 60%), linear-gradient(135deg, var(--color-yellow), var(--color-yellow-deep))",
-  sky: "radial-gradient(120% 100% at 0% 0%, rgb(123 67 214 / 0.3), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(32 184 176 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-sky), var(--color-sky-deep))",
+    "radial-gradient(120% 100% at 0% 0%, rgb(201 154 62 / 0.3), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(74 107 138 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-violet), var(--color-violet-deep))",
+  clay: "radial-gradient(120% 100% at 0% 0%, rgb(201 154 62 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(91 140 123 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-clay), var(--color-clay-deep))",
+  indigo:
+    "radial-gradient(120% 100% at 0% 0%, rgb(91 140 123 / 0.3), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(193 122 84 / 0.25), transparent 60%), linear-gradient(135deg, var(--color-indigo), var(--color-indigo-deep))",
+  gold: "radial-gradient(120% 100% at 0% 0%, rgb(193 122 84 / 0.3), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(91 140 123 / 0.25), transparent 60%), linear-gradient(135deg, var(--color-gold), var(--color-gold-deep))",
 } as const;
 
 export type MeshColor = keyof typeof MESH;
@@ -22,8 +26,7 @@ export type MeshColor = keyof typeof MESH;
 /** Matching restrained, realistic (not neon-glow) shadow for a mesh card. */
 export const MESH_SHADOW: Record<MeshColor, string> = {
   violet: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(91_140_123_/_0.4)]",
-  coral: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(244_106_69_/_0.4)]",
-  teal: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(32_184_176_/_0.4)]",
-  yellow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(255_183_43_/_0.4)]",
-  sky: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(93_143_232_/_0.4)]",
+  clay: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(193_122_84_/_0.4)]",
+  indigo: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(74_107_138_/_0.4)]",
+  gold: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(201_154_62_/_0.4)]",
 };

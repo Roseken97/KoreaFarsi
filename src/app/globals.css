@@ -37,6 +37,24 @@
   --color-sky-deep: #3768bb;
   --color-sky-soft: #eaf0fc;
 
+  /*
+   * Harmonized identity family — analogous, muted, Korean-pigment-inspired
+   * tones built around the celadon signature color (--color-violet above),
+   * replacing coral/teal/yellow wherever they were used as *identity*
+   * colors (category tiles, course-level badges, etc). coral/teal/yellow
+   * stay defined above for their other, still-valid uses (secondary button,
+   * success state, misc accents) — only identity usages migrate here.
+   */
+  --color-clay: #c17a54;
+  --color-clay-deep: #96573a;
+  --color-clay-soft: #f5e6da;
+  --color-indigo: #4a6b8a;
+  --color-indigo-deep: #33495e;
+  --color-indigo-soft: #e4eaf0;
+  --color-gold: #c99a3e;
+  --color-gold-deep: #9c7526;
+  --color-gold-soft: #f7edd6;
+
   --color-danger: #e85a5a;
   --color-danger-soft: #fbeaea;
   --color-success: #20b8b0;
