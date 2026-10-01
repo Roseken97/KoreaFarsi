@@ -21,7 +21,7 @@ export type MeshColor = keyof typeof MESH;
 
 /** Matching restrained, realistic (not neon-glow) shadow for a mesh card. */
 export const MESH_SHADOW: Record<MeshColor, string> = {
-  violet: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(123_67_214_/_0.4)]",
+  violet: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(91_140_123_/_0.4)]",
   coral: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(244_106_69_/_0.4)]",
   teal: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(32_184_176_/_0.4)]",
   yellow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(255_183_43_/_0.4)]",
