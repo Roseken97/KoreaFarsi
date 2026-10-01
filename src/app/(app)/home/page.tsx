@@ -31,12 +31,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
 type CardKey = keyof Messages["home"]["cards"];
 
-/** The four main sections (sketch 02 Home). My Courses / Korea Life are placeholders in Phase 1. */
-const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; from: string; to: string; text: string; glow: string }[] = [
-  { key: "courses", href: "/courses", Icon: BooksStackIcon, from: "from-violet", to: "to-violet-deep", text: "text-white", glow: "shadow-[0_18px_36px_-14px_rgb(123_67_214_/_0.55)]" },
-  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, from: "from-coral", to: "to-coral-deep", text: "text-white", glow: "shadow-[0_18px_36px_-14px_rgb(244_106_69_/_0.55)]" },
-  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, from: "from-teal", to: "to-teal-deep", text: "text-white", glow: "shadow-[0_18px_36px_-14px_rgb(32_184_176_/_0.55)]" },
-  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, from: "from-yellow", to: "to-yellow-deep", text: "text-ink", glow: "shadow-[0_18px_36px_-14px_rgb(255_183_43_/_0.55)]" },
+/**
+ * Claymorphism recipe (matte flat color + a soft shadow tinted with the
+ * shape's own color, no gradient/glass): flat `bg`, a tight near shadow for
+ * lift plus a softer far shadow tinted with the section color for the glow,
+ * and a neutral ink-tinted contact shadow underneath for grounding.
+ */
+const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; bg: string; text: string; clay: string }[] = [
+  { key: "courses", href: "/courses", Icon: BooksStackIcon, bg: "bg-violet", text: "text-white", clay: "shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_16px_28px_-10px_rgb(123_67_214_/_0.55)]" },
+  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, bg: "bg-coral", text: "text-white", clay: "shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_16px_28px_-10px_rgb(244_106_69_/_0.55)]" },
+  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, bg: "bg-teal", text: "text-white", clay: "shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_16px_28px_-10px_rgb(32_184_176_/_0.55)]" },
+  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, bg: "bg-yellow", text: "text-ink", clay: "shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_16px_28px_-10px_rgb(255_183_43_/_0.55)]" },
 ];
 
 export default async function HomePage() {
@@ -97,35 +102,28 @@ export default async function HomePage() {
         </Hero>
       </div>
 
-      {/* Main sections — vivid glass-over-color cards, floating above the white page with a color-matched glow */}
+      {/* Main sections — claymorphism: flat matte color, puffy color-tinted shadow, soft highlight, no gradient/glass */}
       <section className="mt-6 grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-4">
-        {CARDS.map(({ key, href, Icon, from, to, text, glow }) => {
+        {CARDS.map(({ key, href, Icon, bg, text, clay }) => {
           const card = t.cards[key];
           return (
-            <div key={key} className="group relative">
-              <span
-                className={`absolute -inset-2 rounded-[32px] bg-gradient-to-br ${from} ${to} opacity-30 blur-xl transition-opacity duration-300 group-hover:opacity-50`}
-                aria-hidden="true"
-              />
-              <MotionCard
-                href={href}
-                className={`group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[28px] border border-white/50 p-4 ${glow}`}
-              >
-                <span className={`absolute inset-0 bg-gradient-to-br ${from} ${to}`} aria-hidden="true" />
-                <span className="absolute inset-0 bg-gradient-to-b from-white/35 via-white/0 to-transparent" aria-hidden="true" />
-                <span className="absolute -end-6 -top-6 size-24 rounded-full bg-white/20 blur-md" aria-hidden="true" />
-                <span className={`relative grid size-9 place-items-center rounded-full bg-white/25 backdrop-blur-sm ${text}`}>
-                  <Icon width={18} height={18} />
-                </span>
-                <span lang="ko" className={`relative text-center text-[16cqw] leading-none font-bold tracking-tight ${text} opacity-90`}>
-                  {card.ko}
-                </span>
-                <span className="relative">
-                  <span className={`block font-display text-base leading-tight font-semibold ${text}`}>{card.title}</span>
-                  <span className={`mt-0.5 block text-[11px] leading-4 ${text} opacity-75`}>{card.body}</span>
-                </span>
-              </MotionCard>
-            </div>
+            <MotionCard
+              key={key}
+              href={href}
+              className={`group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[28px] p-4 ${bg} ${clay}`}
+            >
+              <span className="absolute -top-8 -start-8 size-28 rounded-full bg-white/15 blur-2xl" aria-hidden="true" />
+              <span className={`relative grid size-9 place-items-center rounded-full bg-white/25 shadow-[inset_0_1px_2px_rgb(41_38_61_/_0.12)] ${text}`}>
+                <Icon width={18} height={18} />
+              </span>
+              <span lang="ko" className={`relative text-center text-[16cqw] leading-none font-bold tracking-tight ${text} opacity-90`}>
+                {card.ko}
+              </span>
+              <span className="relative">
+                <span className={`block font-display text-base leading-tight font-semibold ${text}`}>{card.title}</span>
+                <span className={`mt-0.5 block text-[11px] leading-4 ${text} opacity-75`}>{card.body}</span>
+              </span>
+            </MotionCard>
           );
         })}
       </section>
