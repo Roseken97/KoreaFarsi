@@ -24,6 +24,7 @@ import { getMessages } from "@/lib/i18n/server";
 import { getUnreadNotificationCount } from "@/lib/notifications/queries";
 import { getTodayTasks } from "@/lib/planner/queries";
 import { getProfile } from "@/lib/profile";
+import { MESH, MESH_SHADOW } from "@/lib/ui/mesh";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m } = await getMessages();
@@ -40,39 +41,11 @@ type CardKey = keyof Messages["home"]["cards"];
  * a large low-opacity Korean glyph as a background watermark, title/body
  * anchored bottom-start, and a small "go" affordance top-end.
  */
-const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; mesh: string; shadow: string; text: string }[] = [
-  {
-    key: "courses",
-    href: "/courses",
-    Icon: BooksStackIcon,
-    text: "text-white",
-    mesh: "radial-gradient(120% 100% at 0% 0%, rgb(232 90 159 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(93 143 232 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-violet), var(--color-violet-deep))",
-    shadow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(123_67_214_/_0.4)]",
-  },
-  {
-    key: "bookstore",
-    href: "/bookstore",
-    Icon: ShoppingBagIcon,
-    text: "text-white",
-    mesh: "radial-gradient(120% 100% at 0% 0%, rgb(255 183 43 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(232 90 159 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-coral), var(--color-coral-deep))",
-    shadow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(244_106_69_/_0.4)]",
-  },
-  {
-    key: "aiHub",
-    href: "/ai-hub",
-    Icon: RobotIcon,
-    text: "text-white",
-    mesh: "radial-gradient(120% 100% at 0% 0%, rgb(93 143 232 / 0.35), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(123 67 214 / 0.3), transparent 60%), linear-gradient(135deg, var(--color-teal), var(--color-teal-deep))",
-    shadow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(32_184_176_/_0.4)]",
-  },
-  {
-    key: "koreaLife",
-    href: "/korea-life",
-    Icon: LanternIcon,
-    text: "text-ink",
-    mesh: "radial-gradient(120% 100% at 0% 0%, rgb(244 106 69 / 0.3), transparent 60%), radial-gradient(120% 100% at 100% 100%, rgb(232 90 159 / 0.25), transparent 60%), linear-gradient(135deg, var(--color-yellow), var(--color-yellow-deep))",
-    shadow: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(255_183_43_/_0.4)]",
-  },
+const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; color: keyof typeof MESH; text: string }[] = [
+  { key: "courses", href: "/courses", Icon: BooksStackIcon, color: "violet", text: "text-white" },
+  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, color: "coral", text: "text-white" },
+  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, color: "teal", text: "text-white" },
+  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, color: "yellow", text: "text-ink" },
 ];
 
 export default async function HomePage() {
@@ -135,14 +108,14 @@ export default async function HomePage() {
 
       {/* Main sections — polished colorful: mesh gradient + grain, editorial layout, Korean glyph as a watermark */}
       <section className="mt-6 grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-4">
-        {CARDS.map(({ key, href, Icon, mesh, shadow, text }) => {
+        {CARDS.map(({ key, href, Icon, color, text }) => {
           const card = t.cards[key];
           return (
             <MotionCard
               key={key}
               href={href}
-              style={{ backgroundImage: mesh }}
-              className={`card-grain group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[28px] p-4 ${shadow}`}
+              style={{ backgroundImage: MESH[color] }}
+              className={`card-grain group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[28px] p-4 ${MESH_SHADOW[color]}`}
             >
               <span
                 lang="ko"

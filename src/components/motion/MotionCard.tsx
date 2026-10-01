@@ -68,11 +68,13 @@ export function MotionCard({
 /** Same entrance (+ optional hover lift) language for a card that isn't a single-link tap target (e.g. it has its own internal links/buttons, or is itself a toggle). */
 export function MotionSurface({
   className = "",
+  style,
   hover = true,
   onClick,
   children,
 }: {
   className?: string;
+  style?: CSSProperties;
   hover?: boolean;
   onClick?: () => void;
   children: ReactNode;
@@ -80,6 +82,7 @@ export function MotionSurface({
   return (
     <motion.div
       className={className}
+      style={style}
       onClick={onClick}
       initial={{ opacity: 0, y: 18, scale: 0.96 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}

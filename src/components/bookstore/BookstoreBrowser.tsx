@@ -14,6 +14,7 @@ import {
 } from "@/components/icons";
 import type { Collection, Product } from "@/lib/bookstore/types";
 import { useI18n } from "@/lib/i18n/client";
+import { MESH } from "@/lib/ui/mesh";
 import { BookstoreHeader } from "./BookstoreHeader";
 import { BundleCard } from "./BundleCard";
 import { ProductCard } from "./ProductCard";
@@ -93,7 +94,10 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
       <p className="mt-1 text-sm text-ink-soft">{t.tagline}</p>
 
       {/* Hero banner */}
-      <section className="relative mt-5 overflow-hidden rounded-card bg-violet p-6 text-white shadow-lift md:p-8">
+      <section
+        style={{ backgroundImage: MESH.violet }}
+        className="card-grain relative mt-5 overflow-hidden rounded-card p-6 text-white shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(123_67_214_/_0.4)] md:p-8"
+      >
         <SakuraBranch className="absolute -end-4 -bottom-6 w-44 opacity-90 md:w-60 rtl:-scale-x-100" />
         <p className="relative text-xs font-semibold tracking-[0.18em] text-white/80 uppercase">{t.hero.kicker}</p>
         <p className="relative mt-2 max-w-[15rem] font-display text-2xl leading-snug font-semibold md:max-w-sm md:text-3xl">

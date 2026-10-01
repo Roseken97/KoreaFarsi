@@ -1,13 +1,16 @@
 import Image from "next/image";
 import type { Collection, Product } from "@/lib/bookstore/types";
+import { MESH, MESH_SHADOW, type MeshColor } from "@/lib/ui/mesh";
 
 /**
  * Real cover when cover_image_url is set; otherwise a designed placeholder
  * cover in brand colors (so sample / not-yet-photographed products still look intentional).
+ * The two vivid collections get the "polished colorful" mesh+grain treatment;
+ * the paler collections stay flat (a mesh/grain over near-white muddies it).
  */
-const COVER_STYLE: Record<Collection | "default", { bg: string; glyph: string; text: string }> = {
-  alphabet: { bg: "bg-violet", glyph: "한글", text: "text-white" },
-  four_skills: { bg: "bg-teal-deep", glyph: "한국어", text: "text-cream" },
+const COVER_STYLE: Record<Collection | "default", { bg: string; mesh?: MeshColor; glyph: string; text: string }> = {
+  alphabet: { bg: "bg-violet", mesh: "violet", glyph: "한글", text: "text-white" },
+  four_skills: { bg: "bg-teal-deep", mesh: "teal", glyph: "한국어", text: "text-cream" },
   workbook: { bg: "bg-blush-soft", glyph: "연습", text: "text-ink" },
   planner: { bg: "bg-sage-soft", glyph: "계획", text: "text-teal-deep" },
   merch: { bg: "bg-cream-deep", glyph: "굿즈", text: "text-ink" },
@@ -53,7 +56,8 @@ export function ProductCover({
 
   return (
     <div
-      className={`@container relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-2xl p-3 shadow-soft ${style.bg} ${style.text} ${className}`}
+      style={style.mesh ? { backgroundImage: MESH[style.mesh] } : undefined}
+      className={`@container relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-2xl p-3 ${style.mesh ? `card-grain ${MESH_SHADOW[style.mesh]}` : `shadow-soft ${style.bg}`} ${style.text} ${className}`}
       aria-hidden="true"
     >
       {/* spine */}
