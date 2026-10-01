@@ -28,7 +28,7 @@ export function ProductCard({ product }: { product: Product }) {
   const level = levelLabel(product.level, m);
 
   return (
-    <MotionSurface className="group relative flex flex-col rounded-card border border-line/60 bg-surface p-3 shadow-soft transition hover:shadow-lift">
+    <MotionSurface className="group relative flex flex-col rounded-card border border-line/60 bg-surface p-3.5 shadow-soft transition hover:shadow-lift">
       <Link href={href} className="relative block">
         <ProductCover product={product} sizes="(min-width: 1024px) 220px, 45vw" />
         <span className="absolute start-2 top-2 flex flex-col items-start gap-1">
