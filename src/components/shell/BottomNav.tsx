@@ -29,7 +29,7 @@ export function BottomNav() {
                   className="mx-auto flex w-fit flex-col items-center gap-1"
                 >
                   <span
-                    className={`grid size-14 place-items-center rounded-full shadow-lift ring-4 ring-cream transition ${
+                    className={`grid size-14 place-items-center rounded-full shadow-lift ring-4 ring-white transition ${
                       active ? "bg-ink text-cream" : "bg-ink/90 text-cream/85"
                     }`}
                   >

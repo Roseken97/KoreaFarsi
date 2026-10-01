@@ -76,7 +76,7 @@ export default async function AccountPage() {
           <section className="flex items-center gap-4">
             <Link href="/account/profile" className="relative" aria-label={t.editProfile}>
               <Avatar name={profile?.name} email={profile?.user.email} avatarKey={profile?.avatarKey} size={72} className="shadow-soft" />
-              <span className="absolute -end-0.5 -bottom-0.5 grid size-7 place-items-center rounded-full bg-violet text-white ring-2 ring-cream">
+              <span className="absolute -end-0.5 -bottom-0.5 grid size-7 place-items-center rounded-full bg-violet text-white ring-2 ring-white">
                 <PencilIcon width={14} height={14} />
               </span>
             </Link>
