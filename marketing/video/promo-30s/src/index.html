@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fa">
+<head>
+<meta charset="utf-8">
+<title>KoreaFarsi promo 30s</title>
+<link rel="stylesheet" href="../node_modules/@fontsource/vazirmatn/400.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/vazirmatn/500.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/vazirmatn/700.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/vazirmatn/800.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-serif-kr/600.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-serif-kr/700.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-kr/500.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/600.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/600-italic.css">
+<link rel="stylesheet" href="film.css">
+</head>
+<body>
+<div id="stage">
+  <!-- background -->
+  <div id="bg">
+    <div class="blob" id="blobA"></div>
+    <div class="blob" id="blobB"></div>
+    <div class="blob" id="blobC"></div>
+  </div>
+
+  <!-- persistent bridge arc / method rail -->
+  <svg id="arcsvg" width="1080" height="1920" viewBox="0 0 1080 1920">
+    <path id="arc" d="" fill="none" stroke="#4f8a87" stroke-width="7" stroke-linecap="round"/>
+    <g id="raildots"></g>
+    <circle id="arcdot" r="16" fill="#de8b89"/>
+  </svg>
+
+  <!-- S1 hook -->
+  <div class="scene" id="s1">
+    <div class="abs ko" id="s1ko"><span>안</span><span>녕</span><span>하</span><span>세</span><span>요</span></div>
+    <div class="abs fa" id="s1fa">سلام</div>
+  </div>
+
+  <!-- S2 premise -->
+  <div class="scene" id="s2">
+    <div class="abs fa h1" id="s2a">کره‌ای یاد بگیر</div>
+    <div class="abs fa h1 teal" id="s2b">به زبان خودت</div>
+    <div class="abs pill fa" id="s2pfa">فارسی</div>
+    <div class="abs pill ko-sans" id="s2pko">한국어</div>
+  </div>
+
+  <!-- S3 brand -->
+  <div class="scene" id="s3">
+    <img class="abs" id="s3logo" src="../../../../design/brand/logo-original.png" alt="">
+    <div class="abs fa" id="s3name">کوریافارسی</div>
+    <div class="abs latin" id="s3latin">KoreaFarsi</div>
+    <div class="abs fa" id="s3tag">پلی به سوی نسخه‌ی بهتر تو</div>
+  </div>
+
+  <!-- small brand badge during the method -->
+  <img class="abs" id="badge" src="../../../../design/brand/logo-original.png" alt="">
+
+  <!-- step chips -->
+  <div class="abs chip fa" id="chip1">۱ · یادگیری واژه</div>
+  <div class="abs chip fa" id="chip2">۲ · هم‌نشینی‌ها</div>
+  <div class="abs chip fa" id="chip3">۳ · جمله‌سازی</div>
+  <div class="abs chip fa" id="chip6">۶ · ماموریت گفتاری</div>
+  <div class="abs chip fa" id="chip7">۷ · مرور و تمرین</div>
+
+  <!-- S4–S8 word journey -->
+  <div class="abs card" id="word">
+    <div class="ko" id="wko">배우다</div>
+    <div class="latin" id="wrom">bae-u-da</div>
+    <div class="rule"></div>
+    <div class="fa teal" id="wfa">یاد گرفتن</div>
+    <div id="wwave"></div>
+  </div>
+  <div class="abs row" id="col1"><span class="ko-sans">한국어를 <b>배우다</b></span><span class="fa">کره‌ای یاد گرفتن</span></div>
+  <div class="abs row" id="col2"><span class="ko-sans">열심히 <b>배우다</b></span><span class="fa">با پشتکار یاد گرفتن</span></div>
+
+  <div class="abs tile ko-sans" id="t1">저는</div>
+  <div class="abs tile ko-sans" id="t2">한국어를</div>
+  <div class="abs tile ko-sans accent" id="t3">배워요</div>
+  <div class="abs fa teal" id="trans"></div>
+
+  <div class="abs" id="mic">
+    <div class="ring" id="ring1"></div><div class="ring" id="ring2"></div>
+    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+  </div>
+  <div class="abs" id="micwave"></div>
+  <div class="abs fa" id="say">حالا خودت بگو</div>
+
+  <div class="abs" id="days"></div>
+  <div class="abs fa" id="later">چند روز بعد</div>
+  <div class="abs card mini" id="recall"><span class="ko">배우다</span><span class="fa teal">یاد گرفتن</span>
+    <svg id="check" width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="44" fill="#4f8a6a"/><path id="checkpath" d="M28 49 l13 13 l27 -28" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <!-- S9 method list -->
+  <div class="abs fa h2" id="s9title">یادگیری واقعی، نه فقط دیدن</div>
+  <div id="steps"></div>
+
+  <!-- S10–S13 phone -->
+  <div class="abs fa h2" id="pt1">همه‌چیز یکجا</div>
+  <div class="abs fa h2" id="pt2">دستیار هوش مصنوعی</div>
+  <div class="abs fa h2" id="pt3">برنامه‌ریز، متناسب با زمان تو</div>
+  <div class="abs fa h2" id="pt4">دوره‌ها و کتاب‌های فارسی–کره‌ای</div>
+
+  <div class="abs" id="course"><div class="thumb"><svg width="90" height="90" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></div>
+    <div class="fa ctitle">دوره‌های ویدیویی</div><div class="bar"><i></i></div></div>
+  <div class="abs book" id="b1"><span class="ko">한</span></div>
+  <div class="abs book" id="b2"><span class="ko">글</span></div>
+  <div class="abs book" id="b3"><span class="ko">책</span></div>
+
+  <div class="abs" id="phone">
+    <div id="screen">
+      <div class="status"><span>۹:۴۱</span><span class="notch"></span><span>●●●</span></div>
+      <div class="fa hello">سلام!</div>
+      <div class="fa hello2">امروز چی یاد بگیریم؟</div>
+      <div class="hcard" id="hc1" style="background:#dcecee"><div class="ic"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><div class="fa">دوره‌ها</div></div>
+      <div class="hcard" id="hc2" style="background:#f8e3e1"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 5c3-1 6-1 8 1v14c-2-2-5-2-8-1zM20 5c-3-1-6-1-8 1v14c2-2 5-2 8-1z"/></svg></div><div class="fa">کتاب‌فروشی</div></div>
+      <div class="hcard" id="hc3" style="background:#e3ece5"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></div><div class="fa">هوش مصنوعی</div></div>
+      <div class="hcard" id="hc4" style="background:#f2eadc"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4" stroke="#faf6ef" stroke-width="1.6"/></svg></div><div class="fa">برنامه‌ریز</div></div>
+      <div class="nav"><i></i><i></i><i class="on"></i><i></i><i></i></div>
+
+      <div class="ov" id="ovAI">
+        <div class="ovhead fa">دستیار هوش مصنوعی</div>
+        <div class="bub me fa" id="q">فرق <span class="ko-sans">은</span> و <span class="ko-sans">는</span> چیه؟</div>
+        <div class="bub bot" id="typing"><i></i><i></i><i></i></div>
+        <div class="bub bot fa" id="ans"></div>
+        <div class="bub bot fa" id="ex">مثال: <span class="ko-sans">책<b>은</b></span> (کتاب) · <span class="ko-sans">저<b>는</b></span> (من)</div>
+      </div>
+      <div class="ov" id="ovPlan">
+        <div class="ovhead fa">برنامه‌ی امروز</div>
+        <div class="time fa">۲۰ دقیقه در روز · سطح مبتدی</div>
+        <div class="week" id="week"></div>
+        <div class="task fa" id="k1"><b class="box"></b>۱۵ دقیقه واژه‌های تازه</div>
+        <div class="task fa" id="k2"><b class="box"></b>تمرین جمله‌سازی</div>
+        <div class="task fa" id="k3"><b class="box"></b>مرور واژه‌های دیروز</div>
+        <div class="prog"><i id="progfill"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S15 end card -->
+  <div class="scene" id="s15">
+    <img class="abs" id="endlogo" src="../../../../design/brand/logo-original.png" alt="">
+    <div class="abs fa" id="endname">کوریافارسی</div>
+    <div class="abs fa" id="endcta">از امروز شروع کن</div>
+    <div class="abs latin" id="endurl">koreafarsi.ir</div>
+    <div class="abs latin" id="endig">@koreafarsi</div>
+  </div>
+
+  <div id="petals"></div>
+</div>
+<script src="../node_modules/gsap/dist/gsap.min.js"></script>
+<script src="film.js"></script>
+</body>
+</html>
