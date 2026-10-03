@@ -24,7 +24,7 @@ export async function Hero({
   const height = size === "lg" ? "h-48 md:h-60" : "h-28 md:h-32";
 
   if (announcements.length === 0) {
-    return <section className={`relative overflow-hidden rounded-[28px] bg-gradient-to-br from-blush-soft via-cream to-sage-soft shadow-lift ${height}`}>{children}</section>;
+    return <section className={`relative overflow-hidden rounded-hero bg-gradient-to-br from-blush-soft via-cream to-sage-soft shadow-lift ${height}`}>{children}</section>;
   }
 
   return <AnnouncementCarousel items={announcements} locale={locale} height={height} />;

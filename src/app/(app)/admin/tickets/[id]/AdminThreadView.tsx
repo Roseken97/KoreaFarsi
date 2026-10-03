@@ -44,7 +44,7 @@ export function AdminThreadView({ ticket, messages }: { ticket: SupportTicket; m
             <button
               key={s}
               onClick={() => onStatusChange(s)}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium capitalize transition ${status === s ? "bg-ink text-cream" : "border border-line text-ink-soft"}`}
+              className={`rounded-full px-3 py-1.5 text-xs font-medium capitalize transition ${status === s ? "bg-violet text-white" : "border border-line text-ink-soft"}`}
             >
               {s}
             </button>

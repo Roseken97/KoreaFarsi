@@ -46,7 +46,7 @@ function ResourceRow({ resource, locale, downloadLabel, preparingLabel }: { reso
       <button
         onClick={download}
         disabled={loading}
-        className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-ink px-3.5 py-2 text-xs font-semibold text-cream transition hover:bg-ink/85 disabled:opacity-50"
+        className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-violet px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-violet-deep disabled:opacity-50"
       >
         <DownloadIcon width={14} height={14} />
         {loading ? preparingLabel : downloadLabel}

@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 const tones = {
   sample: "bg-surface/90 text-ink-soft border border-line",
-  soon: "bg-ink text-cream",
+  soon: "bg-sky text-white",
   discount: "bg-blush text-white",
   format: "bg-cream-deep text-ink-soft",
 } as const;

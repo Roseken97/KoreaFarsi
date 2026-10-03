@@ -34,7 +34,7 @@ export function LanguageSwitch({ className = "" }: { className?: string }) {
           onClick={() => choose(l)}
           lang={l}
           className={`rounded-full px-3 py-1.5 transition ${
-            l === locale ? "bg-ink text-cream" : "text-ink-soft hover:text-ink"
+            l === locale ? "bg-violet text-white" : "text-ink-soft hover:text-ink"
           }`}
         >
           {m.language[l]}

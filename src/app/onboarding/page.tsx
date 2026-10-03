@@ -7,17 +7,18 @@ import { ArrowForwardIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { useI18n } from "@/lib/i18n/client";
 import { markOnboarded } from "@/lib/onboarding";
+import { MESH, MESH_SHADOW, type MeshColor } from "@/lib/ui/mesh";
 
 /**
  * PROVISIONAL slide visuals: a Korean word on a brand-colored panel.
  * UX_SPECS asks for illustrations (Seoul, learning, culture) — swap each
  * panel for an <Image> once the 4 artworks exist. Copy lives in the i18n files.
  */
-const VISUALS = [
-  "bg-ink text-cream",
-  "bg-blush-soft text-ink",
-  "bg-sage-soft text-teal-deep",
-  "bg-cream-deep text-ink",
+const VISUALS: { bg?: string; text: string; mesh?: MeshColor }[] = [
+  { text: "text-white", mesh: "violet" },
+  { bg: "bg-blush-soft", text: "text-ink" },
+  { bg: "bg-sage-soft", text: "text-teal-deep" },
+  { bg: "bg-cream-deep", text: "text-ink" },
 ];
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -72,7 +73,9 @@ export default function OnboardingPage() {
           className="flex flex-1 snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           aria-roledescription="carousel"
         >
-          {slides.map((slide, i) => (
+          {slides.map((slide, i) => {
+            const visual = VISUALS[i];
+            return (
             <section
               key={slide.glyph}
               ref={(el) => {
@@ -84,7 +87,10 @@ export default function OnboardingPage() {
               className="flex w-full shrink-0 snap-start flex-col justify-center px-6 py-6"
             >
               <div
-                className={`relative grid aspect-[4/3] w-full place-items-center overflow-hidden rounded-[2rem] shadow-soft ${VISUALS[i]}`}
+                style={visual.mesh ? { backgroundImage: MESH[visual.mesh] } : undefined}
+                className={`relative grid aspect-[4/3] w-full place-items-center overflow-hidden rounded-[2rem] ${visual.text} ${
+                  visual.mesh ? `card-grain ${MESH_SHADOW[visual.mesh]}` : `shadow-soft ${visual.bg}`
+                }`}
               >
                 <span lang="ko" className="text-7xl font-bold md:text-6xl">
                   {slide.glyph}
@@ -96,7 +102,8 @@ export default function OnboardingPage() {
               <h2 className="mt-3 font-display text-3xl leading-tight font-semibold text-ink">{slide.title}</h2>
               <p className="mt-3 text-[15px] leading-7 text-ink-soft">{slide.body}</p>
             </section>
-          ))}
+            );
+          })}
         </div>
 
         <div className="flex items-center justify-between gap-6 px-6 pb-8 md:pb-0">

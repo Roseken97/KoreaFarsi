@@ -2,7 +2,7 @@
 
 import { motion, useMotionValue, useTransform } from "motion/react";
 import Link from "next/link";
-import type { MouseEvent, ReactNode } from "react";
+import type { CSSProperties, MouseEvent, ReactNode } from "react";
 
 const MotionLink = motion.create(Link);
 
@@ -17,12 +17,14 @@ const SPRING = { type: "spring" as const, stiffness: 300, damping: 24 };
 export function MotionCard({
   href,
   className = "",
+  style,
   children,
   tilt = true,
   onClick,
 }: {
   href: string;
   className?: string;
+  style?: CSSProperties;
   children: ReactNode;
   tilt?: boolean;
   onClick?: () => void;
@@ -48,7 +50,7 @@ export function MotionCard({
       href={href}
       onClick={onClick}
       className={className}
-      style={tilt ? { rotateX, rotateY, transformPerspective: 800 } : undefined}
+      style={tilt ? { ...style, rotateX, rotateY, transformPerspective: 800 } : style}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       initial={{ opacity: 0, y: 18, scale: 0.96 }}
@@ -66,11 +68,13 @@ export function MotionCard({
 /** Same entrance (+ optional hover lift) language for a card that isn't a single-link tap target (e.g. it has its own internal links/buttons, or is itself a toggle). */
 export function MotionSurface({
   className = "",
+  style,
   hover = true,
   onClick,
   children,
 }: {
   className?: string;
+  style?: CSSProperties;
   hover?: boolean;
   onClick?: () => void;
   children: ReactNode;
@@ -78,6 +82,7 @@ export function MotionSurface({
   return (
     <motion.div
       className={className}
+      style={style}
       onClick={onClick}
       initial={{ opacity: 0, y: 18, scale: 0.96 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}

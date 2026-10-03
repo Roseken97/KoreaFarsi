@@ -31,6 +31,11 @@ export function SignupForm({ next }: { next: string }) {
   const [formError, setFormError] = useState("");
   const [loading, setLoading] = useState(false);
   const [sentTo, setSentTo] = useState<string | null>(null);
+  const [code, setCode] = useState("");
+  const [codeError, setCodeError] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resentNotice, setResentNotice] = useState(false);
 
   // After signup the user lands on the "You're In!" screen, which then continues to `next`.
   const successPath = `/auth/success${next !== "/home" ? `?next=${encodeURIComponent(next)}` : ""}`;
@@ -69,19 +74,65 @@ export function SignupForm({ next }: { next: string }) {
     }
   }
 
+  async function onVerify(e: FormEvent) {
+    e.preventDefault();
+    if (!sentTo) return;
+    setCodeError("");
+    setVerifying(true);
+    const { data, error } = await createClient().auth.verifyOtp({
+      email: sentTo,
+      token: code.trim(),
+      type: "signup",
+    });
+    setVerifying(false);
+    if (error || !data.session) return setCodeError(t.invalidCode);
+    router.replace(successPath);
+    router.refresh();
+  }
+
+  async function onResend() {
+    if (!sentTo) return;
+    setResending(true);
+    setCodeError("");
+    setResentNotice(false);
+    const { error } = await createClient().auth.resend({ type: "signup", email: sentTo });
+    setResending(false);
+    if (error) return setCodeError(authErrorMessage(m, error));
+    setResentNotice(true);
+  }
+
   if (sentTo) {
     return (
-      <StatusScreen
-        icon={<MailIcon width={30} height={30} />}
-        title={t.checkEmailTitle}
-        action={
-          <Link href="/auth/login" className="font-semibold text-teal hover:underline">
-            {t.backToLogin}
-          </Link>
-        }
-      >
+      <StatusScreen icon={<MailIcon width={30} height={30} />} title={t.checkEmailTitle}>
         <p>{fmt(t.checkEmailBody, { email: `⁦${sentTo}⁩` })}</p>
         <p className="mt-2 text-sm text-ink-faint">{t.checkEmailSpam}</p>
+        <form onSubmit={onVerify} noValidate className="mt-6 flex flex-col gap-4 text-start">
+          {resentNotice && <Notice tone="success">{t.resent}</Notice>}
+          <Field
+            label={t.codeLabel}
+            ltr
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            placeholder={t.codePlaceholder}
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            error={codeError}
+          />
+          <Button type="submit" loading={verifying}>
+            {t.verify}
+          </Button>
+          <button
+            type="button"
+            onClick={onResend}
+            disabled={resending}
+            className="text-sm font-semibold text-teal hover:underline disabled:opacity-55"
+          >
+            {t.resend}
+          </button>
+        </form>
+        <Link href="/auth/login" className="mt-8 block font-semibold text-teal hover:underline">
+          {t.backToLogin}
+        </Link>
       </StatusScreen>
     );
   }

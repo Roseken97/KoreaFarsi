@@ -399,7 +399,7 @@ function LessonForm({
               key={ct}
               type="button"
               onClick={() => set("content_type", ct)}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${form.content_type === ct ? "bg-ink text-cream" : "border border-line bg-surface text-ink-soft"}`}
+              className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${form.content_type === ct ? "bg-violet text-white" : "border border-line bg-surface text-ink-soft"}`}
             >
               {ct === "video" ? "Video (upload)" : "Slides (no recording)"}
             </button>

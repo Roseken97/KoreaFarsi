@@ -4,14 +4,14 @@ import type { ButtonHTMLAttributes, ComponentProps } from "react";
 type Variant = "primary" | "secondary" | "ghost";
 
 const base =
-  "inline-flex h-13 w-full items-center justify-center gap-2 rounded-field px-5 text-[15px] font-semibold transition " +
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal " +
+  "inline-flex h-12 w-full items-center justify-center gap-2 rounded-field px-5 text-[15px] font-semibold transition " +
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet " +
   "disabled:cursor-not-allowed disabled:opacity-55";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-teal text-white shadow-soft hover:bg-teal-deep active:scale-[0.99]",
-  secondary: "border border-line bg-surface text-ink hover:bg-cream-deep",
-  ghost: "text-ink-soft hover:text-ink",
+  primary: "bg-violet text-white shadow-[0_2px_4px_rgb(41_38_61_/_0.10),0_14px_24px_-10px_rgb(91_140_123_/_0.6)] hover:bg-violet-deep active:scale-[0.99]",
+  secondary: "border-2 border-teal bg-surface text-teal-deep hover:bg-teal-mist",
+  ghost: "text-ink hover:underline",
 };
 
 export function Button({

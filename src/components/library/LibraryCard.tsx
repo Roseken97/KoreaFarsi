@@ -29,7 +29,7 @@ export function LibraryCard({ entry }: { entry: LibraryEntry }) {
   }
 
   return (
-    <MotionSurface hover={false} className="flex gap-4 rounded-[20px] border border-line/60 bg-surface p-3 shadow-soft">
+    <MotionSurface hover={false} className="flex gap-4 rounded-card border border-line/60 bg-surface p-3.5 shadow-soft">
       <div className="w-20 shrink-0 sm:w-24">
         <ProductCover product={entry.product} sizes="96px" />
       </div>
@@ -48,7 +48,7 @@ export function LibraryCard({ entry }: { entry: LibraryEntry }) {
           <button
             onClick={download}
             disabled={loading}
-            className="inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-cream transition hover:bg-ink/85 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-full bg-violet px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-deep disabled:opacity-50"
           >
             <DownloadIcon width={16} height={16} />
             {loading ? t.preparing : t.download}

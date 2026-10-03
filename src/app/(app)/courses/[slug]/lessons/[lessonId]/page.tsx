@@ -112,7 +112,7 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
         </div>
       </div>
 
-      <div className="mt-5 flex gap-3 rounded-[18px] bg-sage-soft p-4">
+      <div className="mt-5 flex gap-3 rounded-card bg-sage-soft p-4">
         <TargetIcon width={20} height={20} className="mt-0.5 shrink-0 text-teal-deep" />
         <div className="min-w-0">
           <p className="text-sm font-semibold text-ink">{to.objectivesTitle}</p>
@@ -130,7 +130,7 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-3 divide-x divide-line rounded-[18px] bg-surface p-3 shadow-soft">
+      <div className="mt-4 grid grid-cols-3 divide-x divide-line rounded-card bg-surface p-3 shadow-soft">
         <MetaItem icon={<WatchIcon width={18} height={18} />} value={lesson.duration_minutes > 0 ? `${formatNumber(lesson.duration_minutes, locale)}′` : "—"} label={to.meta.time} />
         <MetaItem icon={<LevelIcon width={18} height={18} />} value={levelLabel ?? "—"} label={to.meta.level} />
         <MetaItem icon={<LayersIcon width={18} height={18} />} value={fmt(to.activitiesCount, { n: formatNumber(activitiesCount, locale) })} label={to.meta.activities} />
@@ -147,7 +147,7 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
 
       <Link
         href={`/courses/${slug}/lessons/${lessonId}/start`}
-        className="mt-6 inline-flex h-13 w-full items-center justify-center gap-2 rounded-field bg-ink px-5 text-[15px] font-semibold text-cream shadow-soft transition hover:bg-ink/85 active:scale-[0.99]"
+        className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-field bg-violet px-5 text-[15px] font-semibold text-white shadow-soft transition hover:bg-violet-deep active:scale-[0.99]"
       >
         <PlayIcon width={18} height={18} />
         {to.startLesson}

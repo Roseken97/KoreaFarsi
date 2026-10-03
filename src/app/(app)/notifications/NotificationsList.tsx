@@ -52,7 +52,7 @@ function NotificationRow({ notification, locale, onRead }: { notification: AppNo
   }
 
   const content = (
-    <div className={`flex items-start gap-3 rounded-[16px] border p-3.5 ${notification.is_read ? "border-line bg-surface" : "border-teal/30 bg-sage-soft"}`}>
+    <div className={`flex items-start gap-3 rounded-card border p-3.5 ${notification.is_read ? "border-line bg-surface" : "border-teal/30 bg-sage-soft"}`}>
       {!notification.is_read && <span className="mt-1.5 size-2 shrink-0 rounded-full bg-teal" aria-hidden="true" />}
       <div className="min-w-0 flex-1">
         <p className={`text-sm ${notification.is_read ? "font-medium text-ink-soft" : "font-semibold text-ink"}`} dir="auto">

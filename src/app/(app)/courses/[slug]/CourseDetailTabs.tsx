@@ -144,7 +144,7 @@ export function CourseDetailTabs({
                 const Icon = SKILL_ICONS[skill.icon];
                 const title = locale === "en" ? skill.title_en || skill.title : skill.title;
                 return (
-                  <div key={i} className="flex w-24 shrink-0 flex-col items-center gap-2 rounded-[16px] bg-surface p-3 text-center shadow-soft">
+                  <div key={i} className="flex w-24 shrink-0 flex-col items-center gap-2 rounded-card bg-surface p-3 text-center shadow-soft">
                     <span className="grid size-9 place-items-center rounded-full bg-sage-soft text-teal-deep">
                       <Icon width={18} height={18} />
                     </span>

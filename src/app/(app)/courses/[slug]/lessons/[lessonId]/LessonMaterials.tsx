@@ -35,7 +35,7 @@ function MaterialCard({ lessonId, material, locale }: { lessonId: string; materi
   }
 
   return (
-    <button onClick={download} disabled={loading} className="flex items-start gap-2.5 rounded-[16px] border border-line bg-surface p-3 text-start transition hover:bg-cream disabled:opacity-60">
+    <button onClick={download} disabled={loading} className="flex items-start gap-3 rounded-card border border-line bg-surface p-3.5 text-start transition hover:bg-cream disabled:opacity-60">
       <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-sage-soft text-teal-deep">
         <Icon width={16} height={16} />
       </span>

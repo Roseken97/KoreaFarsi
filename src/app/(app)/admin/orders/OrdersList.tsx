@@ -107,7 +107,7 @@ function OrderRow({ request }: { request: PurchaseRequestRow }) {
           <button
             onClick={grant}
             disabled={pending}
-            className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-cream transition hover:bg-ink/85 disabled:opacity-50"
+            className="rounded-full bg-violet px-4 py-2 text-sm font-semibold text-white transition hover:bg-violet-deep disabled:opacity-50"
           >
             {pending ? t.granting : t.grant}
           </button>

@@ -5,6 +5,7 @@ import { SakuraBranch } from "@/components/brand/SakuraBranch";
 import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
 import { Hero } from "@/components/shell/Hero";
 import {
+  ArrowForwardIcon,
   BellIcon,
   BooksStackIcon,
   LanternIcon,
@@ -14,7 +15,7 @@ import {
 } from "@/components/icons";
 import { MotionCard } from "@/components/motion/MotionCard";
 import { HomeTodayRing } from "@/components/planner/HomeTodayRing";
-import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
+import { HeaderIconLink } from "@/components/shell/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
 import { getContinueCard } from "@/lib/courses/queries";
@@ -23,6 +24,7 @@ import { getMessages } from "@/lib/i18n/server";
 import { getUnreadNotificationCount } from "@/lib/notifications/queries";
 import { getTodayTasks } from "@/lib/planner/queries";
 import { getProfile } from "@/lib/profile";
+import { MESH, MESH_SHADOW } from "@/lib/ui/mesh";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m } = await getMessages();
@@ -31,12 +33,19 @@ export async function generateMetadata(): Promise<Metadata> {
 
 type CardKey = keyof Messages["home"]["cards"];
 
-/** The four main sections (sketch 02 Home). My Courses / Korea Life are placeholders in Phase 1. */
-const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; bg: string; text: string }[] = [
-  { key: "courses", href: "/courses", Icon: BooksStackIcon, bg: "bg-sage", text: "text-ink" },
-  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, bg: "bg-blush", text: "text-white" },
-  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, bg: "bg-ink", text: "text-cream" },
-  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, bg: "bg-cream-deep", text: "text-ink" },
+/**
+ * Polished-colorful recipe: a layered mesh gradient (base color + two tinted
+ * radial blobs from neighboring palette hues) instead of a flat single fill,
+ * a grain texture to kill the flat-vector look, a restrained realistic
+ * shadow (not a neon glow), and an editorial layout — icon chip top-start,
+ * a large low-opacity Korean glyph as a background watermark, title/body
+ * anchored bottom-start, and a small "go" affordance top-end.
+ */
+const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; color: keyof typeof MESH; text: string }[] = [
+  { key: "courses", href: "/courses", Icon: BooksStackIcon, color: "violet", text: "text-white" },
+  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, color: "clay", text: "text-white" },
+  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, color: "indigo", text: "text-white" },
+  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, color: "gold", text: "text-ink" },
 ];
 
 export default async function HomePage() {
@@ -53,28 +62,25 @@ export default async function HomePage() {
 
   return (
     <div className="animate-fade-up">
-      <PageHeader
-        actions={
-          <>
-            <HeaderIconLink href="/notifications" label={t.notifications} badge={unreadCount > 0}>
-              <BellIcon width={20} height={20} />
-            </HeaderIconLink>
-            <Link href={profile ? "/account" : "/auth/welcome"} aria-label={t.profile}>
-              <Avatar name={profile?.name} email={profile?.user.email} avatarKey={profile?.avatarKey} size={40} className="shadow-soft" />
-            </Link>
-          </>
-        }
-      />
-
-      <p lang="ko" className="text-sm text-ink-soft">
-        {t.greeting} 👋
-      </p>
-      <h1 className="mt-1 font-display text-3xl font-semibold md:text-4xl">
-        {firstName ? fmt(t.welcomeNamed, { name: firstName }) : t.welcomeGuest}
-      </h1>
+      <header className="flex items-center justify-between gap-3">
+        <Link href={profile ? "/account" : "/auth/welcome"} aria-label={t.profile} className="flex min-w-0 items-center gap-3">
+          <Avatar name={profile?.name} email={profile?.user.email} avatarKey={profile?.avatarKey} size={48} className="shadow-soft" />
+          <span className="min-w-0">
+            <span lang="ko" className="block text-sm text-ink-soft">
+              {t.greeting} 👋
+            </span>
+            <span className="block truncate font-display text-lg font-semibold">
+              {firstName ? fmt(t.welcomeNamed, { name: firstName }) : t.welcomeGuest}
+            </span>
+          </span>
+        </Link>
+        <HeaderIconLink href="/notifications" label={t.notifications} badge={unreadCount > 0}>
+          <BellIcon width={20} height={20} />
+        </HeaderIconLink>
+      </header>
 
       {/* Hero — shows the active /admin/announcements banner, or this default message */}
-      <div className="mt-6">
+      <div className="mt-8">
         <Hero placement="home" locale={locale}>
           <span className="absolute -top-10 -start-10 size-32 rounded-full bg-white/30 blur-2xl" aria-hidden="true" />
           <span className="absolute end-6 top-10 size-16 rounded-full bg-blush/20 blur-xl" aria-hidden="true" />
@@ -97,24 +103,34 @@ export default async function HomePage() {
         </Hero>
       </div>
 
-      {/* Main sections — full-bleed color, glyph and label live in one card (cover-style) */}
-      <section className="mt-6 grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
-        {CARDS.map(({ key, href, Icon, bg, text }) => {
+      {/* Main sections — polished colorful: mesh gradient + grain, editorial layout, Korean glyph as a watermark */}
+      <section className="mt-8 grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-4">
+        {CARDS.map(({ key, href, Icon, color, text }) => {
           const card = t.cards[key];
           return (
             <MotionCard
               key={key}
               href={href}
-              className="group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[24px] p-4 shadow-soft"
+              style={{ backgroundImage: MESH[color] }}
+              className={`card-grain group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-hero p-4 ${MESH_SHADOW[color]}`}
             >
-              <span className={`absolute inset-0 ${bg}`} aria-hidden="true" />
-              <span className="absolute -end-4 -top-4 size-20 rounded-full bg-white/10" aria-hidden="true" />
-              <span className={`relative grid size-9 place-items-center rounded-full bg-white/20 ${text}`}>
-                <Icon width={18} height={18} />
-              </span>
-              <span lang="ko" className={`relative text-center text-[16cqw] leading-none font-bold tracking-tight ${text} opacity-90`}>
+              <span
+                lang="ko"
+                className={`pointer-events-none absolute -bottom-3 -end-2 text-[15cqw] leading-none font-bold tracking-tight whitespace-nowrap ${text} opacity-[0.16]`}
+                aria-hidden="true"
+              >
                 {card.ko}
               </span>
+
+              <div className="relative flex items-start justify-between">
+                <span className={`grid size-9 place-items-center rounded-xl bg-white/20 ${text}`}>
+                  <Icon width={18} height={18} />
+                </span>
+                <span className={`grid size-7 place-items-center rounded-full bg-white/15 transition-transform duration-300 group-hover:translate-x-0.5 ${text} rtl:rotate-180 rtl:group-hover:-translate-x-0.5`}>
+                  <ArrowForwardIcon width={14} height={14} />
+                </span>
+              </div>
+
               <span className="relative">
                 <span className={`block font-display text-base leading-tight font-semibold ${text}`}>{card.title}</span>
                 <span className={`mt-0.5 block text-[11px] leading-4 ${text} opacity-75`}>{card.body}</span>
@@ -131,11 +147,17 @@ export default async function HomePage() {
           {continueCard ? (
             <MotionCard
               href={continueCard.nextLessonId ? `/courses/${continueCard.course.slug}/lessons/${continueCard.nextLessonId}` : `/courses/${continueCard.course.slug}`}
-              className="mt-3 flex items-center gap-4 rounded-[24px] bg-surface p-4 shadow-soft"
+              className="mt-3 flex items-center gap-4 rounded-card bg-surface p-4 shadow-soft"
               tilt={false}
             >
               <div className="relative grid size-16 shrink-0 place-items-center">
                 <svg viewBox="0 0 40 40" className="absolute inset-0 -rotate-90">
+                  <defs>
+                    <linearGradient id="continue-ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="var(--color-violet)" />
+                      <stop offset="100%" stopColor="var(--color-clay)" />
+                    </linearGradient>
+                  </defs>
                   <circle cx="20" cy="20" r="17" fill="none" strokeWidth="4" className="stroke-line" />
                   <circle
                     cx="20"
@@ -144,7 +166,7 @@ export default async function HomePage() {
                     fill="none"
                     strokeWidth="4"
                     strokeLinecap="round"
-                    className="stroke-teal"
+                    stroke="url(#continue-ring-gradient)"
                     pathLength={100}
                     strokeDasharray="100"
                     strokeDashoffset={100 - donePct}
@@ -162,12 +184,12 @@ export default async function HomePage() {
                   {continueCard.total > 0 ? fmt(m.courses.progress, { done: formatNumber(continueCard.done, locale as Locale), total: formatNumber(continueCard.total, locale as Locale) }) : m.courses.startCta}
                 </p>
               </div>
-              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-teal text-white" aria-hidden="true">
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-violet text-white" aria-hidden="true">
                 <PlayIcon width={18} height={18} />
               </span>
             </MotionCard>
           ) : (
-            <div className="mt-3 flex items-center gap-4 rounded-[24px] bg-surface p-4 shadow-soft">
+            <div className="mt-3 flex items-center gap-4 rounded-card bg-surface p-4 shadow-soft">
               <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-sage-soft text-teal-deep">
                 <BooksStackIcon width={26} height={26} />
               </span>
@@ -186,7 +208,7 @@ export default async function HomePage() {
         {/* Today's Plan — real tasks once a Planner plan exists (Phase 2) */}
         <section>
           <h2 className="font-display text-xl font-semibold">{t.today.title}</h2>
-          <div className="mt-3 rounded-[24px] bg-surface p-4 shadow-soft">
+          <div className="mt-3 rounded-card bg-surface p-4 shadow-soft">
             {!plan ? (
               <div className="flex flex-col items-center py-2 text-center">
                 <p className="text-sm text-ink-soft">{t.today.soon}</p>

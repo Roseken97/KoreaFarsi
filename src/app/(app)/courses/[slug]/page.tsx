@@ -50,7 +50,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
       <SubPageHeader title={t.title} backHref="/courses" backLabel={t.title} />
 
       {/* Hero — Visual Element: the course's own selected cover image (sketch 07, callout #9) */}
-      <section className="relative h-56 w-full overflow-hidden rounded-[24px] shadow-lift md:h-64">
+      <section className="relative h-56 w-full overflow-hidden rounded-hero shadow-lift md:h-64">
         {hasCover ? (
           <Image src={course.cover_image_url!} alt="" fill sizes="(min-width: 768px) 42rem, 100vw" className="object-cover" />
         ) : (
@@ -70,7 +70,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
       </section>
 
       {/* Key info row (sketch callout #3) — 4 sections split by a short vertical divider, close under the hero */}
-      <div className="mt-2 grid grid-cols-4 divide-x divide-line rounded-[20px] bg-surface p-3 shadow-soft">
+      <div className="mt-2 grid grid-cols-4 divide-x divide-line rounded-card bg-surface p-3 shadow-soft">
         <KeyInfo icon={<LayersIcon width={18} height={18} />} value={formatNumber(total, locale)} label={t.detail.keyInfo.lessons} />
         <KeyInfo icon={<LevelIcon width={18} height={18} />} value={levelLabel ?? "—"} label={t.detail.keyInfo.level} />
         <KeyInfo icon={<WatchIcon width={18} height={18} />} value={totalMinutes > 0 ? fmt(t.detail.keyInfo.minutes, { n: formatNumber(totalMinutes, locale) }) : "—"} label={t.detail.keyInfo.duration} />

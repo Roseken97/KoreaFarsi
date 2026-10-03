@@ -14,6 +14,7 @@ import {
 } from "@/components/icons";
 import type { Collection, Product } from "@/lib/bookstore/types";
 import { useI18n } from "@/lib/i18n/client";
+import { MESH } from "@/lib/ui/mesh";
 import { BookstoreHeader } from "./BookstoreHeader";
 import { BundleCard } from "./BundleCard";
 import { ProductCard } from "./ProductCard";
@@ -93,9 +94,12 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
       <p className="mt-1 text-sm text-ink-soft">{t.tagline}</p>
 
       {/* Hero banner */}
-      <section className="relative mt-5 overflow-hidden rounded-card bg-ink p-6 text-cream shadow-soft md:p-8">
+      <section
+        style={{ backgroundImage: MESH.violet }}
+        className="card-grain relative mt-5 overflow-hidden rounded-card p-6 text-white shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(91_140_123_/_0.4)] md:p-8"
+      >
         <SakuraBranch className="absolute -end-4 -bottom-6 w-44 opacity-90 md:w-60 rtl:-scale-x-100" />
-        <p className="relative text-xs font-semibold tracking-[0.18em] text-blush uppercase">{t.hero.kicker}</p>
+        <p className="relative text-xs font-semibold tracking-[0.18em] text-white/80 uppercase">{t.hero.kicker}</p>
         <p className="relative mt-2 max-w-[15rem] font-display text-2xl leading-snug font-semibold md:max-w-sm md:text-3xl">
           {t.hero.title}
         </p>
@@ -123,7 +127,7 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
                 >
                   <span
                     className={`grid size-14 place-items-center rounded-2xl border transition ${
-                      active ? "border-ink bg-ink text-cream" : "border-line bg-surface text-ink-soft hover:text-ink"
+                      active ? "border-violet bg-violet text-white" : "border-line bg-surface text-ink-soft hover:text-ink"
                     }`}
                   >
                     <Icon width={24} height={24} />
@@ -208,7 +212,7 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
             href={communityHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-cream transition hover:bg-ink/85"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-violet px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-deep"
           >
             {t.community.cta}
             <ArrowForwardIcon width={16} height={16} />
