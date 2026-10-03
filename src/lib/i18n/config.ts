@@ -14,13 +14,8 @@ export function isLocale(value: unknown): value is Locale {
   return typeof value === "string" && (LOCALES as readonly string[]).includes(value);
 }
 
-/**
- * Layout direction stays LTR for every locale: switching language only
- * swaps text content, it never mirrors icons, nav, or spacing.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for call-site compatibility
-export function dirOf(_locale: Locale) {
-  return "ltr";
+export function dirOf(locale: Locale) {
+  return locale === "fa" ? "rtl" : "ltr";
 }
 
 /** Replaces `{key}` placeholders: fmt("Hi {name}", { name: "Rose" }). */
