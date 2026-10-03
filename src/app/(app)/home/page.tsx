@@ -83,7 +83,7 @@ export default async function HomePage() {
       </h1>
 
       {/* Hero — shows the active /admin/announcements banner, or this default message */}
-      <div className="mt-6">
+      <div className="mt-8">
         <Hero placement="home" locale={locale}>
           <span className="absolute -top-10 -start-10 size-32 rounded-full bg-white/30 blur-2xl" aria-hidden="true" />
           <span className="absolute end-6 top-10 size-16 rounded-full bg-blush/20 blur-xl" aria-hidden="true" />
@@ -107,7 +107,7 @@ export default async function HomePage() {
       </div>
 
       {/* Main sections — polished colorful: mesh gradient + grain, editorial layout, Korean glyph as a watermark */}
-      <section className="mt-6 grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-4">
+      <section className="mt-8 grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-4">
         {CARDS.map(({ key, href, Icon, color, text }) => {
           const card = t.cards[key];
           return (
