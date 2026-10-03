@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronIcon } from "@/components/icons";
 import type { Announcement } from "@/lib/announcements/types";
 import type { Locale } from "@/lib/i18n/config";
@@ -23,6 +23,18 @@ export function AnnouncementCarousel({ items, locale, height }: { items: Announc
     if (!el) return;
     el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
   }
+
+  // Auto-advance so users notice there's more than one announcement.
+  useEffect(() => {
+    if (items.length < 2) return;
+    const id = setInterval(() => {
+      const el = trackRef.current;
+      if (!el) return;
+      const next = (Math.round(el.scrollLeft / el.clientWidth) + 1) % items.length;
+      el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
+    }, 3000);
+    return () => clearInterval(id);
+  }, [items.length]);
 
   return (
     <div className={`relative overflow-hidden rounded-hero shadow-lift ${height}`}>

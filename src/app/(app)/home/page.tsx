@@ -15,7 +15,7 @@ import {
 } from "@/components/icons";
 import { MotionCard } from "@/components/motion/MotionCard";
 import { HomeTodayRing } from "@/components/planner/HomeTodayRing";
-import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
+import { HeaderIconLink } from "@/components/shell/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
 import { getContinueCard } from "@/lib/courses/queries";
@@ -62,25 +62,22 @@ export default async function HomePage() {
 
   return (
     <div className="animate-fade-up">
-      <PageHeader
-        actions={
-          <>
-            <HeaderIconLink href="/notifications" label={t.notifications} badge={unreadCount > 0}>
-              <BellIcon width={20} height={20} />
-            </HeaderIconLink>
-            <Link href={profile ? "/account" : "/auth/welcome"} aria-label={t.profile}>
-              <Avatar name={profile?.name} email={profile?.user.email} avatarKey={profile?.avatarKey} size={40} className="shadow-soft" />
-            </Link>
-          </>
-        }
-      />
-
-      <p lang="ko" className="text-sm text-ink-soft">
-        {t.greeting} 👋
-      </p>
-      <h1 className="mt-1 font-display text-3xl font-semibold md:text-4xl">
-        {firstName ? fmt(t.welcomeNamed, { name: firstName }) : t.welcomeGuest}
-      </h1>
+      <header className="flex items-center justify-between gap-3">
+        <Link href={profile ? "/account" : "/auth/welcome"} aria-label={t.profile} className="flex min-w-0 items-center gap-3">
+          <Avatar name={profile?.name} email={profile?.user.email} avatarKey={profile?.avatarKey} size={48} className="shadow-soft" />
+          <span className="min-w-0">
+            <span lang="ko" className="block text-sm text-ink-soft">
+              {t.greeting} 👋
+            </span>
+            <span className="block truncate font-display text-lg font-semibold">
+              {firstName ? fmt(t.welcomeNamed, { name: firstName }) : t.welcomeGuest}
+            </span>
+          </span>
+        </Link>
+        <HeaderIconLink href="/notifications" label={t.notifications} badge={unreadCount > 0}>
+          <BellIcon width={20} height={20} />
+        </HeaderIconLink>
+      </header>
 
       {/* Hero — shows the active /admin/announcements banner, or this default message */}
       <div className="mt-8">
