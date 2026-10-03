@@ -77,7 +77,7 @@
     gsap.set("#ovAI", { left: 296, top: 576, width: 228, height: 260, borderRadius: 40 });
     gsap.set("#ovPlan", { left: 44, top: 576, width: 228, height: 260, borderRadius: 40 });
     gsap.set("#ovAI > *, #ovPlan > *", { opacity: 0 });
-    gsap.set("#q", { scale: 0.8, transformOrigin: "100% 100%" }); gsap.set("#ex", { y: 30 });
+    gsap.set("#q", { scale: 0.8, transformOrigin: "100% 100%" }); gsap.set("#ex", { y: 30 }); gsap.set("#cinput,#ovAI .sug", { y: 30 });
     P("#endlogo", 540, 900, { scale: 0.2 }); P("#endname", 540, 1040); P("#endcta", 540, 1150); P("#endurl", 540, 1300, { scale: 0.7 }); P("#endig", 540, 1440);
 
     // measure sentence slots after fonts are in
@@ -122,9 +122,11 @@
     to(fx, { petals: 0.8, duration: 0.5 }, 4.4);
     to("#s3name,#s3latin,#s3tag", { y: "-=130", opacity: 0, duration: 0.36, ease: "power2.in", stagger: 0.04 }, 6.22);
     to("#s3logo", { y: 250, scale: 0.23, duration: 0.55, ease: "power3.inOut" }, 6.2);
-    to(arc, { x1: 1012, y1: 440, x2: 1012, y2: 1460, lift: 0, duration: 0.7, ease: "power3.inOut" }, 6.2);
+    to(arc, { draw: 0, duration: 0.25, ease: "power2.in" }, 6.2);
+    tl.set(arc, { x1: 1012, y1: 440, x2: 1012, y2: 1460, lift: 0 }, 6.47);
+    to(arc, { draw: 1, duration: 0.5, ease: "power2.out" }, 6.5);
     to(fx, { petals: 0.22, duration: 0.5 }, 6.3);
-    to(rail, { dotsOp: 1, duration: 0.3 }, 6.75);
+    to(rail, { dotsOp: 1, duration: 0.3 }, 6.85);
     to(rail, { active: 1, duration: 0.3 }, 6.95);
 
     // S4 word 6.6–8.6
@@ -137,8 +139,8 @@
 
     // S5 collocations 8.6–10.4
     to("#word", { y: 700, scale: 0.6, duration: 0.55, ease: "power3.inOut" }, 8.5);
-    to("#chip1", { opacity: 0, y: 390, duration: 0.2, ease: "power2.in" }, 8.5);
-    to("#chip2", { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 8.66);
+    to("#chip1", { opacity: 0, y: 390, duration: 0.18, ease: "power2.in" }, 8.5);
+    to("#chip2", { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 8.72);
     to(rail, { active: 2, duration: 0.25 }, 8.7);
     to("#col1", { x: 510, opacity: 1, duration: 0.55, ease: "expo.out" }, 8.85);
     to("#col2", { x: 510, opacity: 1, duration: 0.55, ease: "expo.out" }, 9.0);
@@ -146,8 +148,8 @@
 
     // S6 sentence 10.4–12.4
     to("#col1,#col2", { x: 1500, duration: 0.4, ease: "power2.in", stagger: 0.05 }, 10.2);
-    to("#chip2", { opacity: 0, y: 390, duration: 0.2, ease: "power2.in" }, 10.3);
-    to("#chip3", { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 10.45);
+    to("#chip2", { opacity: 0, y: 390, duration: 0.18, ease: "power2.in" }, 10.3);
+    to("#chip3", { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 10.52);
     to(rail, { active: 3, duration: 0.25 }, 10.5);
     to("#word", { scale: 0.22, opacity: 0, y: 720, duration: 0.35, ease: "power2.in" }, 10.3);
     to("#t3", { opacity: 1, duration: 0.15 }, 10.5);
@@ -159,8 +161,8 @@
     to("#t1,#t2,#t3", { y: 845, duration: 1.1, ease: "none" }, 11.25);
 
     // S7 speaking 12.4–14.2
-    to("#chip3", { opacity: 0, y: 390, duration: 0.2, ease: "power2.in" }, 12.3);
-    to("#chip6", { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 12.45);
+    to("#chip3", { opacity: 0, y: 390, duration: 0.18, ease: "power2.in" }, 12.3);
+    to("#chip6", { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 12.52);
     to(rail, { active: 6, duration: 0.5, ease: "power1.inOut" }, 12.4);
     to("#t1,#t2,#t3", { y: 620, duration: 0.5, ease: "power3.inOut" }, 12.3);
     to("#trans", { y: 760, scale: 0.8, duration: 0.5, ease: "power3.inOut" }, 12.3);
@@ -175,8 +177,8 @@
     to("#t1,#t2,#t3,#trans", { y: "-=200", opacity: 0, duration: 0.32, ease: "power2.in" }, 14.0);
 
     // S8 review 14.2–16.0
-    to("#chip6", { opacity: 0, y: 390, duration: 0.2, ease: "power2.in" }, 14.1);
-    to("#chip7", { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 14.25);
+    to("#chip6", { opacity: 0, y: 390, duration: 0.18, ease: "power2.in" }, 14.1);
+    to("#chip7", { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.7)" }, 14.32);
     to(rail, { active: 7, duration: 0.25 }, 14.3);
     to("#days", { y: 720, opacity: 1, duration: 0.5, ease: "expo.out" }, 14.25);
     to(fx, { dayHi: 3, duration: 0.45, ease: "power2.inOut" }, 14.7);
@@ -215,6 +217,8 @@
     to("#ovAI", { left: 0, top: 0, width: 568, height: 1168, borderRadius: 74, duration: 0.45, ease: "power3.inOut" }, 19.78);
     to("#ovAI .ovhead", { opacity: 1, duration: 0.25 }, 20.15);
     to("#q", { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.7)" }, 20.4);
+    to("#cinput", { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 20.2);
+    to("#ovAI .sug", { opacity: 1, y: 0, duration: 0.35, ease: "expo.out", stagger: 0.08 }, 20.3);
     to(fx, { typing: 1, duration: 0.15 }, 20.72);
     to(fx, { typing: 0, duration: 0.1 }, 21.1);
     tl.set("#ans", { opacity: 1 }, 21.15);
