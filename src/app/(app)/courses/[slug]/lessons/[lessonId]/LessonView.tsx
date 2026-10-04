@@ -165,35 +165,46 @@ export function LessonView({
               const locked = i > unlockedIndex;
               const passed = i < unlockedIndex;
               const current = i === activeIndex;
+              const unlocked = !locked;
+              const litSegments = passed ? 3 : current ? 1 : 0;
               return (
-                <div key={step.key} className="relative flex gap-3">
-                  {i < arr.length - 1 && <span className={`absolute start-4 top-8 bottom-[-0.75rem] w-px ${i < unlockedIndex ? "bg-teal" : "bg-line"}`} aria-hidden="true" />}
+                <div key={step.key} className="relative flex items-center gap-4">
+                  {i < arr.length - 1 && <span className={`absolute start-[7px] top-1/2 -bottom-3 w-px ${passed ? "bg-teal" : "bg-line"}`} aria-hidden="true" />}
                   <span
-                    className={`relative z-10 mt-0.5 grid size-8 shrink-0 place-items-center rounded-full border text-xs font-semibold ${
-                      current ? "border-teal bg-teal text-white" : passed ? "border-success bg-success text-white" : "border-line bg-surface text-ink-soft"
-                    }`}
-                  >
-                    {passed ? <CheckIcon width={13} height={13} /> : i + 1}
-                  </span>
+                    className={`relative z-10 size-4 shrink-0 rounded-full border-[3px] bg-surface ${unlocked ? "border-teal" : "border-line"}`}
+                    aria-hidden="true"
+                  />
                   <button
                     onClick={() => !locked && setActiveIndex(i)}
                     disabled={locked}
-                    className={`flex min-w-0 flex-1 items-center gap-3 rounded-field border p-3 text-start transition disabled:cursor-not-allowed ${
-                      current ? "border-teal bg-teal/5" : locked ? "border-line bg-cream-deep opacity-70" : "border-line bg-surface hover:bg-cream"
-                    }`}
+                    className="flex min-w-0 flex-1 items-center gap-3 rounded-2xl bg-surface py-2.5 pe-4 ps-2.5 text-start shadow-soft transition disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${current ? "bg-teal text-white" : "bg-cream-deep text-ink-soft"}`}>
-                      <step.Icon width={16} height={16} />
+                    <span
+                      className={`relative -my-1 -ms-5 grid size-14 shrink-0 rotate-[-4deg] place-items-center overflow-hidden rounded-tl-2xl rounded-tr-lg rounded-br-2xl rounded-bl-lg text-white shadow-lift ${
+                        unlocked ? "bg-teal" : "bg-line"
+                      }`}
+                    >
+                      <span className="absolute top-2 start-2.5 size-2 rounded-full bg-white/25" aria-hidden="true" />
+                      <span className="absolute end-2.5 bottom-2.5 size-1.5 rounded-full bg-white/20" aria-hidden="true" />
+                      <step.Icon width={20} height={20} className="relative rotate-[4deg]" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-semibold text-ink" dir="auto">
+                      <span className={`block truncate text-[15px] font-bold ${unlocked ? "text-ink" : "text-ink-faint"}`} dir="auto">
                         {step.title}
                       </span>
                       <span className="block truncate text-[12px] text-ink-faint" dir="auto">
                         {step.subtitle}
                       </span>
                     </span>
-                    {locked && <ShieldIcon width={14} height={14} className="shrink-0 text-ink-faint" />}
+                    {unlocked ? (
+                      <div className="flex shrink-0 items-center gap-1" aria-hidden="true">
+                        {[0, 1, 2].map((s) => (
+                          <span key={s} className={`h-1.5 w-4 rounded-full ${s < litSegments ? "bg-teal" : "bg-line"}`} />
+                        ))}
+                      </div>
+                    ) : (
+                      <ShieldIcon width={16} height={16} className="shrink-0 text-ink-faint" />
+                    )}
                   </button>
                 </div>
               );
