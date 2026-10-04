@@ -67,13 +67,12 @@
   --radius-field: 0.75rem;
   --radius-hero: 1.5rem;
 
-  /* Claymorphism: an outer drop shadow for lift off the page, plus an inset
-     highlight (top) and inset shade (bottom) so the surface itself reads as
-     a puffy, molded shape rather than a flat panel with a shadow under it. */
-  --shadow-soft: 0 2px 5px rgb(41 38 61 / 0.06), 0 10px 22px -10px rgb(41 38 61 / 0.18), inset 0 1.5px 1px rgb(255 255 255 / 0.7),
-    inset 0 -2px 3px rgb(41 38 61 / 0.05);
-  --shadow-lift: 0 6px 14px rgb(41 38 61 / 0.09), 0 22px 38px -14px rgb(41 38 61 / 0.28), inset 0 2px 1.5px rgb(255 255 255 / 0.75),
-    inset 0 -3px 4px rgb(41 38 61 / 0.06);
+  /* Neumorphism: a diagonal pair of soft, diffuse shadows — dark toward the
+     light source's far side, light (white) toward its near side — so a
+     surface close to the page's own color reads as gently raised out of it,
+     with no hard edge or border doing the work. */
+  --shadow-soft: 6px 6px 14px rgb(41 38 61 / 0.12), -6px -6px 14px rgb(255 255 255 / 0.9);
+  --shadow-lift: 10px 10px 24px rgb(41 38 61 / 0.14), -10px -10px 24px rgb(255 255 255 / 0.95);
 }
 
 html {
