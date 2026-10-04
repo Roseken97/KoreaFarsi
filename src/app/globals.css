@@ -67,8 +67,13 @@
   --radius-field: 0.75rem;
   --radius-hero: 1.5rem;
 
-  --shadow-soft: 0 2px 6px rgb(41 38 61 / 0.05), 0 10px 24px -8px rgb(41 38 61 / 0.14);
-  --shadow-lift: 0 4px 10px rgb(41 38 61 / 0.07), 0 20px 40px -12px rgb(41 38 61 / 0.22);
+  /* Claymorphism: an outer drop shadow for lift off the page, plus an inset
+     highlight (top) and inset shade (bottom) so the surface itself reads as
+     a puffy, molded shape rather than a flat panel with a shadow under it. */
+  --shadow-soft: 0 2px 5px rgb(41 38 61 / 0.06), 0 10px 22px -10px rgb(41 38 61 / 0.18), inset 0 1.5px 1px rgb(255 255 255 / 0.7),
+    inset 0 -2px 3px rgb(41 38 61 / 0.05);
+  --shadow-lift: 0 6px 14px rgb(41 38 61 / 0.09), 0 22px 38px -14px rgb(41 38 61 / 0.28), inset 0 2px 1.5px rgb(255 255 255 / 0.75),
+    inset 0 -3px 4px rgb(41 38 61 / 0.06);
 }
 
 html {

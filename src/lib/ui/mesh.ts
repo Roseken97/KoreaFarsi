@@ -23,10 +23,16 @@ export const MESH = {
 
 export type MeshColor = keyof typeof MESH;
 
-/** Matching restrained, realistic (not neon-glow) shadow for a mesh card. */
+/**
+ * Claymorphism: the restrained colored drop shadow for lift, plus an inset
+ * highlight (top) and inset shade (bottom) so the card itself reads as a
+ * puffy molded surface instead of a flat gradient fill with a shadow under it.
+ */
 export const MESH_SHADOW: Record<MeshColor, string> = {
-  violet: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(91_140_123_/_0.4)]",
-  clay: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(193_122_84_/_0.4)]",
-  indigo: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(74_107_138_/_0.4)]",
-  gold: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(201_154_62_/_0.4)]",
+  violet:
+    "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(91_140_123_/_0.4),inset_0_2px_1px_rgb(255_255_255_/_0.3),inset_0_-4px_6px_rgb(0_0_0_/_0.18)]",
+  clay: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(193_122_84_/_0.4),inset_0_2px_1px_rgb(255_255_255_/_0.3),inset_0_-4px_6px_rgb(0_0_0_/_0.18)]",
+  indigo:
+    "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(74_107_138_/_0.4),inset_0_2px_1px_rgb(255_255_255_/_0.3),inset_0_-4px_6px_rgb(0_0_0_/_0.18)]",
+  gold: "shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(201_154_62_/_0.4),inset_0_2px_1px_rgb(255_255_255_/_0.3),inset_0_-4px_6px_rgb(0_0_0_/_0.18)]",
 };
