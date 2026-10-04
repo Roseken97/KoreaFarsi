@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { CheckIcon, ChevronIcon, ShieldIcon } from "@/components/icons";
+import { BooksStackIcon, CheckIcon, ChevronIcon, ShieldIcon } from "@/components/icons";
 import { MotionCard } from "@/components/motion/MotionCard";
 import { SKILL_ICONS } from "@/lib/courses/skillIcons";
 import type { CourseResource, CourseReview, CourseSkill } from "@/lib/courses/types";
@@ -45,6 +45,19 @@ export function CourseDetailTabs({
   const flat = flattenLessons(units);
   const firstOpenId = flat.find((l) => !progress[l.id])?.id ?? flat[0]?.id ?? null;
 
+  // Each unit gets one identity color, cycling through the palette, so the
+  // step circle and the badge inside its lessons' cards read as one group.
+  const UNIT_COLORS = [
+    { badge: "bg-violet", ring: "ring-violet", border: "border-violet bg-violet" },
+    { badge: "bg-clay", ring: "ring-clay", border: "border-clay bg-clay" },
+    { badge: "bg-indigo", ring: "ring-indigo", border: "border-indigo bg-indigo" },
+    { badge: "bg-gold", ring: "ring-gold", border: "border-gold bg-gold" },
+  ] as const;
+  function colorFor(unitId: string) {
+    const i = units.findIndex((u) => u.id === unitId);
+    return UNIT_COLORS[(i < 0 ? 0 : i) % UNIT_COLORS.length];
+  }
+
   // Fallback for courses created before skills were editable per-course (0015).
   const defaultSkills: CourseSkill[] = [
     { icon: "listening", title: t.detail.skills.listening.title },
@@ -54,15 +67,19 @@ export function CourseDetailTabs({
   ];
   const skills = course.skills && course.skills.length > 0 ? course.skills : defaultSkills;
 
-  /** Numbered circle sits outside the lesson card, connected to the next one by a vertical line (sketch 07). */
+  /** Numbered circle sits outside the lesson card on a connecting timeline; the card carries a colored icon badge per unit. */
   function LessonRow({ lesson, index, isLast }: { lesson: (typeof flat)[number]; index: number; isLast: boolean }) {
     const isDone = Boolean(progress[lesson.id]);
     const isCurrent = !isDone && lesson.id === firstOpenId;
     const unlocked = isDone || isLessonUnlocked(units, progress, lesson.id);
-    const rowClass = `flex min-w-0 flex-1 items-center gap-3 rounded-field border bg-surface p-3 ${isCurrent ? "border-teal bg-teal/5" : "border-line"}`;
+    const color = colorFor(lesson.unit_id);
+    const rowClass = `flex min-w-0 flex-1 items-center gap-3 rounded-card bg-surface p-3 shadow-soft ${isCurrent ? `ring-2 ${color.ring}` : ""}`;
     const content = (
       <>
-        <span className={`min-w-0 flex-1 truncate text-sm font-medium ${unlocked ? "text-ink" : "text-ink-faint"}`} dir="auto">
+        <span className={`grid size-10 shrink-0 place-items-center rounded-2xl text-white ${unlocked ? color.badge : "bg-line text-ink-faint"}`}>
+          <BooksStackIcon width={18} height={18} />
+        </span>
+        <span className={`min-w-0 flex-1 truncate text-sm font-semibold ${unlocked ? "text-ink" : "text-ink-faint"}`} dir="auto">
           {locale === "en" ? lesson.title_en || lesson.title : lesson.title}
         </span>
         {unlocked ? (
@@ -74,16 +91,16 @@ export function CourseDetailTabs({
     );
     return (
       <div className="relative flex gap-3">
-        {!isLast && <span className="absolute start-4 top-8 bottom-[-0.75rem] w-px bg-line" aria-hidden="true" />}
+        {!isLast && <span className="absolute start-4 top-9 bottom-[-0.75rem] w-px bg-line" aria-hidden="true" />}
         <span
-          className={`relative z-10 mt-0.5 grid size-8 shrink-0 place-items-center rounded-full border text-xs font-semibold ${
-            isDone ? "border-success bg-success text-white" : "border-line bg-surface text-ink-soft"
+          className={`relative z-10 mt-0.5 grid size-8 shrink-0 place-items-center rounded-full border-2 text-xs font-bold ${
+            isDone ? "border-success bg-success text-white" : isCurrent ? `${color.border} text-white` : "border-line bg-surface text-ink-soft"
           }`}
         >
           {isDone ? <CheckIcon width={14} height={14} /> : formatNumber(index + 1, locale)}
         </span>
         {unlocked ? (
-          <MotionCard href={`/courses/${course.slug}/lessons/${lesson.id}`} tilt={false} className={`${rowClass} hover:bg-cream`}>
+          <MotionCard href={`/courses/${course.slug}/lessons/${lesson.id}`} tilt={false} className={rowClass}>
             {content}
           </MotionCard>
         ) : (
