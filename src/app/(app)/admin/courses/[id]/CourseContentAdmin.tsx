@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
@@ -17,7 +17,8 @@ import {
   type LessonInput,
   type ResourceInput,
 } from "@/lib/courses/admin-actions";
-import type { Course, CourseLesson, CourseResource, CourseUnit, LessonMaterial, SlideContent, VocabularyEntry } from "@/lib/courses/types";
+import type { Course, CourseLesson, CourseResource, CourseUnit, LessonMaterial, SlideContent, UnitIconKey, VocabularyEntry } from "@/lib/courses/types";
+import { UNIT_ICON_KEYS, UNIT_ICONS } from "@/lib/courses/unitIcons";
 import { createClient } from "@/lib/supabase/client";
 
 const EMPTY_LESSON = (unitId: string, courseId: string, sortOrder: number): LessonInput => ({
@@ -83,16 +84,18 @@ export function CourseContentAdmin({ course, units, lessons, resources }: { cour
   const [status, setStatus] = useState<{ tone: "error" | "success"; text: string } | null>(null);
   const [newUnitTitle, setNewUnitTitle] = useState("");
   const [newUnitTitleEn, setNewUnitTitleEn] = useState("");
+  const [newUnitIcon, setNewUnitIcon] = useState<UnitIconKey>("book");
   const [addingUnit, setAddingUnit] = useState(false);
 
   async function addUnit(e: FormEvent) {
     e.preventDefault();
     setAddingUnit(true);
-    const result = await saveUnit({ id: null, course_id: course.id, title: newUnitTitle, title_en: newUnitTitleEn, sort_order: units.length });
+    const result = await saveUnit({ id: null, course_id: course.id, title: newUnitTitle, title_en: newUnitTitleEn, sort_order: units.length, icon: newUnitIcon });
     setAddingUnit(false);
     if (!result.ok) return setStatus({ tone: "error", text: errorText(result) });
     setNewUnitTitle("");
     setNewUnitTitleEn("");
+    setNewUnitIcon("book");
   }
 
   return (
@@ -102,6 +105,15 @@ export function CourseContentAdmin({ course, units, lessons, resources }: { cour
       <form onSubmit={addUnit} className="flex flex-col gap-3 rounded-card bg-surface p-4 shadow-soft sm:flex-row sm:items-end">
         <Field label="New unit title (Persian)" value={newUnitTitle} onChange={(e) => setNewUnitTitle(e.target.value)} className="flex-1" />
         <Field label="Title (English)" value={newUnitTitleEn} onChange={(e) => setNewUnitTitleEn(e.target.value)} ltr className="flex-1" />
+        <Labeled label="Icon">
+          <select value={newUnitIcon} onChange={(e) => setNewUnitIcon(e.target.value as UnitIconKey)} className={selectClass}>
+            {UNIT_ICON_KEYS.map((key) => (
+              <option key={key} value={key}>
+                {key}
+              </option>
+            ))}
+          </select>
+        </Labeled>
         <Button type="submit" loading={addingUnit} className="w-auto! shrink-0 px-6">
           Add unit
         </Button>
@@ -252,13 +264,32 @@ function ResourceForm({
 function UnitBlock({ unit, course, lessons, onError }: { unit: CourseUnit; course: Course; lessons: CourseLesson[]; onError: (text: string) => void }) {
   const [addingLesson, setAddingLesson] = useState(false);
   const [editing, setEditing] = useState<LessonInput | null>(null);
+  const [savingIcon, setSavingIcon] = useState(false);
+  const Icon = UNIT_ICONS[unit.icon];
+
+  async function changeIcon(icon: UnitIconKey) {
+    setSavingIcon(true);
+    const result = await saveUnit({ id: unit.id, course_id: course.id, title: unit.title, title_en: unit.title_en ?? "", sort_order: unit.sort_order, icon });
+    setSavingIcon(false);
+    if (!result.ok) onError(errorText(result));
+  }
 
   return (
     <section className="rounded-card border border-line bg-surface p-4 shadow-soft">
-      <div className="flex items-center justify-between">
-        <h3 className="font-display text-lg font-semibold" dir="auto">
-          {unit.title}
-        </h3>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2">
+          <Icon width={18} height={18} className="shrink-0 text-ink-faint" />
+          <h3 className="min-w-0 truncate font-display text-lg font-semibold" dir="auto">
+            {unit.title}
+          </h3>
+        </div>
+        <select value={unit.icon} disabled={savingIcon} onChange={(e) => changeIcon(e.target.value as UnitIconKey)} className={`${selectClass} h-9 shrink-0 text-xs`}>
+          {UNIT_ICON_KEYS.map((key) => (
+            <option key={key} value={key}>
+              {key}
+            </option>
+          ))}
+        </select>
         <button
           onClick={async () => {
             if (!confirm(`Delete unit "${unit.title}" and all its lessons?`)) return;
@@ -266,7 +297,7 @@ function UnitBlock({ unit, course, lessons, onError }: { unit: CourseUnit; cours
             if (!result.ok) onError(errorText(result));
           }}
           aria-label="Delete unit"
-          className="grid size-8 place-items-center rounded-full text-ink-faint hover:bg-danger-soft hover:text-danger"
+          className="grid size-8 shrink-0 place-items-center rounded-full text-ink-faint hover:bg-danger-soft hover:text-danger"
         >
           <TrashIcon width={16} height={16} />
         </button>
@@ -590,3 +621,13 @@ function MaterialsEditor({
 
 const inputClass = "h-10 rounded-field border border-line bg-cream px-3 text-sm outline-none focus:border-teal focus:ring-4 focus:ring-teal/15";
 const textareaClass = "rounded-field border border-line bg-surface px-3 py-2 text-sm leading-6 outline-none focus:border-teal focus:ring-4 focus:ring-teal/15";
+const selectClass = "h-13 rounded-field border border-line bg-surface px-4 text-[15px] outline-none focus:border-teal focus:ring-4 focus:ring-teal/15";
+
+function Labeled({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="text-sm font-medium">{label}</span>
+      {children}
+    </div>
+  );
+}

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getAdminUser } from "@/lib/admin";
 import { hasServiceRole, supabaseAdmin } from "@/lib/supabase/admin";
-import type { Course, CourseLesson, CourseResource, CourseSkill, CourseUnit, LessonMaterial, SlideContent, VocabularyEntry } from "./types";
+import type { Course, CourseLesson, CourseResource, CourseSkill, CourseUnit, LessonMaterial, SlideContent, UnitIconKey, VocabularyEntry } from "./types";
 
 export type AdminResult = { ok: true } | { ok: false; error: "forbidden" | "slug" | "title" | "generic" };
 export type UploadTicketResult = { ok: true; path: string; token: string; bucket: "courses" } | { ok: false; error: "forbidden" | "generic" };
@@ -118,12 +118,12 @@ export async function deleteCourse(id: string): Promise<AdminResult> {
   return { ok: true };
 }
 
-export async function saveUnit(input: { id: string | null; course_id: string; title: string; title_en: string; sort_order: number }): Promise<AdminResult> {
+export async function saveUnit(input: { id: string | null; course_id: string; title: string; title_en: string; sort_order: number; icon: UnitIconKey }): Promise<AdminResult> {
   const store = await guard();
   if (!store) return { ok: false, error: "forbidden" };
   const title = input.title.trim();
   if (!title) return { ok: false, error: "title" };
-  const row = { course_id: input.course_id, title, title_en: input.title_en.trim() || null, sort_order: input.sort_order };
+  const row = { course_id: input.course_id, title, title_en: input.title_en.trim() || null, sort_order: input.sort_order, icon: input.icon };
   const { error } = input.id ? await store.from("course_units").update(row).eq("id", input.id) : await store.from("course_units").insert(row);
   if (error) return { ok: false, error: "generic" };
   revalidatePath(`/admin/courses/${input.course_id}`);

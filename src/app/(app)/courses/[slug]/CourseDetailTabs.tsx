@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { BooksStackIcon, ChevronIcon, ShieldIcon } from "@/components/icons";
+import { ChevronIcon, ShieldIcon } from "@/components/icons";
 import { MotionCard } from "@/components/motion/MotionCard";
 import { SKILL_ICONS } from "@/lib/courses/skillIcons";
 import type { CourseResource, CourseReview, CourseSkill } from "@/lib/courses/types";
 import { flattenLessons, isLessonUnlocked, type CourseOutline } from "@/lib/courses/types";
+import { UNIT_ICONS } from "@/lib/courses/unitIcons";
 import { fmt, formatNumber, type Locale } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
 import { ResourcesTab } from "./ResourcesTab";
@@ -57,6 +58,9 @@ export function CourseDetailTabs({
     const i = units.findIndex((u) => u.id === unitId);
     return UNIT_COLORS[(i < 0 ? 0 : i) % UNIT_COLORS.length];
   }
+  function iconFor(unitId: string) {
+    return UNIT_ICONS[units.find((u) => u.id === unitId)?.icon ?? "book"];
+  }
 
   // Fallback for courses created before skills were editable per-course (0015).
   const defaultSkills: CourseSkill[] = [
@@ -77,6 +81,7 @@ export function CourseDetailTabs({
     const isCurrent = !isDone && lesson.id === firstOpenId;
     const unlocked = isDone || isLessonUnlocked(units, progress, lesson.id);
     const color = colorFor(lesson.unit_id);
+    const Icon = iconFor(lesson.unit_id);
     const litSegments = isDone ? 3 : isCurrent ? 1 : 0;
     const rowClass = "flex min-w-0 flex-1 items-center gap-3 rounded-2xl bg-surface py-2.5 pe-4 ps-2.5 shadow-soft";
     const content = (
@@ -88,7 +93,7 @@ export function CourseDetailTabs({
         >
           <span className="absolute top-2 start-2.5 size-2 rounded-full bg-white/25" aria-hidden="true" />
           <span className="absolute end-2.5 bottom-2.5 size-1.5 rounded-full bg-white/20" aria-hidden="true" />
-          <BooksStackIcon width={20} height={20} className="relative rotate-[4deg]" />
+          <Icon width={20} height={20} className="relative rotate-[4deg]" />
         </span>
         <span className={`min-w-0 flex-1 truncate text-[15px] font-bold ${unlocked ? "text-ink" : "text-ink-faint"}`} dir="auto">
           {locale === "en" ? lesson.title_en || lesson.title : lesson.title}
@@ -227,7 +232,7 @@ export function CourseDetailTabs({
                 <ul className="flex flex-col gap-4">
                   {unit.lessons.map((lesson, i, arr) => (
                     <li key={lesson.id}>
-                      <LessonRow lesson={{ ...lesson, unitTitle: unit.title, unitTitleEn: unit.title_en }} isLast={i === arr.length - 1} />
+                      <LessonRow lesson={{ ...lesson, unitTitle: unit.title, unitTitleEn: unit.title_en, unitIcon: unit.icon }} isLast={i === arr.length - 1} />
                     </li>
                   ))}
                 </ul>

@@ -6,6 +6,9 @@ export type LessonMaterial = { title: string; title_en?: string; file_path: stri
 export type SkillIconKey = "listening" | "reading" | "writing" | "speaking" | "vocabulary" | "grammar" | "pronunciation" | "culture";
 export type CourseSkill = { icon: SkillIconKey; title: string; title_en?: string };
 
+/** Preset icon choices for a course unit's badge on the Lessons timeline (mapped to real icons in unitIcons.tsx). */
+export type UnitIconKey = "book" | "sparkle" | "chat" | "people" | "food" | "palette" | "globe" | "mic" | "headphones" | "pencil" | "tag" | "flame";
+
 /** Mirrors public.courses (supabase/migrations/0009_courses.sql, skills added in 0015). */
 export type Course = {
   id: string;
@@ -28,6 +31,7 @@ export type CourseUnit = {
   title: string;
   title_en: string | null;
   sort_order: number;
+  icon: UnitIconKey;
 };
 
 export type CourseLesson = {
@@ -104,7 +108,7 @@ export function completedCount(units: UnitWithLessons[], progress: Record<string
 
 /** Flat, ordered lesson list — used to find a lesson's course-wide neighbors and its "first not done". */
 export function flattenLessons(units: UnitWithLessons[]) {
-  return units.flatMap((u) => u.lessons.map((l) => ({ ...l, unitTitle: u.title, unitTitleEn: u.title_en })));
+  return units.flatMap((u) => u.lessons.map((l) => ({ ...l, unitTitle: u.title, unitTitleEn: u.title_en, unitIcon: u.icon })));
 }
 
 /**
