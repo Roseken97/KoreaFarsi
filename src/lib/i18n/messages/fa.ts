@@ -687,20 +687,29 @@ export const fa: Messages = {
     subtitle: "برنامه‌ی مطالعه‌ای متناسب با زمان و هدف واقعی تو.",
     setup: {
       title: "بیا برنامه‌ات را بسازیم",
-      subtitle: "چهار سؤال کوتاه — هر وقت خواستی می‌توانی تغییرش بدهی.",
+      subtitle: "۵ سؤال کوتاه — هر وقت خواستی می‌توانی تغییرش بدهی.",
       levelLabel: "سطح فعلی تو",
+      coursesLabel: "کدام دوره‌ها را می‌خواهی پیش ببری؟",
+      coursesEmpty: "هنوز دوره‌ای موجود نیست.",
+      hoursLabel: "چند ساعت در هفته وقت می‌ذاری؟",
       daysLabel: "کدام روزها می‌توانی مطالعه کنی؟",
-      minutesLabel: "چند دقیقه در روزهای مطالعه",
       categoriesLabel: "روی چه چیزی می‌خواهی تمرکز کنی؟",
       goalLabel: "هدف (اختیاری)",
       goalPlaceholder: "مثلاً سفر به کره، TOPIK، دانشگاه…",
       submit: "ساخت برنامه‌ی من",
-      errors: { invalid: "حداقل یک روز و یک حوزه‌ی تمرکز انتخاب کن.", generic: "برنامه ذخیره نشد. دوباره تلاش کن." },
+      estimate: "با این سرعت، دوره‌های انتخابی‌ات رو تقریباً تو {weeks} هفته تموم می‌کنی.",
+      errors: {
+        invalid: "حداقل یک روز و یک حوزه‌ی تمرکز انتخاب کن.",
+        noCourses: "حداقل یک دوره انتخاب کن.",
+        generic: "برنامه ذخیره نشد. دوباره تلاش کن.",
+      },
     },
     day: { 0: "یک", 1: "دو", 2: "سه", 3: "چهار", 4: "پنج", 5: "جمعه", 6: "شنبه" },
     categoryLabel: { watch: "تماشا", review: "مرور", practice: "تمرین", speak: "صحبت" },
     editPlan: "ویرایش برنامه",
     setupCta: "ساخت برنامه‌ام",
+    tabs: { profile: "پروفایل", daily: "روزانه", weekly: "هفتگی", monthly: "ماهانه", yearly: "سالانه" },
+    progressComplete: "{pct}٪ تکمیل",
     today: {
       title: "تسک‌های امروز",
       empty: "برای امروز روز مطالعه‌ای برنامه‌ریزی نشده.",
@@ -710,6 +719,14 @@ export const fa: Messages = {
     week: {
       title: "این هفته",
       doneOf: "{done}/{total}",
+    },
+    month: {
+      title: "این ماه",
+      doneOf: "{done}/{total} تسک",
+    },
+    year: {
+      title: "امسال",
+      doneOf: "{done}/{total} تسک",
     },
     streak: {
       label: "روز پیاپی",

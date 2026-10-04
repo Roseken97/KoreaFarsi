@@ -30,6 +30,16 @@ export async function getCourseLessonCounts(courseIds: string[]): Promise<Record
   return counts;
 }
 
+/** Total lesson minutes per course — the Planner setup uses this to estimate a finish date from hours/week. */
+export async function getCourseMinutes(courseIds: string[]): Promise<Record<string, number>> {
+  if (!isSupabaseConfigured || courseIds.length === 0) return {};
+  const supabase = await createClient();
+  const { data } = await supabase.from("course_lessons").select("course_id, duration_minutes").in("course_id", courseIds);
+  const minutes: Record<string, number> = {};
+  for (const row of data ?? []) minutes[row.course_id] = (minutes[row.course_id] ?? 0) + (row.duration_minutes ?? 0);
+  return minutes;
+}
+
 /** Whether the signed-in user (if any) can watch this course's videos. */
 async function checkAccess(courseProductId: string | null, userId: string | null) {
   if (!courseProductId) return Boolean(userId); // open course: any signed-in user

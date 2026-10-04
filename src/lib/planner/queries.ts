@@ -1,7 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
-import { addDays, lastNDays, toDateKey } from "./dates";
+import { addDays, lastNDays, monthRange, toDateKey, yearRange } from "./dates";
 import type { PlannerTask, StudyPlan } from "./types";
 
 export async function getActivePlan(): Promise<StudyPlan | null> {
@@ -68,10 +68,10 @@ export async function getTodayTasks(): Promise<{ plan: StudyPlan | null; tasks: 
   return { plan, tasks: await getTasksForDate(plan.id, new Date()) };
 }
 
-/** Tasks for the last 7 days (oldest first), for the Planner page's weekly view. */
-export async function getWeekTasks(planId: string): Promise<Record<string, PlannerTask[]>> {
+/** Tasks for the 7 days ending `endDate` (oldest first), for the Planner page's weekly view. */
+export async function getWeekTasks(planId: string, endDate = new Date()): Promise<Record<string, PlannerTask[]>> {
   const supabase = await createClient();
-  const days = lastNDays(7);
+  const days = lastNDays(7, endDate);
   const { data, error } = await supabase
     .from("planner_tasks")
     .select("*")
@@ -86,6 +86,34 @@ export async function getWeekTasks(planId: string): Promise<Record<string, Plann
     (byDate[task.task_date] ??= []).push(task);
   }
   return byDate;
+}
+
+/** Tasks for one calendar month — there is no separate "monthly plan" row, this aggregates the same daily tasks. */
+export async function getMonthTasks(planId: string, year: number, month: number): Promise<PlannerTask[]> {
+  const supabase = await createClient();
+  const { start, end } = monthRange(year, month);
+  const { data, error } = await supabase
+    .from("planner_tasks")
+    .select("*")
+    .eq("plan_id", planId)
+    .gte("task_date", toDateKey(start))
+    .lte("task_date", toDateKey(end));
+  if (error) console.error("[planner] getMonthTasks:", error.message);
+  return (data as PlannerTask[] | null) ?? [];
+}
+
+/** Tasks for one calendar year, for the yearly view's month-by-month breakdown. */
+export async function getYearTasks(planId: string, year: number): Promise<PlannerTask[]> {
+  const supabase = await createClient();
+  const { start, end } = yearRange(year);
+  const { data, error } = await supabase
+    .from("planner_tasks")
+    .select("*")
+    .eq("plan_id", planId)
+    .gte("task_date", toDateKey(start))
+    .lte("task_date", toDateKey(end));
+  if (error) console.error("[planner] getYearTasks:", error.message);
+  return (data as PlannerTask[] | null) ?? [];
 }
 
 /**

@@ -698,20 +698,29 @@ export const en = {
     subtitle: "A study plan built around your real time and goals.",
     setup: {
       title: "Let's build your plan",
-      subtitle: "Four quick questions — you can change this anytime.",
+      subtitle: "5 quick questions — you can change this anytime.",
       levelLabel: "Your current level",
+      coursesLabel: "Which courses do you want to study?",
+      coursesEmpty: "No courses available yet.",
+      hoursLabel: "How many hours a week can you commit?",
       daysLabel: "Which days can you study?",
-      minutesLabel: "Minutes per study day",
       categoriesLabel: "What do you want to focus on?",
       goalLabel: "Goal (optional)",
       goalPlaceholder: "e.g. Travel to Korea, TOPIK, university…",
       submit: "Create my plan",
-      errors: { invalid: "Please pick at least one day and one focus area.", generic: "Couldn't save your plan. Please try again." },
+      estimate: "At this pace, you'll finish your selected courses in about {weeks} weeks.",
+      errors: {
+        invalid: "Please pick at least one day and one focus area.",
+        noCourses: "Please pick at least one course.",
+        generic: "Couldn't save your plan. Please try again.",
+      },
     },
     day: { 0: "Sun", 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri", 6: "Sat" } as Record<number, string>,
     categoryLabel: { watch: "Watch", review: "Review", practice: "Practice", speak: "Speak" },
     editPlan: "Edit plan",
     setupCta: "Set up my plan",
+    tabs: { profile: "Profile", daily: "Daily", weekly: "Weekly", monthly: "Monthly", yearly: "Yearly" },
+    progressComplete: "{pct}% complete",
     today: {
       title: "Today's Tasks",
       empty: "No study day scheduled for today.",
@@ -721,6 +730,14 @@ export const en = {
     week: {
       title: "This Week",
       doneOf: "{done}/{total}",
+    },
+    month: {
+      title: "This Month",
+      doneOf: "{done}/{total} tasks",
+    },
+    year: {
+      title: "This Year",
+      doneOf: "{done}/{total} tasks",
     },
     streak: {
       label: "Day streak",

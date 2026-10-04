@@ -13,6 +13,8 @@ export type StudyPlan = {
   categories: TaskCategory[];
   goal: string | null;
   target_date: string | null;
+  course_ids: string[];
+  hours_per_week: number | null;
   is_active: boolean;
   created_at: string;
 };
@@ -29,7 +31,8 @@ export type PlannerTask = {
 
 export type PlanInput = {
   level: PlanLevel;
-  minutesPerDay: number;
+  courseIds: string[];
+  hoursPerWeek: number;
   daysOfWeek: number[];
   categories: TaskCategory[];
   goal?: string;

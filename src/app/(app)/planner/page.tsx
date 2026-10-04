@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { PlanWizard } from "@/components/planner/PlanWizard";
-import { TaskItem } from "@/components/planner/TaskItem";
-import { WeekOverview } from "@/components/planner/WeekOverview";
+import { DailyPanel } from "@/components/planner/DailyPanel";
+import { MonthlyPanel } from "@/components/planner/MonthlyPanel";
+import { PLANNER_TABS, PlannerCarousel, type PlannerTab } from "@/components/planner/PlannerCarousel";
+import { ProfileSetupPanel } from "@/components/planner/ProfileSetupPanel";
+import { WeeklyPanel } from "@/components/planner/WeeklyPanel";
+import { YearlyPanel } from "@/components/planner/YearlyPanel";
+import type { CalendarStripItem } from "@/components/planner/CalendarStrip";
 import { PageHeader } from "@/components/shell/PageHeader";
-import { FlameIcon } from "@/components/icons";
+import { getCourseMinutes, getCourses } from "@/lib/courses/queries";
 import { getMessages } from "@/lib/i18n/server";
-import { lastNDays } from "@/lib/planner/dates";
-import { computeStreak, getActivePlan, getTasksForDate, getWeekTasks } from "@/lib/planner/queries";
-import { formatNumber } from "@/lib/i18n/config";
+import { addDays, lastNDays, toDateKey } from "@/lib/planner/dates";
+import { getActivePlan, getMonthTasks, getTasksForDate, getWeekTasks, getYearTasks } from "@/lib/planner/queries";
+import { seasonalTheme } from "@/lib/planner/season";
+import { getProfile } from "@/lib/profile";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { getCurrentUser } from "@/lib/supabase/server";
 
@@ -17,74 +22,119 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: m.planner.metaTitle };
 }
 
-/** Planner (Phase 2, part 2): a short setup wizard, then real daily tasks. */
-export default async function PlannerPage() {
+function isPlannerTab(v: unknown): v is PlannerTab {
+  return typeof v === "string" && (PLANNER_TABS as readonly string[]).includes(v);
+}
+
+/** Planner: a 5-page carousel (Profile setup, Daily, Weekly, Monthly, Yearly), themed by the season/holiday on the system date. */
+export default async function PlannerPage(props: PageProps<"/planner">) {
   if (isSupabaseConfigured && !(await getCurrentUser())) redirect("/auth/login?next=/planner");
 
-  const [{ m, locale }, plan] = await Promise.all([getMessages(), getActivePlan()]);
+  const sp = await props.searchParams;
+  const [{ m, locale }, plan, profile] = await Promise.all([getMessages(), getActivePlan(), getProfile()]);
+
+  const requestedTab = isPlannerTab(sp.tab) ? sp.tab : null;
+  const tab: PlannerTab = !plan ? "profile" : (requestedTab ?? "daily");
+  const theme = seasonalTheme();
+
+  const labels = m.planner.tabs;
 
   return (
     <div className="animate-fade-up max-w-3xl">
       <PageHeader />
-      <h1 className="font-display text-3xl font-semibold">{m.planner.title}</h1>
-      <p className="mt-1 mb-6 text-sm text-ink-soft">{m.planner.subtitle}</p>
+      <div
+        className="mb-5 flex items-center justify-between rounded-card p-4"
+        style={{ backgroundImage: theme.gradient }}
+      >
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-ink">{m.planner.title}</h1>
+          <p className="mt-0.5 text-sm text-ink-soft">{m.planner.subtitle}</p>
+        </div>
+        <span className="rounded-full bg-surface/80 px-3 py-1.5 text-xs font-semibold text-ink shadow-soft backdrop-blur">{theme.label}</span>
+      </div>
 
-      {!plan ? (
-        <PlanWizard />
-      ) : (
-        <PlanView plan={plan} m={m} locale={locale} />
-      )}
+      <PlannerCarousel active={tab} labels={labels}>
+        {tab === "profile" || !plan ? (
+          await renderProfile(profile)
+        ) : tab === "daily" ? (
+          await renderDaily(plan.id, sp.day, m, locale, theme.accent)
+        ) : tab === "weekly" ? (
+          await renderWeekly(plan.id, sp.week, m, theme.accent)
+        ) : tab === "monthly" ? (
+          await renderMonthly(plan.id, sp.month, m, theme.accent)
+        ) : (
+          await renderYearly(plan.id, sp.year, m, locale, theme.accent)
+        )}
+      </PlannerCarousel>
     </div>
   );
 }
 
-async function PlanView({ plan, m, locale }: { plan: NonNullable<Awaited<ReturnType<typeof getActivePlan>>>; m: Awaited<ReturnType<typeof getMessages>>["m"]; locale: Awaited<ReturnType<typeof getMessages>>["locale"] }) {
-  const today = new Date();
-  const [todayTasks, weekTasks, streak] = await Promise.all([
-    getTasksForDate(plan.id, today),
-    getWeekTasks(plan.id),
-    computeStreak(plan.id),
-  ]);
-  const t = m.planner;
+async function renderProfile(profile: Awaited<ReturnType<typeof getProfile>>) {
+  const courses = await getCourses();
+  const courseMinutes = await getCourseMinutes(courses.map((c) => c.id));
+  return <ProfileSetupPanel profile={profile} courses={courses} courseMinutes={courseMinutes} />;
+}
 
-  return (
-    <div className="flex flex-col gap-8">
-      <section className="flex items-center gap-3 rounded-card bg-gradient-to-br from-sage-soft to-cream-deep p-4">
-        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-surface text-danger/80 shadow-soft">
-          <FlameIcon width={22} height={22} />
-        </span>
-        <div>
-          <p className="font-display text-xl font-semibold">
-            {formatNumber(streak, locale)} {t.streak.label}
-          </p>
-          {streak === 0 && <p className="text-xs text-ink-soft">{t.streak.none}</p>}
-        </div>
-      </section>
+async function renderDaily(planId: string, dayParam: string | string[] | undefined, m: Awaited<ReturnType<typeof getMessages>>["m"], locale: Awaited<ReturnType<typeof getMessages>>["locale"], accent: string) {
+  const selected = typeof dayParam === "string" && !Number.isNaN(Date.parse(dayParam)) ? new Date(dayParam) : new Date();
+  const tasks = await getTasksForDate(planId, selected);
 
-      <WeekOverview days={lastNDays(7)} byDate={weekTasks} m={m} />
+  const stripItems: CalendarStripItem[] = lastNDays(9, addDays(selected, 4)).map((d) => ({
+    key: toDateKey(d),
+    label: String(d.getDate()),
+    sub: d.toLocaleDateString(locale === "fa" ? "fa-IR" : "en-US", { weekday: "short" }),
+    href: `/planner?tab=daily&day=${toDateKey(d)}`,
+    active: toDateKey(d) === toDateKey(selected),
+  }));
 
-      <section>
-        <h2 className="mb-3 font-display text-xl font-semibold">{t.today.title}</h2>
-        {todayTasks.length === 0 ? (
-          <p className="rounded-card border border-dashed border-line p-6 text-center text-sm text-ink-soft">{t.today.empty}</p>
-        ) : todayTasks.every((task) => task.is_done) ? (
-          <p className="rounded-card bg-success-soft p-6 text-center text-sm font-medium text-success">{t.today.allDone}</p>
-        ) : null}
-        {todayTasks.length > 0 && (
-          <ul className="mt-3 flex flex-col gap-2">
-            {todayTasks.map((task) => (
-              <TaskItem key={task.id} task={task} />
-            ))}
-          </ul>
-        )}
-      </section>
+  return <DailyPanel tasks={tasks} stripItems={stripItems} m={m} accent={accent} />;
+}
 
-      <details className="rounded-card bg-surface p-4 shadow-soft">
-        <summary className="cursor-pointer text-sm font-medium text-ink-soft">{t.editPlan}</summary>
-        <div className="mt-4">
-          <PlanWizard />
-        </div>
-      </details>
-    </div>
-  );
+async function renderWeekly(planId: string, weekParam: string | string[] | undefined, m: Awaited<ReturnType<typeof getMessages>>["m"], accent: string) {
+  const selected = typeof weekParam === "string" && !Number.isNaN(Date.parse(weekParam)) ? new Date(weekParam) : new Date();
+  const byDate = await getWeekTasks(planId, selected);
+  const days = lastNDays(7, selected);
+
+  const stripItems: CalendarStripItem[] = Array.from({ length: 5 }, (_, i) => addDays(selected, (i - 2) * 7)).map((d) => ({
+    key: toDateKey(d),
+    label: String(d.getDate()),
+    sub: d.toLocaleDateString(undefined, { month: "short" }),
+    href: `/planner?tab=weekly&week=${toDateKey(d)}`,
+    active: toDateKey(d) === toDateKey(selected),
+  }));
+
+  return <WeeklyPanel days={days} byDate={byDate} stripItems={stripItems} m={m} accent={accent} />;
+}
+
+async function renderMonthly(planId: string, monthParam: string | string[] | undefined, m: Awaited<ReturnType<typeof getMessages>>["m"], accent: string) {
+  const now = new Date();
+  const match = typeof monthParam === "string" ? /^(\d{4})-(\d{2})$/.exec(monthParam) : null;
+  const year = match ? Number(match[1]) : now.getFullYear();
+  const month = match ? Number(match[2]) - 1 : now.getMonth();
+  const tasks = await getMonthTasks(planId, year, month);
+
+  const stripItems: CalendarStripItem[] = Array.from({ length: 12 }, (_, i) => i).map((i) => ({
+    key: `${year}-${i}`,
+    label: new Date(year, i, 1).toLocaleDateString(undefined, { month: "short" }),
+    href: `/planner?tab=monthly&month=${year}-${String(i + 1).padStart(2, "0")}`,
+    active: i === month,
+  }));
+
+  return <MonthlyPanel year={year} month={month} tasks={tasks} stripItems={stripItems} m={m} accent={accent} />;
+}
+
+async function renderYearly(planId: string, yearParam: string | string[] | undefined, m: Awaited<ReturnType<typeof getMessages>>["m"], locale: Awaited<ReturnType<typeof getMessages>>["locale"], accent: string) {
+  const now = new Date();
+  const year = typeof yearParam === "string" && /^\d{4}$/.test(yearParam) ? Number(yearParam) : now.getFullYear();
+  const tasks = await getYearTasks(planId, year);
+
+  const stripItems: CalendarStripItem[] = Array.from({ length: 8 }, (_, i) => now.getFullYear() - 5 + i).map((y) => ({
+    key: String(y),
+    label: String(y),
+    href: `/planner?tab=yearly&year=${y}`,
+    active: y === year,
+  }));
+
+  return <YearlyPanel year={year} tasks={tasks} stripItems={stripItems} m={m} locale={locale} accent={accent} />;
 }
