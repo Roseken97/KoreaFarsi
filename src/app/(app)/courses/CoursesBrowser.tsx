@@ -43,7 +43,7 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
             const meshColor = LEVEL_MESH[levelBucket(c.level) ?? "beginner"];
             return (
               <li key={c.id}>
-                <MotionCard href={`/courses/${c.slug}`} tilt={false} className="flex items-center gap-4 rounded-card border border-line/60 bg-surface p-3.5 shadow-soft">
+                <MotionCard href={`/courses/${c.slug}`} tilt={false} className="flex items-center gap-4 rounded-2xl bg-surface py-3.5 pe-4 ps-3 shadow-soft">
                   {c.cover_image_url ? (
                     <div className="relative size-[92px] shrink-0 overflow-hidden rounded-2xl bg-cream-deep">
                       <Image src={c.cover_image_url} alt="" fill sizes="92px" className="object-cover" />
@@ -51,10 +51,11 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
                   ) : (
                     <div
                       style={{ backgroundImage: MESH[meshColor] }}
-                      className={`card-grain relative grid size-[92px] shrink-0 place-items-center overflow-hidden rounded-2xl text-white ${MESH_SHADOW[meshColor]}`}
+                      className={`card-grain relative -my-1 -ms-2 grid size-[92px] shrink-0 rotate-[-4deg] place-items-center overflow-hidden rounded-tl-3xl rounded-tr-xl rounded-br-3xl rounded-bl-xl text-white ${MESH_SHADOW[meshColor]}`}
                     >
-                      <span className="absolute start-2 top-2 text-[9px] font-semibold tracking-wide opacity-80">KoreaFarsi</span>
-                      <BooksStackIcon width={30} height={30} />
+                      <span className="absolute top-2.5 start-2.5 size-2 rounded-full bg-white/25" aria-hidden="true" />
+                      <span className="absolute end-2.5 bottom-2.5 size-1.5 rounded-full bg-white/20" aria-hidden="true" />
+                      <BooksStackIcon width={30} height={30} className="relative rotate-[4deg]" />
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
