@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { BooksStackIcon, CheckIcon, ChevronIcon, ShieldIcon } from "@/components/icons";
+import { BooksStackIcon, ChevronIcon, ShieldIcon } from "@/components/icons";
 import { MotionCard } from "@/components/motion/MotionCard";
 import { SKILL_ICONS } from "@/lib/courses/skillIcons";
 import type { CourseResource, CourseReview, CourseSkill } from "@/lib/courses/types";
@@ -46,12 +46,12 @@ export function CourseDetailTabs({
   const firstOpenId = flat.find((l) => !progress[l.id])?.id ?? flat[0]?.id ?? null;
 
   // Each unit gets one identity color, cycling through the palette, so the
-  // step circle and the badge inside its lessons' cards read as one group.
+  // timeline marker and the badge inside its lessons' cards read as one group.
   const UNIT_COLORS = [
-    { badge: "bg-violet", ring: "ring-violet", border: "border-violet bg-violet" },
-    { badge: "bg-clay", ring: "ring-clay", border: "border-clay bg-clay" },
-    { badge: "bg-indigo", ring: "ring-indigo", border: "border-indigo bg-indigo" },
-    { badge: "bg-gold", ring: "ring-gold", border: "border-gold bg-gold" },
+    { badge: "bg-violet", ring: "border-violet" },
+    { badge: "bg-clay", ring: "border-clay" },
+    { badge: "bg-indigo", ring: "border-indigo" },
+    { badge: "bg-gold", ring: "border-gold" },
   ] as const;
   function colorFor(unitId: string) {
     const i = units.findIndex((u) => u.id === unitId);
@@ -67,38 +67,50 @@ export function CourseDetailTabs({
   ];
   const skills = course.skills && course.skills.length > 0 ? course.skills : defaultSkills;
 
-  /** Numbered circle sits outside the lesson card on a connecting timeline; the card carries a colored icon badge per unit. */
-  function LessonRow({ lesson, index, isLast }: { lesson: (typeof flat)[number]; index: number; isLast: boolean }) {
+  /**
+   * A hollow colored ring sits on the connecting timeline; the card itself
+   * carries a rotated, overlapping "folder tab" icon badge in that same
+   * color, plus a 3-segment progress indicator (0/1/3 lit = locked/current/done).
+   */
+  function LessonRow({ lesson, isLast }: { lesson: (typeof flat)[number]; isLast: boolean }) {
     const isDone = Boolean(progress[lesson.id]);
     const isCurrent = !isDone && lesson.id === firstOpenId;
     const unlocked = isDone || isLessonUnlocked(units, progress, lesson.id);
     const color = colorFor(lesson.unit_id);
-    const rowClass = `flex min-w-0 flex-1 items-center gap-3 rounded-card bg-surface p-3 shadow-soft ${isCurrent ? `ring-2 ${color.ring}` : ""}`;
+    const litSegments = isDone ? 3 : isCurrent ? 1 : 0;
+    const rowClass = "flex min-w-0 flex-1 items-center gap-3 rounded-2xl bg-surface py-2.5 pe-4 ps-2.5 shadow-soft";
     const content = (
       <>
-        <span className={`grid size-10 shrink-0 place-items-center rounded-2xl text-white ${unlocked ? color.badge : "bg-line text-ink-faint"}`}>
-          <BooksStackIcon width={18} height={18} />
+        <span
+          className={`relative -my-1 -ms-5 grid size-14 shrink-0 rotate-[-4deg] place-items-center overflow-hidden rounded-tl-2xl rounded-tr-lg rounded-br-2xl rounded-bl-lg text-white shadow-lift ${
+            unlocked ? color.badge : "bg-line"
+          }`}
+        >
+          <span className="absolute top-2 start-2.5 size-2 rounded-full bg-white/25" aria-hidden="true" />
+          <span className="absolute end-2.5 bottom-2.5 size-1.5 rounded-full bg-white/20" aria-hidden="true" />
+          <BooksStackIcon width={20} height={20} className="relative rotate-[4deg]" />
         </span>
-        <span className={`min-w-0 flex-1 truncate text-sm font-semibold ${unlocked ? "text-ink" : "text-ink-faint"}`} dir="auto">
+        <span className={`min-w-0 flex-1 truncate text-[15px] font-bold ${unlocked ? "text-ink" : "text-ink-faint"}`} dir="auto">
           {locale === "en" ? lesson.title_en || lesson.title : lesson.title}
         </span>
         {unlocked ? (
-          lesson.duration_minutes > 0 && <span className="shrink-0 text-xs text-ink-faint">{lesson.duration_minutes}′</span>
+          <div className="flex shrink-0 items-center gap-1" aria-hidden="true">
+            {[0, 1, 2].map((i) => (
+              <span key={i} className={`h-1.5 w-4 rounded-full ${i < litSegments ? color.badge : "bg-line"}`} />
+            ))}
+          </div>
         ) : (
           <ShieldIcon width={16} height={16} className="shrink-0 text-ink-faint" />
         )}
       </>
     );
     return (
-      <div className="relative flex gap-3">
-        {!isLast && <span className="absolute start-4 top-9 bottom-[-0.75rem] w-px bg-line" aria-hidden="true" />}
+      <div className="relative flex items-center gap-4">
+        {!isLast && <span className="absolute start-[7px] top-1/2 -bottom-3 w-px bg-line" aria-hidden="true" />}
         <span
-          className={`relative z-10 mt-0.5 grid size-8 shrink-0 place-items-center rounded-full border-2 text-xs font-bold ${
-            isDone ? "border-success bg-success text-white" : isCurrent ? `${color.border} text-white` : "border-line bg-surface text-ink-soft"
-          }`}
-        >
-          {isDone ? <CheckIcon width={14} height={14} /> : formatNumber(index + 1, locale)}
-        </span>
+          className={`relative z-10 size-4 shrink-0 rounded-full border-[3px] bg-surface ${unlocked ? color.ring : "border-line"}`}
+          aria-hidden="true"
+        />
         {unlocked ? (
           <MotionCard href={`/courses/${course.slug}/lessons/${lesson.id}`} tilt={false} className={rowClass}>
             {content}
@@ -186,10 +198,10 @@ export function CourseDetailTabs({
             {flat.length === 0 ? (
               <p className="mt-3 rounded-card border border-dashed border-line p-6 text-center text-sm text-ink-soft">{t.empty}</p>
             ) : (
-              <ul className="mt-3 flex flex-col gap-3">
+              <ul className="mt-3 flex flex-col gap-4">
                 {flat.slice(0, 3).map((lesson, i, arr) => (
                   <li key={lesson.id}>
-                    <LessonRow lesson={lesson} index={i} isLast={i === arr.length - 1} />
+                    <LessonRow lesson={lesson} isLast={i === arr.length - 1} />
                   </li>
                 ))}
               </ul>
@@ -205,13 +217,17 @@ export function CourseDetailTabs({
           ) : (
             units.map((unit) => (
               <section key={unit.id}>
-                <h2 className="mb-2 font-display text-lg font-semibold" dir="auto">
-                  {locale === "en" ? unit.title_en || unit.title : unit.title}
-                </h2>
-                <ul className="flex flex-col gap-3">
+                <div className="mb-3 flex items-center gap-4">
+                  <span className="size-4 shrink-0 rounded-full border-[3px] border-line bg-surface" aria-hidden="true" />
+                  <h2 className="flex-1 font-display text-lg font-semibold" dir="auto">
+                    {locale === "en" ? unit.title_en || unit.title : unit.title}
+                  </h2>
+                  <ChevronIcon width={16} height={16} className="shrink-0 rotate-90 text-ink-faint rtl:-rotate-90" />
+                </div>
+                <ul className="flex flex-col gap-4">
                   {unit.lessons.map((lesson, i, arr) => (
                     <li key={lesson.id}>
-                      <LessonRow lesson={{ ...lesson, unitTitle: unit.title, unitTitleEn: unit.title_en }} index={i} isLast={i === arr.length - 1} />
+                      <LessonRow lesson={{ ...lesson, unitTitle: unit.title, unitTitleEn: unit.title_en }} isLast={i === arr.length - 1} />
                     </li>
                   ))}
                 </ul>
