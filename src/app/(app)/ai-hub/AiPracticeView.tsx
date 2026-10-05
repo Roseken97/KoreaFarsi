@@ -15,10 +15,8 @@ const SECTION_STYLE: Record<string, { Icon: ArcCard["Icon"]; bg: string; text: s
 };
 
 /**
- * AI Hub landing: just the floating character + a semicircular carousel of
- * the 5 practice "spaces". No title, stats, or chip row — Rose asked for
- * everything else removed. Each card's own page (incl. the real Chat) lives
- * under /ai-hub/<key>.
+ * AI Hub landing: floating character + large infinite carousel with modern card design.
+ * Each card's own page lives under /ai-hub/<key>.
  */
 export function AiPracticeView() {
   const { m } = useI18n();
@@ -32,12 +30,14 @@ export function AiPracticeView() {
   }));
 
   return (
-    <div className="animate-fade-up flex max-w-2xl flex-col items-center">
+    <div className="animate-fade-up flex w-full flex-col items-center py-6">
       <PageHeader />
-      <div className="mt-6 mb-2">
+      <div className="mt-8 mb-12">
         <FloatingRobotIcon size={96} />
       </div>
-      <ArcCarousel cards={cards} />
+      <div className="w-full px-4 sm:px-6 max-w-4xl">
+        <ArcCarousel cards={cards} />
+      </div>
     </div>
   );
 }
