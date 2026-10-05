@@ -1,21 +1,19 @@
 "use client";
 
 import { ArcCarousel, type ArcCard } from "@/components/ai-hub/ArcCarousel";
-import { FloatingRobotIcon } from "@/components/ai-hub/FloatingRobotIcon";
 import { ChatBubbleIcon, DictionaryIcon, HeadphonesIcon, MicIcon } from "@/components/icons";
-import { PageHeader } from "@/components/shell/PageHeader";
 import { useI18n } from "@/lib/i18n/client";
 
 const SECTION_STYLE: Record<string, { Icon: ArcCard["Icon"]; bg: string; text: string }> = {
-  chat: { Icon: ChatBubbleIcon, bg: "bg-teal-mist", text: "text-teal-deep" },
-  speak: { Icon: MicIcon, bg: "bg-coral-soft", text: "text-coral-deep" },
-  listen: { Icon: HeadphonesIcon, bg: "bg-sky-soft", text: "text-sky-deep" },
-  shadow: { Icon: MicIcon, bg: "bg-violet-soft", text: "text-violet-deep" },
-  grammar: { Icon: DictionaryIcon, bg: "bg-gold-soft", text: "text-gold-deep" },
+  chat: { Icon: ChatBubbleIcon, bg: "bg-gradient-to-br from-purple-600 to-purple-800", text: "text-purple-100" },
+  speak: { Icon: MicIcon, bg: "bg-gradient-to-br from-violet-600 to-violet-800", text: "text-violet-100" },
+  listen: { Icon: HeadphonesIcon, bg: "bg-gradient-to-br from-purple-700 to-slate-900", text: "text-purple-100" },
+  shadow: { Icon: MicIcon, bg: "bg-gradient-to-br from-indigo-600 to-purple-800", text: "text-indigo-100" },
+  grammar: { Icon: DictionaryIcon, bg: "bg-gradient-to-br from-purple-600 to-indigo-800", text: "text-purple-100" },
 };
 
 /**
- * AI Hub landing: floating character + premium carousel with contemporary design.
+ * AI Hub: immersive dark carousel experience with premium purple/lavender aesthetic.
  * Each card's own page lives under /ai-hub/<key>.
  */
 export function AiPracticeView() {
@@ -30,11 +28,7 @@ export function AiPracticeView() {
   }));
 
   return (
-    <div className="animate-fade-up flex w-full flex-col items-center py-8">
-      <PageHeader />
-      <div className="mt-10 mb-16">
-        <FloatingRobotIcon size={96} />
-      </div>
+    <div className="animate-fade-up flex w-full h-dvh flex-col items-center justify-center px-4 sm:px-6">
       <div className="w-full max-w-2xl">
         <ArcCarousel cards={cards} />
       </div>

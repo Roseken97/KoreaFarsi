@@ -61,15 +61,15 @@ export function ArcCarousel({ cards }: { cards: ArcCard[] }) {
 
   const card = cards[index];
 
-  const bgColorMap: Record<string, { circle: string; dark: string }> = {
-    "bg-teal-mist": { circle: "bg-teal-deep/30", dark: "from-teal-deep/40" },
-    "bg-coral-soft": { circle: "bg-coral-deep/30", dark: "from-coral-deep/40" },
-    "bg-sky-soft": { circle: "bg-sky-deep/30", dark: "from-sky-deep/40" },
-    "bg-violet-soft": { circle: "bg-violet-deep/30", dark: "from-violet-deep/40" },
-    "bg-gold-soft": { circle: "bg-gold-deep/30", dark: "from-gold-deep/40" },
+  const bgColorMap: Record<string, { circle: string; accent: string }> = {
+    "bg-gradient-to-br from-purple-600 to-purple-800": { circle: "bg-white/10", accent: "border-purple-400/30" },
+    "bg-gradient-to-br from-violet-600 to-violet-800": { circle: "bg-white/10", accent: "border-violet-400/30" },
+    "bg-gradient-to-br from-purple-700 to-slate-900": { circle: "bg-white/10", accent: "border-purple-400/30" },
+    "bg-gradient-to-br from-indigo-600 to-purple-800": { circle: "bg-white/10", accent: "border-indigo-400/30" },
+    "bg-gradient-to-br from-purple-600 to-indigo-800": { circle: "bg-white/10", accent: "border-purple-400/30" },
   };
 
-  const colors = bgColorMap[card.bg] || bgColorMap["bg-teal-mist"];
+  const colors = bgColorMap[card.bg] || { circle: "bg-white/10", accent: "border-purple-400/30" };
 
   return (
     <div className="relative w-full">
@@ -100,53 +100,48 @@ export function ArcCarousel({ cards }: { cards: ArcCard[] }) {
             <motion.button
               type="button"
               onClick={() => !isDragging && router.push(card.href)}
-              className={`relative w-full aspect-[9/11] rounded-3xl overflow-hidden ${card.bg} shadow-2xl transition-shadow hover:shadow-3xl`}
+              className={`relative w-full aspect-[9/11] rounded-3xl overflow-hidden ${card.bg} shadow-2xl transition-shadow hover:shadow-3xl border border-white/10`}
               whileHover={{ y: -8 }}
               whileTap={{ scale: 0.98 }}
             >
-              {/* Multi-layer background */}
+              {/* Overlay effects */}
               <div className="absolute inset-0">
-                {/* Base gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${colors.dark} to-black/30`} />
-
-                {/* Subtle pattern/texture */}
-                <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[radial-gradient(circle_at_20%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
+                {/* Subtle shine */}
+                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.15),transparent_70%)]" />
               </div>
 
               {/* Content container */}
-              <div className="relative z-10 h-full flex flex-col items-center justify-between pt-8 pb-12 px-6">
-                {/* Top accent */}
-                <div className="text-center opacity-40">
-                  <div className="w-12 h-1 mx-auto rounded-full bg-white/30" />
-                </div>
+              <div className="relative z-10 h-full flex flex-col items-center justify-between pt-10 pb-12 px-6">
+                {/* Top subtle line */}
+                <div className="w-8 h-0.5 rounded-full bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
                 {/* Character illustration area - large and prominent */}
                 <div className="flex-1 flex items-center justify-center w-full relative">
-                  {/* Large circular background for character */}
-                  <div className={`absolute inset-0 rounded-full ${colors.circle} blur-3xl opacity-60`} />
+                  {/* Glow effect */}
+                  <div className={`absolute inset-0 rounded-full ${colors.circle} blur-2xl opacity-40`} />
 
                   {/* Character icon container */}
                   <motion.div
-                    animate={{ y: isDragging ? 0 : [0, -8, 0] }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                    animate={{ y: isDragging ? 0 : [0, -12, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                     className="relative z-20"
                   >
-                    <div className={`w-56 h-56 flex items-center justify-center`}>
+                    <div className="w-56 h-56 flex items-center justify-center">
                       <card.Icon
                         width={200}
                         height={200}
-                        className={`${card.text} drop-shadow-2xl`}
+                        className={`${card.text} drop-shadow-2xl filter drop-shadow-[0_8px_24px_rgba(0,0,0,0.3)]`}
                       />
                     </div>
                   </motion.div>
                 </div>
 
                 {/* Text section */}
-                <div className="text-center space-y-3">
+                <div className="text-center space-y-2">
                   <h2 className={`text-4xl font-display font-bold tracking-tight ${card.text}`}>
                     {card.label}
                   </h2>
-                  <p className={`text-sm font-medium ${card.text} opacity-70`}>
+                  <p className={`text-xs font-medium ${card.text} opacity-60 uppercase tracking-widest`}>
                     Tap to explore
                   </p>
                 </div>
@@ -157,22 +152,22 @@ export function ArcCarousel({ cards }: { cards: ArcCard[] }) {
       </div>
 
       {/* Navigation indicators */}
-      <div className="flex justify-center items-center gap-3 mt-10">
+      <div className="flex justify-center items-center gap-4 mt-12">
         {/* Previous button */}
         <motion.button
           onClick={() => navigate(-1)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="p-2 rounded-full border border-ink/20 hover:border-ink/40 transition-colors"
+          className="p-2 rounded-full border border-purple-400/30 hover:border-purple-300/60 hover:bg-white/5 transition-all"
           aria-label="Previous slide"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-ink">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-purple-200">
             <path d="M15 19l-7-7 7-7" />
           </svg>
         </motion.button>
 
         {/* Dots */}
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           {cards.map((_, i) => (
             <motion.button
               key={i}
@@ -181,11 +176,11 @@ export function ArcCarousel({ cards }: { cards: ArcCard[] }) {
                 setIndex(i);
               }}
               animate={{
-                width: i === index ? 24 : 8,
-                opacity: i === index ? 1 : 0.4,
+                width: i === index ? 28 : 8,
+                opacity: i === index ? 1 : 0.3,
               }}
               className={`h-2 rounded-full transition-colors ${
-                i === index ? "bg-ink" : "bg-ink/30"
+                i === index ? "bg-gradient-to-r from-purple-300 to-violet-300" : "bg-purple-400/20"
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />
@@ -197,17 +192,17 @@ export function ArcCarousel({ cards }: { cards: ArcCard[] }) {
           onClick={() => navigate(1)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="p-2 rounded-full border border-ink/20 hover:border-ink/40 transition-colors"
+          className="p-2 rounded-full border border-purple-400/30 hover:border-purple-300/60 hover:bg-white/5 transition-all"
           aria-label="Next slide"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-ink">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-purple-200">
             <path d="M9 5l7 7-7 7" />
           </svg>
         </motion.button>
       </div>
 
       {/* Slide counter */}
-      <div className="text-center mt-6 text-xs text-ink-faint font-medium">
+      <div className="text-center mt-8 text-xs text-purple-300/60 font-medium tracking-widest">
         {String(index + 1).padStart(2, "0")} / {String(cards.length).padStart(2, "0")}
       </div>
     </div>

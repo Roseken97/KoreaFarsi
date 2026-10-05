@@ -7,7 +7,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: m.aiPractice.metaTitle };
 }
 
-/** AI Hub landing — a floating character + the 5-section arc carousel. Each section's real content lives at /ai-hub/<key>. */
+/** AI Hub landing — dark immersive experience with premium carousel. Each section's real content lives at /ai-hub/<key>. */
 export default function AiHubPage() {
-  return <AiPracticeView />;
+  return (
+    <div className="min-h-dvh bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
+      <AiPracticeView />
+    </div>
+  );
 }
