@@ -1,22 +1,43 @@
+import Image from "next/image";
 import { AccountIcon } from "@/components/icons";
 import { AvatarArt } from "@/components/avatars/AvatarArt";
 import type { AvatarKey } from "@/lib/avatars";
 
-/** A chosen preset avatar (see src/lib/avatars.ts), or initials as the default. */
+/** A custom image, preset avatar (see src/lib/avatars.ts), or initials as the default. */
 export function Avatar({
   name,
   email,
   avatarKey,
+  customAvatarUrl,
   size = 40,
   className = "",
 }: {
   name?: string | null;
   email?: string | null;
   avatarKey?: AvatarKey | null;
+  customAvatarUrl?: string | null;
   size?: number;
   className?: string;
 }) {
   const signedIn = Boolean(name || email);
+
+  if (customAvatarUrl) {
+    return (
+      <span
+        className={`inline-block shrink-0 overflow-hidden rounded-full ring-2 ring-surface ${className}`}
+        style={{ width: size, height: size }}
+      >
+        <Image
+          src={customAvatarUrl}
+          alt={name || "Avatar"}
+          width={size}
+          height={size}
+          className="h-full w-full object-cover"
+          priority
+        />
+      </span>
+    );
+  }
 
   if (avatarKey) {
     return (

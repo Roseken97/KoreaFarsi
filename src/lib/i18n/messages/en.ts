@@ -9,6 +9,7 @@ export const en = {
     backHome: "Back to Home",
     comingSoon: "This section is coming soon.",
     or: "or",
+    uploading: "Uploading…",
   },
   splash: {
     tagline: "A Bridge to a Brighter You",
@@ -211,6 +212,8 @@ export const en = {
       passwordMin: "Password must be at least {n} characters.",
       passwordComplex: "Password must include letters and numbers.",
       confirmMismatch: "Passwords don't match.",
+      invalidImageType: "Please upload a valid image file (JPG, PNG, GIF).",
+      imageTooLarge: "Image must be smaller than 5MB.",
     },
   },
   nav: {
@@ -305,6 +308,9 @@ export const en = {
       metaTitle: "Edit profile",
       title: "Edit Profile",
       chooseAvatar: "Choose an avatar",
+      uploadImage: "Upload custom image",
+      imageUploaded: "Image uploaded successfully",
+      imageNote: "JPG, PNG or GIF up to 5MB. Replaces your avatar.",
       emailNote: "Your email can't be changed here.",
       userId: "User ID",
       userIdNote: "Share this if you contact support about your account.",

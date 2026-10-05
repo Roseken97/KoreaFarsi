@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
-import { CheckIcon } from "@/components/icons";
+import { useState, type FormEvent, useRef } from "react";
+import { CheckIcon, CloseIcon } from "@/components/icons";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
@@ -17,21 +17,70 @@ export function ProfileForm({
   initialName,
   email,
   initialAvatarKey,
+  initialCustomAvatarUrl,
 }: {
   userId: string;
   initialName: string;
   email: string;
   initialAvatarKey: AvatarKey | null;
+  initialCustomAvatarUrl?: string | null;
 }) {
   const router = useRouter();
   const { m } = useI18n();
   const t = m.account.profile;
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [name, setName] = useState(initialName);
   const [avatarKey, setAvatarKey] = useState<AvatarKey | null>(initialAvatarKey);
+  const [customAvatarUrl, setCustomAvatarUrl] = useState<string | null>(initialCustomAvatarUrl || null);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [nameError, setNameError] = useState("");
   const [status, setStatus] = useState<{ tone: "error" | "success"; text: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setStatus({ tone: "error", text: m.errors.validation.invalidImageType || "Invalid image type" });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setStatus({ tone: "error", text: m.errors.validation.imageTooLarge || "Image too large (max 5MB)" });
+      return;
+    }
+
+    setUploadingImage(true);
+    setStatus(null);
+
+    try {
+      const supabase = createClient();
+      const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 9)}.${file.name.split(".").pop()}`;
+      const { error: uploadError, data } = await supabase.storage
+        .from("avatars")
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) {
+        setStatus({ tone: "error", text: authErrorMessage(m, uploadError) });
+        setUploadingImage(false);
+        return;
+      }
+
+      const { data: publicUrl } = supabase.storage.from("avatars").getPublicUrl(fileName);
+      setCustomAvatarUrl(publicUrl.publicUrl);
+      setStatus({ tone: "success", text: t.imageUploaded || "Image uploaded" });
+    } catch (err) {
+      setStatus({ tone: "error", text: "Upload failed" });
+    }
+
+    setUploadingImage(false);
+  }
+
+  async function removeCustomAvatar() {
+    setCustomAvatarUrl(null);
+  }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -43,7 +92,9 @@ export function ProfileForm({
     setLoading(true);
     const supabase = createClient();
     // profiles is the source of truth; metadata is kept in sync for places that read the session only.
-    const { error } = await supabase.from("profiles").upsert({ id: userId, name: trimmed, avatar_key: avatarKey });
+    const { error } = await supabase
+      .from("profiles")
+      .upsert({ id: userId, name: trimmed, avatar_key: avatarKey, custom_avatar_url: customAvatarUrl });
     if (!error) await supabase.auth.updateUser({ data: { name: trimmed } });
     setLoading(false);
 
@@ -86,6 +137,41 @@ export function ProfileForm({
               </button>
             );
           })}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <span className="text-sm font-medium text-ink">{t.uploadImage}</span>
+        <div className="flex flex-col gap-2">
+          {customAvatarUrl && (
+            <div className="relative inline-w-fit mx-auto">
+              <Avatar customAvatarUrl={customAvatarUrl} size={120} />
+              <button
+                type="button"
+                onClick={removeCustomAvatar}
+                disabled={uploadingImage}
+                className="absolute -top-2 -end-2 rounded-full bg-error text-white p-1 hover:bg-error-dark transition disabled:opacity-50"
+                aria-label="Remove custom avatar"
+              >
+                <CloseIcon width={14} height={14} />
+              </button>
+            </div>
+          )}
+          <label className="flex items-center justify-center gap-2 cursor-pointer rounded-field border-2 border-dashed border-ink-soft px-4 py-3.5 transition hover:border-teal hover:bg-teal/5">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" className="text-ink-soft">
+              <path d="M12 3v12M6 9l6-6 6 6M4 20h16" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span className="text-sm font-medium text-ink-soft">{uploadingImage ? m.common.uploading : t.uploadImage}</span>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              disabled={uploadingImage}
+              className="hidden"
+            />
+          </label>
+          <p className="text-xs text-ink-faint">{t.imageNote}</p>
         </div>
       </div>
 

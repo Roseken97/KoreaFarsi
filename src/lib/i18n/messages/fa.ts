@@ -6,6 +6,7 @@ export const fa: Messages = {
     backHome: "بازگشت به خانه",
     comingSoon: "این بخش به‌زودی اضافه می‌شود.",
     or: "یا",
+    uploading: "در حال آپلود…",
   },
   splash: {
     tagline: "پلی به سوی نسخه‌ی بهتر تو",
@@ -200,6 +201,8 @@ export const fa: Messages = {
       passwordMin: "رمز عبور باید حداقل {n} کاراکتر باشد.",
       passwordComplex: "رمز عبور باید شامل حرف انگلیسی و عدد باشد.",
       confirmMismatch: "تکرار رمز عبور یکسان نیست.",
+      invalidImageType: "لطفاً یک فایل تصویری معتبر آپلود کن (JPG، PNG، GIF).",
+      imageTooLarge: "تصویر باید کمتر از ۵ مگابایت باشد.",
     },
   },
   nav: {
@@ -294,6 +297,9 @@ export const fa: Messages = {
       metaTitle: "ویرایش پروفایل",
       title: "ویرایش پروفایل",
       chooseAvatar: "انتخاب آواتار",
+      uploadImage: "آپلود عکس شخصی",
+      imageUploaded: "عکس با موفقیت آپلود شد",
+      imageNote: "JPG، PNG یا GIF تا ۵ مگابایت. آواتار را جایگزین می‌کند.",
       emailNote: "ایمیل از این‌جا قابل تغییر نیست.",
       userId: "شناسه‌ی کاربری",
       userIdNote: "اگر با پشتیبانی تماس گرفتی، این را در اختیارشان بگذار.",
