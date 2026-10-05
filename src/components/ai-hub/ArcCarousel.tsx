@@ -92,9 +92,11 @@ export function ArcCarousel({ cards }: { cards: ArcCard[] }) {
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.3}
             dragTransition={{ power: 0.2, timeConstant: 200 }}
-            onDragEnd={onDragEnd}
             onDragStart={() => setIsDragging(true)}
-            onDragEnd={() => setIsDragging(false)}
+            onDragEnd={(e, info) => {
+              onDragEnd(e, info);
+              setIsDragging(false);
+            }}
             className="w-full px-4 sm:px-6 cursor-grab active:cursor-grabbing"
           >
             <motion.button
