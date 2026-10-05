@@ -36,6 +36,28 @@ function PanelSkeleton() {
 export default async function PlannerPage(props: PageProps<"/planner">) {
   if (isSupabaseConfigured && !(await getCurrentUser())) redirect("/auth/login?next=/planner");
 
+  try {
+    return await PlannerPageBody(props);
+  } catch (err) {
+    // Caught here (instead of letting it reach app/error.tsx), production doesn't
+    // redact the message — this is the only way to see what's actually failing
+    // before the shared data fetch even gets to a tab-specific Suspense boundary.
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error("[planner] page-level failure:", err);
+    return (
+      <div className="max-w-3xl p-4">
+        <div className="rounded-card border border-dashed border-danger/40 bg-danger-soft p-5 text-sm text-danger" dir="ltr">
+          <p className="font-semibold">Planner failed to load.</p>
+          <p className="mt-1 break-words">{message}</p>
+          {stack && <pre className="mt-3 overflow-x-auto whitespace-pre-wrap text-[10px] opacity-70">{stack}</pre>}
+        </div>
+      </div>
+    );
+  }
+}
+
+async function PlannerPageBody(props: PageProps<"/planner">) {
   const sp = await props.searchParams;
   const [{ m, locale }, plan, profile] = await Promise.all([getMessages(), getActivePlan(), getProfile()]);
 
