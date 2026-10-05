@@ -1,4 +1,7 @@
 import { cookies } from "next/headers";
+import { cache } from "react";
+import { applyOverrides } from "@/lib/site-copy/entries";
+import { getCopyOverrides } from "@/lib/site-copy/queries";
 import { DEFAULT_LOCALE, LOCALE_COOKIE, MESSAGES, isLocale, type Locale } from "./config";
 
 export async function getLocale(): Promise<Locale> {
@@ -6,7 +9,8 @@ export async function getLocale(): Promise<Locale> {
   return isLocale(value) ? value : DEFAULT_LOCALE;
 }
 
-export async function getMessages() {
+/** The copy in code with any /admin/content edits applied. Memoized per request. */
+export const getMessages = cache(async function getMessages() {
   const locale = await getLocale();
-  return { locale, m: MESSAGES[locale] };
-}
+  return { locale, m: applyOverrides(MESSAGES[locale], await getCopyOverrides(locale)) };
+});
