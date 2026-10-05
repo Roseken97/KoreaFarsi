@@ -15,7 +15,7 @@ const SECTION_STYLE: Record<string, { Icon: ArcCard["Icon"]; bg: string; text: s
 };
 
 /**
- * AI Hub landing: floating character + large infinite carousel with modern card design.
+ * AI Hub landing: floating character + premium carousel with contemporary design.
  * Each card's own page lives under /ai-hub/<key>.
  */
 export function AiPracticeView() {
@@ -30,12 +30,12 @@ export function AiPracticeView() {
   }));
 
   return (
-    <div className="animate-fade-up flex w-full flex-col items-center py-6">
+    <div className="animate-fade-up flex w-full flex-col items-center py-8">
       <PageHeader />
-      <div className="mt-8 mb-12">
+      <div className="mt-10 mb-16">
         <FloatingRobotIcon size={96} />
       </div>
-      <div className="w-full px-4 sm:px-6 max-w-4xl">
+      <div className="w-full max-w-2xl">
         <ArcCarousel cards={cards} />
       </div>
     </div>
