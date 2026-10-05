@@ -119,6 +119,7 @@ export default async function AccountPage() {
           <ListGroup>
             <ListRow href="/account/language" Icon={GlobeIcon} title={t.items.language.title} body={t.items.language.body} />
             <ListRow href="/account/settings" Icon={SettingsIcon} title={t.items.settings.title} body={t.items.settings.body} />
+            {isAdmin && <ListRow href="/account/app-admin" Icon={PencilIcon} title={t.items.appAdmin.title} body={t.items.appAdmin.body} tone="bg-violet text-white" />}
             <ListRow href="/account/help" Icon={HelpIcon} title={t.items.help.title} body={t.items.help.body} />
             {profile && <SignOutRow label={t.signOut} />}
           </ListGroup>

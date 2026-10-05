@@ -6,63 +6,28 @@ import type { Locale } from "@/lib/i18n/config";
 import { resetCopy, saveCopy, type CopyResult } from "@/lib/site-copy/admin-actions";
 import type { CopyEntry, CopyOverrides } from "@/lib/site-copy/entries";
 
-/** Friendly names for the top-level message sections (falls back to the raw key). */
-const SECTION_LABELS: Record<string, string> = {
-  common: "Shared",
-  splash: "Splash screen",
-  marketing: "Landing page",
-  onboarding: "Onboarding",
-  welcome: "Welcome",
-  auth: "Sign in / sign up",
-  errors: "Error messages",
-  nav: "Navigation",
-  koreaLife: "Korea Life",
-  notifications: "Notifications",
-  placeholders: "Coming-soon pages",
-  home: "Home",
-  account: "Account",
-  bookstore: "Bookstore",
-  aiPractice: "AI Practice",
-  chat: "AI chat",
-  admin: "Admin: knowledge base",
-  dictionaryPage: "Dictionary",
-  productsAdmin: "Admin: products",
-  orders: "Orders",
-  coursesAdmin: "Admin: courses",
-  courses: "Courses",
-  library: "Library",
-  planner: "Planner",
-  language: "Language",
-  notFound: "Page not found",
-};
-
 const PAGE_SIZE = 40;
-const EDITED = "__edited";
 
 type Overrides = Record<Locale, CopyOverrides>;
 
-export function ContentAdmin({ entries, initialOverrides }: { entries: CopyEntry[]; initialOverrides: Overrides }) {
+/** Edits every string of one app area (English + Persian). Used by /account/app-admin/[area]. */
+export function CopyEditor({ entries, initialOverrides }: { entries: CopyEntry[]; initialOverrides: Overrides }) {
   const [overrides, setOverrides] = useState<Overrides>(initialOverrides);
-  const [section, setSection] = useState<string>("");
+  const [editedOnly, setEditedOnly] = useState(false);
   const [query, setQuery] = useState("");
   const [limit, setLimit] = useState(PAGE_SIZE);
 
-  const sections = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const e of entries) counts.set(e.section, (counts.get(e.section) ?? 0) + 1);
-    return [...counts];
-  }, [entries]);
-
-  const editedCount = new Set([...Object.keys(overrides.en), ...Object.keys(overrides.fa)]).size;
+  const isEdited = (key: string) => key in overrides.en || key in overrides.fa;
+  const editedCount = entries.filter((e) => isEdited(e.key)).length;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return entries.filter((e) => {
-      if (section === EDITED ? !(e.key in overrides.en || e.key in overrides.fa) : section && e.section !== section) return false;
+      if (editedOnly && !(e.key in overrides.en || e.key in overrides.fa)) return false;
       if (!q) return true;
       return [e.key, e.en, e.fa, overrides.en[e.key], overrides.fa[e.key]].some((t) => t?.toLowerCase().includes(q));
     });
-  }, [entries, overrides, section, query]);
+  }, [entries, overrides, editedOnly, query]);
 
   function onSaved(key: string, locale: Locale, value: string | null) {
     setOverrides((o) => {
@@ -75,7 +40,7 @@ export function ContentAdmin({ entries, initialOverrides }: { entries: CopyEntry
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-3 rounded-card bg-surface p-4 shadow-soft sm:flex-row">
+      <div className="flex flex-col gap-3 rounded-card bg-surface p-4 shadow-soft sm:flex-row sm:items-center">
         <input
           type="search"
           value={query}
@@ -87,34 +52,30 @@ export function ContentAdmin({ entries, initialOverrides }: { entries: CopyEntry
           dir="auto"
           className={`${inputClass} flex-1`}
         />
-        <select
-          value={section}
-          onChange={(e) => {
-            setSection(e.target.value);
-            setLimit(PAGE_SIZE);
-          }}
-          className={`${inputClass} sm:w-60`}
-        >
-          <option value="">All sections ({entries.length})</option>
-          <option value={EDITED}>Edited only ({editedCount})</option>
-          {sections.map(([key, n]) => (
-            <option key={key} value={key}>
-              {SECTION_LABELS[key] ?? key} ({n})
-            </option>
-          ))}
-        </select>
+        <label className="flex shrink-0 items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={editedOnly}
+            onChange={(e) => {
+              setEditedOnly(e.target.checked);
+              setLimit(PAGE_SIZE);
+            }}
+            className="size-4"
+          />
+          Edited only ({editedCount})
+        </label>
       </div>
 
       {filtered.length === 0 ? (
         <p className="rounded-card border border-dashed border-line p-6 text-center text-sm text-ink-soft">
-          {section === EDITED ? "Nothing has been edited yet." : "No text matches your search."}
+          {editedOnly && !query ? "Nothing here has been edited yet." : "No text matches your search."}
         </p>
       ) : (
         <ul className="flex flex-col gap-3">
           {filtered.slice(0, limit).map((e) => (
             <li key={e.key} className="rounded-card bg-surface p-4 shadow-soft">
               <p className="mb-3 text-xs text-ink-faint" dir="ltr">
-                <span className="font-medium text-ink-soft">{SECTION_LABELS[e.section] ?? e.section}</span> · <code>{e.key}</code>
+                <code>{e.key}</code>
               </p>
               <div className="grid gap-4 sm:grid-cols-2">
                 <CopyField entry={e} locale="en" override={overrides.en[e.key]} onSaved={onSaved} />

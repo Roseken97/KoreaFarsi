@@ -296,6 +296,7 @@ export const en = {
       planner: { title: "My Planner", body: "Your personal study plan" },
       achievements: { title: "My Achievements", body: "Badges and milestones" },
       admin: { title: "Admin Panel", body: "Products, courses, orders, knowledge base" },
+      appAdmin: { title: "App Admin", body: "Edit the titles and text of each part of the app" },
       language: { title: "Language Settings", body: "English / فارسی" },
       settings: { title: "App Settings", body: "Notifications, appearance, privacy" },
       help: { title: "Help & Support", body: "Get in touch with the KoreaFarsi team" },
@@ -322,6 +323,14 @@ export const en = {
     languagePage: {
       title: "Language",
       body: "Choose the language of the app. Lessons and the AI assistant keep their own content language.",
+    },
+    appAdminPage: {
+      title: "App Admin",
+      intro: "Pick a part of the app to edit its titles, descriptions and labels. Changes go live right away.",
+      count: "{n} texts",
+      edited: "{n} edited",
+      forbidden: "This page is only available to KoreaFarsi admins.",
+      notConfigured: "Supabase isn't configured yet.",
     },
     settingsPage: {
       title: "App Settings",
