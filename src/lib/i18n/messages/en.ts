@@ -213,7 +213,7 @@ export const en = {
       passwordComplex: "Password must include letters and numbers.",
       confirmMismatch: "Passwords don't match.",
       invalidImageType: "Please upload a valid image file (JPG, PNG, GIF).",
-      imageTooLarge: "Image must be smaller than 5MB.",
+      imageTooLarge: "Image must be smaller than 2MB.",
     },
   },
   nav: {

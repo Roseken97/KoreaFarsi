@@ -202,7 +202,7 @@ export const fa: Messages = {
       passwordComplex: "رمز عبور باید شامل حرف انگلیسی و عدد باشد.",
       confirmMismatch: "تکرار رمز عبور یکسان نیست.",
       invalidImageType: "لطفاً یک فایل تصویری معتبر آپلود کن (JPG، PNG، GIF).",
-      imageTooLarge: "تصویر باید کمتر از ۵ مگابایت باشد.",
+      imageTooLarge: "تصویر باید کمتر از ۲ مگابایت باشد.",
     },
   },
   nav: {

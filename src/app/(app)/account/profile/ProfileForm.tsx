@@ -47,8 +47,9 @@ export function ProfileForm({
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      setStatus({ tone: "error", text: m.errors.validation.imageTooLarge || "Image too large (max 5MB)" });
+    const MAX_SIZE = 2 * 1024 * 1024; // 2MB
+    if (file.size > MAX_SIZE) {
+      setStatus({ tone: "error", text: m.errors.validation.imageTooLarge || "Image too large (max 2MB)" });
       return;
     }
 
@@ -57,8 +58,10 @@ export function ProfileForm({
 
     try {
       const supabase = createClient();
-      const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).slice(2, 9)}.${file.name.split(".").pop()}`;
-      const { error: uploadError, data } = await supabase.storage
+      const ext = file.name.split(".").pop() || "jpg";
+      const fileName = `${userId}/avatar.${ext}`;
+
+      const { error: uploadError } = await supabase.storage
         .from("avatars")
         .upload(fileName, file, { upsert: true });
 
@@ -70,6 +73,7 @@ export function ProfileForm({
 
       const { data: publicUrl } = supabase.storage.from("avatars").getPublicUrl(fileName);
       setCustomAvatarUrl(publicUrl.publicUrl);
+      if (fileInputRef.current) fileInputRef.current.value = "";
       setStatus({ tone: "success", text: t.imageUploaded || "Image uploaded" });
     } catch (err) {
       setStatus({ tone: "error", text: "Upload failed" });
@@ -79,7 +83,19 @@ export function ProfileForm({
   }
 
   async function removeCustomAvatar() {
-    setCustomAvatarUrl(null);
+    setUploadingImage(true);
+    try {
+      const supabase = createClient();
+      const ext = customAvatarUrl?.split(".").pop() || "jpg";
+      await supabase.storage.from("avatars").remove([`${userId}/avatar.${ext}`]);
+      setCustomAvatarUrl(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      setStatus({ tone: "success", text: "Avatar removed" });
+    } catch (err) {
+      // File might already be deleted, that's fine
+      setCustomAvatarUrl(null);
+    }
+    setUploadingImage(false);
   }
 
   async function onSubmit(e: FormEvent) {
