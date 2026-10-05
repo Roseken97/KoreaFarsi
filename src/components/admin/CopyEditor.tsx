@@ -10,7 +10,7 @@ const PAGE_SIZE = 40;
 
 type Overrides = Record<Locale, CopyOverrides>;
 
-/** Edits every string of one app area (English + Persian). Used by /account/app-admin/[area]. */
+/** Edits every string of one app area (English + Persian). Used by /admin/app/[area]. */
 export function CopyEditor({ entries, initialOverrides }: { entries: CopyEntry[]; initialOverrides: Overrides }) {
   const [overrides, setOverrides] = useState<Overrides>(initialOverrides);
   const [editedOnly, setEditedOnly] = useState(false);

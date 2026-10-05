@@ -15,6 +15,9 @@ export function AdminNav({ active }: { active: (typeof TABS)[number]["key"] }) {
   return (
     <nav className="-mx-4 mb-6 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
       <div className="flex w-max gap-2">
+        <Link href="/admin/panel" className="shrink-0 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium whitespace-nowrap text-ink-soft transition hover:text-ink">
+          All admin pages
+        </Link>
         {TABS.map((tab) => (
           <Link
             key={tab.key}

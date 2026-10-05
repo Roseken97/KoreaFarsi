@@ -113,13 +113,12 @@ export default async function AccountPage() {
             <ListRow href="/library" Icon={LibraryIcon} title={t.items.books.title} body={t.items.books.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/planner" Icon={PlannerIcon} title={t.items.planner.title} body={t.items.planner.body} tone="bg-sage-soft text-teal-deep" />
             <ListRow href="/account/achievements" Icon={TrophyIcon} title={t.items.achievements.title} body={t.items.achievements.body} tone="bg-sage-soft text-teal-deep" />
-            {isAdmin && <ListRow href="/admin/products" Icon={ShieldIcon} title={t.items.admin.title} body={t.items.admin.body} tone="bg-violet text-white" />}
+            {isAdmin && <ListRow href="/admin" Icon={ShieldIcon} title={t.items.admin.title} body={t.items.admin.body} tone="bg-violet text-white" />}
           </ListGroup>
 
           <ListGroup>
             <ListRow href="/account/language" Icon={GlobeIcon} title={t.items.language.title} body={t.items.language.body} />
             <ListRow href="/account/settings" Icon={SettingsIcon} title={t.items.settings.title} body={t.items.settings.body} />
-            {isAdmin && <ListRow href="/account/app-admin" Icon={PencilIcon} title={t.items.appAdmin.title} body={t.items.appAdmin.body} tone="bg-violet text-white" />}
             <ListRow href="/account/help" Icon={HelpIcon} title={t.items.help.title} body={t.items.help.body} />
             {profile && <SignOutRow label={t.signOut} />}
           </ListGroup>

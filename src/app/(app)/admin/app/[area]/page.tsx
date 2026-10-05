@@ -6,23 +6,23 @@ import { Notice } from "@/components/ui/Notice";
 import { getMessages } from "@/lib/i18n/server";
 import { listCopyOverridesAdmin } from "@/lib/site-copy/admin-actions";
 import { entriesForArea, getCopyArea } from "@/lib/site-copy/areas";
-import { appAdminAccess } from "../guard";
+import { appAdminAccess } from "../../guard";
 
-export async function generateMetadata(props: PageProps<"/account/app-admin/[area]">): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<"/admin/app/[area]">): Promise<Metadata> {
   const [{ area: id }, { locale }] = await Promise.all([props.params, getMessages()]);
   const area = getCopyArea(id);
   return { title: area?.label[locale], robots: { index: false } };
 }
 
 /** Text editor for one part of the app (admins only). */
-export default async function AppAdminAreaPage(props: PageProps<"/account/app-admin/[area]">) {
+export default async function AppAdminAreaPage(props: PageProps<"/admin/app/[area]">) {
   const [{ area: id }, { m, locale }] = await Promise.all([props.params, getMessages()]);
   const area = getCopyArea(id);
   if (!area) notFound();
 
-  const t = m.account.appAdminPage;
-  const access = await appAdminAccess(`/account/app-admin/${id}`);
-  const header = <SubPageHeader title={area.label[locale]} backHref="/account/app-admin" backLabel={t.title} />;
+  const t = m.account.adminHub;
+  const access = await appAdminAccess(`/admin/app/${id}`);
+  const header = <SubPageHeader title={area.label[locale]} backHref="/admin/app" backLabel={t.appAdmin.title} />;
 
   if (access !== "ok") {
     return (

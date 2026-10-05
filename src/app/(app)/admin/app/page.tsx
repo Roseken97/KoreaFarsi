@@ -23,11 +23,11 @@ import { fmt, formatNumber } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
 import { listCopyOverridesAdmin } from "@/lib/site-copy/admin-actions";
 import { COPY_AREAS, entriesForArea } from "@/lib/site-copy/areas";
-import { appAdminAccess } from "./guard";
+import { appAdminAccess } from "../guard";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m } = await getMessages();
-  return { title: m.account.appAdminPage.title, robots: { index: false } };
+  return { title: m.account.adminHub.appAdmin.title, robots: { index: false } };
 }
 
 const AREA_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
@@ -47,11 +47,11 @@ const AREA_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   admin: ShieldIcon,
 };
 
-/** App Admin hub (admins only): one row per part of the app, each opening its own text editor. */
+/** App Admin (admins only): one row per part of the app, each opening its own text editor. */
 export default async function AppAdminPage() {
-  const [{ m, locale }, access] = await Promise.all([getMessages(), appAdminAccess("/account/app-admin")]);
-  const t = m.account.appAdminPage;
-  const header = <SubPageHeader title={t.title} backHref="/account" backLabel={m.account.title} />;
+  const [{ m, locale }, access] = await Promise.all([getMessages(), appAdminAccess("/admin/app")]);
+  const t = m.account.adminHub;
+  const header = <SubPageHeader title={t.appAdmin.title} backHref="/admin" backLabel={t.title} />;
 
   if (access !== "ok") {
     return (
@@ -73,7 +73,7 @@ export default async function AppAdminPage() {
           const entries = entriesForArea(area.id);
           const edited = entries.filter((e) => e.key in overrides.en || e.key in overrides.fa).length;
           const body = fmt(t.count, { n: formatNumber(entries.length, locale) }) + (edited ? ` · ${fmt(t.edited, { n: formatNumber(edited, locale) })}` : "");
-          return <ListRow key={area.id} href={`/account/app-admin/${area.id}`} Icon={AREA_ICONS[area.id] ?? SparkleIcon} title={area.label[locale]} body={body} />;
+          return <ListRow key={area.id} href={`/admin/app/${area.id}`} Icon={AREA_ICONS[area.id] ?? SparkleIcon} title={area.label[locale]} body={body} />;
         })}
       </ListGroup>
     </div>
