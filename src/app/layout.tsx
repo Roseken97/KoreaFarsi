@@ -4,6 +4,7 @@ import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { I18nProvider } from "@/lib/i18n/client";
 import { dirOf } from "@/lib/i18n/config";
 import { getLocale } from "@/lib/i18n/server";
+import { getCopyOverrides } from "@/lib/site-copy/queries";
 import "./globals.css";
 
 // PROVISIONAL typography (UX_SPECS: serif display for branding, sans body).
@@ -37,6 +38,7 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const locale = await getLocale();
+  const overrides = await getCopyOverrides(locale);
   return (
     <html
       lang={locale}
@@ -44,7 +46,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       className={`${playfair.variable} ${inter.variable} ${vazirmatn.variable} h-full antialiased`}
     >
       <body className="min-h-full">
-        <I18nProvider locale={locale}>{children}</I18nProvider>
+        <I18nProvider locale={locale} overrides={overrides}>{children}</I18nProvider>
         <ServiceWorkerRegister />
       </body>
     </html>
