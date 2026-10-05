@@ -1,5 +1,6 @@
 import { AccountIcon } from "@/components/icons";
-import { AVATAR_STYLE, type AvatarKey } from "@/lib/avatars";
+import { AvatarArt } from "@/components/avatars/AvatarArt";
+import type { AvatarKey } from "@/lib/avatars";
 
 /** A chosen preset avatar (see src/lib/avatars.ts), or initials as the default. */
 export function Avatar({
@@ -18,15 +19,12 @@ export function Avatar({
   const signedIn = Boolean(name || email);
 
   if (avatarKey) {
-    const style = AVATAR_STYLE[avatarKey];
     return (
       <span
-        lang="ko"
-        className={`inline-grid shrink-0 place-items-center rounded-full font-semibold ring-2 ring-surface ${style.bg} ${style.text} ${className}`}
-        style={{ width: size, height: size, fontSize: size * 0.42 }}
-        aria-hidden="true"
+        className={`inline-block shrink-0 overflow-hidden rounded-full ring-2 ring-surface ${className}`}
+        style={{ width: size, height: size }}
       >
-        {style.glyph}
+        <AvatarArt avatarKey={avatarKey} size={size} />
       </span>
     );
   }

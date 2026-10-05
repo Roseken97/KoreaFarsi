@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Notice } from "@/components/ui/Notice";
 import { authErrorMessage } from "@/lib/auth/errors";
-import { AVATAR_KEYS, AVATAR_STYLE, type AvatarKey } from "@/lib/avatars";
+import { AVATAR_KEYS, type AvatarKey } from "@/lib/avatars";
 import { useI18n } from "@/lib/i18n/client";
 import { createClient } from "@/lib/supabase/client";
 
@@ -68,7 +68,6 @@ export function ProfileForm({
         <span className="text-sm font-medium text-ink">{t.chooseAvatar}</span>
         <div className="flex flex-wrap justify-center gap-3">
           {AVATAR_KEYS.map((key) => {
-            const style = AVATAR_STYLE[key];
             const selected = avatarKey === key;
             return (
               <button
@@ -76,11 +75,9 @@ export function ProfileForm({
                 type="button"
                 onClick={() => setAvatarKey(selected ? null : key)}
                 aria-pressed={selected}
-                className={`relative grid size-12 place-items-center rounded-full font-semibold transition ${style.bg} ${style.text} ${
-                  selected ? "ring-2 ring-teal ring-offset-2 ring-offset-surface" : ""
-                }`}
+                className={`relative rounded-full transition ${selected ? "ring-2 ring-teal ring-offset-2 ring-offset-surface" : ""}`}
               >
-                <span lang="ko">{style.glyph}</span>
+                <Avatar avatarKey={key} size={48} />
                 {selected && (
                   <span className="absolute -end-0.5 -bottom-0.5 grid size-5 place-items-center rounded-full bg-teal text-white ring-2 ring-surface">
                     <CheckIcon width={11} height={11} />
