@@ -3,9 +3,7 @@
 import { motion, type PanInfo } from "motion/react";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
-
-export const PLANNER_TABS = ["profile", "daily", "weekly", "monthly", "yearly"] as const;
-export type PlannerTab = (typeof PLANNER_TABS)[number];
+import { PLANNER_TABS, type PlannerTab } from "@/lib/planner/tabs";
 
 /** Top pill nav + swipeable panel — 5 "pages" (sketch request), each a real server-rendered route via ?tab=. */
 export function PlannerCarousel({
