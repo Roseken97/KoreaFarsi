@@ -484,6 +484,7 @@ export const en = {
       soon: "Soon",
     },
     quote: "A new language. A more confident you.",
+    card: { start: "Start", live: "Live", soon: "Soon", of: "of", mode: "Mode", status: "Status", prev: "Previous", next: "Next", goTo: "Go to {n}" },
   },
   chat: {
     metaTitle: "KoreaFarsi AI",

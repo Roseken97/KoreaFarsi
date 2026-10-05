@@ -7,11 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: m.aiPractice.metaTitle };
 }
 
-/** AI Hub landing — dark immersive experience with premium carousel. Each section's real content lives at /ai-hub/<key>. */
+/** AI Hub landing — practice modes as soft 3D cards on a lavender stage. Each section's real content lives at /ai-hub/<key>. */
 export default function AiHubPage() {
-  return (
-    <div className="min-h-dvh bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
-      <AiPracticeView />
-    </div>
-  );
+  return <AiPracticeView />;
 }
