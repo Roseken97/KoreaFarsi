@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type ComponentType, type ReactNode, type SVGProps } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { ChatBox } from "@/components/chat/ChatBox";
-import { BellIcon, ChatBubbleIcon, DictionaryIcon, HeadphonesIcon, MicIcon, RobotIcon, TrophyIcon, WatchIcon } from "@/components/icons";
+import { BellIcon, ChatBubbleIcon, DictionaryIcon, HeadphonesIcon, MicIcon, TrophyIcon, WatchIcon } from "@/components/icons";
+import { FloatingMascot } from "@/components/ai-hub/FloatingMascot";
+import { PracticeCarousel, type PracticeCard } from "@/components/ai-hub/PracticeCarousel";
 import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
 import { Avatar } from "@/components/ui/Avatar";
 import type { AiPracticeStats } from "@/lib/ai-practice/queries";
@@ -14,26 +16,43 @@ import type { Profile } from "@/lib/profile";
 type OtherSection = "speak" | "listen" | "shadow" | "grammar";
 type Level = "beginner" | "intermediate" | "advanced";
 
-const OTHER_SECTIONS: { key: OtherSection; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
-  { key: "speak", Icon: MicIcon },
-  { key: "listen", Icon: HeadphonesIcon },
-  { key: "shadow", Icon: MicIcon },
-  { key: "grammar", Icon: DictionaryIcon },
+const OTHER_SECTIONS: { key: OtherSection; Icon: PracticeCard["Icon"]; bg: string; text: string }[] = [
+  { key: "speak", Icon: MicIcon, bg: "bg-coral-soft", text: "text-coral-deep" },
+  { key: "listen", Icon: HeadphonesIcon, bg: "bg-sky-soft", text: "text-sky-deep" },
+  { key: "shadow", Icon: MicIcon, bg: "bg-violet-soft", text: "text-violet-deep" },
+  { key: "grammar", Icon: DictionaryIcon, bg: "bg-gold-soft", text: "text-gold-deep" },
 ];
 
 const LEVELS: Level[] = ["beginner", "intermediate", "advanced"];
 
 /**
- * AI Practice. Chat is the one real, working section, so it gets the page's
- * main real estate (no header duplication, no "select it" step). The other
- * modes are a small, clearly-secondary chip row — real numbers (Your
- * Progress) never hide behind a not-yet-built feature.
+ * AI Practice. A floating mascot hero sits above a colored carousel of
+ * practice "spaces" — Chat is the one that's real (its card scrolls down to
+ * the actual ChatBox below); the rest surface the same coming-soon notice as
+ * before, just inside the new card language instead of a plain chip row.
  */
 export function AiPracticeView({ profile, stats, unreadCount }: { profile: Profile | null; stats: AiPracticeStats; unreadCount: number }) {
   const { m, locale } = useI18n();
   const t = m.aiPractice;
   const [level, setLevel] = useState<Level>("beginner");
   const [notice, setNotice] = useState<string | null>(null);
+  const [activeCard, setActiveCard] = useState<string | null>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  const cards: PracticeCard[] = [
+    { key: "chat", label: t.sections.chat, Icon: ChatBubbleIcon, bg: "bg-teal-mist", text: "text-teal-deep" },
+    ...OTHER_SECTIONS.map(({ key, Icon, bg, text }) => ({ key, label: t.sections[key], Icon, bg, text })),
+  ];
+
+  function onSelectCard(key: string) {
+    setActiveCard(key);
+    if (key === "chat") {
+      setNotice(null);
+      chatRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      setNotice(t.tabComingSoon[key as OtherSection]);
+    }
+  }
 
   return (
     <div className="animate-fade-up max-w-2xl">
@@ -50,19 +69,19 @@ export function AiPracticeView({ profile, stats, unreadCount }: { profile: Profi
         }
       />
 
-      {/* Title + friendly AI character */}
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h1 className="font-display text-3xl font-semibold">{t.title}</h1>
-          <p className="mt-1 text-sm text-ink-soft">{t.subtitle}</p>
-        </div>
-        <div className="relative shrink-0 rounded-card bg-sage-soft px-3.5 py-3">
-          <span className="absolute -top-2.5 -end-1.5 rounded-full bg-surface px-2 py-0.5 text-[11px] font-medium text-ink shadow-soft" dir="ltr" lang="ko">
-            {t.greeting}
-          </span>
-          <RobotIcon width={32} height={32} className="text-teal-deep" />
-        </div>
+      {/* Floating mascot hero */}
+      <div className="relative flex flex-col items-center gap-1 pt-1 pb-3 text-center">
+        <span className="rounded-full bg-surface px-3 py-1 text-[11px] font-medium text-ink shadow-soft" dir="ltr" lang="ko">
+          {t.greeting}
+        </span>
+        <FloatingMascot size={120} />
+        <h1 className="font-display text-2xl font-semibold">{t.title}</h1>
+        <p className="text-sm text-ink-soft">{t.subtitle}</p>
       </div>
+
+      {/* Practice spaces — colored floating carousel; tapping one "enters" that space */}
+      <PracticeCarousel cards={cards} active={activeCard} onSelect={onSelectCard} />
+      {notice && <p className="mt-2 text-center text-xs text-ink-faint">{notice}</p>}
 
       {/* Your Progress — always visible; real numbers, never hidden behind a placeholder tab */}
       <section className="mt-5 rounded-card bg-surface p-4 shadow-soft">
@@ -87,26 +106,8 @@ export function AiPracticeView({ profile, stats, unreadCount }: { profile: Profi
         </div>
       </section>
 
-      {/* Speak / Listen / Shadow / Grammar — a small, clearly-secondary row, not full cards competing with the real feature */}
-      <div className="mt-5">
-        <p className="mb-2 text-[11px] font-semibold tracking-wide text-ink-faint uppercase">{t.comingSoonLabel}</p>
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {OTHER_SECTIONS.map(({ key, Icon }) => (
-            <button
-              key={key}
-              onClick={() => setNotice(t.tabComingSoon[key])}
-              className="flex shrink-0 items-center gap-1.5 rounded-full border border-line bg-cream-deep px-3.5 py-2 text-xs font-medium text-ink-soft transition hover:bg-cream"
-            >
-              <Icon width={14} height={14} />
-              {t.sections[key]}
-            </button>
-          ))}
-        </div>
-        {notice && <p className="mt-2 text-xs text-ink-faint">{notice}</p>}
-      </div>
-
       {/* Chat — the real feature, front and center */}
-      <div className="mt-6">
+      <div ref={chatRef} className="mt-6 scroll-mt-6">
         <ChatBox hideHeader />
       </div>
 
