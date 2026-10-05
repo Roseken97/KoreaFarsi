@@ -473,7 +473,6 @@ export const fa: Messages = {
       soon: "به‌زودی",
     },
     quote: "یک زبان جدید. یک تو با اعتمادبه‌نفس بیشتر.",
-    card: { start: "شروع کن", live: "فعال", soon: "به‌زودی", of: "از", mode: "حالت", status: "وضعیت", prev: "قبلی", next: "بعدی", goTo: "رفتن به {n}" },
   },
   chat: {
     metaTitle: "دستیار کوریافارسی",
