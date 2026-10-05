@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import { getAiPracticeStats } from "@/lib/ai-practice/queries";
 import { getMessages } from "@/lib/i18n/server";
-import { getUnreadNotificationCount } from "@/lib/notifications/queries";
-import { getProfile } from "@/lib/profile";
 import { AiPracticeView } from "./AiPracticeView";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -10,13 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: m.aiPractice.metaTitle };
 }
 
-/**
- * AI Practice (sketch 12). Chat is real (the existing KoreaFarsi AI text
- * assistant); Speak/Listen/Shadow/Grammar are the UX/structure only for now —
- * per Rose, the voice engine behind them is a later, separately-scoped build.
- */
-export default async function AiHubPage() {
-  const [profile, stats, unreadCount] = await Promise.all([getProfile(), getAiPracticeStats(), getUnreadNotificationCount()]);
-
-  return <AiPracticeView profile={profile} stats={stats} unreadCount={unreadCount} />;
+/** AI Hub landing — a floating character + the 5-section arc carousel. Each section's real content lives at /ai-hub/<key>. */
+export default function AiHubPage() {
+  return <AiPracticeView />;
 }
