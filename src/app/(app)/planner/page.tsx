@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import type { ReactNode } from "react";
+import { Suspense } from "react";
 import { DailyPanel } from "@/components/planner/DailyPanel";
 import { MonthlyPanel } from "@/components/planner/MonthlyPanel";
+import { PanelErrorBoundary } from "@/components/planner/PanelErrorBoundary";
 import { PLANNER_TABS, PlannerCarousel, type PlannerTab } from "@/components/planner/PlannerCarousel";
 import { ProfileSetupPanel } from "@/components/planner/ProfileSetupPanel";
 import { WeeklyPanel } from "@/components/planner/WeeklyPanel";
@@ -27,20 +28,8 @@ function isPlannerTab(v: unknown): v is PlannerTab {
   return typeof v === "string" && (PLANNER_TABS as readonly string[]).includes(v);
 }
 
-/** Runs one panel's data-fetch + render in isolation so a bug in one tab shows an inline message instead of crashing the whole page (no error.tsx boundary blanks the tab bar too). */
-async function renderPanel(build: () => Promise<ReactNode>) {
-  try {
-    return await build();
-  } catch (err) {
-    console.error("[planner] panel render failed:", err);
-    const message = err instanceof Error ? err.message : String(err);
-    return (
-      <div className="rounded-card border border-dashed border-danger/40 bg-danger-soft p-5 text-center text-sm text-danger" dir="ltr">
-        Couldn&apos;t load this tab.
-        <p className="mt-1 text-xs opacity-80">{message}</p>
-      </div>
-    );
-  }
+function PanelSkeleton() {
+  return <div className="h-48 animate-pulse rounded-card bg-surface shadow-soft" />;
 }
 
 /** Planner: a 5-page carousel (Profile setup, Daily, Weekly, Monthly, Yearly), themed by the season/holiday on the system date. */
@@ -71,16 +60,43 @@ export default async function PlannerPage(props: PageProps<"/planner">) {
       </div>
 
       <PlannerCarousel active={tab} labels={labels}>
-        {await renderPanel(async () => {
-          if (tab === "profile" || !plan) return renderProfile(profile);
-          if (tab === "daily") return renderDaily(plan.id, sp.day, m, locale, theme.accent);
-          if (tab === "weekly") return renderWeekly(plan.id, sp.week, m, theme.accent);
-          if (tab === "monthly") return renderMonthly(plan.id, sp.month, m, theme.accent);
-          return renderYearly(plan.id, sp.year, m, locale, theme.accent);
-        })}
+        <Suspense key={tab} fallback={<PanelSkeleton />}>
+          <PanelErrorBoundary tab={tab}>
+            <PlannerPanel tab={tab} plan={plan} profile={profile} sp={sp} m={m} locale={locale} accent={theme.accent} />
+          </PanelErrorBoundary>
+        </Suspense>
       </PlannerCarousel>
     </div>
   );
+}
+
+/**
+ * Rendered inside a Suspense boundary (own render unit) wrapped by a client
+ * error boundary — so a throw anywhere in here (including the data fetch)
+ * is isolated to this one tab's slot instead of failing the whole response.
+ */
+async function PlannerPanel({
+  tab,
+  plan,
+  profile,
+  sp,
+  m,
+  locale,
+  accent,
+}: {
+  tab: PlannerTab;
+  plan: Awaited<ReturnType<typeof getActivePlan>>;
+  profile: Awaited<ReturnType<typeof getProfile>>;
+  sp: Awaited<PageProps<"/planner">["searchParams"]>;
+  m: Awaited<ReturnType<typeof getMessages>>["m"];
+  locale: Awaited<ReturnType<typeof getMessages>>["locale"];
+  accent: string;
+}) {
+  if (tab === "profile" || !plan) return renderProfile(profile);
+  if (tab === "daily") return renderDaily(plan.id, sp.day, m, locale, accent);
+  if (tab === "weekly") return renderWeekly(plan.id, sp.week, m, accent);
+  if (tab === "monthly") return renderMonthly(plan.id, sp.month, m, accent);
+  return renderYearly(plan.id, sp.year, m, locale, accent);
 }
 
 async function renderProfile(profile: Awaited<ReturnType<typeof getProfile>>) {
