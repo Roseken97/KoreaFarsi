@@ -5,8 +5,15 @@ import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n/client";
 import { hasOnboarded } from "@/lib/onboarding";
 
-/** Paper colour the intro film was recoloured to; the page matches it so the film's edges disappear. */
-const FILM_BG = "#fdf5ed";
+/**
+ * The film's background gradient, redrawn in CSS so the page around the film matches it. The film is always
+ * 100dvh tall and centred, so stops are in dvh. Keep in sync with scripts/splash_gradient.py.
+ */
+const SPLASH_BG = [
+  "radial-gradient(45dvh circle at 50% 45%, rgb(255 249 242 / 0.85) 0, rgb(255 249 242 / 0.6) 18dvh, rgb(255 249 242 / 0.2) 33.75dvh, rgb(255 249 242 / 0) 45dvh)",
+  "radial-gradient(55dvh circle at 50% 100%, rgb(242 199 209 / 0.45) 0, rgb(242 199 209 / 0.2) 27.5dvh, rgb(242 199 209 / 0) 55dvh)",
+  "linear-gradient(#fff9f2 0%, #f8dde3 55%, #f3e7d7 100%)",
+].join(", ");
 /** Leave anyway if the film can't load or stalls (it runs 6s). */
 const MAX_MS = 8000;
 
@@ -54,7 +61,7 @@ export default function SplashPage() {
   }
 
   return (
-    <div className="relative grid min-h-dvh place-items-center overflow-hidden" style={{ background: FILM_BG }}>
+    <div className="relative grid h-dvh place-items-center overflow-hidden" style={{ background: SPLASH_BG }}>
       <h1 className="sr-only">KoreaFarsi</h1>
       <p className="sr-only" role="status">
         {m.splash.loading}
@@ -66,7 +73,7 @@ export default function SplashPage() {
         preload="auto"
         aria-hidden="true"
         className="h-dvh w-full max-w-[min(100%,calc(100dvh*9/16))] object-cover"
-        // On wide screens the film is a column; fading its sides hides the paper texture's edge.
+        // On wide screens the film is a column; softening its sides hides any seam with the CSS gradient.
         style={{ maskImage: "linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)" }}
       >
         {/* WebM is half the size; Safari takes the MP4. */}
