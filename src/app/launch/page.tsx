@@ -14,43 +14,64 @@ const SPLASH_BG = [
   "radial-gradient(55dvh circle at 50% 100%, rgb(242 199 209 / 0.45) 0, rgb(242 199 209 / 0.2) 27.5dvh, rgb(242 199 209 / 0) 55dvh)",
   "linear-gradient(#fff9f2 0%, #f8dde3 55%, #f3e7d7 100%)",
 ].join(", ");
-/** Leave anyway if the film can't load or stalls (it runs 6s). */
-const MAX_MS = 8000;
+/** If the film hasn't started by then (slow network, autoplay blocked), show the finished logo instead. */
+const STALL_MS = 3000;
+/** How long the still logo stays before moving on. */
+const STILL_MS = 2200;
+/** Leave no matter what (the film runs 6s). */
+const MAX_MS = 12000;
 
 /**
  * Splash: the logo intro film with its sound, then first-run → onboarding, otherwise → home.
  * This is the PWA's start_url — installed-app opens land here, not on the public marketing page at "/".
  * Browsers block autoplay with sound until the user has interacted, so when the unmuted play is
- * refused the film plays muted and a small button offers the sound.
+ * refused the film plays muted and a small button offers the sound. When even muted playback is
+ * refused (iOS Low Power Mode, data saver) or the film is slow to arrive, the finished logo shows as
+ * a still for a moment instead of a blank screen.
  */
 export default function SplashPage() {
   const router = useRouter();
   const { m } = useI18n();
   const video = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(false);
+  const [still, setStill] = useState(false);
 
   useEffect(() => {
     const target = hasOnboarded() ? "/home" : "/onboarding";
     router.prefetch(target);
-    const leave = () => router.replace(target);
     const el = video.current;
-    const fallback = setTimeout(leave, MAX_MS);
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    let settled = false;
+
+    const leave = () => router.replace(target);
+    const showStill = () => {
+      if (settled) return;
+      settled = true;
+      el?.pause();
+      setStill(true);
+      timers.push(setTimeout(leave, STILL_MS));
+    };
+    const onPlaying = () => clearTimeout(stall);
+    const stall = setTimeout(showStill, STALL_MS);
+    timers.push(stall, setTimeout(leave, MAX_MS));
 
     // With <source> children, a load failure fires on the last source, not on the video.
     const lastSource = el?.querySelector("source:last-of-type");
     if (el) {
+      el.addEventListener("playing", onPlaying);
       el.addEventListener("ended", leave);
-      lastSource?.addEventListener("error", leave);
+      lastSource?.addEventListener("error", showStill);
       el.play().catch(() => {
         el.muted = true;
         setMuted(true);
-        el.play().catch(leave);
+        el.play().catch(showStill);
       });
     }
     return () => {
-      clearTimeout(fallback);
+      timers.forEach(clearTimeout);
+      el?.removeEventListener("playing", onPlaying);
       el?.removeEventListener("ended", leave);
-      lastSource?.removeEventListener("error", leave);
+      lastSource?.removeEventListener("error", showStill);
     };
   }, [router]);
 
@@ -80,7 +101,16 @@ export default function SplashPage() {
         <source src="/splash/logo-intro.webm" type="video/webm" />
         <source src="/splash/logo-intro.mp4" type="video/mp4" />
       </video>
-      {muted && (
+      {still && (
+        // eslint-disable-next-line @next/next/no-img-element -- a fixed-size local still; next/image adds nothing here
+        <img
+          src="/splash/logo-still.jpg"
+          alt=""
+          className="absolute inset-0 mx-auto h-dvh w-full max-w-[min(100%,calc(100dvh*9/16))] object-cover"
+          style={{ maskImage: "linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)" }}
+        />
+      )}
+      {muted && !still && (
         <button
           type="button"
           onClick={unmute}
