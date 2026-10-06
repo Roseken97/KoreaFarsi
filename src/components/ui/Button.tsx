@@ -12,13 +12,13 @@ const base =
 // look, flipping to an inset pair (pressed into the page) on :active.
 const variants: Record<Variant, string> = {
   primary:
-    "bg-violet text-white " +
-    "shadow-[6px_6px_14px_rgb(41_38_61_/_0.25),-6px_-6px_14px_rgb(255_255_255_/_0.5)] " +
+    "bg-ink text-white " +
+    "shadow-[6px_6px_14px_rgb(30_35_64_/_0.25),-6px_-6px_14px_rgb(255_255_255_/_0.5)] " +
     "hover:bg-violet-deep active:scale-[0.98] active:shadow-[inset_4px_4px_10px_rgb(0_0_0_/_0.3),inset_-4px_-4px_10px_rgb(255_255_255_/_0.15)]",
   secondary:
     "border-2 border-teal bg-surface text-teal-deep " +
-    "shadow-[6px_6px_14px_rgb(41_38_61_/_0.12),-6px_-6px_14px_rgb(255_255_255_/_0.9)] " +
-    "hover:bg-teal-mist active:scale-[0.98] active:shadow-[inset_4px_4px_10px_rgb(41_38_61_/_0.1),inset_-4px_-4px_10px_rgb(255_255_255_/_0.6)]",
+    "shadow-[6px_6px_14px_rgb(30_35_64_/_0.12),-6px_-6px_14px_rgb(255_255_255_/_0.9)] " +
+    "hover:bg-teal-mist active:scale-[0.98] active:shadow-[inset_4px_4px_10px_rgb(30_35_64_/_0.1),inset_-4px_-4px_10px_rgb(255_255_255_/_0.6)]",
   ghost: "text-ink hover:underline",
   // Auth screens: deep celadon pill, as in the soft-3D login reference.
   dark:

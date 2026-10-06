@@ -96,10 +96,10 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
       {/* Hero banner */}
       <section
         style={{ backgroundImage: MESH.violet }}
-        className="card-grain relative mt-5 overflow-hidden rounded-card p-6 text-white shadow-[0_2px_6px_rgb(41_38_61_/_0.08),0_14px_26px_-12px_rgb(91_140_123_/_0.4)] md:p-8"
+        className="card-grain relative mt-5 overflow-hidden rounded-card p-6 text-ink shadow-[0_2px_6px_rgb(30_35_64_/_0.08),0_14px_26px_-12px_rgb(118_144_234_/_0.45)] md:p-8"
       >
         <SakuraBranch className="absolute -end-4 -bottom-6 w-44 opacity-90 md:w-60 rtl:-scale-x-100" />
-        <p className="relative text-xs font-semibold tracking-[0.18em] text-white/80 uppercase">{t.hero.kicker}</p>
+        <p className="relative text-xs font-semibold tracking-[0.18em] text-ink/70 uppercase">{t.hero.kicker}</p>
         <p className="relative mt-2 max-w-[15rem] font-display text-2xl leading-snug font-semibold md:max-w-sm md:text-3xl">
           {t.hero.title}
         </p>

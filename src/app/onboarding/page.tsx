@@ -15,7 +15,7 @@ import { MESH, MESH_SHADOW, type MeshColor } from "@/lib/ui/mesh";
  * panel for an <Image> once the 4 artworks exist. Copy lives in the i18n files.
  */
 const VISUALS: { bg?: string; text: string; mesh?: MeshColor }[] = [
-  { text: "text-white", mesh: "violet" },
+  { text: "text-ink", mesh: "violet" },
   { bg: "bg-blush-soft", text: "text-ink" },
   { bg: "bg-sage-soft", text: "text-teal-deep" },
   { bg: "bg-cream-deep", text: "text-ink" },

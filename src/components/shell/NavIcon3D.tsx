@@ -7,11 +7,11 @@ type Palette = { light: string; mid: string; dark: string; deep: string };
 /** Soft grey "clay" for inactive tabs; each tab gets its own color once active, like the reference tab bar. */
 const GREY: Palette = { light: "#fbfbfc", mid: "#d6d5dc", dark: "#a3a1ae", deep: "#76737f" };
 export const NAV_PALETTE: Record<Name, Palette> = {
-  planner: { light: "#ffe0ec", mid: "#f58cb8", dark: "#e85a9f", deep: "#b83677" },
-  library: { light: "#fff1cc", mid: "#ffcf5c", dark: "#ffb72b", deep: "#c98400" },
-  home: { light: "#d9fbf6", mid: "#7fe3d8", dark: "#20b8b0", deep: "#16847f" },
-  dictionary: { light: "#e3ecff", mid: "#9dbdf6", dark: "#5d8fe8", deep: "#3768bb" },
-  account: { light: "#ece4ff", mid: "#b9a0ff", dark: "#8b63f0", deep: "#5d3bc4" },
+  planner: { light: "#fdf1df", mid: "#f8d4a6", dark: "#ebb574", deep: "#9a6418" },
+  library: { light: "#fde4e4", mid: "#f8a8a8", dark: "#e98a8f", deep: "#b24e58" },
+  home: { light: "#e6eafb", mid: "#a4b6f3", dark: "#7690ea", deep: "#4c5fb5" },
+  dictionary: { light: "#e6f8f3", mid: "#aaeedd", dark: "#5fc9ad", deep: "#1f7a66" },
+  account: { light: "#f0e7f9", mid: "#d1b6e7", dark: "#ae8ad2", deep: "#7550aa" },
 };
 
 /**

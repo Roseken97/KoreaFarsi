@@ -51,7 +51,7 @@ export function CoursesBrowser({ courses, lessonCounts }: { courses: Course[]; l
                   ) : (
                     <div
                       style={{ backgroundImage: MESH[meshColor] }}
-                      className={`card-grain relative -my-1 -ms-2 grid size-[92px] shrink-0 rotate-[-4deg] place-items-center overflow-hidden rounded-tl-3xl rounded-tr-xl rounded-br-3xl rounded-bl-xl text-white ${MESH_SHADOW[meshColor]}`}
+                      className={`card-grain relative -my-1 -ms-2 grid size-[92px] shrink-0 rotate-[-4deg] place-items-center overflow-hidden rounded-tl-3xl rounded-tr-xl rounded-br-3xl rounded-bl-xl text-ink ${MESH_SHADOW[meshColor]}`}
                     >
                       <span className="absolute top-2.5 start-2.5 size-2 rounded-full bg-white/25" aria-hidden="true" />
                       <span className="absolute end-2.5 bottom-2.5 size-1.5 rounded-full bg-white/20" aria-hidden="true" />
