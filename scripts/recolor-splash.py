@@ -1,5 +1,6 @@
 # Usage: python3 scripts/recolor-splash.py <original.mp4> public/splash/logo-intro.mp4 fff8ef
-# Needs ffmpeg and numpy. Then re-encode the WebM and poster (see src/app/launch/page.tsx).
+# Needs ffmpeg and numpy. For the shipped files, render to a lossless master, then upscale to 1080x1920
+# (lanczos + light unsharp) and encode MP4 (x264 crf 19) and WebM (VP9 crf 22) plus a poster frame.
 """Recolour the paper background of the logo film to one flat colour, keeping texture and shadows.
 The paper's lighting is fitted once (smooth 2D quadratic, from a late frame) and divided out."""
 import sys, subprocess, numpy as np
