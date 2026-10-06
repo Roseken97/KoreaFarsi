@@ -503,6 +503,7 @@ export const en = {
       soon: "Soon",
     },
     quote: "A new language. A more confident you.",
+    card: { start: "Start", live: "Live", soon: "Soon", of: "of" },
   },
   chat: {
     metaTitle: "KoreaFarsi AI",
