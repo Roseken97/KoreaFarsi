@@ -12,10 +12,13 @@ export function GoogleButton({
   next,
   remember = true,
   onError,
+  round = false,
 }: {
   next: string;
   remember?: boolean;
   onError: (message: string) => void;
+  /** Round white icon button, as in the soft-3D auth reference's social row. */
+  round?: boolean;
 }) {
   const { m } = useI18n();
   const [loading, setLoading] = useState(false);
@@ -35,6 +38,25 @@ export function GoogleButton({
       setLoading(false);
       onError(authErrorMessage(m, error));
     }
+  }
+
+  if (round) {
+    return (
+      <button
+        type="button"
+        onClick={signIn}
+        disabled={loading}
+        aria-label={m.auth.google}
+        title={m.auth.google}
+        className="grid size-14 place-items-center rounded-full bg-surface shadow-[0_10px_24px_-12px_rgb(41_38_61/0.3)] transition hover:-translate-y-0.5 disabled:opacity-55"
+      >
+        {loading ? (
+          <span className="size-5 animate-spin rounded-full border-2 border-ink-faint border-t-transparent" />
+        ) : (
+          <GoogleIcon width={22} height={22} />
+        )}
+      </button>
+    );
   }
 
   return (

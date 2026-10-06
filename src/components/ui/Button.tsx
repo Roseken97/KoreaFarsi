@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ComponentProps } from "react";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ghost" | "dark";
 
 const base =
   "inline-flex h-12 w-full items-center justify-center gap-2 rounded-field px-5 text-[15px] font-semibold transition " +
@@ -20,6 +20,10 @@ const variants: Record<Variant, string> = {
     "shadow-[6px_6px_14px_rgb(30_35_64_/_0.12),-6px_-6px_14px_rgb(255_255_255_/_0.9)] " +
     "hover:bg-teal-mist active:scale-[0.98] active:shadow-[inset_4px_4px_10px_rgb(30_35_64_/_0.1),inset_-4px_-4px_10px_rgb(255_255_255_/_0.6)]",
   ghost: "text-ink hover:underline",
+  // Auth screens: deep celadon pill, as in the soft-3D login reference.
+  dark:
+    "rounded-full bg-violet-deep text-white shadow-[0_14px_28px_-12px_rgb(63_102_87/0.6)] hover:bg-[#345849] active:scale-[0.98]" +
+    "hover:bg-[#2c2940] active:scale-[0.98]",
 };
 
 export function Button({

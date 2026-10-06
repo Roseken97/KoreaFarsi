@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { AuthHeader } from "@/components/auth/AuthHeader";
+import { AuthHero } from "@/components/auth/AuthHero";
 import { GoogleButton, OrDivider } from "@/components/auth/GoogleButton";
 import { StatusScreen } from "@/components/auth/StatusScreen";
-import { MailIcon } from "@/components/icons";
+import { AccountIcon, MailIcon, ShieldIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Notice } from "@/components/ui/Notice";
@@ -125,12 +126,12 @@ export function SignupForm({ next }: { next: string }) {
             type="button"
             onClick={onResend}
             disabled={resending}
-            className="text-sm font-semibold text-teal hover:underline disabled:opacity-55"
+            className="text-sm font-semibold text-violet-deep hover:underline disabled:opacity-55"
           >
             {t.resend}
           </button>
         </form>
-        <Link href="/auth/login" className="mt-8 block font-semibold text-teal hover:underline">
+        <Link href="/auth/login" className="mt-8 block font-semibold text-violet-deep hover:underline">
           {t.backToLogin}
         </Link>
       </StatusScreen>
@@ -139,13 +140,16 @@ export function SignupForm({ next }: { next: string }) {
 
   return (
     <>
-      <AuthHeader title={t.title} subtitle={t.subtitle} />
+      <AuthHero tone="rose" letter="가" />
+      <AuthHeader title={t.title} subtitle={t.subtitle} center />
 
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         {formError && <Notice tone="error">{formError}</Notice>}
         <Field
           label={m.auth.fields.fullName}
           autoComplete="name"
+          icon={<AccountIcon width={17} height={17} />}
+          iconTint="bg-gold-soft text-gold-deep"
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={fieldErrors.name}
@@ -156,7 +160,8 @@ export function SignupForm({ next }: { next: string }) {
           ltr
           autoComplete="email"
           inputMode="email"
-          placeholder="name@example.com"
+          icon={<MailIcon width={17} height={17} />}
+          iconTint="bg-violet-soft text-violet-deep"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={fieldErrors.email}
@@ -166,21 +171,25 @@ export function SignupForm({ next }: { next: string }) {
           type="password"
           ltr
           autoComplete="new-password"
+          icon={<ShieldIcon width={17} height={17} />}
+          iconTint="bg-clay-soft text-clay-deep"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={fieldErrors.password}
         />
-        <Button type="submit" loading={loading} className="mt-2">
+        <Button type="submit" variant="dark" loading={loading} className="mt-2 h-14">
           {t.submit}
         </Button>
       </form>
 
       <OrDivider />
-      <GoogleButton next={successPath} onError={setFormError} />
+      <div className="flex justify-center">
+        <GoogleButton next={successPath} onError={setFormError} round />
+      </div>
 
       <p className="mt-auto pt-8 text-center text-sm text-ink-soft">
         {t.haveAccount}{" "}
-        <Link href="/auth/login" className="font-semibold text-teal hover:underline">
+        <Link href="/auth/login" className="font-semibold text-violet-deep hover:underline">
           {t.loginLink}
         </Link>
       </p>
