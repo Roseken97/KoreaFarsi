@@ -7,6 +7,7 @@ import { toggleTask } from "@/lib/planner/actions";
 import type { PlannerTask } from "@/lib/planner/types";
 import { fmt } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
+import { playSound } from "@/lib/ui/sound";
 import { CATEGORY_ICON } from "./categoryIcons";
 
 export function TaskItem({ task }: { task: PlannerTask }) {
@@ -18,6 +19,7 @@ export function TaskItem({ task }: { task: PlannerTask }) {
   function toggle() {
     const next = !done;
     setDone(next); // optimistic — reverted below if the write fails
+    if (next) playSound("success");
     startTransition(async () => {
       const result = await toggleTask(task.id, next).catch(() => ({ ok: false }) as const);
       if (!result.ok) setDone(!next);
@@ -27,6 +29,7 @@ export function TaskItem({ task }: { task: PlannerTask }) {
   return (
     <li>
       <motion.button
+        data-sound="off"
         onClick={toggle}
         disabled={pending}
         aria-pressed={done}

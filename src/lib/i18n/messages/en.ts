@@ -331,6 +331,7 @@ export const en = {
     },
     settingsPage: {
       title: "App Settings",
+      sounds: { title: "Sounds", body: "Soft sounds when you tap buttons and finish a lesson or task." },
       notifications: { title: "Notifications", body: "Study reminders are coming in a future update." },
       appearance: { title: "Appearance", body: "Light theme. Dark mode is planned for later." },
       privacy: { title: "Privacy", body: "The privacy policy will be published here soon." },

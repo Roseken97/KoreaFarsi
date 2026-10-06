@@ -188,3 +188,72 @@ body {
     animation: none;
   }
 }
+
+/*
+ * Entrances. `.kf-stagger` rises its children in sequence; `.kf-page` does the same for each
+ * page's top-level sections (applied by the route transitions). Both end on `transform: none`
+ * so no lasting containing block is left for fixed or sticky children.
+ */
+@keyframes kf-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes kf-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.kf-stagger > *,
+.kf-page > * > * {
+  animation: kf-rise 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.kf-pop {
+  animation: kf-pop 480ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.kf-stagger > :nth-child(2),
+.kf-page > * > :nth-child(2) {
+  animation-delay: 60ms;
+}
+.kf-stagger > :nth-child(3),
+.kf-page > * > :nth-child(3) {
+  animation-delay: 120ms;
+}
+.kf-stagger > :nth-child(4),
+.kf-page > * > :nth-child(4) {
+  animation-delay: 180ms;
+}
+.kf-stagger > :nth-child(5),
+.kf-page > * > :nth-child(5) {
+  animation-delay: 240ms;
+}
+.kf-stagger > :nth-child(6),
+.kf-page > * > :nth-child(6) {
+  animation-delay: 300ms;
+}
+.kf-stagger > :nth-child(n + 7),
+.kf-page > * > :nth-child(n + 7) {
+  animation-delay: 340ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kf-stagger > *,
+  .kf-page > * > *,
+  .kf-pop {
+    animation: none;
+  }
+}

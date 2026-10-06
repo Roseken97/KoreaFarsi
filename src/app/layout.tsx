@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display, Vazirmatn } from "next/font/google";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { UiSounds } from "@/components/shell/UiSounds";
 import { I18nProvider } from "@/lib/i18n/client";
 import { dirOf } from "@/lib/i18n/config";
 import { getLocale } from "@/lib/i18n/server";
@@ -48,6 +49,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full">
         <I18nProvider locale={locale} overrides={overrides}>{children}</I18nProvider>
         <ServiceWorkerRegister />
+        <UiSounds />
       </body>
     </html>
   );

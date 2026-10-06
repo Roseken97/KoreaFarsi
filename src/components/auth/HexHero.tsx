@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, type ReactNode } from "react";
 
 const TONES = {
   lavender: { light: "#ece2f7", mid: "#ae8ad2", dark: "#7550aa", ink: "#7550aa" },
@@ -13,9 +13,21 @@ const HEX = "100,22 160,57 160,127 100,162 40,127 40,57";
 /**
  * Rounded hexagon hero from the soft-3D sign-in reference. Shows Rose's uploaded 3D render
  * (Admin → Card photos) clipped to the hexagon; without one, a floating Hangul tile on a
- * pedestal stands in.
+ * pedestal stands in. `children` (e.g. the logo) replaces the tile, centered on the hexagon.
  */
-export function HexHero({ tone, image, letter, className = "" }: { tone: HexTone; image?: string; letter: string; className?: string }) {
+export function HexHero({
+  tone,
+  image,
+  letter = "",
+  className = "",
+  children,
+}: {
+  tone: HexTone;
+  image?: string;
+  letter?: string;
+  className?: string;
+  children?: ReactNode;
+}) {
   const uid = useId();
   const t = TONES[tone];
   const id = (k: string) => `${uid}-${k}`;
@@ -53,7 +65,7 @@ export function HexHero({ tone, image, letter, className = "" }: { tone: HexTone
 
         <polygon points={HEX} fill={`url(#${id("hex")})`} stroke={`url(#${id("hex")})`} strokeWidth="22" strokeLinejoin="round" />
 
-        {image ? (
+        {children ? null : image ? (
           <image href={image} x="18" y="0" width="164" height="184" preserveAspectRatio="xMidYMid slice" mask={`url(#${id("clip")})`} />
         ) : (
           <>
@@ -91,6 +103,7 @@ export function HexHero({ tone, image, letter, className = "" }: { tone: HexTone
         <circle className="kf-float" style={{ animationDelay: "-2s" }} cx="172" cy="150" r="9" fill={`url(#${id("mint")})`} />
         <circle cx="174" cy="38" r="5" fill="#fff" opacity="0.9" />
       </svg>
+      {children && <div className="absolute inset-0 grid place-items-center pb-[4%]">{children}</div>}
     </div>
   );
 }

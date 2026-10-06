@@ -67,7 +67,8 @@ export function OnboardingCarousel({ slides }: { slides: OnboardingSlide[] }) {
                 className="relative flex h-full w-full shrink-0 snap-start flex-col"
                 style={{ background: `linear-gradient(to bottom, ${c.tint} 0%, #ffffff 62%)` }}
               >
-                <div className="px-7 pt-[calc(env(safe-area-inset-top)+4.75rem)]">
+                {/* the text rises in again each time its slide becomes the current one */}
+                <div className={`px-7 pt-[calc(env(safe-area-inset-top)+4.75rem)] ${i === index ? "kf-stagger" : "opacity-0"}`}>
                   {slide.badge && (
                     <span lang="ko" className="inline-flex rounded-full bg-white/80 px-3.5 py-1 text-sm font-bold shadow-[0_6px_16px_-10px_rgb(30_35_64/0.35)]" style={{ color: c.accent }}>
                       {slide.badge}
