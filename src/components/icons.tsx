@@ -85,6 +85,13 @@ export const UserIcon = (p: IconProps) => (
   </Base>
 );
 
+export const SpeakerIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4.5 9.5h3l4-3.5v12l-4-3.5h-3z" />
+    <path d="M15 9a4 4 0 0 1 0 6M17.5 6.5a7.5 7.5 0 0 1 0 11" />
+  </Base>
+);
+
 export const ImageIcon = (p: IconProps) => (
   <Base {...p}>
     <rect x="3.5" y="4.5" width="17" height="15" rx="3" />

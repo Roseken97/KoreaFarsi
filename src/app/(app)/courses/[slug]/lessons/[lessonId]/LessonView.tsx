@@ -12,6 +12,7 @@ import { toggleLessonDone } from "@/lib/courses/actions";
 import type { CourseLesson } from "@/lib/courses/types";
 import { fmt, formatNumber, type Locale } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
+import { playSound } from "@/lib/ui/sound";
 
 type VideoError = "unauthenticated" | "forbidden" | "unavailable" | "generic" | null;
 type StepKey = "content" | "script" | "vocabulary" | "notes";
@@ -58,6 +59,7 @@ export function LessonView({
   function toggle() {
     const next = !done;
     setDone(next);
+    if (next) playSound("success");
     startTransition(async () => {
       const result = await toggleLessonDone(lesson.id, next, courseSlug);
       if (!result.ok) setDone(!next);
@@ -213,7 +215,7 @@ export function LessonView({
         </div>
       )}
 
-      <Button variant={done ? "secondary" : "primary"} onClick={toggle} disabled={pending}>
+      <Button variant={done ? "secondary" : "primary"} onClick={toggle} disabled={pending} data-sound="off">
         <CheckIcon width={18} height={18} />
         {done ? t.markNotDone : t.markDone}
       </Button>

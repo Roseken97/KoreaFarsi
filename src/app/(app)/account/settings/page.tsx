@@ -3,13 +3,14 @@ import { BellIcon, GlobeIcon, PaletteIcon, ShieldIcon } from "@/components/icons
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { ListGroup, ListRow, RowContent } from "@/components/ui/ListRow";
 import { getMessages } from "@/lib/i18n/server";
+import { SoundsToggle } from "./SoundsToggle";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m } = await getMessages();
   return { title: m.account.settingsPage.title };
 }
 
-/** App Settings. Only Language is functional in Phase 1; the rest state their status honestly. */
+/** App Settings. Language and Sounds work; the rest state their status honestly. */
 export default async function SettingsPage() {
   const { m } = await getMessages();
   const t = m.account.settingsPage;
@@ -30,6 +31,7 @@ export default async function SettingsPage() {
             title={m.account.items.language.title}
             body={m.account.items.language.body}
           />
+          <SoundsToggle />
         </ListGroup>
         <ListGroup>
           {rows.map(({ Icon, title, body }) => (

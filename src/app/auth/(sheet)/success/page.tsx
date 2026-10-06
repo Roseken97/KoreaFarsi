@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { StatusScreen } from "@/components/auth/StatusScreen";
 import { CheckCircleIcon } from "@/components/icons";
+import { SuccessChime } from "@/components/shell/UiSounds";
 import { ButtonLink } from "@/components/ui/Button";
 import { safeNext } from "@/lib/auth/validation";
 import { getMessages } from "@/lib/i18n/server";
@@ -22,6 +23,7 @@ export default async function SuccessPage(props: PageProps<"/auth/success">) {
       action={<ButtonLink variant="navy" href={safeNext(typeof next === "string" ? next : null)}>{t.cta}</ButtonLink>}
     >
       <p>{t.body}</p>
+      <SuccessChime />
     </StatusScreen>
   );
 }
