@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { AuthHeader } from "@/components/auth/AuthHeader";
+import { AuthHero } from "@/components/auth/AuthHero";
 import { GoogleButton, OrDivider } from "@/components/auth/GoogleButton";
+import { MailIcon, ShieldIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Notice } from "@/components/ui/Notice";
@@ -49,7 +51,8 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
 
   return (
     <>
-      <AuthHeader title={t.title} subtitle={t.subtitle} />
+      <AuthHero tone="violet" letter="한" />
+      <AuthHeader title={t.title} subtitle={t.subtitle} center />
 
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         {formError && <Notice tone="error">{formError}</Notice>}
@@ -59,7 +62,8 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
           ltr
           autoComplete="email"
           inputMode="email"
-          placeholder="name@example.com"
+          icon={<MailIcon width={17} height={17} />}
+          iconTint="bg-sage-soft text-teal-deep"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={fieldErrors.email}
@@ -69,6 +73,8 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
           type="password"
           ltr
           autoComplete="current-password"
+          icon={<ShieldIcon width={17} height={17} />}
+          iconTint="bg-[#ece4ff] text-[#5d3bc4]"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={fieldErrors.password}
@@ -87,13 +93,15 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
             {t.forgot}
           </Link>
         </div>
-        <Button type="submit" loading={loading} className="mt-2">
+        <Button type="submit" variant="dark" loading={loading} className="mt-2 h-14">
           {t.submit}
         </Button>
       </form>
 
       <OrDivider />
-      <GoogleButton next={next} remember={remember} onError={setFormError} />
+      <div className="flex justify-center">
+        <GoogleButton next={next} remember={remember} onError={setFormError} round />
+      </div>
 
       <p className="mt-auto pt-8 text-center text-sm text-ink-soft">
         {t.noAccount}{" "}

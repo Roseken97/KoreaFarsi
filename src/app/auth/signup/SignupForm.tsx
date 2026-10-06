@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { AuthHeader } from "@/components/auth/AuthHeader";
+import { AuthHero } from "@/components/auth/AuthHero";
 import { GoogleButton, OrDivider } from "@/components/auth/GoogleButton";
 import { StatusScreen } from "@/components/auth/StatusScreen";
-import { MailIcon } from "@/components/icons";
+import { AccountIcon, MailIcon, ShieldIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Notice } from "@/components/ui/Notice";
@@ -139,13 +140,16 @@ export function SignupForm({ next }: { next: string }) {
 
   return (
     <>
-      <AuthHeader title={t.title} subtitle={t.subtitle} />
+      <AuthHero tone="blush" letter="가" />
+      <AuthHeader title={t.title} subtitle={t.subtitle} center />
 
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         {formError && <Notice tone="error">{formError}</Notice>}
         <Field
           label={m.auth.fields.fullName}
           autoComplete="name"
+          icon={<AccountIcon width={17} height={17} />}
+          iconTint="bg-coral-soft text-coral-deep"
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={fieldErrors.name}
@@ -156,7 +160,8 @@ export function SignupForm({ next }: { next: string }) {
           ltr
           autoComplete="email"
           inputMode="email"
-          placeholder="name@example.com"
+          icon={<MailIcon width={17} height={17} />}
+          iconTint="bg-sage-soft text-teal-deep"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={fieldErrors.email}
@@ -166,17 +171,21 @@ export function SignupForm({ next }: { next: string }) {
           type="password"
           ltr
           autoComplete="new-password"
+          icon={<ShieldIcon width={17} height={17} />}
+          iconTint="bg-[#ece4ff] text-[#5d3bc4]"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={fieldErrors.password}
         />
-        <Button type="submit" loading={loading} className="mt-2">
+        <Button type="submit" variant="dark" loading={loading} className="mt-2 h-14">
           {t.submit}
         </Button>
       </form>
 
       <OrDivider />
-      <GoogleButton next={successPath} onError={setFormError} />
+      <div className="flex justify-center">
+        <GoogleButton next={successPath} onError={setFormError} round />
+      </div>
 
       <p className="mt-auto pt-8 text-center text-sm text-ink-soft">
         {t.haveAccount}{" "}
