@@ -5,11 +5,11 @@ import { ChatBubbleIcon, DictionaryIcon, HeadphonesIcon, MicIcon } from "@/compo
 import { useI18n } from "@/lib/i18n/client";
 
 const SECTION_STYLE: Record<string, Pick<ArcCard, "Icon" | "bg" | "text" | "korean" | "live">> = {
-  chat: { Icon: ChatBubbleIcon, bg: "bg-gradient-to-br from-purple-600 to-purple-800", text: "text-purple-100", korean: "채팅", live: true },
-  speak: { Icon: MicIcon, bg: "bg-gradient-to-br from-violet-600 to-violet-800", text: "text-violet-100", korean: "말하기", live: false },
-  listen: { Icon: HeadphonesIcon, bg: "bg-gradient-to-br from-purple-700 to-slate-900", text: "text-purple-100", korean: "듣기", live: false },
-  shadow: { Icon: MicIcon, bg: "bg-gradient-to-br from-indigo-600 to-purple-800", text: "text-indigo-100", korean: "섀도잉", live: false },
-  grammar: { Icon: DictionaryIcon, bg: "bg-gradient-to-br from-purple-600 to-indigo-800", text: "text-purple-100", korean: "문법", live: false },
+  chat: { Icon: ChatBubbleIcon, bg: "bg-gradient-to-br from-[#a07ccc] to-[#6a479e]", text: "text-white", korean: "채팅", live: true },
+  speak: { Icon: MicIcon, bg: "bg-gradient-to-br from-[#7690ea] to-[#3a4a93]", text: "text-white", korean: "말하기", live: false },
+  listen: { Icon: HeadphonesIcon, bg: "bg-gradient-to-br from-[#e98a8f] to-[#a2434d]", text: "text-white", korean: "듣기", live: false },
+  shadow: { Icon: MicIcon, bg: "bg-gradient-to-br from-[#4fb89b] to-[#1f6e5c]", text: "text-white", korean: "섀도잉", live: false },
+  grammar: { Icon: DictionaryIcon, bg: "bg-gradient-to-br from-[#d99a4f] to-[#8a5612]", text: "text-white", korean: "문법", live: false },
 };
 
 /**

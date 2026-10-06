@@ -42,10 +42,10 @@ type CardKey = keyof Messages["home"]["cards"];
  * anchored bottom-start, and a small "go" affordance top-end.
  */
 const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; color: keyof typeof MESH; text: string }[] = [
-  { key: "courses", href: "/courses", Icon: BooksStackIcon, color: "violet", text: "text-white" },
-  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, color: "clay", text: "text-white" },
-  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, color: "indigo", text: "text-white" },
-  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, color: "gold", text: "text-ink" },
+  { key: "courses", href: "/courses", Icon: BooksStackIcon, color: "violet", text: "text-ink" },
+  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, color: "clay", text: "text-ink" },
+  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, color: "indigo", text: "text-ink" },
+  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, color: "mint", text: "text-ink" },
 ];
 
 export default async function HomePage() {

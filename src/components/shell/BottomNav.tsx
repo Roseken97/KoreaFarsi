@@ -33,7 +33,7 @@ export function BottomNav() {
                   transition={{ type: "spring", stiffness: 420, damping: 18 }}
                   className={
                     active
-                      ? "-mt-12 grid size-14 place-items-center drop-shadow-[0_10px_14px_rgb(41_38_61/0.22)]"
+                      ? "-mt-12 grid size-14 place-items-center drop-shadow-[0_10px_14px_rgb(30_35_64/0.22)]"
                       : "grid size-7 place-items-center"
                   }
                 >
