@@ -4,9 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { AuthHeader } from "@/components/auth/AuthHeader";
-import { AuthHero } from "@/components/auth/AuthHero";
 import { GoogleButton, OrDivider } from "@/components/auth/GoogleButton";
-import { MailIcon, ShieldIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Notice } from "@/components/ui/Notice";
@@ -51,8 +49,7 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
 
   return (
     <>
-      <AuthHero tone="celadon" letter="한" />
-      <AuthHeader title={t.title} subtitle={t.subtitle} center />
+      <AuthHeader title={t.title} />
 
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         {formError && <Notice tone="error">{formError}</Notice>}
@@ -62,8 +59,6 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
           ltr
           autoComplete="email"
           inputMode="email"
-          icon={<MailIcon width={17} height={17} />}
-          iconTint="bg-violet-soft text-violet-deep"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={fieldErrors.email}
@@ -73,8 +68,6 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
           type="password"
           ltr
           autoComplete="current-password"
-          icon={<ShieldIcon width={17} height={17} />}
-          iconTint="bg-clay-soft text-clay-deep"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={fieldErrors.password}
@@ -98,7 +91,7 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
         </Button>
       </form>
 
-      <OrDivider />
+      <OrDivider label={m.auth.orLoginWith} />
       <div className="flex justify-center">
         <GoogleButton next={next} remember={remember} onError={setFormError} round />
       </div>

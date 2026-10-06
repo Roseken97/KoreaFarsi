@@ -19,7 +19,7 @@ export default async function SuccessPage(props: PageProps<"/auth/success">) {
     <StatusScreen
       icon={<CheckCircleIcon width={32} height={32} />}
       title={t.title}
-      action={<ButtonLink href={safeNext(typeof next === "string" ? next : null)}>{t.cta}</ButtonLink>}
+      action={<ButtonLink variant="dark" href={safeNext(typeof next === "string" ? next : null)}>{t.cta}</ButtonLink>}
     >
       <p>{t.body}</p>
     </StatusScreen>

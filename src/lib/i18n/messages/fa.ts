@@ -80,31 +80,12 @@ export const fa: Messages = {
     footer: { rights: "تمامی حقوق محفوظ است." },
   },
   onboarding: {
-    skip: "رد شدن",
+    skip: "رد کن",
     next: "بعدی",
     getStarted: "شروع کنیم",
-    slides: [
-      {
-        glyph: "안녕",
-        title: "سفری تازه در انتظار توست",
-        body: "زبان کره‌ای را با مسیری یاد بگیر که برای فارسی‌زبان‌ها طراحی شده است.",
-      },
-      {
-        glyph: "책",
-        title: "به روش خودت یاد بگیر",
-        body: "کتاب‌ها، دوره‌ها و منابعی متناسب با سطح و سرعت تو.",
-      },
-      {
-        glyph: "연습",
-        title: "تمرین واقعی، پیشرفت واقعی",
-        body: "آنچه یاد می‌گیری را تمرین کن و پیشرفتت را ببین.",
-      },
-      {
-        glyph: "함께",
-        title: "بخشی از یک داستان بزرگ‌تر باش",
-        body: "به جمع رو به رشد فارسی‌زبان‌هایی بپیوند که کره‌ای یاد می‌گیرند.",
-      },
-    ],
+    haveAccount: "حساب کاربری داری؟",
+    loginLink: "وارد شو",
+    slideLabel: "اسلاید {n} از {total}",
   },
   welcome: {
     title: "به کوریافارسی خوش آمدی",
@@ -124,6 +105,9 @@ export const fa: Messages = {
       hidePassword: "پنهان کردن رمز",
     },
     google: "ادامه با گوگل",
+    back: "بازگشت",
+    orLoginWith: "یا ورود با",
+    orSignupWith: "یا ثبت‌نام با",
     login: {
       metaTitle: "ورود",
       title: "خوش برگشتی",
@@ -330,6 +314,7 @@ export const fa: Messages = {
         tickets: "تیکت‌ها",
         orders: "سفارش‌ها",
         knowledge: "دانش‌نامه",
+        onboarding: "اسلایدهای شروع",
       },
     },
     settingsPage: {

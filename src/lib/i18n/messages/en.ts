@@ -94,28 +94,9 @@ export const en = {
     skip: "Skip",
     next: "Next",
     getStarted: "Get Started",
-    slides: [
-      {
-        glyph: "안녕",
-        title: "A New Journey Awaits",
-        body: "Learn Korean with a path designed for Persian speakers.",
-      },
-      {
-        glyph: "책",
-        title: "Learn Your Way",
-        body: "Books, courses and materials that fit your level and your pace.", // PROVISIONAL
-      },
-      {
-        glyph: "연습",
-        title: "Real Practice, Real Progress",
-        body: "Practise what you learn and see how far you've come.", // PROVISIONAL
-      },
-      {
-        glyph: "함께",
-        title: "Be Part of a Bigger Story",
-        body: "Join a growing community of Persian-speaking Korean learners.", // PROVISIONAL
-      },
-    ],
+    haveAccount: "Already have an account?",
+    loginLink: "Log in",
+    slideLabel: "Slide {n} of {total}",
   },
   welcome: {
     title: "Welcome to KoreaFarsi",
@@ -135,6 +116,9 @@ export const en = {
       hidePassword: "Hide password",
     },
     google: "Continue with Google",
+    back: "Back",
+    orLoginWith: "Or log in with",
+    orSignupWith: "Or sign up with",
     login: {
       metaTitle: "Log in",
       title: "Welcome back",
@@ -341,6 +325,7 @@ export const en = {
         tickets: "Tickets",
         orders: "Orders",
         knowledge: "Knowledge base",
+        onboarding: "Onboarding slides",
       },
     },
     settingsPage: {

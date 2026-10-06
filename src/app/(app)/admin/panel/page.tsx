@@ -12,10 +12,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: m.account.adminHub.panel.title, robots: { index: false } };
 }
 
-const ITEMS: { key: "products" | "courses" | "announcements" | "koreaLife" | "tickets" | "orders" | "knowledge"; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
+const ITEMS: { key: "products" | "courses" | "announcements" | "onboarding" | "koreaLife" | "tickets" | "orders" | "knowledge"; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
   { key: "products", href: "/admin/products", Icon: ShoppingBagIcon },
   { key: "courses", href: "/admin/courses", Icon: BooksStackIcon },
   { key: "announcements", href: "/admin/announcements", Icon: SparkleIcon },
+  { key: "onboarding", href: "/admin/onboarding", Icon: LayersIcon },
   { key: "koreaLife", href: "/admin/korea-life", Icon: LanternIcon },
   { key: "tickets", href: "/admin/tickets", Icon: TicketIcon },
   { key: "orders", href: "/admin/orders", Icon: BookmarkIcon },
