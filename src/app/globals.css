@@ -12,6 +12,8 @@
  * new accent families for the more playful multi-color card style.
  */
 @theme {
+  --container-app: 440px;
+
   --color-cream: #fffdf6;
   --color-cream-deep: #f5f2ec;
   --color-surface: #ffffff;

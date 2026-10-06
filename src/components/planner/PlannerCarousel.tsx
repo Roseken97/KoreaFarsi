@@ -36,7 +36,7 @@ export function PlannerCarousel({
             <button
               key={tab}
               onClick={() => go(i)}
-              className={`min-w-0 truncate rounded-full px-1.5 py-1.5 text-[11px] font-medium transition sm:px-3 sm:text-sm ${
+              className={`min-w-0 truncate rounded-full px-1.5 py-1.5 text-[11px] font-medium transition ${
                 tab === active ? "bg-surface text-ink shadow-soft" : "text-ink-soft hover:text-ink"
               }`}
             >

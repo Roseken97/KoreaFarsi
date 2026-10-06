@@ -129,7 +129,7 @@ export function ChatBox({ hideHeader = false }: { hideHeader?: boolean } = {}) {
   }
 
   return (
-    <div className="flex min-h-[calc(100dvh-12rem)] flex-col md:min-h-[calc(100dvh-6rem)]">
+    <div className="flex min-h-[calc(100dvh-12rem)] flex-col">
       {/* Header — skipped when embedded under a page that already shows its own title (e.g. AI Practice) */}
       {hideHeader ? (
         messages.length > 0 && (
@@ -211,7 +211,7 @@ export function ChatBox({ hideHeader = false }: { hideHeader?: boolean } = {}) {
       </div>
 
       {/* Composer — sits above the mobile bottom nav */}
-      <div className="sticky bottom-[4.5rem] z-10 -mx-4 mt-2 bg-gradient-to-t from-cream from-80% to-transparent px-4 pt-5 pb-3 sm:-mx-6 sm:px-6 md:bottom-0 md:mx-0 md:px-0 md:pb-6">
+      <div className="sticky bottom-[4.5rem] z-10 -mx-4 mt-2 bg-gradient-to-t from-cream from-80% to-transparent px-4 pt-5 pb-3">
         <form onSubmit={onSubmit} className="flex items-end gap-2 rounded-card border border-line bg-surface p-2 shadow-lift">
           <textarea
             ref={inputRef}
@@ -267,7 +267,7 @@ function Bubble({
         role="group"
         aria-label={label}
         dir="auto"
-        className={`max-w-[85%] rounded-3xl px-4 py-2.5 text-[15px] leading-7 shadow-soft md:max-w-[75%] ${
+        className={`max-w-[85%] rounded-3xl px-4 py-2.5 text-[15px] leading-7 shadow-soft ${
           isUser
             ? "rounded-ee-md bg-blush-soft text-ink"
             : error

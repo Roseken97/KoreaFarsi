@@ -30,7 +30,7 @@ export function LibraryCard({ entry }: { entry: LibraryEntry }) {
 
   return (
     <MotionSurface hover={false} className="flex gap-4 rounded-2xl bg-surface p-3.5 shadow-soft">
-      <div className="w-20 shrink-0 sm:w-24">
+      <div className="w-20 shrink-0">
         <ProductCover product={entry.product} sizes="96px" />
       </div>
       <div className="flex min-w-0 flex-1 flex-col">

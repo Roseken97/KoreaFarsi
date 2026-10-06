@@ -25,8 +25,8 @@ export default async function CoursesPage() {
       {/* Hero — Visual Element (sketch 06, callout #6): brand illustration, or the active announcement banner */}
       <div className="mb-6">
         <Hero placement="courses" locale={locale} size="sm">
-          <SakuraBranch className="absolute -top-3 -end-3 w-32 md:w-40 rtl:-scale-x-100" />
-          <SeoulSkyline className="absolute! inset-x-0 bottom-0 h-16 md:h-20" />
+          <SakuraBranch className="absolute -top-3 -end-3 w-32 rtl:-scale-x-100" />
+          <SeoulSkyline className="absolute! inset-x-0 bottom-0 h-16" />
         </Hero>
       </div>
 

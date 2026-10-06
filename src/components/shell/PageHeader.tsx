@@ -4,12 +4,12 @@ import { Logo } from "@/components/brand/Logo";
 
 /**
  * Screen header from the sketches: logo at the start, actions at the end.
- * On desktop the sidebar already shows the logo, so only the actions remain.
+ * The app is phone-width on every device, so the logo always shows.
  */
 export function PageHeader({ actions }: { actions?: ReactNode }) {
   return (
-    <header className="mb-6 flex items-center justify-between gap-4 md:mb-8 md:justify-end">
-      <Link href="/home" className="md:hidden" aria-label="KoreaFarsi">
+    <header className="mb-6 flex items-center justify-between gap-4">
+      <Link href="/home" aria-label="KoreaFarsi">
         <Logo size={34} />
       </Link>
       {actions && <div className="flex items-center gap-2">{actions}</div>}

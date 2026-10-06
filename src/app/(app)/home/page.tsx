@@ -84,10 +84,10 @@ export default async function HomePage() {
         <Hero placement="home" locale={locale}>
           <span className="absolute -top-10 -start-10 size-32 rounded-full bg-white/30 blur-2xl" aria-hidden="true" />
           <span className="absolute end-6 top-10 size-16 rounded-full bg-blush/20 blur-xl" aria-hidden="true" />
-          <SakuraBranch className="absolute -top-2 -end-2 w-40 md:w-56 rtl:-scale-x-100" />
-          <SeoulSkyline className="absolute! inset-x-0 bottom-0 h-24 md:h-32" />
-          <div className="relative p-6 md:p-8">
-            <p className="max-w-[14rem] font-display text-2xl leading-snug font-semibold text-ink md:max-w-xs md:text-3xl">
+          <SakuraBranch className="absolute -top-2 -end-2 w-40 rtl:-scale-x-100" />
+          <SeoulSkyline className="absolute! inset-x-0 bottom-0 h-24" />
+          <div className="relative p-6">
+            <p className="max-w-[14rem] font-display text-2xl leading-snug font-semibold text-ink">
               {t.hero.message}
             </p>
             <p lang="ko" className="mt-2 text-sm text-ink-soft">
@@ -103,8 +103,8 @@ export default async function HomePage() {
         </Hero>
       </div>
 
-      {/* Main sections — polished colorful: mesh gradient + grain, editorial layout, Korean glyph as a watermark */}
-      <section className="mt-8 grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-4">
+      {/* Main sections — polished colorful: mesh gradient + grain, editorial layout, Korean name as a small label */}
+      <section className="mt-8 grid grid-cols-2 gap-4">
         {CARDS.map(({ key, href, Icon, color, text }) => {
           const card = t.cards[key];
           return (
@@ -112,35 +112,30 @@ export default async function HomePage() {
               key={key}
               href={href}
               style={{ backgroundImage: MESH[color] }}
-              className={`card-grain group @container relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-hero p-4 ${MESH_SHADOW[color]}`}
+              className={`card-grain group @container relative flex min-h-44 flex-col justify-between gap-5 overflow-hidden rounded-hero p-4 ${MESH_SHADOW[color]}`}
             >
-              <span
-                lang="ko"
-                className={`pointer-events-none absolute -bottom-3 -end-2 text-[15cqw] leading-none font-bold tracking-tight whitespace-nowrap ${text} opacity-[0.16]`}
-                aria-hidden="true"
-              >
-                {card.ko}
-              </span>
-
               <div className="relative flex items-start justify-between">
-                <span className={`grid size-9 place-items-center rounded-xl bg-white/20 ${text}`}>
+                <span className={`grid size-9 place-items-center rounded-xl bg-white/55 shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)] ${text}`}>
                   <Icon width={18} height={18} />
                 </span>
-                <span className={`grid size-7 place-items-center rounded-full bg-white/15 transition-transform duration-300 group-hover:translate-x-0.5 ${text} rtl:rotate-180 rtl:group-hover:-translate-x-0.5`}>
-                  <ArrowForwardIcon width={14} height={14} />
+                <span className={`grid size-9 place-items-center rounded-full bg-white/55 shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)] transition-transform duration-300 group-hover:translate-x-0.5 ${text} rtl:group-hover:-translate-x-0.5`}>
+                  <ArrowForwardIcon width={16} height={16} />
                 </span>
               </div>
 
               <span className="relative">
-                <span className={`block font-display text-base leading-tight font-semibold ${text}`}>{card.title}</span>
-                <span className={`mt-0.5 block text-[11px] leading-4 ${text} opacity-75`}>{card.body}</span>
+                <span lang="ko" className={`block text-xs leading-none font-semibold tracking-wide ${text} opacity-55`} aria-hidden="true">
+                  {card.ko}
+                </span>
+                <span className={`mt-1.5 block font-display text-base leading-tight font-semibold ${text}`}>{card.title}</span>
+                <span className={`mt-1 block text-[13px] leading-5 ${text} opacity-80`}>{card.body}</span>
               </span>
             </MotionCard>
           );
         })}
       </section>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+      <div className="mt-8 grid gap-6">
         {/* Continue Your Journey — circular progress + color block, real once a course exists */}
         <section>
           <h2 className="font-display text-xl font-semibold">{t.continue.title}</h2>
@@ -212,7 +207,7 @@ export default async function HomePage() {
             {!plan ? (
               <div className="flex flex-col items-center py-2 text-center">
                 <p className="text-sm text-ink-soft">{t.today.soon}</p>
-                <ButtonLink href="/planner" variant="secondary" className="mt-3 w-auto! px-6">
+                <ButtonLink href="/planner" variant="dark" className="mt-3 w-auto! px-6">
                   {m.planner.setupCta}
                 </ButtonLink>
               </div>

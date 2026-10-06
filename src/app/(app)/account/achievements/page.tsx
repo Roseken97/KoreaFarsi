@@ -36,7 +36,7 @@ export default async function AchievementsPage() {
             {t.unlocked.replace("{done}", formatNumber(unlockedCount, locale)).replace("{total}", formatNumber(BADGES.length, locale))}
           </p>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3">
             {BADGES.map(({ key, Icon, category, threshold }) => {
               const value = current[category];
               const unlocked = value >= threshold;

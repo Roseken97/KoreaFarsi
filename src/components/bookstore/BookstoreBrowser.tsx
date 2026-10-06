@@ -90,17 +90,17 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
         onSearchOpenChange={setSearchOpen}
       />
 
-      <h1 className="font-display text-3xl font-semibold md:text-4xl">{t.title}</h1>
+      <h1 className="font-display text-3xl font-semibold">{t.title}</h1>
       <p className="mt-1 text-sm text-ink-soft">{t.tagline}</p>
 
       {/* Hero banner */}
       <section
         style={{ backgroundImage: MESH.violet }}
-        className="card-grain relative mt-5 overflow-hidden rounded-card p-6 text-ink shadow-[0_2px_6px_rgb(30_35_64_/_0.08),0_14px_26px_-12px_rgb(118_144_234_/_0.45)] md:p-8"
+        className="card-grain relative mt-5 overflow-hidden rounded-card p-6 text-ink shadow-[0_2px_6px_rgb(30_35_64_/_0.08),0_14px_26px_-12px_rgb(118_144_234_/_0.45)]"
       >
-        <SakuraBranch className="absolute -end-4 -bottom-6 w-44 opacity-90 md:w-60 rtl:-scale-x-100" />
+        <SakuraBranch className="absolute -end-4 -bottom-6 w-44 opacity-90 rtl:-scale-x-100" />
         <p className="relative text-xs font-semibold tracking-[0.18em] text-ink/70 uppercase">{t.hero.kicker}</p>
-        <p className="relative mt-2 max-w-[15rem] font-display text-2xl leading-snug font-semibold md:max-w-sm md:text-3xl">
+        <p className="relative mt-2 max-w-[15rem] font-display text-2xl leading-snug font-semibold">
           {t.hero.title}
         </p>
         <a
@@ -113,7 +113,7 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
       </section>
 
       {/* Category tabs */}
-      <nav id="catalog" className="-mx-4 mt-6 scroll-mt-6 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
+      <nav id="catalog" className="-mx-4 mt-6 scroll-mt-6 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <ul className="flex gap-3" role="tablist" aria-label={t.title}>
           {COLLECTION_TABS.map(({ key, Icon }) => {
             const active = collection === key;
@@ -143,7 +143,7 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
       </nav>
 
       {/* Filter chips */}
-      <div className="-mx-4 mt-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0 [&::-webkit-scrollbar]:hidden">
+      <div className="-mx-4 mt-4 overflow-x-auto px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex gap-2" role="radiogroup" aria-label={t.filters.label}>
           {FILTER_TABS.map((f) => {
             const active = filter === f;
@@ -183,7 +183,7 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
           )}
           {bundles.length > 0 && (
             <Section title={t.bundles}>
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4">
                 {bundles.map((p) => (
                   <BundleCard key={p.id} product={p} />
                 ))}
@@ -199,7 +199,7 @@ export function BookstoreBrowser({ products, communityHref }: { products: Produc
       )}
 
       {/* Community banner */}
-      <section className="mt-10 flex flex-col gap-4 rounded-card bg-gradient-to-br from-sage-soft to-cream-deep p-6 md:flex-row md:items-center">
+      <section className="mt-10 flex flex-col gap-4 rounded-card bg-gradient-to-br from-sage-soft to-cream-deep p-6">
         <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-surface text-blush shadow-soft">
           <SparkleIcon width={24} height={24} />
         </span>
@@ -234,7 +234,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function ProductGrid({ products }: { products: Product[] }) {
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3">
       {products.map((p) => (p.category === "bundle" ? <div key={p.id} className="col-span-2"><BundleCard product={p} /></div> : <ProductCard key={p.id} product={p} />))}
     </div>
   );

@@ -152,7 +152,7 @@ export function ArcCarousel({
               onDragEnd(e, info);
               setIsDragging(false);
             }}
-            className="w-full px-4 sm:px-6 cursor-grab active:cursor-grabbing"
+            className="w-full px-4 cursor-grab active:cursor-grabbing"
           >
             <motion.button
               type="button"

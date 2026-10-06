@@ -25,7 +25,7 @@ export default async function KoreaLifePostPage({ params }: { params: Promise<{ 
     <div className="animate-fade-up max-w-2xl">
       <SubPageHeader title={t.title} backHref="/korea-life" backLabel={t.title} />
 
-      <div className="relative h-52 w-full overflow-hidden rounded-hero bg-blush-soft shadow-soft md:h-64">
+      <div className="relative h-52 w-full overflow-hidden rounded-hero bg-blush-soft shadow-soft">
         {post.cover_image_url ? (
           <Image src={post.cover_image_url} alt="" fill sizes="(min-width: 768px) 42rem, 100vw" className="object-cover" />
         ) : (

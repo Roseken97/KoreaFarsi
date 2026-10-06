@@ -55,7 +55,7 @@ export function BookstoreHeader({
           />
         </div>
       ) : (
-        <Link href="/home" className="mx-auto md:mx-0 md:me-auto md:invisible" aria-label="KoreaFarsi">
+        <Link href="/home" className="mx-auto" aria-label="KoreaFarsi">
           <Logo size={32} />
         </Link>
       )}

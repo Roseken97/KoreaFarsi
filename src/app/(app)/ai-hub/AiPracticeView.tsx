@@ -29,7 +29,7 @@ export function AiPracticeView() {
   }));
 
   return (
-    <div className="animate-fade-up flex w-full h-dvh flex-col items-center justify-center px-4 sm:px-6">
+    <div className="animate-fade-up flex w-full h-dvh flex-col items-center justify-center px-4">
       <div className="w-full max-w-2xl">
         <ArcCarousel cards={cards} labels={t.card} formatNumber={(n) => nf.format(n)} />
       </div>

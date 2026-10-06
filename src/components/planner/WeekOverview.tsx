@@ -10,7 +10,7 @@ export function WeekOverview({ days, byDate, m }: { days: Date[]; byDate: Record
   return (
     <div>
       <h2 className="mb-3 font-display text-xl font-semibold">{m.planner.week.title}</h2>
-      <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+      <div className="grid grid-cols-7 gap-1.5">
         {days.map((day) => {
           const key = toDateKey(day);
           const tasks = byDate[key] ?? [];
@@ -24,7 +24,7 @@ export function WeekOverview({ days, byDate, m }: { days: Date[]; byDate: Record
                 {m.planner.day[day.getDay()]}
               </span>
               <div
-                className={`relative grid size-10 place-items-center rounded-full text-[10px] font-semibold sm:size-12 ${
+                className={`relative grid size-10 place-items-center rounded-full text-[10px] font-semibold ${
                   isToday ? "ring-2 ring-teal ring-offset-2 ring-offset-cream" : ""
                 }`}
                 style={{
@@ -34,7 +34,7 @@ export function WeekOverview({ days, byDate, m }: { days: Date[]; byDate: Record
                       : `conic-gradient(from 0deg, var(--color-violet) 0%, var(--color-indigo) ${pct}%, var(--color-line) ${pct}%)`,
                 }}
               >
-                <span className="grid size-8 place-items-center rounded-full bg-surface sm:size-10">
+                <span className="grid size-8 place-items-center rounded-full bg-surface">
                   {tasks.length > 0 ? fmt(m.planner.week.doneOf, { done, total: tasks.length }) : "–"}
                 </span>
               </div>
