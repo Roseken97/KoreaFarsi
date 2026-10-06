@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { safeNext } from "@/lib/auth/validation";
+import { getCardImages } from "@/lib/card-images/queries";
 import { getMessages } from "@/lib/i18n/server";
 import { SignupForm } from "./SignupForm";
 
@@ -9,6 +10,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SignupPage(props: PageProps<"/auth/signup">) {
-  const { next } = await props.searchParams;
-  return <SignupForm next={safeNext(typeof next === "string" ? next : null)} />;
+  const [{ next }, images] = await Promise.all([props.searchParams, getCardImages()]);
+  return <SignupForm next={safeNext(typeof next === "string" ? next : null)} image={images["auth.signup"]} />;
 }

@@ -43,7 +43,7 @@ export function ForgotPasswordForm() {
   }
 
   const backLink = (
-    <Link href="/auth/login" className="font-semibold text-teal hover:underline">
+    <Link href="/auth/login" className="font-semibold text-violet-deep hover:underline">
       {t.backToLogin}
     </Link>
   );
@@ -63,16 +63,17 @@ export function ForgotPasswordForm() {
         {formError && <Notice tone="error">{formError}</Notice>}
         <Field
           label={m.auth.fields.email}
+          icon={<MailIcon width={18} height={18} />}
+          iconTint="bg-sage-soft text-teal-deep"
           type="email"
           ltr
           autoComplete="email"
           inputMode="email"
-          placeholder="name@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={emailError}
         />
-        <Button type="submit" variant="dark" loading={loading} className="mt-2 h-14">
+        <Button type="submit" variant="navy" loading={loading} className="mt-2 h-14">
           {t.submit}
         </Button>
       </form>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ComponentProps } from "react";
 
-type Variant = "primary" | "secondary" | "ghost" | "dark";
+type Variant = "primary" | "secondary" | "ghost" | "dark" | "navy";
 
 const base =
   "inline-flex h-12 w-full items-center justify-center gap-2 rounded-field px-5 text-[15px] font-semibold transition " +
@@ -22,6 +22,8 @@ const variants: Record<Variant, string> = {
   ghost: "text-ink hover:underline",
   // Auth screens: solid brand violet, matching the periwinkle panel above the form.
   dark: "bg-violet text-white shadow-[0_14px_28px_-12px_rgb(76_95_181/0.65)] hover:bg-violet-deep active:scale-[0.98]",
+  // Sign-in screens (soft-3D reference): a deep navy pill.
+  navy: "rounded-full! bg-ink text-white shadow-[0_14px_28px_-12px_rgb(30_35_64/0.6)] hover:bg-ink/90 active:scale-[0.98]",
 };
 
 export function Button({

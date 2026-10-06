@@ -1,25 +1,23 @@
 import Link from "next/link";
-import { AuthArt } from "@/components/auth/AuthArt";
-import { ChevronIcon } from "@/components/icons";
+import { AuthBackdrop } from "@/components/auth/AuthBackdrop";
+import { ArrowForwardIcon } from "@/components/icons";
 import { getMessages } from "@/lib/i18n/server";
 
-/** Log in, sign up and the password screens: a color panel with a back pill, under a white sheet. */
+/** Log in, sign up and the password screens: a frosted backdrop with a round back button. */
 export default async function SheetLayout({ children }: { children: React.ReactNode }) {
   const { m } = await getMessages();
 
   return (
     <>
-      <div className="relative h-48 shrink-0 overflow-hidden">
-        <AuthArt />
-        <Link
-          href="/auth/welcome"
-          className="absolute start-4 top-[calc(env(safe-area-inset-top)+1rem)] flex items-center gap-1 rounded-full bg-ink/25 py-1.5 ps-2 pe-3.5 text-sm font-medium text-white backdrop-blur transition hover:bg-ink/35"
-        >
-          <ChevronIcon width={18} height={18} className="rotate-180" />
-          {m.auth.back}
-        </Link>
-      </div>
-      <main className="relative -mt-8 flex flex-1 flex-col rounded-t-[2rem] bg-white px-6 pt-8 pb-[max(2rem,env(safe-area-inset-bottom))]">{children}</main>
+      <AuthBackdrop />
+      <Link
+        href="/auth/welcome"
+        aria-label={m.auth.back}
+        className="absolute start-5 top-[calc(env(safe-area-inset-top)+1rem)] z-20 grid size-10 place-items-center rounded-full bg-white/90 text-ink shadow-[0_8px_20px_-10px_rgb(30_35_64/0.35)] backdrop-blur transition hover:bg-white"
+      >
+        <ArrowForwardIcon width={18} height={18} className="rotate-180" />
+      </Link>
+      <main className="relative flex flex-1 flex-col px-6 pt-[calc(env(safe-area-inset-top)+4.5rem)] pb-[max(2rem,env(safe-area-inset-bottom))]">{children}</main>
     </>
   );
 }

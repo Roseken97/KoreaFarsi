@@ -1,5 +1,5 @@
 /**
- * Photos on the section cards (Home and Korea Life). Edited at /admin/card-images.
+ * Photos on the section cards (Home, Korea Life) and the sign-in screens. Edited at /admin/card-images.
  * Stored as rows in `site_copy` under `cardImage.<slot>` (locale "fa"), so they ride
  * the same cache and need no table of their own; those keys aren't message paths,
  * so the copy editor and applyOverrides ignore them.
@@ -13,6 +13,8 @@ export const CARD_IMAGE_SLOTS = [
   { slot: "koreaLife.travel", group: "Korea Life", label: "Travel" },
   { slot: "koreaLife.food", group: "Korea Life", label: "Food" },
   { slot: "koreaLife.life", group: "Korea Life", label: "Everyday life" },
+  { slot: "auth.login", group: "Sign-in screens", label: "Log in (top panel)" },
+  { slot: "auth.signup", group: "Sign-in screens", label: "Sign up (hexagon)" },
 ] as const;
 
 export type CardImageSlot = (typeof CARD_IMAGE_SLOTS)[number]["slot"];

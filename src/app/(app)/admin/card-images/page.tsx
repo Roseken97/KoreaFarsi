@@ -45,8 +45,8 @@ function Shell({ nav, children }: { nav?: React.ReactNode; children: React.React
       {nav}
       <h1 className="font-display text-3xl font-semibold">Card photos</h1>
       <p className="mt-1 mb-6 text-sm text-ink-soft">
-        The photos on the section cards. Square photos work best, with the subject in the upper part: the bottom fades into the card color behind the title. A
-        card without a photo keeps its plain color.
+        Photos for the section cards and the sign-in screens. Card photos: square, subject in the upper part (the bottom fades into the card color behind
+        the title). Sign-in: a 3D render; the sign-up one is clipped to the hexagon. An empty slot keeps the built-in look.
       </p>
       {children}
     </div>
