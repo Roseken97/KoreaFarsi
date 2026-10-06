@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import type { ComponentType, SVGProps } from "react";
 import { SakuraBranch } from "@/components/brand/SakuraBranch";
@@ -18,6 +19,7 @@ import { HomeTodayRing } from "@/components/planner/HomeTodayRing";
 import { HeaderIconLink } from "@/components/shell/PageHeader";
 import { ButtonLink } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
+import { getCardImages } from "@/lib/card-images/queries";
 import { getContinueCard } from "@/lib/courses/queries";
 import { fmt, formatNumber, type Locale, type Messages } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
@@ -49,12 +51,13 @@ const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGEl
 ];
 
 export default async function HomePage() {
-  const [{ m, locale }, profile, { plan, tasks }, continueCard, unreadCount] = await Promise.all([
+  const [{ m, locale }, profile, { plan, tasks }, continueCard, unreadCount, images] = await Promise.all([
     getMessages(),
     getProfile(),
     getTodayTasks(),
     getContinueCard(),
     getUnreadNotificationCount(),
+    getCardImages(),
   ]);
   const t = m.home;
   const firstName = profile?.name?.split(/\s+/)[0] ?? null;
@@ -107,13 +110,24 @@ export default async function HomePage() {
       <section className="mt-8 grid grid-cols-2 gap-4">
         {CARDS.map(({ key, href, Icon, color, text }) => {
           const card = t.cards[key];
+          const photo = images[`home.${key}`];
           return (
             <MotionCard
               key={key}
               href={href}
               style={{ backgroundImage: MESH[color] }}
-              className={`card-grain group @container relative flex min-h-44 flex-col justify-between gap-5 overflow-hidden rounded-hero p-4 ${MESH_SHADOW[color]}`}
+              className={`card-grain group @container relative flex flex-col justify-between gap-5 overflow-hidden rounded-hero p-4 ${photo ? "min-h-56" : "min-h-44"} ${MESH_SHADOW[color]}`}
             >
+              {/* the photo fades out toward the bottom so the title sits on the card color */}
+              {photo && (
+                <Image
+                  src={photo}
+                  alt=""
+                  fill
+                  sizes="220px"
+                  className="object-cover [mask-image:linear-gradient(to_bottom,black_40%,transparent_82%)]"
+                />
+              )}
               <div className="relative flex items-start justify-between">
                 <span className={`grid size-9 place-items-center rounded-xl bg-white/55 shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)] ${text}`}>
                   <Icon width={18} height={18} />

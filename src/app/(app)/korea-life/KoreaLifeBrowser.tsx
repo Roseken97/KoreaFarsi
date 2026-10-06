@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, type ComponentType, type SVGProps } from "react";
 import { BowlIcon, ChevronIcon, GlobeIcon, LanternIcon, SparkleIcon } from "@/components/icons";
 import { MotionCard, MotionSurface } from "@/components/motion/MotionCard";
+import type { CardImages } from "@/lib/card-images/slots";
 import type { KoreaLifeCategory, KoreaLifePost } from "@/lib/korealife/types";
 import { useI18n } from "@/lib/i18n/client";
 import { MESH, MESH_SHADOW, type MeshColor } from "@/lib/ui/mesh";
@@ -17,7 +18,7 @@ const CATEGORY_STYLE: Record<KoreaLifeCategory, { mesh: MeshColor; text: string;
   life: { mesh: "gold", text: "text-ink", labelText: "text-gold-deep", Icon: SparkleIcon },
 };
 
-export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
+export function KoreaLifeBrowser({ posts, images }: { posts: KoreaLifePost[]; images: CardImages }) {
   const { m, locale } = useI18n();
   const t = m.koreaLife;
   const [active, setActive] = useState<KoreaLifeCategory | null>(null);
@@ -31,16 +32,21 @@ export function KoreaLifeBrowser({ posts }: { posts: KoreaLifePost[] }) {
           const { mesh, text, Icon } = CATEGORY_STYLE[c];
           const selected = active === c;
           const count = posts.filter((p) => p.category === c).length;
+          const photo = images[`koreaLife.${c}`];
           return (
             <MotionSurface
               key={c}
               onClick={() => setActive(selected ? null : c)}
               hover={false}
               style={{ backgroundImage: MESH[mesh] }}
-              className={`card-grain group @container relative flex aspect-[3/2] cursor-pointer flex-col justify-between overflow-hidden rounded-hero p-3.5 transition ${MESH_SHADOW[mesh]} ${selected ? "ring-2 ring-violet ring-offset-2 ring-offset-cream" : ""}`}
+              className={`card-grain group @container relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-hero p-3.5 transition ${photo ? "min-h-44" : "aspect-[3/2]"} ${MESH_SHADOW[mesh]} ${selected ? "ring-2 ring-violet ring-offset-2 ring-offset-cream" : ""}`}
             >
-              <span className="absolute -end-3 -top-3 size-16 rounded-full bg-white/10" aria-hidden="true" />
-              <span className={`relative grid size-8 place-items-center rounded-full bg-white/20 ${text}`}>
+              {photo ? (
+                <Image src={photo} alt="" fill sizes="220px" className="object-cover [mask-image:linear-gradient(to_bottom,black_40%,transparent_82%)]" />
+              ) : (
+                <span className="absolute -end-3 -top-3 size-16 rounded-full bg-white/10" aria-hidden="true" />
+              )}
+              <span className={`relative grid size-8 place-items-center rounded-full bg-white/55 ${text}`}>
                 <Icon width={16} height={16} />
               </span>
               <span className="relative">

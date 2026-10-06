@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ComponentType, SVGProps } from "react";
-import { BooksStackIcon, BookmarkIcon, LanternIcon, LayersIcon, ShoppingBagIcon, SparkleIcon, TicketIcon } from "@/components/icons";
+import { BooksStackIcon, BookmarkIcon, ImageIcon, LanternIcon, LayersIcon, ShoppingBagIcon, SparkleIcon, TicketIcon } from "@/components/icons";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { ListGroup, ListRow } from "@/components/ui/ListRow";
 import { Notice } from "@/components/ui/Notice";
@@ -12,11 +12,12 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: m.account.adminHub.panel.title, robots: { index: false } };
 }
 
-const ITEMS: { key: "products" | "courses" | "announcements" | "onboarding" | "koreaLife" | "tickets" | "orders" | "knowledge"; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
+const ITEMS: { key: "products" | "courses" | "announcements" | "onboarding" | "cardImages" | "koreaLife" | "tickets" | "orders" | "knowledge"; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }[] = [
   { key: "products", href: "/admin/products", Icon: ShoppingBagIcon },
   { key: "courses", href: "/admin/courses", Icon: BooksStackIcon },
   { key: "announcements", href: "/admin/announcements", Icon: SparkleIcon },
   { key: "onboarding", href: "/admin/onboarding", Icon: LayersIcon },
+  { key: "cardImages", href: "/admin/card-images", Icon: ImageIcon },
   { key: "koreaLife", href: "/admin/korea-life", Icon: LanternIcon },
   { key: "tickets", href: "/admin/tickets", Icon: TicketIcon },
   { key: "orders", href: "/admin/orders", Icon: BookmarkIcon },

@@ -315,6 +315,7 @@ export const fa: Messages = {
         orders: "سفارش‌ها",
         knowledge: "دانش‌نامه",
         onboarding: "اسلایدهای شروع",
+        cardImages: "عکس کارت‌ها",
       },
     },
     settingsPage: {
