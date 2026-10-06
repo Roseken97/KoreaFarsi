@@ -51,7 +51,7 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
 
   return (
     <>
-      <AuthHero tone="violet" letter="한" />
+      <AuthHero tone="celadon" letter="한" />
       <AuthHeader title={t.title} subtitle={t.subtitle} center />
 
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
@@ -63,7 +63,7 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
           autoComplete="email"
           inputMode="email"
           icon={<MailIcon width={17} height={17} />}
-          iconTint="bg-sage-soft text-teal-deep"
+          iconTint="bg-violet-soft text-violet-deep"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={fieldErrors.email}
@@ -74,7 +74,7 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
           ltr
           autoComplete="current-password"
           icon={<ShieldIcon width={17} height={17} />}
-          iconTint="bg-[#ece4ff] text-[#5d3bc4]"
+          iconTint="bg-clay-soft text-clay-deep"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={fieldErrors.password}
@@ -85,11 +85,11 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
               type="checkbox"
               checked={remember}
               onChange={(e) => setRemember(e.target.checked)}
-              className="size-4 rounded accent-ink"
+              className="size-4 rounded accent-violet-deep"
             />
             {t.rememberMe}
           </label>
-          <Link href="/auth/forgot-password" className="font-medium text-teal hover:underline">
+          <Link href="/auth/forgot-password" className="font-medium text-violet-deep hover:underline">
             {t.forgot}
           </Link>
         </div>
@@ -107,7 +107,7 @@ export function LoginForm({ next, callbackFailed }: { next: string; callbackFail
         {t.noAccount}{" "}
         <Link
           href={`/auth/signup${next !== "/home" ? `?next=${encodeURIComponent(next)}` : ""}`}
-          className="font-semibold text-teal hover:underline"
+          className="font-semibold text-violet-deep hover:underline"
         >
           {t.signupLink}
         </Link>

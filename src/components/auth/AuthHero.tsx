@@ -1,8 +1,9 @@
 import { useId } from "react";
 
 const TONES = {
-  violet: { light: "#ddd0ff", mid: "#ad8cff", dark: "#7b52e8", ink: "#5d3bc4" },
-  blush: { light: "#ffdbe9", mid: "#f59bc2", dark: "#e85a9f", ink: "#b83677" },
+  // Brand palette: muted celadon and a warm dusty rose, with a gold accent.
+  celadon: { light: "#e6f1ec", mid: "#a8cbbd", dark: "#5b8c7b", ink: "#3f6657", dot: "#e6b3a6" },
+  rose: { light: "#f8e8e2", mid: "#e3b0a2", dark: "#c17a6a", ink: "#96573a", dot: "#a8cbbd" },
 };
 
 /**
@@ -26,19 +27,19 @@ export function AuthHero({ tone, letter }: { tone: keyof typeof TONES; letter: s
           </linearGradient>
           <linearGradient id={id("tile")} x1="0" y1="0" x2="0.5" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="100%" stopColor="#e8e6f0" />
+            <stop offset="100%" stopColor="#f1ece4" />
           </linearGradient>
           <linearGradient id={id("disc")} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="100%" stopColor={t.light} />
           </linearGradient>
           <radialGradient id={id("gold")} cx="35%" cy="30%" r="75%">
-            <stop offset="0%" stopColor="#fff1c2" />
-            <stop offset="100%" stopColor="#f2a516" />
+            <stop offset="0%" stopColor="#fbefd2" />
+            <stop offset="100%" stopColor="#c99a3e" />
           </radialGradient>
-          <radialGradient id={id("teal")} cx="35%" cy="30%" r="75%">
-            <stop offset="0%" stopColor="#d9fbf6" />
-            <stop offset="100%" stopColor="#20b8b0" />
+          <radialGradient id={id("dot")} cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="100%" stopColor={t.dot} />
           </radialGradient>
         </defs>
 
@@ -70,7 +71,7 @@ export function AuthHero({ tone, letter }: { tone: keyof typeof TONES; letter: s
 
         {/* floating spheres */}
         <circle cx="34" cy="34" r="13" fill={`url(#${id("gold")})`} />
-        <circle cx="170" cy="150" r="9" fill={`url(#${id("teal")})`} />
+        <circle cx="170" cy="150" r="9" fill={`url(#${id("dot")})`} />
         <circle cx="172" cy="40" r="5" fill="#fff" opacity="0.9" />
       </svg>
     </div>

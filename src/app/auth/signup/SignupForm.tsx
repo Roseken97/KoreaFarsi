@@ -126,12 +126,12 @@ export function SignupForm({ next }: { next: string }) {
             type="button"
             onClick={onResend}
             disabled={resending}
-            className="text-sm font-semibold text-teal hover:underline disabled:opacity-55"
+            className="text-sm font-semibold text-violet-deep hover:underline disabled:opacity-55"
           >
             {t.resend}
           </button>
         </form>
-        <Link href="/auth/login" className="mt-8 block font-semibold text-teal hover:underline">
+        <Link href="/auth/login" className="mt-8 block font-semibold text-violet-deep hover:underline">
           {t.backToLogin}
         </Link>
       </StatusScreen>
@@ -140,7 +140,7 @@ export function SignupForm({ next }: { next: string }) {
 
   return (
     <>
-      <AuthHero tone="blush" letter="가" />
+      <AuthHero tone="rose" letter="가" />
       <AuthHeader title={t.title} subtitle={t.subtitle} center />
 
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
@@ -149,7 +149,7 @@ export function SignupForm({ next }: { next: string }) {
           label={m.auth.fields.fullName}
           autoComplete="name"
           icon={<AccountIcon width={17} height={17} />}
-          iconTint="bg-coral-soft text-coral-deep"
+          iconTint="bg-gold-soft text-gold-deep"
           value={name}
           onChange={(e) => setName(e.target.value)}
           error={fieldErrors.name}
@@ -161,7 +161,7 @@ export function SignupForm({ next }: { next: string }) {
           autoComplete="email"
           inputMode="email"
           icon={<MailIcon width={17} height={17} />}
-          iconTint="bg-sage-soft text-teal-deep"
+          iconTint="bg-violet-soft text-violet-deep"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={fieldErrors.email}
@@ -172,7 +172,7 @@ export function SignupForm({ next }: { next: string }) {
           ltr
           autoComplete="new-password"
           icon={<ShieldIcon width={17} height={17} />}
-          iconTint="bg-[#ece4ff] text-[#5d3bc4]"
+          iconTint="bg-clay-soft text-clay-deep"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={fieldErrors.password}
@@ -189,7 +189,7 @@ export function SignupForm({ next }: { next: string }) {
 
       <p className="mt-auto pt-8 text-center text-sm text-ink-soft">
         {t.haveAccount}{" "}
-        <Link href="/auth/login" className="font-semibold text-teal hover:underline">
+        <Link href="/auth/login" className="font-semibold text-violet-deep hover:underline">
           {t.loginLink}
         </Link>
       </p>
