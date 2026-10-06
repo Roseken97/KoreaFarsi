@@ -117,11 +117,11 @@ export function ArcCarousel({
   const card = cards[index];
 
   const bgColorMap: Record<string, { circle: string; accent: string }> = {
-    "bg-gradient-to-br from-purple-600 to-purple-800": { circle: "bg-white/10", accent: "border-purple-400/30" },
-    "bg-gradient-to-br from-violet-600 to-violet-800": { circle: "bg-white/10", accent: "border-violet-400/30" },
-    "bg-gradient-to-br from-purple-700 to-slate-900": { circle: "bg-white/10", accent: "border-purple-400/30" },
-    "bg-gradient-to-br from-indigo-600 to-purple-800": { circle: "bg-white/10", accent: "border-indigo-400/30" },
-    "bg-gradient-to-br from-purple-600 to-indigo-800": { circle: "bg-white/10", accent: "border-purple-400/30" },
+    "bg-gradient-to-br from-[#a07ccc] to-[#6a479e]": { circle: "bg-white/10", accent: "border-purple-400/30" },
+    "bg-gradient-to-br from-[#7690ea] to-[#3a4a93]": { circle: "bg-white/10", accent: "border-violet-400/30" },
+    "bg-gradient-to-br from-[#e98a8f] to-[#a2434d]": { circle: "bg-white/10", accent: "border-purple-400/30" },
+    "bg-gradient-to-br from-[#4fb89b] to-[#1f6e5c]": { circle: "bg-white/10", accent: "border-indigo-400/30" },
+    "bg-gradient-to-br from-[#d99a4f] to-[#8a5612]": { circle: "bg-white/10", accent: "border-purple-400/30" },
   };
 
   const colors = bgColorMap[card.bg] || { circle: "bg-white/10", accent: "border-purple-400/30" };
