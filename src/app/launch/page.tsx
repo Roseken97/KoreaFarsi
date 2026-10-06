@@ -1,109 +1,98 @@
 "use client";
 
-import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { LogoMark } from "@/components/brand/Logo";
-import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
+import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/lib/i18n/client";
 import { hasOnboarded } from "@/lib/onboarding";
 
-const SPLASH_MS = 2600;
-const PARTICLE_COUNT = 20;
-const PARTICLE_COLORS = ["var(--color-violet)", "var(--color-clay)", "var(--color-indigo)", "var(--color-gold)"];
+/**
+ * The film's background gradient, redrawn in CSS so the page around the film matches it. The film is always
+ * 100dvh tall and centred, so stops are in dvh. Keep in sync with scripts/splash_gradient.py.
+ */
+const SPLASH_BG = [
+  "radial-gradient(45dvh circle at 50% 45%, rgb(255 249 242 / 0.85) 0, rgb(255 249 242 / 0.6) 18dvh, rgb(255 249 242 / 0.2) 33.75dvh, rgb(255 249 242 / 0) 45dvh)",
+  "radial-gradient(55dvh circle at 50% 100%, rgb(242 199 209 / 0.45) 0, rgb(242 199 209 / 0.2) 27.5dvh, rgb(242 199 209 / 0) 55dvh)",
+  "linear-gradient(#fff9f2 0%, #f8dde3 55%, #f3e7d7 100%)",
+].join(", ");
+/** Leave anyway if the film can't load or stalls (it runs 6s). */
+const MAX_MS = 8000;
 
-/** Deterministic (no Math.random) so server and client render the same positions — avoids hydration mismatch. */
-function useParticles() {
-  return useMemo(
-    () =>
-      Array.from({ length: PARTICLE_COUNT }).map((_, i) => {
-        const angle = (i / PARTICLE_COUNT) * Math.PI * 2;
-        const radius = 130 + (i % 4) * 18;
-        return {
-          id: i,
-          x: Math.cos(angle) * radius,
-          y: Math.sin(angle) * radius,
-          size: 6 + (i % 3) * 2,
-          color: PARTICLE_COLORS[i % PARTICLE_COLORS.length],
-          delay: (i % 6) * 0.035,
-        };
-      }),
-    [],
-  );
-}
-
-/** Splash (sketch 01): brand moment, then first-run → onboarding, otherwise → home. This is the PWA's start_url — installed-app opens land here, not on the public marketing page at "/". */
+/**
+ * Splash: the logo intro film with its sound, then first-run → onboarding, otherwise → home.
+ * This is the PWA's start_url — installed-app opens land here, not on the public marketing page at "/".
+ * Browsers block autoplay with sound until the user has interacted, so when the unmuted play is
+ * refused the film plays muted and a small button offers the sound.
+ */
 export default function SplashPage() {
   const router = useRouter();
   const { m } = useI18n();
-  const particles = useParticles();
-  const [risen, setRisen] = useState(false);
+  const video = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(false);
 
   useEffect(() => {
     const target = hasOnboarded() ? "/home" : "/onboarding";
     router.prefetch(target);
-    const toRisen = setTimeout(() => setRisen(true), 1350);
-    const toNext = setTimeout(() => router.replace(target), SPLASH_MS);
+    const leave = () => router.replace(target);
+    const el = video.current;
+    const fallback = setTimeout(leave, MAX_MS);
+
+    // With <source> children, a load failure fires on the last source, not on the video.
+    const lastSource = el?.querySelector("source:last-of-type");
+    if (el) {
+      el.addEventListener("ended", leave);
+      lastSource?.addEventListener("error", leave);
+      el.play().catch(() => {
+        el.muted = true;
+        setMuted(true);
+        el.play().catch(leave);
+      });
+    }
     return () => {
-      clearTimeout(toRisen);
-      clearTimeout(toNext);
+      clearTimeout(fallback);
+      el?.removeEventListener("ended", leave);
+      lastSource?.removeEventListener("error", leave);
     };
   }, [router]);
 
+  function unmute() {
+    if (!video.current) return;
+    video.current.muted = false;
+    setMuted(false);
+  }
+
   return (
-    <div className="relative flex min-h-dvh flex-col items-center overflow-hidden">
-      <div aria-hidden="true" className="absolute top-1/5 -left-24 size-80 rounded-full bg-blush/20 blur-3xl" />
-
-      <div className="relative flex flex-1 flex-col items-center justify-center px-6 pb-40 text-center">
-        {/* Particles converge toward the center, then the mark is revealed with a diagonal wipe */}
-        <div className="relative grid h-32 w-32 place-items-center">
-          {particles.map((p) => (
-            <motion.span
-              key={p.id}
-              aria-hidden="true"
-              className="absolute rounded-full"
-              style={{ width: p.size, height: p.size, background: p.color }}
-              initial={{ x: p.x, y: p.y, opacity: 0, scale: 0.5 }}
-              animate={{ x: 0, y: 0, opacity: [0, 1, 1, 0], scale: [0.5, 1, 1, 0.4] }}
-              transition={{ duration: 0.85, delay: p.delay, times: [0, 0.3, 0.75, 1], ease: "easeInOut" }}
-            />
-          ))}
-
-          <motion.div animate={{ y: risen ? -14 : 0 }} transition={{ type: "spring", stiffness: 140, damping: 15 }}>
-            <div className="kf-splash-reveal">
-              <LogoMark size={96} priority />
-            </div>
-          </motion.div>
-        </div>
-
-        <motion.h1
-          dir="ltr"
-          initial={{ opacity: 0, y: 10 }}
-          animate={risen ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.45, ease: "easeOut" }}
-          className="mt-6 font-[family-name:var(--font-playfair)] text-5xl font-semibold tracking-tight text-ink"
+    <div className="relative grid h-dvh place-items-center overflow-hidden" style={{ background: SPLASH_BG }}>
+      <h1 className="sr-only">KoreaFarsi</h1>
+      <p className="sr-only" role="status">
+        {m.splash.loading}
+      </p>
+      <video
+        ref={video}
+        poster="/splash/logo-intro-poster.jpg"
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        className="h-dvh w-full max-w-[min(100%,calc(100dvh*9/16))] object-cover"
+        // On wide screens the film is a column; softening its sides hides any seam with the CSS gradient.
+        style={{ maskImage: "linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)" }}
+      >
+        {/* WebM is half the size; Safari takes the MP4. */}
+        <source src="/splash/logo-intro.webm" type="video/webm" />
+        <source src="/splash/logo-intro.mp4" type="video/mp4" />
+      </video>
+      {muted && (
+        <button
+          type="button"
+          onClick={unmute}
+          aria-label={m.splash.sound}
+          className="absolute end-5 bottom-[max(1.25rem,env(safe-area-inset-bottom))] grid size-11 place-items-center rounded-full bg-white/70 text-ink shadow-soft backdrop-blur"
         >
-          KoreaFarsi
-        </motion.h1>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={risen ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.45, delay: 0.1, ease: "easeOut" }}
-          className="flex flex-col items-center"
-        >
-          <p className="mt-3 font-display text-lg text-ink-soft italic rtl:not-italic">{m.splash.tagline}</p>
-          <span aria-hidden="true" className="my-5 h-px w-12 bg-blush" />
-          <p className="text-sm text-ink-faint">{m.splash.subline}</p>
-
-          <div className="mt-12 flex flex-col items-center gap-3" role="status">
-            <span className="size-6 animate-spin rounded-full border-2 border-blush/30 border-t-blush" />
-            <span className="text-xs tracking-wide text-ink-soft">{m.splash.loading}</span>
-          </div>
-        </motion.div>
-      </div>
-
-      <SeoulSkyline className="pointer-events-none absolute! inset-x-0 bottom-0 h-44 md:h-52" />
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+            <path d="m16 9.5 5 5M21 9.5l-5 5" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }

@@ -15,6 +15,7 @@ export const en = {
     tagline: "A Bridge to a Brighter You",
     subline: "More than a language, a closer you.",
     loading: "Loading your journey…",
+    sound: "Turn sound on",
   },
   marketing: {
     metaTitle: "KoreaFarsi — A Bridge to a Brighter You",
