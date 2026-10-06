@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AuthArt } from "@/components/auth/AuthArt";
+import { SeoulSkyline } from "@/components/auth/SeoulSkyline";
 import { LogoMark } from "@/components/brand/Logo";
 import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
 import { getMessages } from "@/lib/i18n/server";
@@ -35,6 +36,9 @@ export default async function WelcomePage() {
           {m.welcome.guest}
         </Link>
       </div>
+
+      {/* the gate sits over the panel-colored half of the tab bar, away from the white tab */}
+      <SeoulSkyline className="absolute inset-x-0 bottom-[calc(5rem+env(safe-area-inset-bottom))] rtl:-scale-x-100" />
 
       <nav className="relative grid h-[calc(5rem+env(safe-area-inset-bottom))] grid-cols-2 text-[15px] font-semibold">
         <Link href="/auth/login" className="grid place-items-center pb-[env(safe-area-inset-bottom)] text-white transition hover:bg-white/10">
