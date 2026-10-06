@@ -71,6 +71,14 @@ export const EyeOffIcon = (p: IconProps) => (
   </Base>
 );
 
+export const ImageIcon = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="3.5" y="4.5" width="17" height="15" rx="3" />
+    <circle cx="9" cy="10" r="1.6" />
+    <path d="m4 17 4.5-4.5 3.5 3.5 2.5-2.5L20 18" />
+  </Base>
+);
+
 /** Points forward in reading direction (right in LTR, left in RTL). */
 export const ArrowForwardIcon = ({ className = "", ...p }: IconProps) => (
   <Base className={`rtl:-scale-x-100 ${className}`} {...p}>

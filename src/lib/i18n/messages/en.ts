@@ -326,6 +326,7 @@ export const en = {
         orders: "Orders",
         knowledge: "Knowledge base",
         onboarding: "Onboarding slides",
+        cardImages: "Card photos",
       },
     },
     settingsPage: {

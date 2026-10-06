@@ -5,6 +5,7 @@ const TABS = [
   { key: "courses", href: "/admin/courses", label: "Courses" },
   { key: "announcements", href: "/admin/announcements", label: "Announcements" },
   { key: "onboarding", href: "/admin/onboarding", label: "Onboarding" },
+  { key: "cardImages", href: "/admin/card-images", label: "Card photos" },
   { key: "korealife", href: "/admin/korea-life", label: "Korea Life" },
   { key: "tickets", href: "/admin/tickets", label: "Tickets" },
   { key: "orders", href: "/admin/orders", label: "Orders" },

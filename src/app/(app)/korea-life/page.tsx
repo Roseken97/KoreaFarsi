@@ -3,6 +3,7 @@ import { SakuraBranch } from "@/components/brand/SakuraBranch";
 import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
 import { Hero } from "@/components/shell/Hero";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
+import { getCardImages } from "@/lib/card-images/queries";
 import { getKoreaLifePosts } from "@/lib/korealife/queries";
 import { getMessages } from "@/lib/i18n/server";
 import { KoreaLifeBrowser } from "./KoreaLifeBrowser";
@@ -14,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** Culture/travel/food articles, following the same list pattern as Courses. */
 export default async function KoreaLifePage() {
-  const [{ m, locale }, posts] = await Promise.all([getMessages(), getKoreaLifePosts()]);
+  const [{ m, locale }, posts, images] = await Promise.all([getMessages(), getKoreaLifePosts(), getCardImages()]);
   const t = m.koreaLife;
 
   return (
@@ -29,7 +30,7 @@ export default async function KoreaLifePage() {
         </Hero>
       </div>
 
-      <KoreaLifeBrowser posts={posts} />
+      <KoreaLifeBrowser posts={posts} images={images} />
     </div>
   );
 }
