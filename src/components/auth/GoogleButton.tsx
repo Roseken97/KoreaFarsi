@@ -48,7 +48,7 @@ export function GoogleButton({
         disabled={loading}
         aria-label={m.auth.google}
         title={m.auth.google}
-        className="grid size-14 place-items-center rounded-full bg-surface shadow-[0_10px_24px_-12px_rgb(41_38_61/0.3)] transition hover:-translate-y-0.5 disabled:opacity-55"
+        className="grid size-12 place-items-center rounded-full border border-line bg-surface transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-12px_rgb(30_35_64/0.3)] disabled:opacity-55"
       >
         {loading ? (
           <span className="size-5 animate-spin rounded-full border-2 border-ink-faint border-t-transparent" />
@@ -67,12 +67,12 @@ export function GoogleButton({
   );
 }
 
-export function OrDivider() {
+export function OrDivider({ label }: { label?: string }) {
   const { m } = useI18n();
   return (
     <div className="my-6 flex items-center gap-3 text-xs text-ink-faint">
       <span className="h-px flex-1 bg-line" />
-      {m.common.or}
+      {label ?? m.common.or}
       <span className="h-px flex-1 bg-line" />
     </div>
   );

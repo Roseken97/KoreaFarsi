@@ -14,8 +14,8 @@ export function StatusScreen({
 }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center text-center">
-      <span className="grid size-16 place-items-center rounded-3xl bg-sage-soft text-teal">{icon}</span>
-      <h1 className="mt-6 font-display text-3xl font-semibold">{title}</h1>
+      <span className="grid size-16 place-items-center rounded-3xl bg-violet-soft text-violet-deep">{icon}</span>
+      <h1 className="mt-6 font-display text-[26px] font-bold text-violet-deep">{title}</h1>
       {children && <div className="mt-3 text-[15px] leading-7 text-ink-soft">{children}</div>}
       {action && <div className="mt-8 w-full">{action}</div>}
     </div>

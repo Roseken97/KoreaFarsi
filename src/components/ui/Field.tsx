@@ -56,7 +56,7 @@ export function Field({ label, error, ltr, icon, iconTint = "", type = "text", c
                   ? `pr-14 ${isPassword ? "pl-12" : "pl-5"} ${ltr ? "placeholder:text-right" : ""} `
                   : `pl-14 ${isPassword ? "pr-12" : "pr-5"} `)
               : "h-13 w-full rounded-field border bg-surface px-4 text-[15px] text-ink outline-none transition " +
-                "placeholder:text-ink-faint focus:border-teal focus:ring-4 focus:ring-teal/15 ") +
+                "placeholder:text-ink-faint focus:border-violet/50 focus:ring-4 focus:ring-violet/12 ") +
             (error ? "border-danger " : icon ? "border-transparent " : "border-line ") +
             (isPassword && !icon ? "pe-12" : "")
           }

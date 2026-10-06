@@ -72,7 +72,7 @@ export function ForgotPasswordForm() {
           onChange={(e) => setEmail(e.target.value)}
           error={emailError}
         />
-        <Button type="submit" loading={loading} className="mt-2">
+        <Button type="submit" variant="dark" loading={loading} className="mt-2 h-14">
           {t.submit}
         </Button>
       </form>

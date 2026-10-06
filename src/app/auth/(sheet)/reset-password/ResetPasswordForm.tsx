@@ -72,7 +72,7 @@ export function ResetPasswordForm() {
           onChange={(e) => setConfirm(e.target.value)}
           error={errors.confirm}
         />
-        <Button type="submit" loading={loading} className="mt-2">
+        <Button type="submit" variant="dark" loading={loading} className="mt-2 h-14">
           {t.submit}
         </Button>
       </form>
