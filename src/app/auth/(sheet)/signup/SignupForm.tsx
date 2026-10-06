@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { GoogleButton, OrDivider } from "@/components/auth/GoogleButton";
+import { HexHero } from "@/components/auth/HexHero";
 import { StatusScreen } from "@/components/auth/StatusScreen";
-import { MailIcon } from "@/components/icons";
+import { LockIcon, MailIcon, UserIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Notice } from "@/components/ui/Notice";
@@ -20,7 +21,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/env";
 type Errors = { name?: string; email?: string; password?: string };
 
 // Sketch 03 step 2: Full Name / Email / Password (no confirm field; the eye toggle covers typos).
-export function SignupForm({ next }: { next: string }) {
+export function SignupForm({ next, image }: { next: string; image?: string }) {
   const router = useRouter();
   const { m, locale } = useI18n();
   const t = m.auth.signup;
@@ -118,7 +119,7 @@ export function SignupForm({ next }: { next: string }) {
             onChange={(e) => setCode(e.target.value)}
             error={codeError}
           />
-          <Button type="submit" variant="dark" loading={verifying}>
+          <Button type="submit" variant="navy" loading={verifying}>
             {t.verify}
           </Button>
           <button
@@ -139,12 +140,15 @@ export function SignupForm({ next }: { next: string }) {
 
   return (
     <>
+      <HexHero tone="rose" image={image} letter="한" className="-mt-6 mb-4" />
       <AuthHeader title={t.title} />
 
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         {formError && <Notice tone="error">{formError}</Notice>}
         <Field
           label={m.auth.fields.fullName}
+          icon={<UserIcon width={18} height={18} />}
+          iconTint="bg-gold-soft text-gold-deep"
           autoComplete="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -152,6 +156,8 @@ export function SignupForm({ next }: { next: string }) {
         />
         <Field
           label={m.auth.fields.email}
+          icon={<MailIcon width={18} height={18} />}
+          iconTint="bg-sage-soft text-teal-deep"
           type="email"
           ltr
           autoComplete="email"
@@ -162,6 +168,8 @@ export function SignupForm({ next }: { next: string }) {
         />
         <Field
           label={m.auth.fields.password}
+          icon={<LockIcon width={18} height={18} />}
+          iconTint="bg-indigo-soft text-indigo-deep"
           type="password"
           ltr
           autoComplete="new-password"
@@ -169,7 +177,7 @@ export function SignupForm({ next }: { next: string }) {
           onChange={(e) => setPassword(e.target.value)}
           error={fieldErrors.password}
         />
-        <Button type="submit" variant="dark" loading={loading} className="mt-2 h-14">
+        <Button type="submit" variant="navy" loading={loading} className="mt-3 h-14">
           {t.submit}
         </Button>
       </form>
@@ -179,7 +187,7 @@ export function SignupForm({ next }: { next: string }) {
         <GoogleButton next={successPath} onError={setFormError} round />
       </div>
 
-      <p className="mt-auto pt-8 text-center text-sm text-ink-soft">
+      <p className="mt-auto pt-6 text-center text-sm text-ink-soft">
         {t.haveAccount}{" "}
         <Link href="/auth/login" className="font-semibold text-violet-deep hover:underline">
           {t.loginLink}

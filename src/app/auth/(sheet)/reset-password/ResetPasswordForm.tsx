@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { AuthHeader } from "@/components/auth/AuthHeader";
+import { LockIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
 import { Notice } from "@/components/ui/Notice";
@@ -56,6 +57,8 @@ export function ResetPasswordForm() {
         )}
         <Field
           label={m.auth.fields.newPassword}
+          icon={<LockIcon width={18} height={18} />}
+          iconTint="bg-indigo-soft text-indigo-deep"
           type="password"
           ltr
           autoComplete="new-password"
@@ -65,6 +68,8 @@ export function ResetPasswordForm() {
         />
         <Field
           label={m.auth.fields.confirmPassword}
+          icon={<LockIcon width={18} height={18} />}
+          iconTint="bg-indigo-soft text-indigo-deep"
           type="password"
           ltr
           autoComplete="new-password"
@@ -72,7 +77,7 @@ export function ResetPasswordForm() {
           onChange={(e) => setConfirm(e.target.value)}
           error={errors.confirm}
         />
-        <Button type="submit" variant="dark" loading={loading} className="mt-2 h-14">
+        <Button type="submit" variant="navy" loading={loading} className="mt-2 h-14">
           {t.submit}
         </Button>
       </form>

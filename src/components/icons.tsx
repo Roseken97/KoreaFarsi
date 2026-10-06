@@ -71,6 +71,20 @@ export const EyeOffIcon = (p: IconProps) => (
   </Base>
 );
 
+export const LockIcon = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="5" y="10.5" width="14" height="10" rx="2.5" />
+    <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" />
+  </Base>
+);
+
+export const UserIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="8.5" r="3.5" />
+    <path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5" />
+  </Base>
+);
+
 export const ImageIcon = (p: IconProps) => (
   <Base {...p}>
     <rect x="3.5" y="4.5" width="17" height="15" rx="3" />
