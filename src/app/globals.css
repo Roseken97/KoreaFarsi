@@ -1,41 +1,45 @@
 @import "tailwindcss";
 
 /*
- * KoreaFarsi design tokens — "Color Reference V1" (vivid / warm / premium / playful).
+ * KoreaFarsi design tokens — Rose's NEXTPURE palette, lifted (white page,
+ * color only on cards and buttons, navy text). Section colors: courses =
+ * periwinkle (violet/sky), bookstore = rose (clay), AI Hub = lavender
+ * (indigo), Korea Life = mint (sage), planner = sand (gold).
+ * Previously "Color Reference V1" (vivid / warm / premium / playful).
  * Every component reads from these tokens, so no component code needs to change
  * when the palette does. ink/cream/line/teal/blush keep their existing names (so
  * nothing breaks) but now carry the new V1 hex values; violet/coral/yellow/sky are
  * new accent families for the more playful multi-color card style.
  */
 @theme {
-  --color-cream: #fff8ef;
-  --color-cream-deep: #f4efe8;
+  --color-cream: #fffdf6;
+  --color-cream-deep: #f5f2ec;
   --color-surface: #ffffff;
-  --color-ink: #29263d;
-  --color-ink-soft: #6e6878;
-  --color-ink-faint: #9691a0;
-  --color-line: #e6dfd7;
+  --color-ink: #1e2340;
+  --color-ink-soft: #585c74;
+  --color-ink-faint: #8d90a6;
+  --color-line: #e7e5ee;
 
-  --color-sage: #bfe8d9;
-  --color-sage-soft: #e4f8f1;
-  --color-teal: #20b8b0;
-  --color-teal-deep: #16847f;
-  --color-teal-mist: #e3f7f5;
-  --color-blush: #e85a9f;
-  --color-blush-soft: #fceaf3;
+  --color-sage: #aaeedd;
+  --color-sage-soft: #e6f8f3;
+  --color-teal: #2a9c82;
+  --color-teal-deep: #1f7a66;
+  --color-teal-mist: #e6f8f3;
+  --color-blush: #c84b60;
+  --color-blush-soft: #fde4e6;
 
-  --color-violet: #5b8c7b;
-  --color-violet-deep: #3f6657;
-  --color-violet-soft: #e3efe9;
+  --color-violet: #4c5fb5;
+  --color-violet-deep: #3a4a93;
+  --color-violet-soft: #e6eafb;
   --color-coral: #f46a45;
   --color-coral-deep: #c84b2d;
   --color-coral-soft: #fdece7;
   --color-yellow: #ffb72b;
   --color-yellow-deep: #d88e00;
   --color-yellow-soft: #fff4d9;
-  --color-sky: #5d8fe8;
-  --color-sky-deep: #3768bb;
-  --color-sky-soft: #eaf0fc;
+  --color-sky: #7690ea;
+  --color-sky-deep: #4c5fb5;
+  --color-sky-soft: #e6eafb;
 
   /*
    * Harmonized identity family — analogous, muted, Korean-pigment-inspired
@@ -45,20 +49,20 @@
    * stay defined above for their other, still-valid uses (secondary button,
    * success state, misc accents) — only identity usages migrate here.
    */
-  --color-clay: #c17a54;
-  --color-clay-deep: #96573a;
-  --color-clay-soft: #f5e6da;
-  --color-indigo: #4a6b8a;
-  --color-indigo-deep: #33495e;
-  --color-indigo-soft: #e4eaf0;
-  --color-gold: #c99a3e;
-  --color-gold-deep: #9c7526;
-  --color-gold-soft: #f7edd6;
+  --color-clay: #e98a8f;
+  --color-clay-deep: #b24e58;
+  --color-clay-soft: #fde4e4;
+  --color-indigo: #ae8ad2;
+  --color-indigo-deep: #7550aa;
+  --color-indigo-soft: #f0e7f9;
+  --color-gold: #ebb574;
+  --color-gold-deep: #9a6418;
+  --color-gold-soft: #fdf1df;
 
   --color-danger: #e85a5a;
   --color-danger-soft: #fbeaea;
-  --color-success: #20b8b0;
-  --color-success-soft: #e3f7f5;
+  --color-success: #2a9c82;
+  --color-success-soft: #e6f8f3;
 
   --font-sans: var(--font-inter), var(--font-vazirmatn), system-ui, sans-serif;
   --font-display: var(--font-playfair), Georgia, serif;
@@ -71,8 +75,8 @@
      light source's far side, light (white) toward its near side — so a
      surface close to the page's own color reads as gently raised out of it,
      with no hard edge or border doing the work. */
-  --shadow-soft: 6px 6px 14px rgb(41 38 61 / 0.12), -6px -6px 14px rgb(255 255 255 / 0.9);
-  --shadow-lift: 10px 10px 24px rgb(41 38 61 / 0.14), -10px -10px 24px rgb(255 255 255 / 0.95);
+  --shadow-soft: 6px 6px 14px rgb(30 35 64 / 0.12), -6px -6px 14px rgb(255 255 255 / 0.9);
+  --shadow-lift: 10px 10px 24px rgb(30 35 64 / 0.14), -10px -10px 24px rgb(255 255 255 / 0.95);
 }
 
 html {

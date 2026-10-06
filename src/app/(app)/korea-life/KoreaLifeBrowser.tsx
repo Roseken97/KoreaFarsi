@@ -11,9 +11,9 @@ import { MESH, MESH_SHADOW, type MeshColor } from "@/lib/ui/mesh";
 const CATEGORIES: KoreaLifeCategory[] = ["culture", "travel", "food", "life"];
 
 const CATEGORY_STYLE: Record<KoreaLifeCategory, { mesh: MeshColor; text: string; labelText: string; Icon: ComponentType<SVGProps<SVGSVGElement>> }> = {
-  culture: { mesh: "violet", text: "text-white", labelText: "text-violet-deep", Icon: LanternIcon },
-  travel: { mesh: "indigo", text: "text-white", labelText: "text-indigo-deep", Icon: GlobeIcon },
-  food: { mesh: "clay", text: "text-white", labelText: "text-clay-deep", Icon: BowlIcon },
+  culture: { mesh: "violet", text: "text-ink", labelText: "text-violet-deep", Icon: LanternIcon },
+  travel: { mesh: "indigo", text: "text-ink", labelText: "text-indigo-deep", Icon: GlobeIcon },
+  food: { mesh: "clay", text: "text-ink", labelText: "text-clay-deep", Icon: BowlIcon },
   life: { mesh: "gold", text: "text-ink", labelText: "text-gold-deep", Icon: SparkleIcon },
 };
 

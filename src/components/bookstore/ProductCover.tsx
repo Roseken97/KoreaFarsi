@@ -9,8 +9,8 @@ import { MESH, MESH_SHADOW, type MeshColor } from "@/lib/ui/mesh";
  * the paler collections stay flat (a mesh/grain over near-white muddies it).
  */
 const COVER_STYLE: Record<Collection | "default", { bg: string; mesh?: MeshColor; glyph: string; text: string }> = {
-  alphabet: { bg: "bg-violet", mesh: "violet", glyph: "한글", text: "text-white" },
-  four_skills: { bg: "bg-indigo-deep", mesh: "indigo", glyph: "한국어", text: "text-cream" },
+  alphabet: { bg: "bg-violet", mesh: "violet", glyph: "한글", text: "text-ink" },
+  four_skills: { bg: "bg-indigo-deep", mesh: "indigo", glyph: "한국어", text: "text-ink" },
   workbook: { bg: "bg-blush-soft", glyph: "연습", text: "text-ink" },
   planner: { bg: "bg-sage-soft", glyph: "계획", text: "text-teal-deep" },
   merch: { bg: "bg-cream-deep", glyph: "굿즈", text: "text-ink" },
