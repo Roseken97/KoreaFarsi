@@ -13,7 +13,8 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#ffffff",
+    // Matches the top of the splash film's gradient, so the phone's own launch screen hands off without a flash.
+    background_color: "#fff9f2",
     theme_color: "#ffffff",
     lang: "en",
     dir: "auto",
