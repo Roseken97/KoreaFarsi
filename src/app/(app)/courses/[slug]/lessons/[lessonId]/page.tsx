@@ -93,7 +93,7 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
         <div className="min-w-0">
           {lesson.title_ko ? (
             <>
-              <h1 lang="ko" className="font-display text-2xl leading-tight font-bold text-ink sm:text-3xl">
+              <h1 lang="ko" className="font-display text-2xl leading-tight font-bold text-ink">
                 {lesson.title_ko}
               </h1>
               <p className="mt-1 text-base text-ink-soft" dir="auto">

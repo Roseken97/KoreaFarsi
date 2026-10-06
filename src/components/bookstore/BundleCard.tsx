@@ -23,7 +23,7 @@ export function BundleCard({ product }: { product: Product }) {
 
   return (
     <MotionSurface className="flex gap-4 rounded-card border border-line/60 bg-gradient-to-br from-surface to-blush-soft/50 p-4 shadow-soft">
-      <Link href={`/bookstore/${product.slug}`} className="w-24 shrink-0 md:w-28">
+      <Link href={`/bookstore/${product.slug}`} className="w-24 shrink-0">
         <ProductCover product={product} sizes="112px" />
       </Link>
       <div className="flex min-w-0 flex-1 flex-col">

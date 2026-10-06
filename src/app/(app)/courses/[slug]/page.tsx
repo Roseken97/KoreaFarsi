@@ -50,7 +50,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
       <SubPageHeader title={t.title} backHref="/courses" backLabel={t.title} />
 
       {/* Hero — Visual Element: the course's own selected cover image (sketch 07, callout #9) */}
-      <section className="relative h-56 w-full overflow-hidden rounded-hero shadow-lift md:h-64">
+      <section className="relative h-56 w-full overflow-hidden rounded-hero shadow-lift">
         {hasCover ? (
           <Image src={course.cover_image_url!} alt="" fill sizes="(min-width: 768px) 42rem, 100vw" className="object-cover" />
         ) : (
@@ -60,9 +60,9 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
           </div>
         )}
         {hasCover && <span className="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/15 to-transparent" aria-hidden="true" />}
-        <div className="relative flex h-full flex-col justify-end p-5 md:p-6">
+        <div className="relative flex h-full flex-col justify-end p-5">
           <p className={`text-xs font-semibold tracking-wide uppercase ${hasCover ? "text-white/80" : "text-ink-soft"}`}>KoreaFarsi</p>
-          <h1 className={`mt-1 font-display text-2xl leading-tight font-bold md:text-3xl ${hasCover ? "text-white" : "text-ink"}`} dir="auto">
+          <h1 className={`mt-1 font-display text-2xl leading-tight font-bold ${hasCover ? "text-white" : "text-ink"}`} dir="auto">
             {title}
           </h1>
           {levelLabel && <p className={`mt-1 text-sm font-medium ${hasCover ? "text-white/85" : "text-ink-soft"}`}>{levelLabel}</p>}

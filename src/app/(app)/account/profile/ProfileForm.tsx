@@ -126,7 +126,7 @@ export function ProfileForm({
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5 rounded-card bg-surface p-5 shadow-soft md:p-6">
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5 rounded-card bg-surface p-5 shadow-soft">
       <div className="flex justify-center">
         <Avatar name={name || initialName} email={email} avatarKey={avatarKey} size={88} />
       </div>

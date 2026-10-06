@@ -73,7 +73,7 @@ export function ProfileSetupPanel({
         </div>
       </div>
 
-      <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6 rounded-card bg-surface p-5 shadow-soft md:p-6">
+      <form onSubmit={onSubmit} noValidate className="flex flex-col gap-6 rounded-card bg-surface p-5 shadow-soft">
         {error && <Notice tone="error">{error}</Notice>}
 
         {/* Q1 */}
@@ -170,7 +170,7 @@ export function ProfileSetupPanel({
         {/* Q5 */}
         <fieldset>
           <legend className="mb-2 text-sm font-medium text-ink">{t.categoriesLabel}</legend>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2">
             {TASK_CATEGORIES.map((c) => {
               const Icon = CATEGORY_ICON[c];
               const active = categories.includes(c);

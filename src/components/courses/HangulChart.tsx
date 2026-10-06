@@ -9,7 +9,7 @@ export function HangulChart({ chart }: { chart: "consonants" | "vowels" }) {
   const [active, setActive] = useState<number | null>(null);
 
   return (
-    <div className="mt-6 grid grid-cols-5 gap-2 sm:grid-cols-7">
+    <div className="mt-6 grid grid-cols-5 gap-2">
       {letters.map(({ char, roman }, i) => (
         <button
           key={i}

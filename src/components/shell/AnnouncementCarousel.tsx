@@ -76,12 +76,12 @@ function Card({ announcement, locale }: { announcement: Announcement; locale: Lo
           </>
         )
       ) : (
-        <div className="relative flex h-full flex-col justify-center p-6 md:p-8">
-          <p className="max-w-[16rem] font-display text-xl leading-snug font-semibold text-ink md:max-w-sm md:text-2xl" dir="auto">
+        <div className="relative flex h-full flex-col justify-center p-6">
+          <p className="max-w-[16rem] font-display text-xl leading-snug font-semibold text-ink" dir="auto">
             {title}
           </p>
           {body && (
-            <p className="mt-1.5 max-w-[18rem] text-sm leading-6 text-ink-soft md:max-w-sm" dir="auto">
+            <p className="mt-1.5 max-w-[18rem] text-sm leading-6 text-ink-soft" dir="auto">
               {body}
             </p>
           )}

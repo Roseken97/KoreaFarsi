@@ -70,7 +70,7 @@ export default async function AccountPage() {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-start">
+      <div className="grid gap-6">
         <div className="flex flex-col gap-4">
           {/* Profile */}
           <section className="flex items-center gap-4">

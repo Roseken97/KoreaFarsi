@@ -35,8 +35,8 @@ export default async function ProductPage(props: PageProps<"/bookstore/[slug]">)
     <div className="animate-fade-up">
       <BookstoreHeader backHref="/bookstore" />
 
-      <div className="grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] md:items-start">
-        <div className="mx-auto w-full max-w-[15rem] md:sticky md:top-10 md:max-w-none">
+      <div className="grid gap-8">
+        <div className="mx-auto w-full max-w-[15rem]">
           <ProductCover product={product} sizes="(min-width: 768px) 360px, 240px" />
         </div>
 

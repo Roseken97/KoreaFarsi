@@ -60,7 +60,7 @@ export function CartView({ products, contactFallback }: { products: Product[]; c
           </ButtonLink>
         </div>
       ) : (
-        <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start">
+        <div className="mt-6 grid gap-6">
           <ul className="divide-y divide-line/70 overflow-hidden rounded-card bg-surface shadow-soft">
             <AnimatePresence initial={false}>
               {rows.map(({ line, product }) => {
@@ -120,7 +120,7 @@ export function CartView({ products, contactFallback }: { products: Product[]; c
             </AnimatePresence>
           </ul>
 
-          <aside className="flex flex-col gap-4 rounded-card bg-surface p-5 shadow-soft lg:sticky lg:top-10">
+          <aside className="flex flex-col gap-4 rounded-card bg-surface p-5 shadow-soft">
             <div className="flex items-center justify-between">
               <span className="text-ink-soft">{t.cart.total}</span>
               <span className="font-display text-xl font-semibold">{formatPrice(total, locale, m)}</span>

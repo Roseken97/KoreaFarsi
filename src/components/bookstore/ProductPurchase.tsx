@@ -18,7 +18,7 @@ export function ProductPurchase({ product }: { product: Product }) {
       {product.format.length > 0 && (
         <fieldset>
           <legend className="mb-2 text-sm font-medium text-ink">{t.product.chooseFormat}</legend>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <div className="grid gap-2">
             {product.format.map((f) => {
               const selected = f === format;
               const compareAt = compareAtFor(product, f);

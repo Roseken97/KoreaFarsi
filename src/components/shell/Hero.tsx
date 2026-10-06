@@ -21,7 +21,7 @@ export async function Hero({
   children?: React.ReactNode;
 }) {
   const announcements = await getActiveAnnouncements(placement);
-  const height = size === "lg" ? "h-48 md:h-60" : "h-28 md:h-32";
+  const height = size === "lg" ? "h-48" : "h-28";
 
   if (announcements.length === 0) {
     return <section className={`relative overflow-hidden rounded-hero bg-gradient-to-br from-blush-soft via-cream to-sage-soft shadow-lift ${height}`}>{children}</section>;
