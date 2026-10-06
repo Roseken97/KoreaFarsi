@@ -147,3 +147,42 @@ body {
 .animate-blink {
   animation: kf-blink 1s step-end infinite;
 }
+
+/* Auth panel: the 3D spheres bob and the light shapes sway, slowly and out of step. */
+@keyframes kf-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes kf-sway {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-8px, 6px) rotate(-1.5deg);
+  }
+}
+
+.kf-float,
+.kf-sway {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: kf-float 7s ease-in-out infinite;
+}
+
+.kf-sway {
+  animation: kf-sway 14s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kf-float,
+  .kf-sway {
+    animation: none;
+  }
+}
