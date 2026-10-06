@@ -7,7 +7,7 @@ const TONES = {
 };
 
 /**
- * Hexagon hero for the auth screens, after the soft-3D login reference: a tinted rounded
+ * Hexagon hero panel for the auth screens, after the soft-3D login reference: a tinted rounded
  * hexagon holding a floating Hangul tile on a small pedestal, with a few floating spheres.
  */
 export function AuthHero({ tone, letter }: { tone: keyof typeof TONES; letter: string }) {
@@ -17,9 +17,18 @@ export function AuthHero({ tone, letter }: { tone: keyof typeof TONES; letter: s
   const hex = "100,26 157,59 157,125 100,158 43,125 43,59";
 
   return (
-    <div className="relative mx-auto mb-6 w-48" aria-hidden="true">
-      <div className="absolute inset-6 rounded-full blur-2xl" style={{ background: t.mid, opacity: 0.45 }} />
-      <svg viewBox="0 0 200 184" className="relative w-full overflow-visible">
+    <div
+      className="relative mb-7 overflow-hidden rounded-[32px] px-6 pt-7 pb-10"
+      style={{ background: `linear-gradient(160deg, ${t.light} 0%, ${t.light} 45%, ${t.mid} 140%)` }}
+      aria-hidden="true"
+    >
+      {/* fine dot grid so the panel reads as its own surface */}
+      <div
+        className="absolute inset-0 opacity-40"
+        style={{ backgroundImage: `radial-gradient(${t.mid} 1px, transparent 1.2px)`, backgroundSize: "16px 16px" }}
+      />
+      <div className="absolute -top-10 -right-10 size-36 rounded-full bg-white/40 blur-2xl" />
+      <svg viewBox="0 0 200 184" className="relative mx-auto w-44 overflow-visible">
         <defs>
           <linearGradient id={id("hex")} x1="0" y1="0" x2="0.6" y2="1">
             <stop offset="0%" stopColor={t.light} />
@@ -73,6 +82,10 @@ export function AuthHero({ tone, letter }: { tone: keyof typeof TONES; letter: s
         <circle cx="34" cy="34" r="13" fill={`url(#${id("gold")})`} />
         <circle cx="170" cy="150" r="9" fill={`url(#${id("dot")})`} />
         <circle cx="172" cy="40" r="5" fill="#fff" opacity="0.9" />
+      </svg>
+      {/* wave edge that hands off to the milk-white page */}
+      <svg viewBox="0 0 400 40" preserveAspectRatio="none" className="absolute inset-x-0 -bottom-px h-8 w-full">
+        <path d="M0 40V22C70 2 130 2 200 18S330 36 400 14V40Z" fill="#fbf9f4" />
       </svg>
     </div>
   );
