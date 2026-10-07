@@ -1,51 +1,12 @@
-import { useId, type SVGProps } from "react";
+import { useId } from "react";
+import { BLUSH, CREAM, CREAM_SHADE, Defs, type IllustrationProps, KR_FONT, LAVENDER, MINT, NAVY, SAND, Sparkle } from "@/components/illustrations/kit";
 
 /**
  * Soft-3D illustrations for the AI Hub cards, one per practice mode. Drawn in
  * cream and white with small accents from Rose's palette so they sit on any of
- * the five card colors; navy (#1E2340) only for the small details. Each uses
- * its own gradient ids (useId) so several can render on one page.
+ * the five card colors. Shared pieces live in illustrations/kit.
  */
-type Props = SVGProps<SVGSVGElement>;
-
-const NAVY = "#1E2340";
-const CREAM = "#FFFDF6";
-const CREAM_SHADE = "#EDE6DA";
-const BLUSH = "#F5B8C4";
-const SAND = "#F8D4A6";
-const MINT = "#AAEEDD";
-const LAVENDER = "#D1B6E7";
-
-/** Shared defs: a top-lit cream body gradient and a soft gloss. */
-function Defs({ id }: { id: string }) {
-  return (
-    <defs>
-      <linearGradient id={`${id}-body`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stopColor="#FFFFFF" />
-        <stop offset="0.55" stopColor={CREAM} />
-        <stop offset="1" stopColor={CREAM_SHADE} />
-      </linearGradient>
-      <linearGradient id={`${id}-gloss`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stopColor="#FFFFFF" stopOpacity="0.9" />
-        <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
-      </linearGradient>
-      <radialGradient id={`${id}-glow`} cx="0.5" cy="0.5" r="0.5">
-        <stop offset="0" stopColor="#FFFFFF" stopOpacity="0.35" />
-        <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
-      </radialGradient>
-    </defs>
-  );
-}
-
-function Sparkle({ x, y, s = 1, fill = "#FFFFFF" }: { x: number; y: number; s?: number; fill?: string }) {
-  return (
-    <path
-      transform={`translate(${x} ${y}) scale(${s})`}
-      d="M0 -10C1.2 -3.5 3.5 -1.2 10 0C3.5 1.2 1.2 3.5 0 10C-1.2 3.5 -3.5 1.2 -10 0C-3.5 -1.2 -1.2 -3.5 0 -10Z"
-      fill={fill}
-    />
-  );
-}
+type Props = IllustrationProps;
 
 /** Chat: two speech bubbles in conversation, a Korean greeting and a typing reply. */
 export function ChatIllustration(props: Props) {
@@ -66,7 +27,7 @@ export function ChatIllustration(props: Props) {
       <g>
         <path d="M46 44h104a26 26 0 0 1 26 26v34a26 26 0 0 1-26 26H84l-30 22 6-22h-14a26 26 0 0 1-26-26V70a26 26 0 0 1 26-26Z" fill={`url(#${id}-body)`} />
         <path d="M46 44h104a26 26 0 0 1 26 26v8H20v-8a26 26 0 0 1 26-26Z" fill={`url(#${id}-gloss)`} />
-        <text x="98" y="99" textAnchor="middle" fontSize="34" fontWeight="700" fill={NAVY} fontFamily="'Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+        <text x="98" y="99" textAnchor="middle" fontSize="34" fontWeight="700" fill={NAVY} fontFamily={KR_FONT}>
           안녕?
         </text>
       </g>
@@ -109,7 +70,7 @@ export function SpeakIllustration(props: Props) {
       {/* tag */}
       <g transform="rotate(8 186 30)">
         <rect x="149" y="14" width="74" height="32" rx="16" fill={SAND} />
-        <text x="186" y="37" textAnchor="middle" fontSize="17" fontWeight="700" fill={NAVY} fontFamily="'Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+        <text x="186" y="37" textAnchor="middle" fontSize="17" fontWeight="700" fill={NAVY} fontFamily={KR_FONT}>
           말해요
         </text>
       </g>
@@ -149,7 +110,7 @@ export function ListenIllustration(props: Props) {
         <path d="M188 30v30.5a9 9 0 1 1-6-8.5V38l18-5v-6Z" />
         <path d="M44 46v22a7 7 0 1 1-5-6.7V46Z" opacity="0.8" />
       </g>
-      <text x="120" y="214" textAnchor="middle" fontSize="18" fontWeight="700" fill="#FFFFFF" fontFamily="'Apple SD Gothic Neo','Noto Sans KR',sans-serif" opacity="0.9">
+      <text x="120" y="214" textAnchor="middle" fontSize="18" fontWeight="700" fill="#FFFFFF" fontFamily={KR_FONT} opacity="0.9">
         들어 봐요
       </text>
       <Sparkle x={210} y={92} s={0.8} />
@@ -185,7 +146,7 @@ export function ShadowIllustration(props: Props) {
       {/* tag */}
       <g transform="rotate(6 160 34)">
         <rect x="116" y="18" width="90" height="32" rx="16" fill={SAND} />
-        <text x="161" y="41" textAnchor="middle" fontSize="17" fontWeight="700" fill={NAVY} fontFamily="'Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+        <text x="161" y="41" textAnchor="middle" fontSize="17" fontWeight="700" fill={NAVY} fontFamily={KR_FONT}>
           따라 하기
         </text>
       </g>
@@ -197,7 +158,6 @@ export function ShadowIllustration(props: Props) {
 /** Grammar: an open book with Hangul blocks snapping together (가 + ㄴ = 간). */
 export function GrammarIllustration(props: Props) {
   const id = useId();
-  const KR = "'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
   return (
     <svg viewBox="0 0 240 240" fill="none" direction="ltr" aria-hidden="true" {...props}>
       <Defs id={id} />
@@ -205,19 +165,19 @@ export function GrammarIllustration(props: Props) {
       {/* blocks */}
       <g>
         <rect x="26" y="40" width="58" height="58" rx="16" fill={`url(#${id}-body)`} transform="rotate(-8 55 69)" />
-        <text x="55" y="82" textAnchor="middle" fontSize="32" fontWeight="700" fill={NAVY} fontFamily={KR} transform="rotate(-8 55 69)">
+        <text x="55" y="82" textAnchor="middle" fontSize="32" fontWeight="700" fill={NAVY} fontFamily={KR_FONT} transform="rotate(-8 55 69)">
           가
         </text>
         <text x="100" y="78" textAnchor="middle" fontSize="26" fontWeight="700" fill="#FFFFFF">
           +
         </text>
         <rect x="118" y="46" width="46" height="46" rx="13" fill={SAND} transform="rotate(6 141 69)" />
-        <text x="141" y="80" textAnchor="middle" fontSize="26" fontWeight="700" fill={NAVY} fontFamily={KR} transform="rotate(6 141 69)">
+        <text x="141" y="80" textAnchor="middle" fontSize="26" fontWeight="700" fill={NAVY} fontFamily={KR_FONT} transform="rotate(6 141 69)">
           ㄴ
         </text>
         <path d="M172 70h10m-6-7 7 7-7 7" stroke="#FFFFFF" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
         <rect x="186" y="38" width="44" height="64" rx="14" fill={BLUSH} />
-        <text x="208" y="82" textAnchor="middle" fontSize="28" fontWeight="700" fill={NAVY} fontFamily={KR}>
+        <text x="208" y="82" textAnchor="middle" fontSize="28" fontWeight="700" fill={NAVY} fontFamily={KR_FONT}>
           간
         </text>
       </g>
