@@ -4,17 +4,17 @@ import { ArcCarousel, type ArcCard } from "@/components/ai-hub/ArcCarousel";
 import { ChatBubbleIcon, DictionaryIcon, HeadphonesIcon, MicIcon } from "@/components/icons";
 import { useI18n } from "@/lib/i18n/client";
 
-const SECTION_STYLE: Record<string, Pick<ArcCard, "Icon" | "bg" | "text" | "korean" | "live">> = {
-  chat: { Icon: ChatBubbleIcon, bg: "bg-gradient-to-br from-[#a07ccc] to-[#6a479e]", text: "text-white", korean: "채팅", live: true },
-  speak: { Icon: MicIcon, bg: "bg-gradient-to-br from-[#7690ea] to-[#3a4a93]", text: "text-white", korean: "말하기", live: false },
-  listen: { Icon: HeadphonesIcon, bg: "bg-gradient-to-br from-[#e98a8f] to-[#a2434d]", text: "text-white", korean: "듣기", live: false },
-  shadow: { Icon: MicIcon, bg: "bg-gradient-to-br from-[#4fb89b] to-[#1f6e5c]", text: "text-white", korean: "섀도잉", live: false },
-  grammar: { Icon: DictionaryIcon, bg: "bg-gradient-to-br from-[#d99a4f] to-[#8a5612]", text: "text-white", korean: "문법", live: false },
+const SECTION_STYLE: Record<string, Pick<ArcCard, "Icon" | "bg" | "text" | "korean" | "live" | "image">> = {
+  chat: { Icon: ChatBubbleIcon, bg: "bg-gradient-to-br from-[#a07ccc] to-[#6a479e]", text: "text-white", korean: "채팅", live: true, image: "/companion/wave.webp" },
+  speak: { Icon: MicIcon, bg: "bg-gradient-to-br from-[#7690ea] to-[#3a4a93]", text: "text-white", korean: "말하기", live: false, image: "/companion/wonder.webp" },
+  listen: { Icon: HeadphonesIcon, bg: "bg-gradient-to-br from-[#e98a8f] to-[#a2434d]", text: "text-white", korean: "듣기", live: false, image: "/companion/hop.webp" },
+  shadow: { Icon: MicIcon, bg: "bg-gradient-to-br from-[#4fb89b] to-[#1f6e5c]", text: "text-white", korean: "섀도잉", live: false, image: "/companion/joy.webp" },
+  grammar: { Icon: DictionaryIcon, bg: "bg-gradient-to-br from-[#d99a4f] to-[#8a5612]", text: "text-white", korean: "문법", live: false, image: "/companion/think.webp" },
 };
 
 /**
  * AI Hub: immersive dark carousel experience with premium purple/lavender aesthetic.
- * Each card's own page lives under /ai-hub/<key>.
+ * Each card's own page lives under /ai-hub/<key>; the companion appears on every card in a pose that fits the mode.
  */
 export function AiPracticeView() {
   const { m, locale } = useI18n();

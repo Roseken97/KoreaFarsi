@@ -43,10 +43,11 @@ type CardKey = keyof Messages["home"]["cards"];
  * a large low-opacity Korean glyph as a background watermark, title/body
  * anchored bottom-start, and a small "go" affordance top-end.
  */
-const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; color: keyof typeof MESH; text: string }[] = [
+/** `face`: a picture in place of the icon chip (the AI Hub card shows the companion). */
+const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; color: keyof typeof MESH; text: string; face?: string }[] = [
   { key: "courses", href: "/courses", Icon: BooksStackIcon, color: "violet", text: "text-ink" },
   { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, color: "clay", text: "text-ink" },
-  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, color: "indigo", text: "text-ink" },
+  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, color: "indigo", text: "text-ink", face: "/companion/avatar.webp" },
   { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, color: "mint", text: "text-ink" },
 ];
 
@@ -108,7 +109,7 @@ export default async function HomePage() {
 
       {/* Main sections — polished colorful: mesh gradient + grain, editorial layout, Korean name as a small label */}
       <section className="mt-8 grid grid-cols-2 gap-4">
-        {CARDS.map(({ key, href, Icon, color, text }) => {
+        {CARDS.map(({ key, href, Icon, color, text, face }) => {
           const card = t.cards[key];
           const photo = images[`home.${key}`];
           return (
@@ -129,9 +130,13 @@ export default async function HomePage() {
                 />
               )}
               <div className="relative flex items-start justify-between">
-                <span className={`grid size-9 place-items-center rounded-xl bg-white/55 shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)] ${text}`}>
-                  <Icon width={18} height={18} />
-                </span>
+                {face ? (
+                  <Image src={face} alt="" width={36} height={36} className="size-9 rounded-xl bg-[#f0eade] object-cover shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)]" />
+                ) : (
+                  <span className={`grid size-9 place-items-center rounded-xl bg-white/55 shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)] ${text}`}>
+                    <Icon width={18} height={18} />
+                  </span>
+                )}
                 <span className={`grid size-9 place-items-center rounded-full bg-white/55 shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)] transition-transform duration-300 group-hover:translate-x-0.5 ${text} rtl:group-hover:-translate-x-0.5`}>
                   <ArrowForwardIcon width={16} height={16} />
                 </span>
