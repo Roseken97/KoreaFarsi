@@ -14,6 +14,7 @@ import {
   RobotIcon,
   ShoppingBagIcon,
 } from "@/components/icons";
+import { AiHubArt, BookstoreArt, CoursesArt, KoreaLifeArt } from "@/components/illustrations/HomeCardArt";
 import { MotionCard } from "@/components/motion/MotionCard";
 import { HomeTodayRing } from "@/components/planner/HomeTodayRing";
 import { HeaderIconLink } from "@/components/shell/PageHeader";
@@ -43,12 +44,16 @@ type CardKey = keyof Messages["home"]["cards"];
  * a large low-opacity Korean glyph as a background watermark, title/body
  * anchored bottom-start, and a small "go" affordance top-end.
  */
-/** `face`: a picture in place of the icon chip (the AI Hub card shows the companion). */
-const CARDS: { key: CardKey; href: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; color: keyof typeof MESH; text: string; face?: string }[] = [
-  { key: "courses", href: "/courses", Icon: BooksStackIcon, color: "violet", text: "text-ink" },
-  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, color: "clay", text: "text-ink" },
-  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, color: "indigo", text: "text-ink", face: "/companion/avatar.webp" },
-  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, color: "mint", text: "text-ink" },
+/**
+ * `face`: a picture in place of the icon chip (the AI Hub card shows the companion).
+ * `Art`: the card's soft-3D illustration, shown when no photo is uploaded for it.
+ */
+type SvgComponent = ComponentType<SVGProps<SVGSVGElement>>;
+const CARDS: { key: CardKey; href: string; Icon: SvgComponent; Art: SvgComponent; color: keyof typeof MESH; text: string; face?: string }[] = [
+  { key: "courses", href: "/courses", Icon: BooksStackIcon, Art: CoursesArt, color: "violet", text: "text-ink" },
+  { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, Art: BookstoreArt, color: "clay", text: "text-ink" },
+  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, Art: AiHubArt, color: "indigo", text: "text-ink", face: "/companion/avatar.webp" },
+  { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, Art: KoreaLifeArt, color: "mint", text: "text-ink" },
 ];
 
 export default async function HomePage() {
@@ -109,7 +114,7 @@ export default async function HomePage() {
 
       {/* Main sections — polished colorful: mesh gradient + grain, editorial layout, Korean name as a small label */}
       <section className="mt-8 grid grid-cols-2 gap-4">
-        {CARDS.map(({ key, href, Icon, color, text, face }) => {
+        {CARDS.map(({ key, href, Icon, Art, color, text, face }) => {
           const card = t.cards[key];
           const photo = images[`home.${key}`];
           return (
@@ -117,10 +122,10 @@ export default async function HomePage() {
               key={key}
               href={href}
               style={{ backgroundImage: MESH[color] }}
-              className={`card-grain group @container relative flex flex-col justify-between gap-5 overflow-hidden rounded-hero p-4 ${photo ? "min-h-56" : "min-h-44"} ${MESH_SHADOW[color]}`}
+              className={`card-grain group @container relative flex min-h-56 flex-col justify-between ${photo ? "gap-5" : "gap-1"} overflow-hidden rounded-hero p-4 ${MESH_SHADOW[color]}`}
             >
               {/* the photo fades out toward the bottom so the title sits on the card color */}
-              {photo && (
+              {photo ? (
                 <Image
                   src={photo}
                   alt=""
@@ -128,7 +133,7 @@ export default async function HomePage() {
                   sizes="220px"
                   className="object-cover [mask-image:linear-gradient(to_bottom,black_40%,transparent_82%)]"
                 />
-              )}
+              ) : null}
               <div className="relative flex items-start justify-between">
                 {face ? (
                   <Image src={face} alt="" width={36} height={36} className="size-9 rounded-xl bg-[#f0eade] object-cover shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)]" />
@@ -141,6 +146,10 @@ export default async function HomePage() {
                   <ArrowForwardIcon width={16} height={16} />
                 </span>
               </div>
+
+              {!photo && (
+                <Art className="relative -mt-4 h-24 w-full drop-shadow-[0_10px_16px_rgb(30_35_64/0.18)] transition-transform duration-500 group-hover:-translate-y-1" />
+              )}
 
               <span className="relative">
                 <span lang="ko" className={`block text-xs leading-none font-semibold tracking-wide ${text} opacity-85`} aria-hidden="true">

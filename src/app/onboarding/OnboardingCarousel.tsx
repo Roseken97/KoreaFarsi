@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ArrowForwardIcon } from "@/components/icons";
+import { ONBOARDING_SCENES } from "@/components/illustrations/OnboardingArt";
 import { useI18n } from "@/lib/i18n/client";
 import { fmt } from "@/lib/i18n/config";
 import { markOnboarded } from "@/lib/onboarding";
@@ -100,7 +101,7 @@ export function OnboardingCarousel({ slides }: { slides: OnboardingSlide[] }) {
                       style={{ maskImage: "linear-gradient(to bottom, transparent 0%, #000 22%)" }}
                     />
                   ) : (
-                    <SlideArt badge={slide.badge} base={c.base} tint={c.tint} />
+                    <SlideArt index={i} base={c.base} />
                   )}
                 </div>
               </section>
@@ -152,18 +153,12 @@ export function OnboardingCarousel({ slides }: { slides: OnboardingSlide[] }) {
   );
 }
 
-/** Stand-in until a photo is uploaded in /admin/onboarding: the slide's Korean word on soft palette light. */
-function SlideArt({ badge, base, tint }: { badge: string; base: string; tint: string }) {
+/** Stand-in until a photo is uploaded in /admin/onboarding: the slide's soft-3D scene, tinted by its color. */
+function SlideArt({ index, base }: { index: number; base: string }) {
+  const Scene = ONBOARDING_SCENES[index % ONBOARDING_SCENES.length];
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute start-1/2 top-[12%] size-[26rem] -translate-x-1/2 rounded-full opacity-70 blur-2xl rtl:translate-x-1/2" style={{ background: `radial-gradient(circle, ${base} 0%, ${tint} 55%, transparent 72%)` }} />
-      <div className="absolute end-[12%] top-[8%] size-16 rounded-full bg-white/70 shadow-[inset_-6px_-8px_14px_rgb(30_35_64/0.08)]" />
-      <div className="absolute start-[14%] top-[44%] size-9 rounded-full shadow-[inset_-4px_-5px_10px_rgb(30_35_64/0.12)]" style={{ background: base }} />
-      {badge && (
-        <span lang="ko" className="absolute inset-x-0 top-[18%] text-center text-[7.5rem] leading-none font-bold text-white/90 drop-shadow-[0_18px_30px_rgb(30_35_64/0.15)]">
-          {badge}
-        </span>
-      )}
+    <div className="absolute inset-x-0 top-0 bottom-36 flex items-start justify-center px-4">
+      <Scene base={base} className="h-full max-h-[26rem] w-full drop-shadow-[0_18px_30px_rgb(30_35_64/0.12)]" />
     </div>
   );
 }
