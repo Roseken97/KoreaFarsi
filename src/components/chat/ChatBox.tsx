@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
-import { LogoMark } from "@/components/brand/Logo";
 import { ReviewIcon, SendIcon, SparkleIcon } from "@/components/icons";
 import { STREAM_ERROR_MARKER } from "@/lib/chat-agent/protocol";
 import { fmt, formatNumber } from "@/lib/i18n/config";
@@ -146,7 +145,7 @@ export function ChatBox({ hideHeader = false }: { hideHeader?: boolean } = {}) {
         )
       ) : (
         <header className="mb-4 flex items-center gap-3">
-          <LogoMark size={44} />
+          <CompanionAvatar size={44} />
           <div className="min-w-0 flex-1">
             <h1 className="font-display text-2xl leading-tight font-semibold">{t.title}</h1>
             <p className="text-xs text-ink-soft">{t.subtitle}</p>
@@ -188,7 +187,7 @@ export function ChatBox({ hideHeader = false }: { hideHeader?: boolean } = {}) {
         )}
 
         {messages.map((msg, i) => (
-          <Bubble key={i} role={msg.role} label={msg.role === "user" ? t.you : t.assistant} error={msg.error}>
+          <Bubble key={i} role={msg.role} label={msg.role === "user" ? t.you : t.assistant} error={msg.error} thinking={!msg.content}>
             {msg.content ? (
               msg.role === "assistant" ? <RichText text={msg.content} /> : <p className="my-1 whitespace-pre-wrap">{msg.content}</p>
             ) : (
@@ -253,16 +252,20 @@ function Bubble({
   role,
   label,
   error,
+  thinking,
   children,
 }: {
   role: "user" | "assistant";
   label: string;
   error?: boolean;
+  /** The reply is still on its way: the companion shows its thinking face. */
+  thinking?: boolean;
   children: React.ReactNode;
 }) {
   const isUser = role === "user";
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+    <div className={`flex items-end gap-2 ${isUser ? "justify-end" : "justify-start"}`}>
+      {!isUser && <CompanionAvatar size={34} thinking={thinking} />}
       <div
         role="group"
         aria-label={label}
@@ -278,6 +281,22 @@ function Bubble({
         {children}
       </div>
     </div>
+  );
+}
+
+/** Rose's companion character as the assistant's face (a crop of her approved model sheet). */
+function CompanionAvatar({ size, thinking = false }: { size: number; thinking?: boolean }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={thinking ? "/companion/avatar-thinking.webp" : "/companion/avatar.webp"}
+      alt=""
+      aria-hidden="true"
+      width={size}
+      height={size}
+      className="shrink-0 rounded-full bg-[#f0eade] object-cover shadow-soft ring-2 ring-surface"
+      style={{ width: size, height: size }}
+    />
   );
 }
 
