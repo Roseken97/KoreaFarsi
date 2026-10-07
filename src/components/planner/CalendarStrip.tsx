@@ -16,7 +16,7 @@ export function CalendarStrip({ items }: { items: CalendarStripItem[] }) {
               it.active ? "bg-violet text-white shadow-soft" : "bg-surface text-ink-soft hover:text-ink"
             }`}
           >
-            {it.sub && <span className="text-[10px] font-medium opacity-80">{it.sub}</span>}
+            {it.sub && <span className="text-[11px] font-medium">{it.sub}</span>}
             <span className="text-sm font-bold" dir="ltr">
               {it.label}
             </span>

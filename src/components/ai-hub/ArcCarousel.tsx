@@ -43,7 +43,7 @@ function RingChip({ value, label, progress }: { value: ReactNode; label: string;
       </svg>
       <span className="relative flex flex-col items-center leading-none text-white">
         <span className="text-[13px] font-bold">{value}</span>
-        <span className="mt-0.5 text-[8px] font-medium text-white/70">{label}</span>
+        <span className="mt-0.5 text-[10px] font-medium text-white/90">{label}</span>
       </span>
     </span>
   );
@@ -298,7 +298,7 @@ export function ArcCarousel({
       </div>
 
       {/* Slide counter */}
-      <div dir="ltr" className="text-center mt-8 text-xs text-purple-300/60 font-medium tracking-widest">
+      <div dir="ltr" className="text-center mt-8 text-xs text-purple-200 font-medium tracking-widest">
         {String(index + 1).padStart(2, "0")} / {String(cards.length).padStart(2, "0")}
       </div>
     </div>

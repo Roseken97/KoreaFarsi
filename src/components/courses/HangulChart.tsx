@@ -16,7 +16,7 @@ export function HangulChart({ chart }: { chart: "consonants" | "vowels" }) {
           onClick={() => setActive(active === i ? null : i)}
           lang="ko"
           className={`flex aspect-square flex-col items-center justify-center gap-0.5 rounded-2xl text-2xl font-semibold transition ${
-            active === i ? "bg-teal text-white" : "bg-cream-deep text-ink hover:bg-cream"
+            active === i ? "bg-teal-deep text-white" : "bg-cream-deep text-ink hover:bg-cream"
           }`}
         >
           {char}

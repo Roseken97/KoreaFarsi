@@ -44,7 +44,7 @@ function ProgressStat({ icon, value, label }: { icon: ReactNode; value: string; 
       <span className="text-sm font-semibold text-ink" dir="ltr">
         {value}
       </span>
-      <span className="text-[10px] text-ink-faint">{label}</span>
+      <span className="text-[11px] text-ink-soft">{label}</span>
     </div>
   );
 }

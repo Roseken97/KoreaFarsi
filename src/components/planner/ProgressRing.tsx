@@ -35,7 +35,7 @@ export function ProgressRing({
         <span className="font-display text-xl font-bold text-ink" dir="ltr">
           {clamped}%
         </span>
-        {label && <span className="mt-0.5 max-w-[5.5rem] text-center text-[10px] leading-tight text-ink-soft">{label}</span>}
+        {label && <span className="mt-0.5 max-w-[5.5rem] text-center text-[11px] leading-tight text-ink-soft">{label}</span>}
       </div>
     </div>
   );

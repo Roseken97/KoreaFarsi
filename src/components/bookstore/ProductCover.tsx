@@ -45,7 +45,7 @@ export function ProductCover({
         className={`grid aspect-[3/4] place-items-center overflow-hidden rounded-lg ${style.bg} ${style.text} ${className}`}
         aria-hidden="true"
       >
-        <span lang="ko" className="text-[10px] font-bold">
+        <span lang="ko" className="text-[11px] font-bold">
           {style.glyph}
         </span>
       </div>
@@ -74,7 +74,7 @@ export function ProductCover({
       <span lang="ko" className="relative text-center text-[20cqw] leading-none font-bold tracking-tight whitespace-nowrap">
         {style.glyph}
       </span>
-      <span dir="ltr" className="relative line-clamp-2 ps-2 text-[10px] leading-tight font-medium opacity-80">
+      <span dir="ltr" className="relative line-clamp-2 ps-2 text-[11px] leading-tight font-semibold">
         {product.title_en ?? product.title}
       </span>
     </div>

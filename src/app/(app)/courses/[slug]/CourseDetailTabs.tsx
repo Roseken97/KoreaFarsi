@@ -145,7 +145,7 @@ export function CourseDetailTabs({
           <button
             key={key}
             onClick={() => setTab(key)}
-            className={`flex-1 rounded-full px-2 py-2 text-xs font-medium transition ${tab === key ? "bg-teal text-white shadow-soft" : "text-ink-soft"}`}
+            className={`flex-1 rounded-full px-2 py-2 text-xs font-medium transition ${tab === key ? "bg-teal-deep text-white shadow-soft" : "text-ink-soft"}`}
           >
             {t.detail.tabs[key]}
           </button>
