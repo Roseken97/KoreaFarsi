@@ -12,6 +12,17 @@ const GUEST_ONLY_PATHS = ["/auth/welcome", "/auth/login", "/auth/signup"];
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
+  // Supabase falls back to the Site URL (the marketing page) when the
+  // requested redirectTo isn't on its allow list, so an OAuth code can land on
+  // "/". Hand it to the auth callback so the user ends up in the app.
+  const { pathname: path, searchParams } = request.nextUrl;
+  if (path === "/" && searchParams.has("code")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/callback";
+    if (!searchParams.has("next")) url.searchParams.set("next", "/home");
+    return NextResponse.redirect(url);
+  }
+
   if (!isSupabaseConfigured) return response;
 
   const sessionOnly = request.cookies.get(SESSION_ONLY_COOKIE)?.value === "1";
