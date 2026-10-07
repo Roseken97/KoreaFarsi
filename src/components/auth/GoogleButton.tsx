@@ -7,19 +7,32 @@ import { authErrorMessage } from "@/lib/auth/errors";
 import { useI18n } from "@/lib/i18n/client";
 import { createClient, setRememberMe } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { GOOGLE_CLIENT_ID, GoogleIdentityButton } from "./GoogleIdentityButton";
 
-export function GoogleButton({
-  next,
-  remember = true,
-  onError,
-  round = false,
-}: {
+type GoogleButtonProps = {
   next: string;
   remember?: boolean;
   onError: (message: string) => void;
   /** Round white icon button, as in the soft-3D auth reference's social row. */
   round?: boolean;
-}) {
+};
+
+/**
+ * Uses Google's in-page button when its client ID is configured, so an
+ * installed app stays in its own window; otherwise the OAuth redirect flow.
+ */
+export function GoogleButton({ remember = true, round = false, ...props }: GoogleButtonProps) {
+  const redirect = <GoogleRedirectButton {...props} remember={remember} round={round} />;
+  if (!GOOGLE_CLIENT_ID || !isSupabaseConfigured) return redirect;
+  return <GoogleIdentityButton {...props} remember={remember} round={round} fallback={redirect} />;
+}
+
+function GoogleRedirectButton({
+  next,
+  remember = true,
+  onError,
+  round = false,
+}: GoogleButtonProps) {
   const { m } = useI18n();
   const [loading, setLoading] = useState(false);
 
