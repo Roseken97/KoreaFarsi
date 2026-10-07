@@ -16,8 +16,8 @@ export type ArcCard = {
   korean: string;
   /** Whether the mode is usable yet (only Chat today). */
   live: boolean;
-  /** Character art for the image area; the mode's icon stands in until it exists. */
-  image?: string;
+  /** Illustration for the image area; the mode's icon stands in without one. */
+  Illustration?: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
 export type ArcCardLabels = { start: string; soon: string; live: string; of: string };
@@ -179,15 +179,14 @@ export function ArcCarousel({
                     {/* Glow effect */}
                     <div className={`absolute inset-10 rounded-full ${colors.circle} blur-2xl opacity-70`} />
 
-                    {/* Character (placeholder: the mode's icon) */}
+                    {/* Mode illustration (the mode's icon without one) */}
                     <motion.div
                       animate={{ y: isDragging ? 0 : [0, -12, 0] }}
                       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                      className="absolute inset-x-0 top-[18%] bottom-[22%] z-10 flex items-center justify-center"
+                      className="absolute inset-x-4 top-[20%] bottom-[22%] z-10 flex items-center justify-center"
                     >
-                      {card.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={card.image} alt="" className="h-full w-full object-contain drop-shadow-[0_16px_24px_rgba(0,0,0,0.35)]" />
+                      {card.Illustration ? (
+                        <card.Illustration className="h-full w-full drop-shadow-[0_16px_24px_rgba(0,0,0,0.3)]" />
                       ) : (
                         <card.Icon
                           width={140}
