@@ -44,13 +44,13 @@ export default async function AchievementsPage() {
               return (
                 <div
                   key={key}
-                  className={`flex flex-col items-center gap-2 rounded-card p-4 text-center shadow-soft ${unlocked ? "bg-surface" : "bg-cream-deep opacity-70"}`}
+                  className={`flex flex-col items-center gap-2 rounded-card p-4 text-center shadow-soft ${unlocked ? "bg-surface" : "bg-cream-deep"}`}
                 >
                   <span className={`grid size-12 place-items-center rounded-full ${unlocked ? "bg-sage-soft text-teal-deep" : "bg-surface text-ink-faint"}`}>
                     <Icon width={22} height={22} />
                   </span>
-                  <span className={`text-[13px] font-semibold ${unlocked ? "text-ink" : "text-ink-faint"}`}>{badge.title}</span>
-                  <span className="text-[11px] leading-4 text-ink-faint">{badge.body}</span>
+                  <span className={`text-[13px] font-semibold ${unlocked ? "text-ink" : "text-ink-soft"}`}>{badge.title}</span>
+                  <span className="text-xs leading-5 text-ink-soft">{badge.body}</span>
                   {!unlocked && (
                     <span className="text-[11px] font-medium text-ink-faint" dir="ltr">
                       {t.progress.replace("{done}", formatNumber(Math.min(value, threshold), locale)).replace("{total}", formatNumber(threshold, locale))}

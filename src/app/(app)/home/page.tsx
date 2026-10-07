@@ -143,11 +143,11 @@ export default async function HomePage() {
               </div>
 
               <span className="relative">
-                <span lang="ko" className={`block text-xs leading-none font-semibold tracking-wide ${text} opacity-55`} aria-hidden="true">
+                <span lang="ko" className={`block text-xs leading-none font-semibold tracking-wide ${text} opacity-85`} aria-hidden="true">
                   {card.ko}
                 </span>
                 <span className={`mt-1.5 block font-display text-base leading-tight font-semibold ${text}`}>{card.title}</span>
-                <span className={`mt-1 block text-[13px] leading-5 ${text} opacity-80`}>{card.body}</span>
+                <span className={`mt-1 block text-[13px] leading-5 font-medium ${text}`}>{card.body}</span>
               </span>
             </MotionCard>
           );

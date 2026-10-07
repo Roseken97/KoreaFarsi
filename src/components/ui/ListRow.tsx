@@ -22,7 +22,7 @@ export function RowContent({ Icon, title, body, badge, tone = "bg-cream-deep tex
         <span className="flex items-center gap-2">
           <span className="font-medium text-ink">{title}</span>
           {badge && (
-            <span className="rounded-full bg-blush-soft px-2 py-0.5 text-[10px] font-semibold text-ink-soft">{badge}</span>
+            <span className="rounded-full bg-blush-soft px-2 py-0.5 text-[11px] font-semibold text-ink-soft">{badge}</span>
           )}
         </span>
         {body && <span className={`mt-0.5 block text-[13px] text-ink-soft ${wrap ? "leading-5" : "truncate"}`}>{body}</span>}

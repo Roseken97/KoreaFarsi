@@ -51,7 +51,7 @@ export function KoreaLifeBrowser({ posts, images }: { posts: KoreaLifePost[]; im
               </span>
               <span className="relative">
                 <span className={`block font-display text-[15px] font-semibold ${text}`}>{t.categories[c]}</span>
-                <span className={`mt-0.5 block text-[11px] ${text} opacity-75`}>{count}</span>
+                <span className={`mt-0.5 block text-xs font-medium ${text}`}>{count}</span>
               </span>
             </MotionSurface>
           );

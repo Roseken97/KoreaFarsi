@@ -111,7 +111,7 @@ function KeyInfo({ icon, value, label }: { icon: React.ReactNode; value: string;
       <span className="text-[13px] font-semibold whitespace-nowrap text-ink" dir="auto">
         {value}
       </span>
-      <span className="text-[10px] leading-[1.3] text-ink-faint" dir="auto">
+      <span className="text-[11px] leading-[1.35] text-ink-soft" dir="auto">
         {label}
       </span>
     </div>
