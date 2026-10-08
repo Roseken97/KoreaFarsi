@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useRef } from "react";
+import styles from "./homepage.module.css";
 
 type Screen = { src: string; alt: string };
 
@@ -58,9 +59,13 @@ export function Phone3D({ screens, children }: { screens: Screen[]; children?: R
 function Body({ screens, shift, glare }: { screens: Screen[]; shift: MotionValue<string>; glare: MotionValue<string> }) {
   return (
     <div
+      data-guide="phone"
+      data-guide-at="orbit"
       className="relative w-[clamp(230px,24vw,300px)] rounded-[46px] bg-[#0E0A1C] p-2.5"
       style={{ boxShadow: "0 50px 100px rgba(0,0,0,0.55), 0 0 90px rgba(139,92,246,0.35), inset 0 0 0 1.5px rgba(255,255,255,0.14)" }}
     >
+      <span aria-hidden="true" className={`absolute -inset-3 rounded-[56px] border-2 border-[#2FE6E0]/70 ${styles.ring}`} />
+      <span aria-hidden="true" className={`absolute -inset-3 rounded-[56px] border-2 border-[#FF8FC7]/70 ${styles.ring}`} />
       <div className="relative aspect-[780/1688] overflow-hidden rounded-[36px] bg-[#140E26]">
         <motion.div className="absolute inset-x-0 top-0" style={{ y: shift, height: `${screens.length * 100}%` }}>
           {screens.map((s) => (

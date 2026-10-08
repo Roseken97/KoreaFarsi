@@ -7,7 +7,7 @@ import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
 import { HeroVideo } from "@/components/homepage/HeroVideo";
 import { GlassCore } from "@/components/homepage/GlassCore";
 import { InstallCta } from "@/components/homepage/InstallCta";
-import { CountUp } from "@/components/homepage/CountUp";
+import { Odometer } from "@/components/homepage/Odometer";
 import { Phone3D } from "@/components/homepage/Phone3D";
 import { BlossomGuide } from "@/components/homepage/blossom/BlossomGuide";
 import styles from "@/components/homepage/homepage.module.css";
@@ -159,7 +159,7 @@ export default async function HomePage() {
       <section id="about" className="relative scroll-mt-6 overflow-clip px-6 pt-28 pb-24">
         <div aria-hidden="true" className="absolute -end-16 -bottom-20 size-80 rounded-full bg-[#8B5CF6] opacity-25 blur-[120px]" />
         <div className="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-          <div id="teacher" className="relative mx-auto w-full max-w-[380px] pb-10 lg:mx-0">
+          <div id="teacher" data-guide="photo" data-guide-at="start-top" className={`relative mx-auto w-full max-w-[380px] pb-10 lg:mx-0 ${styles.spinCard}`}>
             <div className="relative aspect-[4/5] overflow-hidden rounded-[36px] border border-white/15 shadow-[0_40px_90px_rgba(0,0,0,0.45)]">
               {TEACHER_PHOTO ? (
                 <Image src={TEACHER_PHOTO} alt={t.about.teacherName} fill sizes="380px" className="object-cover" />
@@ -208,12 +208,12 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="relative z-10 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-4">
-            {STATS.map(({ key, color }) => {
+          <div data-guide="stats" data-guide-at="center-top" className="relative z-10 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-4">
+            {STATS.map(({ key, color }, i) => {
               const s = t.about.stats[key];
               return (
                 <div key={key} className="flex flex-col gap-2 rounded-[26px] border border-white/12 bg-white/5 p-[26px] backdrop-blur-sm">
-                  <CountUp value={s.value} className={`${outfit.className} text-start text-[52px] leading-none font-extralight`} style={{ color, direction: "ltr" }} />
+                  <Odometer value={s.value} delay={i * 0.25} className={`${outfit.className} text-start text-[52px] leading-none font-extralight`} style={{ color }} />
                   <span className="text-[17px] font-extrabold text-white">{s.label}</span>
                   <span className="text-sm text-[#C9BEE3]">{s.body}</span>
                 </div>
@@ -278,9 +278,10 @@ export default async function HomePage() {
               {t.features.titleB}
             </h2>
           </div>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-[18px]">
+          <div data-guide="features" data-guide-at="start-top" className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-[18px]">
             {FEATURES.map(({ key, glow }, i) => (
-              <div key={key} className={`flex flex-col gap-3 rounded-[28px] border border-white/12 bg-white/5 p-7 ${styles.card}`}>
+              <div key={key} className={styles.flipIn} style={{ "--i": i } as React.CSSProperties}>
+              <div className={`flex h-full flex-col gap-3 rounded-[28px] border border-white/12 bg-white/5 p-7 ${styles.card}`}>
                 <Image
                   src={`/landing/icons/${key}.webp`}
                   alt=""
@@ -295,6 +296,7 @@ export default async function HomePage() {
                 <h3 className="m-0 text-xl font-black text-white">{t.features[key].title}</h3>
                 <p className="m-0 text-[15px] text-[#C9BEE3]">{t.features[key].body}</p>
               </div>
+              </div>
             ))}
           </div>
         </div>
@@ -308,11 +310,11 @@ export default async function HomePage() {
             <h2 className="m-0 text-[clamp(28px,3.6vw,44px)] leading-[1.4] font-black text-white">{t.path.title}</h2>
             <p className="m-0 text-[17px] text-[#C9BEE3]">{t.path.body}</p>
           </div>
-          <div className="relative mx-auto w-full max-w-[340px] md:max-w-none">
+          <div data-guide="path" data-guide-at="start-top" className="relative mx-auto w-full max-w-[340px] md:max-w-none">
             {/* desktop: horizontal line with a dot travelling along it */}
             <div
               aria-hidden="true"
-              className="absolute inset-x-[10%] top-11 hidden h-0.5 opacity-70 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-[#FF8FC7] via-[#8B5CF6] to-[#2FE6E0] md:block"
+              className={`absolute inset-x-[10%] top-11 hidden h-0.5 opacity-70 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-[#FF8FC7] via-[#8B5CF6] to-[#2FE6E0] md:block ${styles.drawLine}`}
             />
             <span
               aria-hidden="true"
@@ -321,13 +323,13 @@ export default async function HomePage() {
             {/* mobile: the same path as a vertical line through the circles, dot travelling down */}
             <div
               aria-hidden="true"
-              className="absolute start-[35px] top-9 bottom-9 w-0.5 bg-gradient-to-b from-[#FF8FC7] via-[#8B5CF6] to-[#2FE6E0] opacity-70 md:hidden"
+              className={`absolute start-[35px] top-9 bottom-9 w-0.5 bg-gradient-to-b from-[#FF8FC7] via-[#8B5CF6] to-[#2FE6E0] opacity-70 md:hidden ${styles.drawLineY}`}
             >
               <span className={`absolute start-1/2 -ms-[7px] size-3.5 rounded-full bg-white shadow-[0_0_12px_#fff,0_0_30px_#B79CFF,0_0_50px_#2FE6E0] ${styles.travelDown}`} />
             </div>
             <ol className="relative m-0 grid list-none grid-cols-1 gap-7 p-0 md:grid-cols-5 md:gap-6">
               {pathSteps.map((s, i) => (
-                <li key={s.key} className="flex flex-row items-center gap-5 text-start md:flex-col md:gap-2.5 md:text-center">
+                <li key={s.key} className={`flex flex-row items-center gap-5 text-start md:flex-col md:gap-2.5 md:text-center ${styles.popStep}`} style={{ "--i": i } as React.CSSProperties}>
                   <span
                     className={`grid size-[72px] shrink-0 place-items-center rounded-full md:size-[88px] ${styles.pulse}`}
                     style={{
@@ -368,10 +370,10 @@ export default async function HomePage() {
             <span className="absolute -top-1.5 left-1/2 size-3 rounded-full bg-white shadow-[0_0_16px_#fff,0_0_30px_#2FE6E0]" />
           </div>
         </div>
-        <div className="relative z-10 flex max-w-[680px] flex-col items-center gap-5">
-          <h2 className="m-0 text-[clamp(32px,5vw,60px)] leading-[1.3] font-black text-white [text-shadow:0_4px_30px_rgba(20,14,38,0.6)]">{t.cta.title}</h2>
-          <p className="m-0 text-lg text-[#F1E8FF] [text-shadow:0_2px_16px_rgba(20,14,38,0.7)]">{t.cta.body}</p>
-          <div className="flex flex-wrap justify-center gap-3 pt-1.5">
+        <div data-guide="cta" data-guide-at="center-top" className="relative z-10 flex max-w-[680px] flex-col items-center gap-5">
+          <h2 style={{ "--i": 0 } as React.CSSProperties} className={`${styles.rise} m-0 text-[clamp(32px,5vw,60px)] leading-[1.3] font-black text-white [text-shadow:0_4px_30px_rgba(20,14,38,0.6)]`}>{t.cta.title}</h2>
+          <p style={{ "--i": 1 } as React.CSSProperties} className={`${styles.rise} m-0 text-lg text-[#F1E8FF] [text-shadow:0_2px_16px_rgba(20,14,38,0.7)]`}>{t.cta.body}</p>
+          <div style={{ "--i": 2 } as React.CSSProperties} className={`${styles.rise} flex flex-wrap justify-center gap-3 pt-1.5`}>
             {installCta}
             {placementCta}
           </div>
