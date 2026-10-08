@@ -76,3 +76,77 @@
   .float, .phone, .orbit, .orbitB, .travel, .travelDown, .pulse, .cue { animation: none !important; }
   .card { transition: none; }
 }
+
+/* ── Site guide: animations the petal wakes by setting data-guided (blossom/guide.ts) ──
+ * Hidden "before" states only apply once the guide is running (html[data-guide-on]),
+ * so without JS every section is simply shown. */
+
+/* stats: vertical digit reels */
+.reelWindow {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  line-height: 1;
+}
+.reel {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(var(--to));
+  transition: transform 2.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reel > span { height: 1em; }
+:global(html[data-guide-on]) [data-guide]:not([data-guided]) .reel { transform: translateY(0); transition: none; }
+
+/* teacher photo card: one full turn */
+@keyframes cardSpin {
+  0% { transform: perspective(1400px) rotateY(0deg); }
+  100% { transform: perspective(1400px) rotateY(360deg); }
+}
+.spinCard[data-guided] { animation: cardSpin 1.5s cubic-bezier(0.65, 0, 0.35, 1) both; }
+
+/* phone: two glow rings ripple out when the petal arrives */
+@keyframes ring {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.35); }
+}
+.ring { opacity: 0; pointer-events: none; }
+[data-guided] .ring { animation: ring 1.6s ease-out 2; }
+[data-guided] .ring + .ring { animation-delay: 0.5s; }
+
+/* feature cards: flip up one after another */
+:global(html[data-guide-on]) .flipIn { opacity: 0; transform: perspective(900px) rotateX(32deg) translateY(36px); }
+:global(html[data-guide-on]) [data-guided] .flipIn {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i) * 120ms);
+}
+
+/* learning path: the line draws, then each step pops in turn */
+:global(html[data-guide-on]) .drawLine { transform: scaleX(0); }
+:global(html[data-guide-on]) .drawLineY { transform: scaleY(0); }
+:global(html[data-guide-on]) [data-guided] .drawLine, :global(html[data-guide-on]) [data-guided] .drawLineY { transform: none; transition: transform 1.6s cubic-bezier(0.65, 0, 0.35, 1); }
+.drawLine { transform-origin: left; }
+:global([dir="rtl"]) .drawLine { transform-origin: right; }
+.drawLineY { transform-origin: top; }
+:global(html[data-guide-on]) .popStep { opacity: 0; transform: scale(0.6); }
+:global(html[data-guide-on]) [data-guided] .popStep {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.4s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: calc(0.3s + var(--i) * 260ms);
+}
+
+/* final call: text rises, buttons bounce in */
+:global(html[data-guide-on]) .rise { opacity: 0; transform: translateY(28px); }
+:global(html[data-guide-on]) [data-guided] .rise {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i) * 140ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel, .flipIn, .drawLine, .drawLineY, .popStep, .rise { transition: none !important; }
+  .spinCard[data-guided], [data-guided] .ring { animation: none !important; }
+}
