@@ -18,6 +18,7 @@ export const COPY_AREAS: CopyArea[] = [
   { id: "dictionary", label: { en: "Dictionary", fa: "دیکشنری" }, sections: ["dictionaryPage"] },
   { id: "notifications", label: { en: "Notifications", fa: "اعلان‌ها" }, sections: ["notifications"] },
   { id: "account", label: { en: "Account & settings", fa: "حساب کاربری و تنظیمات" }, sections: ["account", "language"] },
+  { id: "guide", label: { en: "App guide", fa: "راهنمای اپ" }, sections: ["guide"] },
   { id: "general", label: { en: "General & errors", fa: "عمومی و پیام‌های خطا" }, sections: ["common", "errors", "placeholders", "notFound"] },
   { id: "admin", label: { en: "Admin pages", fa: "صفحه‌های ادمین" }, sections: ["admin", "productsAdmin", "coursesAdmin"] },
 ];

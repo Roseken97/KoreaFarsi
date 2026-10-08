@@ -283,7 +283,7 @@ export const en = {
       admin: { title: "Admin", body: "App Admin and Admin Panel" },
       language: { title: "Language Settings", body: "English / فارسی" },
       settings: { title: "App Settings", body: "Notifications, appearance, privacy" },
-      help: { title: "Help & Support", body: "Get in touch with the KoreaFarsi team" },
+      help: { title: "Help & Support", body: "App guide and contact with the KoreaFarsi team" },
     },
     name: "Name",
     email: "Email",
@@ -756,6 +756,148 @@ export const en = {
     streak: {
       label: "Day streak",
       none: "Complete a task today to start your streak.",
+    },
+  },
+  guide: {
+    metaTitle: "App guide",
+    title: "App guide",
+    subtitle: "Everything KoreaFarsi can do, and how to use each part.",
+    helpRow: { title: "How to use the app", body: "A short guide to every section, plus common questions" },
+    quickStart: {
+      title: "Start here",
+      steps: [
+        "Open the Planner and answer five short questions to get your study plan.",
+        "Go to My courses and start your first lesson.",
+        "Come back each day, finish today's tasks and keep your streak going.",
+      ],
+    },
+    topicsTitle: "Parts of the app",
+    tipLabel: "Tip",
+    topics: {
+      home: {
+        title: "Home",
+        summary: "Your starting point every day",
+        steps: [
+          "The ring at the top shows how much of today's plan you've done.",
+          "The continue card takes you straight back to the lesson you left.",
+          "The four big cards open My courses, the Bookstore, the KoreaFarsi assistant and Life in Korea.",
+        ],
+        tip: "The bell at the top shows new notifications.",
+      },
+      courses: {
+        title: "My courses",
+        summary: "Lessons, progress and course files",
+        steps: [
+          "Pick a course and open the Lessons tab.",
+          "Tap Mark as done when you finish a lesson, and your progress updates.",
+          "The Resources tab has the course files to download, and Reviews has other learners' opinions.",
+        ],
+        tip: "A course shows a lock until you have access. Get access from the Bookstore.",
+      },
+      bookstore: {
+        title: "Bookstore and buying",
+        summary: "How to order a book or course",
+        steps: [
+          "Open a book and add it to your cart.",
+          "In the cart, enter your name and a way to reach you, then send the purchase request.",
+          "The KoreaFarsi team contacts you to arrange payment.",
+          "After payment is confirmed, the book appears in your Library and the course unlocks.",
+        ],
+        tip: "There is no online payment in the app yet. Sign in before ordering so access can be added to your account.",
+      },
+      library: {
+        title: "Library",
+        summary: "Your books and PDFs",
+        steps: [
+          "Open Library from the bottom menu.",
+          "Every book you have access to is listed here.",
+          "Tap Download to save the PDF on your device.",
+        ],
+        tip: "If a file won't download, send a support ticket and the team will check it.",
+      },
+      aiHub: {
+        title: "KoreaFarsi assistant",
+        summary: "Ask about Korean and life in Korea",
+        steps: [
+          "Open the assistant card on Home and choose Chat.",
+          "Ask about learning Korean, universities, scholarships or practical things like visas and SIM cards.",
+          "Answers come from KoreaFarsi's own sources. If the assistant doesn't know, it says so.",
+        ],
+        tip: "There's a daily question limit. Speaking, listening, shadowing and grammar practice are coming soon.",
+      },
+      koreaLife: {
+        title: "Life in Korea",
+        summary: "Articles on culture, travel, food and daily life",
+        steps: [
+          "Open the Life in Korea card on Home.",
+          "Filter by topic: culture, travel, food or life.",
+          "Tap an article to read it in full.",
+        ],
+        tip: "New articles are added over time, so check back.",
+      },
+      planner: {
+        title: "Planner",
+        summary: "A study plan that fits your real time",
+        steps: [
+          "Open Planner from the bottom menu and tap Build my plan.",
+          "Choose your level, courses, weekly hours, study days and focus.",
+          "Each day you get tasks to watch, review, practice and speak. Tick them as you finish.",
+          "The weekly, monthly and yearly tabs show your bigger picture.",
+        ],
+        tip: "You can change your plan any time with Edit plan.",
+      },
+      dictionary: {
+        title: "Dictionary",
+        summary: "Look up Korean and English words",
+        steps: [
+          "Open Dictionary from the bottom menu.",
+          "Type a word and tap Search.",
+          "Naver Dictionary opens in a new tab with the meaning and pronunciation.",
+        ],
+        tip: "Your recent searches stay on the page so you can open them again.",
+      },
+      achievements: {
+        title: "Achievements",
+        summary: "Badges you earn by learning",
+        steps: [
+          "Open My account, then My achievements.",
+          "Each badge says what unlocks it, like finishing lessons or studying several days in a row.",
+        ],
+        tip: "Studying a little every day unlocks the streak badges fastest.",
+      },
+      account: {
+        title: "Account and settings",
+        summary: "Profile, language and sounds",
+        steps: [
+          "In My account, Edit profile changes your name and avatar, or uploads your own photo.",
+          "Language settings switch the app between Persian and English.",
+          "App settings turns the button and lesson sounds on or off.",
+        ],
+        tip: "Your email can't be changed from the app. Send a ticket if you need to.",
+      },
+      install: {
+        title: "Install on your phone",
+        summary: "Use KoreaFarsi like a real app",
+        steps: [
+          "Android: on the KoreaFarsi start page, tap Install app.",
+          "iPhone: in Safari, tap Share, then choose Add to Home Screen.",
+          "The KoreaFarsi icon appears on your home screen and opens full screen.",
+        ],
+        tip: "The app needs an internet connection to load lessons and books.",
+      },
+    },
+    faqTitle: "Common questions",
+    faq: [
+      { q: "I bought a book. Why isn't it in my Library?", a: "Access is added after the team confirms your payment. If it has been a while, send a ticket under Buying and payment." },
+      { q: "Why is a course locked?", a: "You need access to that course first. Get it from the Bookstore, or send a ticket if you already bought it." },
+      { q: "My assistant questions ran out. What now?", a: "The limit resets tomorrow. For anything urgent, contact the KoreaFarsi team directly." },
+      { q: "Can I change my study plan?", a: "Yes. In the Planner, tap Edit plan and update your answers." },
+      { q: "I forgot my password.", a: "On the sign-in page, tap Forgot password and follow the email you receive." },
+    ],
+    stillStuck: {
+      title: "Didn't find your answer?",
+      body: "Send a support ticket and the KoreaFarsi team will reply right here.",
+      cta: "Send a ticket",
     },
   },
   language: {
