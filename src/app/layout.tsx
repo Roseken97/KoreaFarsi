@@ -28,6 +28,8 @@ export const metadata: Metadata = {
   // iOS: open full-screen from the home screen, no Safari address bar.
   appleWebApp: { capable: true, title: "KoreaFarsi", statusBarStyle: "default" },
   formatDetection: { telephone: false },
+  // eNAMAD domain-ownership check: <meta name="enamad" content="…" />.
+  other: { enamad: "53884137" },
 };
 
 export const viewport: Viewport = {
