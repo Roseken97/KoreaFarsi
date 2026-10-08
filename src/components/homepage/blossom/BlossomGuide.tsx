@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const BlossomScene = dynamic(() => import("./BlossomScene"), { ssr: false });
 
 /**
- * Fixed, full-screen layer with the 3D cherry-blossom sprig that follows the scroll.
+ * Fixed, full-screen layer with one 3D cherry-blossom petal that falls down the page as it scrolls.
  * Sits above section backgrounds but below section content (content wrappers use z-10),
  * so text and cards always stay readable. Decorative only.
  */
