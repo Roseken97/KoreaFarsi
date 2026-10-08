@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ContactLinks, configuredChannels } from "@/components/ContactLinks";
-import { TicketIcon } from "@/components/icons";
+import { HelpIcon, TicketIcon } from "@/components/icons";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { ListGroup, ListRow } from "@/components/ui/ListRow";
 import { Notice } from "@/components/ui/Notice";
@@ -21,6 +21,7 @@ export default async function HelpPage() {
       <p className="mb-4 text-sm leading-6 text-ink-soft">{t.body}</p>
 
       <ListGroup>
+        <ListRow href="/account/help/guide" Icon={HelpIcon} title={m.guide.helpRow.title} body={m.guide.helpRow.body} tone="bg-gold-soft text-gold-deep" />
         <ListRow href="/account/help/tickets" Icon={TicketIcon} title={t.ticketsCta.title} body={t.ticketsCta.body} tone="bg-sage-soft text-teal-deep" />
       </ListGroup>
 
