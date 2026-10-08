@@ -425,9 +425,33 @@ export default async function HomePage() {
               <Link href="/launch" className="text-[#C9BEE3] hover:text-white">{t.footer.app}</Link>
             </nav>
           </div>
-          <div className="border-t border-white/[0.08] pt-5 text-[13px] text-[#A99FC4]">{t.footer.rights}</div>
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.08] pt-5 text-[13px] text-[#A99FC4]">
+            <span>{t.footer.rights}</span>
+            <EnamadSeal />
+          </div>
         </div>
       </footer>
     </div>
+  );
+}
+
+const ENAMAD_ID = "8067603";
+const ENAMAD_CODE = "iSNyTR36xvjn5oLYMQAnZteYbDjknYd1";
+
+/** eNAMAD trust seal, kept as eNAMAD's own snippet (referrer + code attribute) so its check still recognises it. */
+function EnamadSeal() {
+  const query = `id=${ENAMAD_ID}&Code=${ENAMAD_CODE}`;
+  return (
+    <a referrerPolicy="origin" target="_blank" href={`https://trustseal.enamad.ir/?${query}`} className="rounded-xl bg-white p-1.5">
+      {/* eslint-disable-next-line @next/next/no-img-element -- eNAMAD serves the seal image itself */}
+      <img
+        referrerPolicy="origin"
+        src={`https://trustseal.enamad.ir/logo.aspx?${query}`}
+        alt="نماد اعتماد الکترونیکی"
+        width={72}
+        style={{ cursor: "pointer", height: "auto" }}
+        {...{ code: ENAMAD_CODE }}
+      />
+    </a>
   );
 }
