@@ -18,6 +18,12 @@
   92% { opacity: 1; }
   100% { inset-inline-start: 90%; opacity: 0; }
 }
+@keyframes travelDown {
+  0% { top: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
 @keyframes pulse {
   0%, 100% { transform: scale(1); filter: brightness(1); }
   50% { transform: scale(1.07); filter: brightness(1.25); }
@@ -32,6 +38,7 @@
 .orbit { animation: orbit 18s linear infinite; }
 .orbitB { animation: orbitB 26s linear infinite; }
 .travel { animation: travel 5s ease-in-out infinite; }
+.travelDown { animation: travelDown 5s ease-in-out infinite; }
 .pulse { animation: pulse 5s ease-in-out infinite; }
 .cue { animation: cue 1.8s ease-in-out infinite; }
 
@@ -66,6 +73,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .float, .phone, .orbit, .orbitB, .travel, .pulse, .cue { animation: none !important; }
+  .float, .phone, .orbit, .orbitB, .travel, .travelDown, .pulse, .cue { animation: none !important; }
   .card { transition: none; }
 }

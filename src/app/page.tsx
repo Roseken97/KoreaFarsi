@@ -301,20 +301,28 @@ export default async function HomePage() {
             <h2 className="m-0 text-[clamp(28px,3.6vw,44px)] leading-[1.4] font-black text-white">{t.path.title}</h2>
             <p className="m-0 text-[17px] text-[#C9BEE3]">{t.path.body}</p>
           </div>
-          <div className="relative">
+          <div className="relative mx-auto w-full max-w-[340px] md:max-w-none">
+            {/* desktop: horizontal line with a dot travelling along it */}
             <div
               aria-hidden="true"
-              className={`absolute inset-x-[10%] top-11 h-0.5 opacity-70 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-[#FF8FC7] via-[#8B5CF6] to-[#2FE6E0] ${styles.hideSm}`}
+              className="absolute inset-x-[10%] top-11 hidden h-0.5 opacity-70 ltr:bg-gradient-to-r rtl:bg-gradient-to-l from-[#FF8FC7] via-[#8B5CF6] to-[#2FE6E0] md:block"
             />
             <span
               aria-hidden="true"
-              className={`absolute top-[38px] -ms-[7px] size-3.5 rounded-full bg-white shadow-[0_0_12px_#fff,0_0_30px_#B79CFF,0_0_50px_#2FE6E0] ${styles.travel} ${styles.hideSm}`}
+              className={`absolute top-[38px] -ms-[7px] hidden size-3.5 rounded-full bg-white shadow-[0_0_12px_#fff,0_0_30px_#B79CFF,0_0_50px_#2FE6E0] md:block ${styles.travel}`}
             />
-            <ol className="relative m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6 p-0">
+            {/* mobile: the same path as a vertical line through the circles, dot travelling down */}
+            <div
+              aria-hidden="true"
+              className="absolute start-[35px] top-9 bottom-9 w-0.5 bg-gradient-to-b from-[#FF8FC7] via-[#8B5CF6] to-[#2FE6E0] opacity-70 md:hidden"
+            >
+              <span className={`absolute start-1/2 -ms-[7px] size-3.5 rounded-full bg-white shadow-[0_0_12px_#fff,0_0_30px_#B79CFF,0_0_50px_#2FE6E0] ${styles.travelDown}`} />
+            </div>
+            <ol className="relative m-0 grid list-none grid-cols-1 gap-7 p-0 md:grid-cols-5 md:gap-6">
               {pathSteps.map((s, i) => (
-                <li key={s.key} className="flex flex-col items-center gap-2.5 text-center">
+                <li key={s.key} className="flex flex-row items-center gap-5 text-start md:flex-col md:gap-2.5 md:text-center">
                   <span
-                    className={`grid size-[88px] place-items-center rounded-full ${styles.pulse}`}
+                    className={`grid size-[72px] shrink-0 place-items-center rounded-full md:size-[88px] ${styles.pulse}`}
                     style={{
                       animationDelay: `${i}s`,
                       background: "filled" in s ? s.ring : "#2A1D4E",
@@ -324,19 +332,21 @@ export default async function HomePage() {
                     }}
                   >
                     {"glyph" in s ? (
-                      <span lang="ko" className="text-[34px] font-black">{s.glyph}</span>
+                      <span lang="ko" className="text-[30px] font-black md:text-[34px]">{s.glyph}</span>
                     ) : (
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         {s.icon}
                       </svg>
                     )}
                   </span>
-                  <span className="text-lg font-extrabold text-white">{t.path[s.key]}</span>
-                  {showLatinSub && (
-                    <span dir="ltr" className={`${outfit.className} text-[13px] tracking-[0.06em] text-[#C9BEE3]`}>
-                      {s.sub}
-                    </span>
-                  )}
+                  <span className="flex flex-col md:items-center">
+                    <span className="text-lg font-extrabold text-white">{t.path[s.key]}</span>
+                    {showLatinSub && (
+                      <span dir="ltr" className={`${outfit.className} text-[13px] tracking-[0.06em] text-[#C9BEE3] rtl:text-end md:rtl:text-center`}>
+                        {s.sub}
+                      </span>
+                    )}
+                  </span>
                 </li>
               ))}
             </ol>
