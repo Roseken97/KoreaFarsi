@@ -5,11 +5,12 @@ import { Hero } from "@/components/shell/Hero";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { getCourseLessonCounts, getCourses } from "@/lib/courses/queries";
 import { getMessages } from "@/lib/i18n/server";
+import { localeAlternates } from "@/lib/seo";
 import { CoursesBrowser } from "./CoursesBrowser";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { m } = await getMessages();
-  return { title: m.courses.metaTitle };
+  const { m, locale } = await getMessages();
+  return { title: m.courses.metaTitle, alternates: localeAlternates("/courses", locale) };
 }
 
 /** Course list (sketch 06). */

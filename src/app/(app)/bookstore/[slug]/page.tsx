@@ -10,12 +10,19 @@ import { getProductBySlug, getProducts } from "@/lib/bookstore/catalog";
 import { levelLabel } from "@/lib/bookstore/format";
 import { descriptionOf, titles } from "@/lib/bookstore/types";
 import { getMessages } from "@/lib/i18n/server";
+import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata(props: PageProps<"/bookstore/[slug]">): Promise<Metadata> {
   const [{ slug }, { locale }] = await Promise.all([props.params, getMessages()]);
   const product = await getProductBySlug(slug);
   if (!product) return {};
-  return { title: titles(product, locale).primary, description: descriptionOf(product, locale).slice(0, 160) };
+  const description = descriptionOf(product, locale).slice(0, 160);
+  return {
+    title: titles(product, locale).primary,
+    description,
+    alternates: localeAlternates(`/bookstore/${slug}`, locale),
+    openGraph: { title: titles(product, locale).primary, description, ...(product.cover_image_url ? { images: [product.cover_image_url] } : {}) },
+  };
 }
 
 export default async function ProductPage(props: PageProps<"/bookstore/[slug]">) {
