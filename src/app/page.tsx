@@ -158,7 +158,7 @@ export default async function HomePage() {
       {/* ── 03 What is KoreaFarsi: teacher photo + role card, then story beside counting stats ── */}
       <section id="about" className="relative scroll-mt-6 overflow-clip px-6 pt-28 pb-24">
         <div aria-hidden="true" className="absolute -end-16 -bottom-20 size-80 rounded-full bg-[#8B5CF6] opacity-25 blur-[120px]" />
-        <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+        <div className="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
           <div id="teacher" className="relative mx-auto w-full max-w-[380px] pb-10 lg:mx-0">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[36px] border border-white/15 shadow-[0_40px_90px_rgba(0,0,0,0.45)]">
               {TEACHER_PHOTO ? (
