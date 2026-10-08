@@ -7,6 +7,9 @@ import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
 import { HeroVideo } from "@/components/homepage/HeroVideo";
 import { GlassCore } from "@/components/homepage/GlassCore";
 import { InstallCta } from "@/components/homepage/InstallCta";
+import { CountUp } from "@/components/homepage/CountUp";
+import { Phone3D } from "@/components/homepage/Phone3D";
+import { BlossomGuide } from "@/components/homepage/blossom/BlossomGuide";
 import styles from "@/components/homepage/homepage.module.css";
 import { CONTACT, CONTACT_LINKS } from "@/config/contact";
 import { getMessages } from "@/lib/i18n/server";
@@ -32,6 +35,9 @@ const STATS = [
   { key: "experience", color: "#FF8FC7" },
   { key: "teaching", color: "#B79CFF" },
 ] as const;
+
+/** Rose's portrait for the about section; until it is added the frame shows the brand mark. */
+const TEACHER_PHOTO: string | null = null;
 
 const SOCIALS = (["instagram", "telegram", "youtube"] as const).filter((k) => CONTACT[k]);
 
@@ -77,7 +83,9 @@ export default async function HomePage() {
   ] as const;
 
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-[#140E26] text-[17px] leading-[1.8] text-[#F4EEFF]">
+    <div className="min-h-dvh overflow-x-clip bg-[#140E26] text-[17px] leading-[1.8] text-[#F4EEFF]">
+      <BlossomGuide />
+
       {/* ── 01 Hero: full-screen film, centered brand, two keys ── */}
       <section id="top" className="relative h-dvh max-h-[1000px] min-h-[640px] overflow-hidden">
         <HeroVideo playLabel={t.hero.play} pauseLabel={t.hero.pause} />
@@ -147,44 +155,45 @@ export default async function HomePage() {
         </a>
       </section>
 
-      {/* ── 03 What is KoreaFarsi ── */}
-      <section id="about" className="relative scroll-mt-6 overflow-hidden px-6 pt-28 pb-24">
+      {/* ── 03 What is KoreaFarsi: teacher photo + role card, then story beside counting stats ── */}
+      <section id="about" className="relative scroll-mt-6 overflow-clip px-6 pt-28 pb-24">
         <div aria-hidden="true" className="absolute -end-16 -bottom-20 size-80 rounded-full bg-[#8B5CF6] opacity-25 blur-[120px]" />
-        <div className="relative z-10 mx-auto flex max-w-[1200px] flex-wrap items-start gap-14">
-          <div className="flex min-w-0 flex-[1_1_440px] flex-col gap-[18px]">
+        <div className="relative mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+          <div id="teacher" className="relative mx-auto w-full max-w-[380px] pb-10 lg:mx-0">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[36px] border border-white/15 shadow-[0_40px_90px_rgba(0,0,0,0.45)]">
+              {TEACHER_PHOTO ? (
+                <Image src={TEACHER_PHOTO} alt={t.about.teacherName} fill sizes="380px" className="object-cover" />
+              ) : (
+                <div className="grid size-full place-items-center" style={{ background: "radial-gradient(circle at 30% 25%, #FFE3F0 0%, #FF8FC7 40%, #8B5CF6 100%)" }}>
+                  <LogoMark size={150} />
+                </div>
+              )}
+              <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#140E26]/60 to-transparent" />
+            </div>
+            <div className="absolute -end-4 bottom-0 z-10 flex items-center gap-3 rounded-[22px] border border-white/25 bg-[#241A45]/70 px-5 py-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:-end-10">
+              <span aria-hidden="true" className="size-2.5 shrink-0 rounded-full bg-[#2FE6E0] shadow-[0_0_12px_#2FE6E0]" />
+              <span className="flex flex-col leading-snug">
+                <span dir="ltr" className={`${outfit.className} text-start text-lg font-medium text-white`}>
+                  {t.about.teacherName}
+                </span>
+                <span className="text-sm text-[#E4DAF7]">{t.about.teacherRole}</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="relative z-10 flex min-w-0 flex-col gap-[18px]">
             <span className="text-[13px] font-extrabold tracking-wide text-[#6FF3EE]">{t.about.eyebrow}</span>
             <h2 className="m-0 text-[clamp(30px,4vw,50px)] leading-[1.35] font-black text-white">
               {t.about.titleA}
               <br />
               {t.about.titleB}
             </h2>
-            <p className="m-0 max-w-[560px] text-lg text-[#CFC5E6]">{t.about.body}</p>
-            <div id="teacher" className="flex items-center gap-3 self-start rounded-full border border-white/15 bg-white/[0.06] p-2 pe-5 text-sm text-white">
-              <span aria-hidden="true" className="size-[38px] rounded-full" style={{ background: "radial-gradient(circle at 30% 30%, #FFE3F0 0%, #FF8FC7 45%, #8B5CF6 100%)" }} />
-              <span className="flex flex-col leading-snug">
-                <span dir="ltr" className={`${outfit.className} text-start text-base font-medium`}>
-                  {t.about.teacherName}
-                </span>
-                <span className="text-xs text-[#C9BEE3]">{t.about.teacherRole}</span>
-              </span>
-            </div>
           </div>
 
-          <div className="grid min-w-0 flex-[1_1_520px] grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-4">
-            {STATS.map(({ key, color }) => {
-              const s = t.about.stats[key];
-              return (
-                <div key={key} className="flex flex-col gap-2 rounded-[26px] border border-white/12 bg-white/5 p-[26px]">
-                  <span dir="ltr" className={`${outfit.className} text-start text-[52px] leading-none font-extralight`} style={{ color }}>
-                    {s.value}
-                  </span>
-                  <span className="text-[17px] font-extrabold text-white">{s.label}</span>
-                  <span className="text-sm text-[#C9BEE3]">{s.body}</span>
-                </div>
-              );
-            })}
+          <div className="relative z-10 flex min-w-0 flex-col gap-6">
+            <p className="m-0 max-w-[560px] text-lg text-[#CFC5E6]">{t.about.body}</p>
             <div
-              className="col-span-full flex flex-col gap-3.5 rounded-[26px] border border-white/15 p-[26px]"
+              className="flex flex-col gap-3.5 rounded-[26px] border border-white/15 p-[26px]"
               style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.22) 0%, rgba(47,230,224,0.1) 100%)" }}
             >
               <span className="text-[17px] font-extrabold text-white">{t.about.philosophy.title}</span>
@@ -198,71 +207,69 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
+
+          <div className="relative z-10 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-4">
+            {STATS.map(({ key, color }) => {
+              const s = t.about.stats[key];
+              return (
+                <div key={key} className="flex flex-col gap-2 rounded-[26px] border border-white/12 bg-white/5 p-[26px] backdrop-blur-sm">
+                  <CountUp value={s.value} className={`${outfit.className} text-start text-[52px] leading-none font-extralight`} style={{ color, direction: "ltr" }} />
+                  <span className="text-[17px] font-extrabold text-white">{s.label}</span>
+                  <span className="text-sm text-[#C9BEE3]">{s.body}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* ── 04 The app: real screens around a live 3D core ── */}
-      <section id="app" className="relative scroll-mt-6 overflow-hidden bg-[#1C1336] px-6 pt-[104px] pb-28">
-        <div aria-hidden="true" className="absolute top-[30%] left-1/2 h-[560px] w-[760px] -translate-x-1/2 rounded-full bg-[#8B5CF6] opacity-35 blur-[160px]" />
-        <div className="relative mx-auto flex max-w-[1200px] flex-col items-center gap-14">
-          <div className="flex max-w-[760px] flex-col items-center gap-4 text-center">
-            <span className="text-[13px] font-extrabold tracking-wide text-[#6FF3EE]">{t.app.eyebrow}</span>
-            <h2 className="m-0 text-[clamp(30px,4.2vw,54px)] leading-[1.35] font-black text-white">{t.app.title}</h2>
-            <p className="m-0 text-lg text-[#CFC5E6]">{t.app.body}</p>
-          </div>
+      {/* ── 04 The app: one 3D phone that turns with the scroll while the app screens scroll inside it ── */}
+      <section id="app" className="relative scroll-mt-6 overflow-clip bg-[#1C1336] pt-[104px]">
+        <div className="relative z-10 mx-auto flex max-w-[760px] flex-col items-center gap-4 px-6 text-center">
+          <span className="text-[13px] font-extrabold tracking-wide text-[#6FF3EE]">{t.app.eyebrow}</span>
+          <h2 className="m-0 text-[clamp(30px,4.2vw,54px)] leading-[1.35] font-black text-white">{t.app.title}</h2>
+          <p className="m-0 text-lg text-[#CFC5E6]">{t.app.body}</p>
+        </div>
 
-          <div className="relative flex w-full flex-wrap items-center justify-center gap-7">
-            <GlassCore />
-            <div aria-hidden="true" className={`pointer-events-none absolute top-1/2 left-1/2 z-0 size-[900px] -translate-x-1/2 -translate-y-1/2 [perspective:1200px] ${styles.hideSm}`}>
-              <div className={`absolute inset-0 rounded-full border-[1.5px] border-[#2FE6E0]/35 shadow-[0_0_30px_rgba(47,230,224,0.15)] ${styles.orbit}`}>
-                <span className="absolute -top-[7px] left-1/2 size-3.5 rounded-full bg-[#2FE6E0] shadow-[0_0_18px_#2FE6E0]" />
-              </div>
-              <div className={`absolute inset-[90px] rounded-full border-[1.5px] border-[#FF8FC7]/30 ${styles.orbitB}`}>
-                <span className="absolute -bottom-1.5 left-[30%] size-3 rounded-full bg-[#FF8FC7] shadow-[0_0_16px_#FF8FC7]" />
-              </div>
+        <Phone3D
+          screens={[
+            { src: "/landing/screens/home.webp", alt: t.app.screenHome },
+            { src: "/landing/screens/onboarding.webp", alt: t.app.screenOnboarding },
+            { src: "/landing/screens/welcome.webp", alt: t.app.screenWelcome },
+          ]}
+        >
+          <div aria-hidden="true" className="absolute top-1/2 left-1/2 h-[560px] w-[760px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#8B5CF6] opacity-35 blur-[160px]" />
+          <GlassCore />
+          <div aria-hidden="true" className={`pointer-events-none absolute top-1/2 left-1/2 z-0 size-[900px] -translate-x-1/2 -translate-y-1/2 [perspective:1200px] ${styles.hideSm}`}>
+            <div className={`absolute inset-0 rounded-full border-[1.5px] border-[#2FE6E0]/35 shadow-[0_0_30px_rgba(47,230,224,0.15)] ${styles.orbit}`}>
+              <span className="absolute -top-[7px] left-1/2 size-3.5 rounded-full bg-[#2FE6E0] shadow-[0_0_18px_#2FE6E0]" />
             </div>
-
-            {([
-              { src: "/landing/screens/onboarding.webp", alt: t.app.screenOnboarding, w: 250, tilt: "-rotate-[4deg] translate-y-[30px]", delay: "0s" },
-              { src: "/landing/screens/home.webp", alt: t.app.screenHome, w: 290, tilt: "", delay: "-2s", hero: true },
-              { src: "/landing/screens/welcome.webp", alt: t.app.screenWelcome, w: 250, tilt: "rotate-[4deg] translate-y-[30px]", delay: "-4s" },
-            ] as const).map((p) => (
-              <div key={p.src} className={`relative z-10 ${"hero" in p ? "" : "hidden sm:block"} ${p.tilt}`}>
-                <div
-                  className={`${styles.phone} rounded-[44px] bg-[#0E0A1C] p-2.5`}
-                  style={{
-                    width: p.w,
-                    animationDelay: p.delay,
-                    boxShadow: "hero" in p ? "0 40px 90px rgba(0,0,0,0.55), 0 0 80px rgba(139,92,246,0.35)" : "0 30px 70px rgba(0,0,0,0.5)",
-                  }}
-                >
-                  <Image src={p.src} alt={p.alt} width={780} height={1688} sizes={`${p.w}px`} className="h-auto w-full rounded-[34px]" />
-                </div>
-              </div>
-            ))}
+            <div className={`absolute inset-[90px] rounded-full border-[1.5px] border-[#FF8FC7]/30 ${styles.orbitB}`}>
+              <span className="absolute -bottom-1.5 left-[30%] size-3 rounded-full bg-[#FF8FC7] shadow-[0_0_16px_#FF8FC7]" />
+            </div>
           </div>
+        </Phone3D>
 
-          <div className="flex flex-wrap justify-center gap-3 pt-6">
-            <Link href="/bookstore" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF8FC7" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" />
-              </svg>
-              {t.app.chipBooks}
-            </Link>
-            <Link href="/courses" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2FE6E0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="8" cy="15" r="4" />
-                <path d="M11 12l9-9M17 6l3 3M15 8l2 2" />
-              </svg>
-              {t.app.chipKoreaKey}
-            </Link>
-          </div>
+        <div className="relative z-10 flex flex-wrap justify-center gap-3 px-6 pb-28">
+          <Link href="/bookstore" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF8FC7" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" />
+            </svg>
+            {t.app.chipBooks}
+          </Link>
+          <Link href="/courses" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2FE6E0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="8" cy="15" r="4" />
+              <path d="M11 12l9-9M17 6l3 3M15 8l2 2" />
+            </svg>
+            {t.app.chipKoreaKey}
+          </Link>
         </div>
       </section>
 
       {/* ── 05 Key features: 3D icons ── */}
-      <section id="features" className="scroll-mt-6 px-6 py-[104px]">
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-10">
+      <section id="features" className="relative scroll-mt-6 px-6 py-[104px]">
+        <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col gap-10">
           <div className="flex max-w-[620px] flex-col gap-2.5">
             <span className="text-[13px] font-extrabold tracking-wide text-[#6FF3EE]">{t.features.eyebrow}</span>
             <h2 className="m-0 text-[clamp(28px,3.6vw,44px)] leading-[1.4] font-black text-white">
@@ -295,7 +302,7 @@ export default async function HomePage() {
 
       {/* ── 06 Learning path ── */}
       <section id="path" className="relative scroll-mt-6 overflow-hidden bg-[#1C1336] px-6 py-[104px]">
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-[52px]">
+        <div className="relative z-10 mx-auto flex max-w-[1200px] flex-col gap-[52px]">
           <div className="flex flex-col items-center gap-2.5 text-center">
             <span className="text-[13px] font-extrabold tracking-wide text-[#6FF3EE]">{t.path.eyebrow}</span>
             <h2 className="m-0 text-[clamp(28px,3.6vw,44px)] leading-[1.4] font-black text-white">{t.path.title}</h2>
@@ -372,7 +379,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── 08 Footer ── */}
-      <footer className="border-t border-white/[0.08] bg-[#140E26] px-6 pt-14 pb-9">
+      <footer className="relative z-10 border-t border-white/[0.08] bg-[#140E26] px-6 pt-14 pb-9">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-9">
           <div className="flex flex-wrap justify-between gap-8">
             <div className="flex flex-[1_1_260px] flex-col gap-2.5">
