@@ -6,7 +6,7 @@ export type CopyArea = { id: string; label: Record<Locale, string>; sections: st
 
 /** Ordered as a learner meets the app. Message sections not listed here land in "general". */
 export const COPY_AREAS: CopyArea[] = [
-  { id: "landing", label: { en: "Landing page", fa: "صفحه‌ی معرفی" }, sections: ["marketing", "splash"] },
+  { id: "landing", label: { en: "Landing page", fa: "صفحه‌ی معرفی" }, sections: ["homepage", "marketing", "splash"] },
   { id: "auth", label: { en: "Sign in & onboarding", fa: "ورود، ثبت‌نام و شروع" }, sections: ["auth", "onboarding", "welcome"] },
   { id: "home", label: { en: "Home & menu", fa: "خانه و منو" }, sections: ["home", "nav"] },
   { id: "courses", label: { en: "Courses", fa: "دوره‌ها" }, sections: ["courses"] },
