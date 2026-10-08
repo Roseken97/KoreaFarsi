@@ -19,6 +19,7 @@ export const en = {
   },
   homepage: {
     metaTitle: "KoreaFarsi — The first Korean learning platform made for Persian speakers",
+    metaDescription: "KoreaFarsi is the first Korean learning platform made for Persian speakers: books, video courses, a vocabulary app and AI speaking practice, from Hangul to advanced Korean.",
     nav: { about: "About KoreaFarsi", app: "The App", features: "Features", courses: "Courses", login: "Log in", start: "Start learning" },
     hero: {
       taglineA: "The first Korean learning platform",
@@ -395,6 +396,17 @@ export const en = {
       edited: "{n} edited",
       forbidden: "This page is only available to KoreaFarsi admins.",
       notConfigured: "Supabase isn't configured yet.",
+      mfa: {
+        title: "Two-step sign-in",
+        enrollIntro: "Admin pages need a code from an authenticator app (Google Authenticator, Microsoft Authenticator, 1Password…). Scan this QR code with the app once.",
+        manual: "Can't scan? Enter this key in the app:",
+        verifyIntro: "Enter the 6-digit code from your authenticator app.",
+        code: "6-digit code",
+        submit: "Confirm",
+        working: "Checking…",
+        invalid: "That code didn't work. Check the time on your phone and try the newest code.",
+        failed: "Couldn't start two-step sign-in. Refresh the page and try again.",
+      },
       panelItems: {
         products: "Products",
         courses: "Courses",

@@ -5,11 +5,20 @@ import { LanternIcon } from "@/components/icons";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { getKoreaLifePost } from "@/lib/korealife/queries";
 import { getMessages } from "@/lib/i18n/server";
+import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
+  const [{ slug }, { locale }] = await Promise.all([params, getMessages()]);
   const post = await getKoreaLifePost(slug);
-  return { title: post?.title ?? "Korea Life" };
+  if (!post) return { title: "Korea Life" };
+  const title = locale === "en" ? post.title_en || post.title : post.title;
+  const description = (locale === "en" ? post.excerpt_en || post.excerpt : post.excerpt) ?? undefined;
+  return {
+    title,
+    description,
+    alternates: localeAlternates(`/korea-life/${slug}`, locale),
+    openGraph: { type: "article", title, description, ...(post.cover_image_url ? { images: [post.cover_image_url] } : {}) },
+  };
 }
 
 export default async function KoreaLifePostPage({ params }: { params: Promise<{ slug: string }> }) {

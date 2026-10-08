@@ -13,12 +13,13 @@ import { BlossomGuide } from "@/components/homepage/blossom/BlossomGuide";
 import styles from "@/components/homepage/homepage.module.css";
 import { CONTACT, CONTACT_LINKS } from "@/config/contact";
 import { getMessages } from "@/lib/i18n/server";
+import { SITE_URL, localeAlternates } from "@/lib/seo";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["200", "300", "500"] });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { m } = await getMessages();
-  return { title: { absolute: m.homepage.metaTitle } };
+  const { m, locale } = await getMessages();
+  return { title: { absolute: m.homepage.metaTitle }, alternates: localeAlternates("/", locale) };
 }
 
 const FEATURES = [
@@ -82,8 +83,35 @@ export default async function HomePage() {
     { key: "progress", sub: "Progress", ring: "#2FE6E0", icon: <path d="M3 17l6-6 4 4 8-8M14 7h7v7" />, filled: true },
   ] as const;
 
+  // Structured data for Google: who runs the site and what it is.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "EducationalOrganization",
+        "@id": `${SITE_URL}/#org`,
+        name: "KoreaFarsi",
+        alternateName: "کوریافارسی",
+        url: SITE_URL,
+        logo: `${SITE_URL}/brand/logo-512.png`,
+        description: m.homepage.metaDescription,
+        sameAs: (["instagram", "youtube", "telegram"] as const).filter((k) => CONTACT[k]).map((k) => CONTACT_LINKS[k](CONTACT[k])),
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        name: "KoreaFarsi",
+        alternateName: "کوریافارسی",
+        url: SITE_URL,
+        inLanguage: ["fa", "en"],
+        publisher: { "@id": `${SITE_URL}/#org` },
+      },
+    ],
+  };
+
   return (
     <div className="min-h-dvh overflow-x-clip bg-[#140E26] text-[17px] leading-[1.8] text-[#F4EEFF]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <BlossomGuide />
 
       {/* ── 01 Hero: full-screen film, centered brand, two keys ── */}

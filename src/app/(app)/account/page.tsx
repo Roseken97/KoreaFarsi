@@ -22,7 +22,7 @@ import { HeaderIconLink, PageHeader } from "@/components/shell/PageHeader";
 import { Avatar } from "@/components/ui/Avatar";
 import { ListGroup, ListRow } from "@/components/ui/ListRow";
 import { Notice } from "@/components/ui/Notice";
-import { getAdminUser } from "@/lib/admin";
+import { getAdminCandidate } from "@/lib/admin";
 import { formatNumber } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
 import { getUnreadNotificationCount } from "@/lib/notifications/queries";
@@ -41,7 +41,7 @@ export default async function AccountPage() {
   const [{ m, locale }, profile, plan] = await Promise.all([getMessages(), getProfile(), getActivePlan()]);
   if (isSupabaseConfigured && !profile) redirect("/auth/login?next=/account");
 
-  const [streak, isAdmin, unreadCount] = await Promise.all([plan ? computeStreak(plan.id) : Promise.resolve(null), getAdminUser(), getUnreadNotificationCount()]);
+  const [streak, isAdmin, unreadCount] = await Promise.all([plan ? computeStreak(plan.id) : Promise.resolve(null), getAdminCandidate(), getUnreadNotificationCount()]);
   const t = m.account;
   const stats: { label: string; Icon: ComponentType<SVGProps<SVGSVGElement>>; tone: string; value: string; soon: boolean }[] = [
     { label: t.stats.level, Icon: LevelIcon, tone: "text-teal", value: "—", soon: true },

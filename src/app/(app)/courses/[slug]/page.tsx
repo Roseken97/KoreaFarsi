@@ -10,13 +10,23 @@ import { completedCount, lessonCount, levelBucket } from "@/lib/courses/types";
 import { getCourseOutline, getCourseResources, getCourseReviews } from "@/lib/courses/queries";
 import { fmt, formatNumber } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
+import { localeAlternates } from "@/lib/seo";
 import { getCurrentUser } from "@/lib/supabase/server";
 import { CourseDetailTabs } from "./CourseDetailTabs";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
+  const [{ slug }, { locale }] = await Promise.all([params, getMessages()]);
   const outline = await getCourseOutline(slug);
-  return { title: outline?.course.title ?? "Course" };
+  if (!outline) return { title: "Course" };
+  const c = outline.course;
+  const title = locale === "en" ? c.title_en || c.title : c.title;
+  const description = ((locale === "en" ? c.description_en || c.description : c.description) ?? "").slice(0, 160) || undefined;
+  return {
+    title,
+    description,
+    alternates: localeAlternates(`/courses/${slug}`, locale),
+    openGraph: { title, description, ...(c.cover_image_url ? { images: [c.cover_image_url] } : {}) },
+  };
 }
 
 /** Course Detail (sketch 07): hero uses the course's own cover image, then key info + tabs (Overview/Lessons/Resources/Reviews). */
