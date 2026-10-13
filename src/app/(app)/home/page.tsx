@@ -45,14 +45,14 @@ type CardKey = keyof Messages["home"]["cards"];
  * anchored bottom-start, and a small "go" affordance top-end.
  */
 /**
- * `face`: a picture in place of the icon chip (the AI Hub card shows the companion).
+ * `noChip`: no icon chip in the top corner (the AI Hub card, at Rose's request).
  * `Art`: the card's soft-3D illustration, shown when no photo is uploaded for it.
  */
 type SvgComponent = ComponentType<SVGProps<SVGSVGElement>>;
-const CARDS: { key: CardKey; href: string; Icon: SvgComponent; Art: SvgComponent; color: keyof typeof MESH; text: string; face?: string }[] = [
+const CARDS: { key: CardKey; href: string; Icon: SvgComponent; Art: SvgComponent; color: keyof typeof MESH; text: string; noChip?: boolean }[] = [
   { key: "courses", href: "/courses", Icon: BooksStackIcon, Art: CoursesArt, color: "violet", text: "text-ink" },
   { key: "bookstore", href: "/bookstore", Icon: ShoppingBagIcon, Art: BookstoreArt, color: "clay", text: "text-ink" },
-  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, Art: AiHubArt, color: "indigo", text: "text-ink", face: "/companion/avatar.webp" },
+  { key: "aiHub", href: "/ai-hub", Icon: RobotIcon, Art: AiHubArt, color: "indigo", text: "text-ink", noChip: true },
   { key: "koreaLife", href: "/korea-life", Icon: LanternIcon, Art: KoreaLifeArt, color: "mint", text: "text-ink" },
 ];
 
@@ -114,7 +114,7 @@ export default async function HomePage() {
 
       {/* Main sections — polished colorful: mesh gradient + grain, editorial layout, Korean name as a small label */}
       <section className="mt-8 grid grid-cols-2 gap-4">
-        {CARDS.map(({ key, href, Icon, Art, color, text, face }) => {
+        {CARDS.map(({ key, href, Icon, Art, color, text, noChip }) => {
           const card = t.cards[key];
           const photo = images[`home.${key}`];
           return (
@@ -135,8 +135,8 @@ export default async function HomePage() {
                 />
               ) : null}
               <div className="relative flex items-start justify-between">
-                {face ? (
-                  <Image src={face} alt="" width={36} height={36} className="size-9 rounded-xl bg-[#f0eade] object-cover shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)]" />
+                {noChip ? (
+                  <span />
                 ) : (
                   <span className={`grid size-9 place-items-center rounded-xl bg-white/55 shadow-[0_6px_14px_-8px_rgb(30_35_64/0.35)] ${text}`}>
                     <Icon width={18} height={18} />
