@@ -15,6 +15,9 @@ const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["lati
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const vazirmatn = Vazirmatn({ variable: "--font-vazirmatn", subsets: ["arabic", "latin"], preload: false });
 
+/** Public token from Search Console's "HTML tag" method for https://koreafarsi.ir (not a secret). */
+const GOOGLE_SITE_VERIFICATION = "TljK_Q64lSzFt_3J2RDmIICVzO7LR-LFHthUlcjDfJA";
+
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
   const description = m.homepage.metaDescription;
@@ -46,8 +49,8 @@ export async function generateMetadata(): Promise<Metadata> {
     // iOS: open full-screen from the home screen, no Safari address bar.
     appleWebApp: { capable: true, title: "KoreaFarsi", statusBarStyle: "default" },
     formatDetection: { telephone: false },
-    // Google Search Console ownership check (the token from "HTML tag" verification).
-    verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
+    // Google Search Console ownership check (the token from "HTML tag" verification); env overrides the built-in one.
+    verification: { google: process.env.GOOGLE_SITE_VERIFICATION || GOOGLE_SITE_VERIFICATION },
     // eNAMAD domain-ownership check: <meta name="enamad" content="…" />.
     other: { enamad: "53884137" },
   };
