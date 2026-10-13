@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -10,6 +11,7 @@ import {
   CloseIcon,
   DictionaryIcon,
   HelpIcon,
+  HomeIcon,
   LanternIcon,
   MenuIcon,
   PlayIcon,
@@ -44,6 +46,7 @@ export function SiteMenu({ signedIn }: { signedIn: boolean }) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const cartCount = hydrated ? count : 0;
+  const onHome = usePathname() === "/";
 
   useEffect(() => {
     if (!open) return;
@@ -61,6 +64,10 @@ export function SiteMenu({ signedIn }: { signedIn: boolean }) {
   }, [open]);
 
   const groups: { title: string; items: Item[] }[] = [
+    {
+      title: "",
+      items: [{ href: "/", label: t.home, icon: <HomeIcon width={20} height={20} />, color: "#6FF3EE" }],
+    },
     {
       title: t.shop,
       items: [
@@ -126,8 +133,8 @@ export function SiteMenu({ signedIn }: { signedIn: boolean }) {
 
         <nav aria-label={t.title} className="flex flex-1 flex-col gap-5 px-6 py-3">
           {groups.map((g) => (
-            <div key={g.title}>
-              <p className="mb-2 text-xs font-extrabold tracking-wider text-[#A99FC4]">{g.title}</p>
+            <div key={g.title || g.items[0].href}>
+              {g.title && <p className="mb-2 text-xs font-extrabold tracking-wider text-[#A99FC4]">{g.title}</p>}
               <ul className="flex flex-col gap-1">
                 {g.items.map((it) => {
                   const body = (
@@ -184,6 +191,11 @@ export function SiteMenu({ signedIn }: { signedIn: boolean }) {
 
   return (
     <>
+      {!onHome && (
+        <Link href="/" aria-label={t.home} className={`grid size-10 place-items-center rounded-full text-white ${styles.glassPill}`}>
+          <HomeIcon width={19} height={19} />
+        </Link>
+      )}
       <Link
         href="/shop/cart"
         aria-label={cartCount > 0 ? `${t.cart} (${formatNumber(cartCount, locale)})` : t.cart}
