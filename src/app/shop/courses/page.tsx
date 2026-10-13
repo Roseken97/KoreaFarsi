@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteLevelPrompt } from "@/components/site/auth/SiteLevelPrompt";
 import { SitePage } from "@/components/site/SitePage";
 import { SiteIntro } from "@/components/site/SiteIntro";
 import { ShopCard } from "@/components/shop/ShopCard";
@@ -15,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const LEVELS: LevelBucket[] = ["beginner", "intermediate", "advanced"];
 
-/** Website page for the courses, filtered by level through ?level= (the signup level prompt links here too). */
+/** Website page for the courses, filtered by level through ?level= (the level question links here too). */
 export default async function CoursesPage(props: PageProps<"/shop/courses">) {
   const [{ m, locale }, products, params] = await Promise.all([getMessages(), getProducts(), props.searchParams]);
   const t = m.site.courses;
@@ -25,6 +26,7 @@ export default async function CoursesPage(props: PageProps<"/shop/courses">) {
 
   return (
     <SitePage>
+      {!level && <SiteLevelPrompt mode="courses" />}
       <SiteIntro kicker={t.kicker} title={t.title} subtitle={t.subtitle} ko="강좌" accent="#B79CFF">
         {courses.length > 0 && (
           <nav aria-label={t.kicker} className="mt-4 flex flex-wrap gap-2">

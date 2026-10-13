@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { GoogleButton } from "@/components/auth/GoogleButton";
-import type { LevelCourse } from "@/components/auth/LevelPrompt";
 import { authErrorMessage } from "@/lib/auth/errors";
 import { validateEmail, validatePassword } from "@/lib/auth/validation";
 import { useI18n } from "@/lib/i18n/client";
@@ -12,16 +11,16 @@ import { fmt } from "@/lib/i18n/config";
 import { createClient, setRememberMe } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { SiteField, SiteNotice, SiteSubmit } from "./SiteField";
-import { SiteLevelPrompt } from "./SiteLevelPrompt";
+import { askLevelAfterSignup } from "./SiteLevelPrompt";
 
 type Errors = { name?: string; email?: string; password?: string };
 
 /**
  * Website signup: name, email, password (+ the 6-digit code when email
  * confirmation is on) and Google, on the same Supabase project as the app.
- * Opens with the level question; signed-up visitors land on `next` (/my-account by default).
+ * Signed-up visitors land on `next` (/my-account by default), where the level question opens.
  */
-export function SiteSignupForm({ next, levelCourses }: { next: string; levelCourses: LevelCourse[] }) {
+export function SiteSignupForm({ next }: { next: string }) {
   const router = useRouter();
   const { m, locale } = useI18n();
   const t = m.auth.signup;
@@ -39,6 +38,7 @@ export function SiteSignupForm({ next, levelCourses }: { next: string; levelCour
   const [resent, setResent] = useState(false);
 
   function done() {
+    askLevelAfterSignup();
     router.replace(next);
     router.refresh();
   }
@@ -114,7 +114,6 @@ export function SiteSignupForm({ next, levelCourses }: { next: string; levelCour
 
   return (
     <div className="flex flex-col gap-5">
-      <SiteLevelPrompt courses={levelCourses} />
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
         {formError && <SiteNotice>{formError}</SiteNotice>}
         <SiteField label={m.auth.fields.fullName} autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} error={errors.name} />
@@ -128,7 +127,7 @@ export function SiteSignupForm({ next, levelCourses }: { next: string; levelCour
         {m.auth.orSignupWith}
         <span className="h-px flex-1 bg-white/15" />
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center" onClickCapture={askLevelAfterSignup}>
         <GoogleButton next={next} onError={setFormError} round />
       </div>
 

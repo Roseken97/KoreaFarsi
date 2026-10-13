@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { CartProvider } from "@/lib/bookstore/cart";
 import { getMessages } from "@/lib/i18n/server";
+import { SiteLevelPrompt } from "./auth/SiteLevelPrompt";
 import { SiteHeader } from "./SiteHeader";
 import { SiteTransition } from "./SiteTransition";
 
@@ -36,6 +37,7 @@ export async function SitePage({ children }: { children: ReactNode }) {
             </nav>
           </div>
         </footer>
+        <SiteLevelPrompt mode="signup" />
       </div>
     </CartProvider>
   );
