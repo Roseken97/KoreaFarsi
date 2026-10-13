@@ -8,12 +8,12 @@ import { GlassCore } from "@/components/homepage/GlassCore";
 import { InstallCta } from "@/components/homepage/InstallCta";
 import { Odometer } from "@/components/homepage/Odometer";
 import { Phone3D } from "@/components/homepage/Phone3D";
-import { SiteMenu } from "@/components/homepage/SiteMenu";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { CartProvider } from "@/lib/bookstore/cart";
 import { BlossomGuide } from "@/components/homepage/blossom/BlossomGuide";
 import styles from "@/components/homepage/homepage.module.css";
 import { CONTACT, CONTACT_LINKS } from "@/config/contact";
 import { getMessages } from "@/lib/i18n/server";
-import { getCurrentUser } from "@/lib/supabase/server";
 import { SITE_URL, localeAlternates } from "@/lib/seo";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["200", "300", "500"] });
@@ -45,8 +45,7 @@ const SOCIALS = (["instagram", "telegram", "youtube"] as const).filter((k) => CO
 
 /** Public homepage at "/" — the app itself opens at /launch (the PWA start_url). */
 export default async function HomePage() {
-  const [{ m, locale }, user] = await Promise.all([getMessages(), getCurrentUser()]);
-  const signedIn = !!user;
+  const { m, locale } = await getMessages();
   const t = m.homepage;
   const showLatinSub = locale === "fa";
 
@@ -131,20 +130,9 @@ export default async function HomePage() {
         />
 
         {/* ── 02 Navigation: background-less bar, glass pills; everything else lives in the menu ── */}
-        <header className="relative z-20 mx-auto max-w-[1240px] px-5 pt-5 sm:px-6">
-          <div className="flex items-center justify-between gap-3">
-            <Link href="/" className="flex items-center gap-2.5 text-white">
-              <LogoMark size={40} priority />
-              <span className="hidden text-[17px] font-extrabold min-[380px]:inline">{t.footer.colBrand}</span>
-            </Link>
-            <div className="flex items-center gap-2 text-sm font-bold">
-              <Link href="/auth/welcome" className="rounded-full bg-white/90 px-5 py-2 font-extrabold whitespace-nowrap text-[#1C1336] backdrop-blur-md">
-                {t.nav.start}
-              </Link>
-              <SiteMenu signedIn={signedIn} telegram={CONTACT.telegram ? CONTACT_LINKS.telegram(CONTACT.telegram) : null} />
-            </div>
-          </div>
-        </header>
+        <CartProvider>
+          <SiteHeader priorityLogo />
+        </CartProvider>
 
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-6 pt-24 pb-16">
           <div className="pointer-events-auto flex max-w-[1000px] flex-col items-center gap-5 text-center">
@@ -266,13 +254,13 @@ export default async function HomePage() {
         </Phone3D>
 
         <div className="relative z-10 flex flex-wrap justify-center gap-3 px-6 pb-28">
-          <Link href="/bookstore" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
+          <Link href="/shop?cat=book" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF8FC7" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" />
             </svg>
             {t.app.chipBooks}
           </Link>
-          <Link href="/courses" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
+          <Link href="/shop?cat=course" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2FE6E0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="8" cy="15" r="4" />
               <path d="M11 12l9-9M17 6l3 3M15 8l2 2" />
@@ -445,8 +433,8 @@ export default async function HomePage() {
             </nav>
             <nav aria-label={t.footer.colLearn} className="flex flex-[0_1_180px] flex-col gap-2 text-sm">
               <span className="mb-1 font-extrabold text-white">{t.footer.colLearn}</span>
-              <Link href="/bookstore" className="text-[#C9BEE3] hover:text-white">{t.footer.books}</Link>
-              <Link href="/courses" className="text-[#C9BEE3] hover:text-white">{t.footer.koreakey}</Link>
+              <Link href="/shop?cat=book" className="text-[#C9BEE3] hover:text-white">{t.footer.books}</Link>
+              <Link href="/shop?cat=course" className="text-[#C9BEE3] hover:text-white">{t.footer.koreakey}</Link>
               <Link href="/launch" className="text-[#C9BEE3] hover:text-white">{t.footer.app}</Link>
             </nav>
           </div>

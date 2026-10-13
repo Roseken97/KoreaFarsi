@@ -19,30 +19,22 @@ import {
   UserIcon,
 } from "@/components/icons";
 import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
-import { CartProvider, useCart } from "@/lib/bookstore/cart";
+import { useCart } from "@/lib/bookstore/cart";
 import { formatNumber } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
-import styles from "./homepage.module.css";
+import styles from "@/components/homepage/homepage.module.css";
 
 const noopSubscribe = () => () => {};
 
 type Item = { href: string; label: string; icon: ReactNode; color: string; external?: boolean; badge?: number };
 
 /**
- * Site header actions: cart, the main "start" CTA and the hamburger. The menu opens
- * as a glass panel over the page and holds every other link, so the bar stays
- * the same on phone and desktop. Rendered into <body> so the hero's stacking
- * and overflow never clip it.
+ * Site header actions: cart and the hamburger. The menu opens as a glass panel
+ * over the page and holds every other link, so the bar stays the same on phone
+ * and desktop. Rendered into <body> so the hero's stacking and overflow never
+ * clip it. Needs a CartProvider above it (SiteHeader's callers provide one).
  */
 export function SiteMenu({ signedIn, telegram }: { signedIn: boolean; telegram: string | null }) {
-  return (
-    <CartProvider>
-      <SiteMenuInner signedIn={signedIn} telegram={telegram} />
-    </CartProvider>
-  );
-}
-
-function SiteMenuInner({ signedIn, telegram }: { signedIn: boolean; telegram: string | null }) {
   const { m, locale } = useI18n();
   const t = m.homepage.menu;
   const { count, hydrated } = useCart();
@@ -71,9 +63,9 @@ function SiteMenuInner({ signedIn, telegram }: { signedIn: boolean; telegram: st
     {
       title: t.shop,
       items: [
-        { href: "/bookstore", label: t.books, icon: <BooksStackIcon width={20} height={20} />, color: "#FF8FC7" },
-        { href: "/courses", label: t.courses, icon: <PlayIcon width={20} height={20} />, color: "#B79CFF" },
-        { href: "/bookstore/cart", label: t.cart, icon: <ShoppingBagIcon width={20} height={20} />, color: "#FFC59A", badge: cartCount },
+        { href: "/shop?cat=book", label: t.books, icon: <BooksStackIcon width={20} height={20} />, color: "#FF8FC7" },
+        { href: "/shop?cat=course", label: t.courses, icon: <PlayIcon width={20} height={20} />, color: "#B79CFF" },
+        { href: "/shop/cart", label: t.cart, icon: <ShoppingBagIcon width={20} height={20} />, color: "#FFC59A", badge: cartCount },
       ],
     },
     {
@@ -201,7 +193,7 @@ function SiteMenuInner({ signedIn, telegram }: { signedIn: boolean; telegram: st
   return (
     <>
       <Link
-        href="/bookstore/cart"
+        href="/shop/cart"
         aria-label={cartCount > 0 ? `${t.cart} (${formatNumber(cartCount, locale)})` : t.cart}
         className={`relative grid size-10 place-items-center rounded-full text-white ${styles.glassPill}`}
       >
