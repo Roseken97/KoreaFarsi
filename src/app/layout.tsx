@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = m.homepage.metaDescription;
   return {
     metadataBase: new URL(SITE_URL),
-    title: { default: "KoreaFarsi", template: "%s | KoreaFarsi" },
+    title: locale === "fa" ? { default: "کوریافارسی", template: "%s | کوریافارسی" } : { default: "KoreaFarsi", template: "%s | KoreaFarsi" },
     description,
     applicationName: "KoreaFarsi",
     keywords:

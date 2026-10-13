@@ -7,10 +7,10 @@ import { ShopPurchase } from "@/components/shop/ShopPurchase";
 import { SitePage } from "@/components/site/SitePage";
 import { getProductBySlug, getProducts } from "@/lib/bookstore/catalog";
 import { levelLabel } from "@/lib/bookstore/format";
-import { descriptionOf, isPurchasable, titles } from "@/lib/bookstore/types";
+import { descriptionOf, isPurchasable, lowestPrice, titles } from "@/lib/bookstore/types";
 import { getCourses } from "@/lib/courses/queries";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { SITE_URL, langUrl, localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata(props: PageProps<"/shop/[slug]">): Promise<Metadata> {
   const [{ slug }, { locale }] = await Promise.all([props.params, getMessages()]);
@@ -39,8 +39,47 @@ export default async function ShopProductPage(props: PageProps<"/shop/[slug]">) 
     .map((s) => products.find((p) => p.slug === s))
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
+  // Product + breadcrumb structured data so Google can show price and the shop path in results.
+  const url = `${SITE_URL}${langUrl(`/shop/${slug}`, locale)}`;
+  const lowPrice = lowestPrice(product);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Product",
+        name: primary,
+        ...(secondary ? { alternateName: secondary } : {}),
+        description: descriptionOf(product, locale) || undefined,
+        ...(product.cover_image_url ? { image: product.cover_image_url } : {}),
+        brand: { "@type": "Brand", name: "KoreaFarsi" },
+        url,
+        ...(lowPrice > 0
+          ? {
+              offers: {
+                "@type": "Offer",
+                url,
+                // Prices are stored in Toman; schema.org wants ISO 4217, and 1 Toman = 10 Rial.
+                price: lowPrice * 10,
+                priceCurrency: "IRR",
+                availability: isPurchasable(product) ? "https://schema.org/InStock" : product.is_coming_soon ? "https://schema.org/PreOrder" : "https://schema.org/OutOfStock",
+              },
+            }
+          : {}),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: m.homepage.menu.home, item: `${SITE_URL}${langUrl("/", locale)}` },
+          { "@type": "ListItem", position: 2, name: m.homepage.menu.shop, item: `${SITE_URL}${langUrl("/shop", locale)}` },
+          { "@type": "ListItem", position: 3, name: primary, item: url },
+        ],
+      },
+    ],
+  };
+
   return (
     <SitePage>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <div className="mx-auto max-w-[1040px] px-5 pt-10 pb-24 sm:px-6">
         <Link href="/shop" className="inline-flex items-center gap-1.5 text-sm font-bold text-[#C9BEE3] hover:text-white">
           <ChevronIcon width={16} height={16} className="rotate-180" />
