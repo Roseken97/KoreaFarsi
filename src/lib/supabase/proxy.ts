@@ -4,10 +4,13 @@ import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "./env";
 import { SESSION_ONLY_COOKIE, applyRememberPolicy } from "./remember";
 
 /** Routes that require a signed-in user. Everything else is open to guests. */
-const PROTECTED_PREFIXES = ["/account", "/admin", "/library", "/planner"];
+const PROTECTED_PREFIXES = ["/account", "/admin", "/library", "/planner", "/my-account"];
 
 /** Auth pages a signed-in user has no reason to see. */
 const GUEST_ONLY_PATHS = ["/auth/welcome", "/auth/login", "/auth/signup"];
+
+/** The website's own auth pages: guests go to /login, signed-in visitors to /my-account. */
+const SITE_GUEST_ONLY_PATHS = ["/login", "/signup", "/forgot-password"];
 
 const ADMIN_MFA_PATH = "/admin/mfa";
 
@@ -62,7 +65,7 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (!isSignedIn && PROTECTED_PREFIXES.some((p) => pathname.startsWith(p))) {
-    return redirectPreservingCookies(request, response, "/auth/login", pathname);
+    return redirectPreservingCookies(request, response, pathname.startsWith("/my-account") ? "/login" : "/auth/login", pathname);
   }
 
   // Admins finish the second factor (authenticator code) before any /admin page.
@@ -77,6 +80,9 @@ export async function updateSession(request: NextRequest) {
 
   if (isSignedIn && GUEST_ONLY_PATHS.includes(pathname)) {
     return redirectPreservingCookies(request, response, "/home");
+  }
+  if (isSignedIn && SITE_GUEST_ONLY_PATHS.includes(pathname)) {
+    return redirectPreservingCookies(request, response, "/my-account");
   }
 
   return response;

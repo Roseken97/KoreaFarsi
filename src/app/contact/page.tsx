@@ -77,10 +77,10 @@ export default async function ContactPage() {
             <div className="flex flex-col gap-4">
               <p className="m-0 text-[15px] text-white">{t.ticket.loginPrompt}</p>
               <div className="flex flex-wrap gap-3 text-sm font-bold">
-                <Link href="/auth/login?next=/contact" className="rounded-full bg-white/90 px-6 py-2.5 font-extrabold text-[#1C1336]">
+                <Link href="/login?next=/contact" className="rounded-full bg-white/90 px-6 py-2.5 font-extrabold text-[#1C1336]">
                   {menu.login}
                 </Link>
-                <Link href="/auth/signup?next=/contact" className="rounded-full border border-white/20 px-6 py-2.5 text-white hover:bg-white/[0.08]">
+                <Link href="/signup?next=/contact" className="rounded-full border border-white/20 px-6 py-2.5 text-white hover:bg-white/[0.08]">
                   {menu.signup}
                 </Link>
               </div>
