@@ -2,9 +2,9 @@
 
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { applyOverrides, type CopyOverrides } from "@/lib/site-copy/entries";
-import { MESSAGES, dirOf, type Locale, type Messages } from "./config";
+import { DEFAULT_LOCALE, MESSAGES, dirOf, type Locale, type Messages } from "./config";
 
-const I18nContext = createContext<{ locale: Locale; m: Messages }>({ locale: "en", m: MESSAGES.en });
+const I18nContext = createContext<{ locale: Locale; m: Messages }>({ locale: DEFAULT_LOCALE, m: MESSAGES[DEFAULT_LOCALE] });
 
 /** `overrides` are the /admin/content edits for this locale, applied over the copy in code. */
 export function I18nProvider({ locale, overrides, children }: { locale: Locale; overrides?: CopyOverrides; children: ReactNode }) {
