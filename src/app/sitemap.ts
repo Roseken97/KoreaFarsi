@@ -29,6 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry("/app", 0.6, "monthly"),
     entry("/tools/dictionary", 0.5, "monthly"),
     entry("/contact", 0.5, "monthly"),
+    entry("/faq", 0.6, "monthly"),
     entry("/terms", 0.3, "monthly"),
     ...courses.map((c) => entry(`/courses/${c.slug}`, 0.8, "monthly")),
     ...products.map((p) => entry(`/shop/${p.slug}`, 0.8, "monthly")),

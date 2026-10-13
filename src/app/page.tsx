@@ -9,6 +9,7 @@ import { InstallCta } from "@/components/homepage/InstallCta";
 import { Odometer } from "@/components/homepage/Odometer";
 import { Phone3D } from "@/components/homepage/Phone3D";
 import { SiteHeader } from "@/components/site/SiteHeader";
+import { SiteTransition } from "@/components/site/SiteTransition";
 import { CartProvider } from "@/lib/bookstore/cart";
 import { BlossomGuide } from "@/components/homepage/blossom/BlossomGuide";
 import styles from "@/components/homepage/homepage.module.css";
@@ -114,6 +115,7 @@ export default async function HomePage() {
   };
 
   return (
+    <SiteTransition>
     <div className="min-h-dvh overflow-x-clip bg-[#140E26] text-[17px] leading-[1.8] text-[#F4EEFF]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <BlossomGuide />
@@ -429,6 +431,7 @@ export default async function HomePage() {
               <Link href="/teacher" className="text-[#C9BEE3] hover:text-white">{t.footer.teacher}</Link>
               <Link href="/terms" className="text-[#C9BEE3] hover:text-white">{t.menu.terms}</Link>
               <Link href="/contact" className="text-[#C9BEE3] hover:text-white">{t.footer.contact}</Link>
+              <Link href="/faq" className="text-[#C9BEE3] hover:text-white">{t.menu.faq}</Link>
             </nav>
             <nav aria-label={t.footer.colLearn} className="flex flex-[0_1_180px] flex-col gap-2 text-sm">
               <span className="mb-1 font-extrabold text-white">{t.footer.colLearn}</span>
@@ -444,6 +447,7 @@ export default async function HomePage() {
         </div>
       </footer>
     </div>
+    </SiteTransition>
   );
 }
 
