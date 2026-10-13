@@ -9,7 +9,7 @@ export const CONTACT = {
   youtube: "koreafarsi",
   telegram: "koreakey_support",
   whatsapp: "", // international phone number, digits only (no +, no spaces), e.g. "989123456789" — off for now
-  email: "",
+  email: "info@koreafarsi.ir",
 };
 
 export const CONTACT_LINKS = {

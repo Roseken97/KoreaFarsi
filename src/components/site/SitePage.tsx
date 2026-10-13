@@ -20,9 +20,10 @@ export async function SitePage({ children }: { children: ReactNode }) {
         <footer className="relative z-10 border-t border-white/[0.08] px-6 py-6">
           <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-3 text-[13px] text-[#A99FC4]">
             <span>{m.homepage.footer.rights}</span>
-            <nav className="flex gap-4">
+            <nav className="flex flex-wrap gap-4">
               <Link href="/" className="hover:text-white">{m.homepage.menu.brand}</Link>
               <Link href="/shop" className="hover:text-white">{m.homepage.menu.shop}</Link>
+              <Link href="/contact" className="hover:text-white">{m.homepage.menu.contact}</Link>
               <Link href="/terms" className="hover:text-white">{m.homepage.menu.terms}</Link>
             </nav>
           </div>

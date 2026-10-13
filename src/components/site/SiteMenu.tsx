@@ -26,7 +26,7 @@ import styles from "@/components/homepage/homepage.module.css";
 
 const noopSubscribe = () => () => {};
 
-type Item = { href: string; label: string; icon: ReactNode; color: string; external?: boolean; badge?: number };
+type Item = { href: string; label: string; icon: ReactNode; color: string; badge?: number };
 
 /**
  * Site header actions: cart and the hamburger. The menu opens as a glass panel
@@ -34,7 +34,7 @@ type Item = { href: string; label: string; icon: ReactNode; color: string; exter
  * and desktop. Rendered into <body> so the hero's stacking and overflow never
  * clip it. Needs a CartProvider above it (SiteHeader's callers provide one).
  */
-export function SiteMenu({ signedIn, telegram }: { signedIn: boolean; telegram: string | null }) {
+export function SiteMenu({ signedIn }: { signedIn: boolean }) {
   const { m, locale } = useI18n();
   const t = m.homepage.menu;
   const { count, hydrated } = useCart();
@@ -63,30 +63,30 @@ export function SiteMenu({ signedIn, telegram }: { signedIn: boolean; telegram: 
     {
       title: t.shop,
       items: [
-        { href: "/shop?cat=book", label: t.books, icon: <BooksStackIcon width={20} height={20} />, color: "#FF8FC7" },
-        { href: "/shop?cat=course", label: t.courses, icon: <PlayIcon width={20} height={20} />, color: "#B79CFF" },
+        { href: "/shop/books", label: t.books, icon: <BooksStackIcon width={20} height={20} />, color: "#FF8FC7" },
+        { href: "/shop/courses", label: t.courses, icon: <PlayIcon width={20} height={20} />, color: "#B79CFF" },
         { href: "/shop/cart", label: t.cart, icon: <ShoppingBagIcon width={20} height={20} />, color: "#FFC59A", badge: cartCount },
       ],
     },
     {
       title: t.learn,
       items: [
-        { href: "/korea-life", label: t.koreaLife, icon: <LanternIcon width={20} height={20} />, color: "#FFB72B" },
-        { href: "/dictionary", label: t.dictionary, icon: <DictionaryIcon width={20} height={20} />, color: "#2FE6E0" },
-        { href: "/launch", label: t.app, icon: <SparkleIcon width={20} height={20} />, color: "#5D8FE8" },
+        { href: "/magazine", label: t.koreaLife, icon: <LanternIcon width={20} height={20} />, color: "#FFB72B" },
+        { href: "/tools/dictionary", label: t.dictionary, icon: <DictionaryIcon width={20} height={20} />, color: "#2FE6E0" },
+        { href: "/app", label: t.app, icon: <SparkleIcon width={20} height={20} />, color: "#5D8FE8" },
       ],
     },
     {
       title: t.brand,
       items: [
-        { href: "/#about", label: t.about, icon: <HelpIcon width={20} height={20} />, color: "#B79CFF" },
-        { href: "/#teacher", label: t.teacher, icon: <UserIcon width={20} height={20} />, color: "#FF8FC7" },
+        { href: "/about", label: t.about, icon: <HelpIcon width={20} height={20} />, color: "#B79CFF" },
+        { href: "/teacher", label: t.teacher, icon: <UserIcon width={20} height={20} />, color: "#FF8FC7" },
       ],
     },
     {
       title: t.support,
       items: [
-        ...(telegram ? [{ href: telegram, label: t.contact, icon: <SendIcon width={20} height={20} />, color: "#2FE6E0", external: true }] : []),
+        { href: "/contact", label: t.contact, icon: <SendIcon width={20} height={20} />, color: "#2FE6E0" },
         { href: "/terms", label: t.terms, icon: <ShieldIcon width={20} height={20} />, color: "#FFC59A" },
       ],
     },
@@ -105,8 +105,8 @@ export function SiteMenu({ signedIn, telegram }: { signedIn: boolean; telegram: 
         aria-modal="true"
         aria-label={t.title}
         inert={!open}
-        className={`absolute inset-y-0 start-0 flex w-[min(380px,88vw)] flex-col overflow-y-auto border-e border-white/15 bg-[#1C1336]/85 text-[#F4EEFF] shadow-[0_0_60px_rgba(20,14,38,0.6)] backdrop-blur-2xl transition-transform duration-300 ease-out ${
-          open ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full"
+        className={`absolute inset-y-0 right-0 flex w-[min(380px,88vw)] flex-col overflow-y-auto border-l border-white/15 bg-[#1C1336]/85 text-[#F4EEFF] shadow-[0_0_60px_rgba(20,14,38,0.6)] backdrop-blur-2xl transition-transform duration-300 ease-out ${
+          open ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between px-6 pt-6 pb-2">
@@ -147,19 +147,9 @@ export function SiteMenu({ signedIn, telegram }: { signedIn: boolean; telegram: 
                   const cls = "flex items-center gap-3 rounded-2xl px-2 py-1.5 text-white transition hover:bg-white/[0.07] focus-visible:bg-white/[0.07]";
                   return (
                     <li key={it.href}>
-                      {it.external ? (
-                        <a href={it.href} target="_blank" rel="noopener noreferrer" onClick={close} className={cls}>
-                          {body}
-                        </a>
-                      ) : it.href.startsWith("/#") ? (
-                        <a href={it.href} onClick={close} className={cls}>
-                          {body}
-                        </a>
-                      ) : (
-                        <Link href={it.href} onClick={close} className={cls}>
-                          {body}
-                        </Link>
-                      )}
+                      <Link href={it.href} onClick={close} className={cls}>
+                        {body}
+                      </Link>
                     </li>
                   );
                 })}

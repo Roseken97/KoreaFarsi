@@ -13,6 +13,7 @@ import { CartProvider } from "@/lib/bookstore/cart";
 import { BlossomGuide } from "@/components/homepage/blossom/BlossomGuide";
 import styles from "@/components/homepage/homepage.module.css";
 import { CONTACT, CONTACT_LINKS } from "@/config/contact";
+import { SEJONG_LEVEL_TEST_URL } from "@/config/links";
 import { getMessages } from "@/lib/i18n/server";
 import { SITE_URL, localeAlternates } from "@/lib/seo";
 
@@ -56,15 +57,17 @@ export default async function HomePage() {
   );
 
   const placementCta = (
-    <Link
-      href="/auth/welcome"
+    <a
+      href={SEJONG_LEVEL_TEST_URL}
+      target="_blank"
+      rel="noopener noreferrer"
       className={`inline-flex min-h-[54px] items-center gap-2.5 rounded-full px-7 text-[17px] font-extrabold text-white ${styles.glassPill}`}
     >
       {t.hero.placement}
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="rtl:-scale-x-100">
         <path d="M9 18l6-6-6-6" />
       </svg>
-    </Link>
+    </a>
   );
 
   const installCta = (
@@ -117,7 +120,7 @@ export default async function HomePage() {
 
       {/* ── 01 Hero: full-screen film, centered brand, two keys ── */}
       <section id="top" className="relative h-dvh max-h-[1000px] min-h-[640px] overflow-hidden">
-        <HeroVideo playLabel={t.hero.play} pauseLabel={t.hero.pause} />
+        <HeroVideo />
         <div
           aria-hidden="true"
           className="absolute inset-0"
@@ -140,7 +143,7 @@ export default async function HomePage() {
               {brand}
             </h1>
             <p className="m-0 max-w-[760px] text-[clamp(19px,2.2vw,28px)] leading-[1.7] text-white [text-shadow:0_2px_20px_rgba(20,14,38,0.7)]">
-              {t.hero.taglineA} <strong className="font-extrabold">{t.hero.taglineB}</strong>
+              {t.hero.taglineA} <strong className="font-extrabold whitespace-nowrap">{t.hero.taglineB}</strong>
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3.5 pt-2.5">
               {installCta}
@@ -254,13 +257,13 @@ export default async function HomePage() {
         </Phone3D>
 
         <div className="relative z-10 flex flex-wrap justify-center gap-3 px-6 pb-28">
-          <Link href="/shop?cat=book" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
+          <Link href="/shop/books" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF8FC7" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" />
             </svg>
             {t.app.chipBooks}
           </Link>
-          <Link href="/shop?cat=course" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
+          <Link href="/shop/courses" className="flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-[18px] py-2.5 text-sm text-white">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2FE6E0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="8" cy="15" r="4" />
               <path d="M11 12l9-9M17 6l3 3M15 8l2 2" />
@@ -422,20 +425,16 @@ export default async function HomePage() {
             </div>
             <nav aria-label={t.footer.colBrand} className="flex flex-[0_1_180px] flex-col gap-2 text-sm">
               <span className="mb-1 font-extrabold text-white">{t.footer.colBrand}</span>
-              <a href="#about" className="text-[#C9BEE3] hover:text-white">{t.footer.about}</a>
-              <a href="#teacher" className="text-[#C9BEE3] hover:text-white">{t.footer.teacher}</a>
+              <Link href="/about" className="text-[#C9BEE3] hover:text-white">{t.footer.about}</Link>
+              <Link href="/teacher" className="text-[#C9BEE3] hover:text-white">{t.footer.teacher}</Link>
               <Link href="/terms" className="text-[#C9BEE3] hover:text-white">{t.menu.terms}</Link>
-              {CONTACT.telegram && (
-                <a href={CONTACT_LINKS.telegram(CONTACT.telegram)} target="_blank" rel="noopener noreferrer" className="text-[#C9BEE3] hover:text-white">
-                  {t.footer.contact}
-                </a>
-              )}
+              <Link href="/contact" className="text-[#C9BEE3] hover:text-white">{t.footer.contact}</Link>
             </nav>
             <nav aria-label={t.footer.colLearn} className="flex flex-[0_1_180px] flex-col gap-2 text-sm">
               <span className="mb-1 font-extrabold text-white">{t.footer.colLearn}</span>
-              <Link href="/shop?cat=book" className="text-[#C9BEE3] hover:text-white">{t.footer.books}</Link>
-              <Link href="/shop?cat=course" className="text-[#C9BEE3] hover:text-white">{t.footer.koreakey}</Link>
-              <Link href="/launch" className="text-[#C9BEE3] hover:text-white">{t.footer.app}</Link>
+              <Link href="/shop/books" className="text-[#C9BEE3] hover:text-white">{t.footer.books}</Link>
+              <Link href="/shop/courses" className="text-[#C9BEE3] hover:text-white">{t.footer.koreakey}</Link>
+              <Link href="/app" className="text-[#C9BEE3] hover:text-white">{t.footer.app}</Link>
             </nav>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.08] pt-5 text-[13px] text-[#A99FC4]">
