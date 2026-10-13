@@ -3,16 +3,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Outfit } from "next/font/google";
 import { LogoMark } from "@/components/brand/Logo";
-import { LanguageSwitch } from "@/components/shell/LanguageSwitch";
 import { HeroVideo } from "@/components/homepage/HeroVideo";
 import { GlassCore } from "@/components/homepage/GlassCore";
 import { InstallCta } from "@/components/homepage/InstallCta";
 import { Odometer } from "@/components/homepage/Odometer";
 import { Phone3D } from "@/components/homepage/Phone3D";
+import { SiteMenu } from "@/components/homepage/SiteMenu";
 import { BlossomGuide } from "@/components/homepage/blossom/BlossomGuide";
 import styles from "@/components/homepage/homepage.module.css";
 import { CONTACT, CONTACT_LINKS } from "@/config/contact";
 import { getMessages } from "@/lib/i18n/server";
+import { getCurrentUser } from "@/lib/supabase/server";
 import { SITE_URL, localeAlternates } from "@/lib/seo";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["200", "300", "500"] });
@@ -44,7 +45,8 @@ const SOCIALS = (["instagram", "telegram", "youtube"] as const).filter((k) => CO
 
 /** Public homepage at "/" — the app itself opens at /launch (the PWA start_url). */
 export default async function HomePage() {
-  const { m, locale } = await getMessages();
+  const [{ m, locale }, user] = await Promise.all([getMessages(), getCurrentUser()]);
+  const signedIn = !!user;
   const t = m.homepage;
   const showLatinSub = locale === "fa";
 
@@ -128,35 +130,20 @@ export default async function HomePage() {
           style={{ background: "radial-gradient(ellipse 60% 45% at 50% 52%, rgba(20,14,38,0.5) 0%, rgba(20,14,38,0) 100%)" }}
         />
 
-        {/* ── 02 Navigation: background-less bar, glass pills ── */}
-        <header className="relative z-20 mx-auto max-w-[1240px] px-6 pt-5">
-          <nav aria-label={t.nav.features} className="flex flex-wrap items-center justify-between gap-3.5">
+        {/* ── 02 Navigation: background-less bar, glass pills; everything else lives in the menu ── */}
+        <header className="relative z-20 mx-auto max-w-[1240px] px-5 pt-5 sm:px-6">
+          <div className="flex items-center justify-between gap-3">
             <Link href="/" className="flex items-center gap-2.5 text-white">
               <LogoMark size={40} priority />
-              <span className="text-[17px] font-extrabold">{t.footer.colBrand}</span>
+              <span className="hidden text-[17px] font-extrabold min-[380px]:inline">{t.footer.colBrand}</span>
             </Link>
-            <div className="hidden flex-wrap justify-center gap-2 text-sm font-bold md:flex">
-              {([
-                ["#about", t.nav.about],
-                ["#app", t.nav.app],
-                ["#features", t.nav.features],
-                ["#path", t.nav.courses],
-              ] as const).map(([href, label]) => (
-                <a key={href} href={href} className={`rounded-full px-5 py-2 text-white ${styles.glassPill}`}>
-                  {label}
-                </a>
-              ))}
-            </div>
             <div className="flex items-center gap-2 text-sm font-bold">
-              <LanguageSwitch />
-              <Link href="/auth/login" className={`rounded-full px-5 py-2 text-white ${styles.glassPill}`}>
-                {t.nav.login}
-              </Link>
-              <Link href="/auth/welcome" className="rounded-full bg-white/90 px-5 py-2 font-extrabold text-[#1C1336] backdrop-blur-md">
+              <Link href="/auth/welcome" className="rounded-full bg-white/90 px-5 py-2 font-extrabold whitespace-nowrap text-[#1C1336] backdrop-blur-md">
                 {t.nav.start}
               </Link>
+              <SiteMenu signedIn={signedIn} telegram={CONTACT.telegram ? CONTACT_LINKS.telegram(CONTACT.telegram) : null} />
             </div>
-          </nav>
+          </div>
         </header>
 
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-6 pt-24 pb-16">
@@ -449,6 +436,7 @@ export default async function HomePage() {
               <span className="mb-1 font-extrabold text-white">{t.footer.colBrand}</span>
               <a href="#about" className="text-[#C9BEE3] hover:text-white">{t.footer.about}</a>
               <a href="#teacher" className="text-[#C9BEE3] hover:text-white">{t.footer.teacher}</a>
+              <Link href="/terms" className="text-[#C9BEE3] hover:text-white">{t.menu.terms}</Link>
               {CONTACT.telegram && (
                 <a href={CONTACT_LINKS.telegram(CONTACT.telegram)} target="_blank" rel="noopener noreferrer" className="text-[#C9BEE3] hover:text-white">
                   {t.footer.contact}

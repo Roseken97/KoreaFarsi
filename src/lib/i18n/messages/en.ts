@@ -20,6 +20,28 @@ export const en = {
   homepage: {
     metaTitle: "KoreaFarsi — The first Korean learning platform made for Persian speakers",
     metaDescription: "KoreaFarsi is the first Korean learning platform made for Persian speakers: books, video courses, a vocabulary app and AI speaking practice, from Hangul to advanced Korean.",
+    menu: {
+      open: "Open menu",
+      close: "Close menu",
+      title: "Menu",
+      shop: "Shop",
+      books: "Books",
+      courses: "Courses",
+      cart: "Cart",
+      learn: "Learn",
+      koreaLife: "Life in Korea",
+      dictionary: "Dictionary",
+      app: "The KoreaFarsi app",
+      brand: "KoreaFarsi",
+      about: "About us",
+      teacher: "Meet the teacher",
+      support: "Support",
+      contact: "Contact us",
+      terms: "Terms of purchase",
+      account: "My account",
+      login: "Log in",
+      signup: "Sign up",
+    },
     nav: { about: "About KoreaFarsi", app: "The App", features: "Features", courses: "Courses", login: "Log in", start: "Start learning" },
     hero: {
       taglineA: "The first Korean learning platform",
@@ -989,6 +1011,44 @@ export const en = {
       body: "Send a support ticket and the KoreaFarsi team will reply right here.",
       cta: "Send a ticket",
     },
+  },
+  terms: {
+    metaTitle: "Terms of purchase",
+    title: "Terms of purchase",
+    intro: "By buying from KoreaFarsi (koreafarsi.ir and its app) you accept these terms. Please read them before you buy.",
+    updated: "Last updated: October 2026",
+    back: "Back to the home page",
+    sections: [
+      {
+        title: "Your account",
+        body: "You need an account to buy courses and digital books. One account works on both the website and the app, and everything you buy is available in that account. Keeping your sign-in details safe is your responsibility.",
+      },
+      {
+        title: "Prices and payment",
+        body: "All prices are in Toman and include VAT. An order is placed once the payment is confirmed, and its receipt is shown in your account.",
+      },
+      {
+        title: "Digital products (courses and e-books)",
+        body: "Digital products unlock in your account's library as soon as the payment is confirmed. They are for the buyer's personal use only; sharing, reselling or publishing them is not allowed.",
+      },
+      {
+        title: "Printed books and shipping",
+        body: "Printed books are handed to the post within 3 working days after the order is confirmed. Shipping cost and estimated time are shown before you pay. Please enter your address and phone number carefully.",
+      },
+      {
+        title: "Cancellations and refunds",
+        body: "You can return a printed book within 7 days of delivery if it arrives damaged or differs from your order, for a full refund. Digital products cannot be refunded once unlocked, unless a technical problem on our side makes them unusable.",
+      },
+      {
+        title: "Privacy",
+        body: "Your details are used only to process, ship and support your order, and are never shared with anyone else unless the law requires it.",
+      },
+      {
+        title: "Support and contact",
+        body: "For any question or problem with an order, reach us on Telegram support or at info@koreafarsi.ir.",
+      },
+    ],
+    contactCta: "Message support on Telegram",
   },
   language: {
     label: "Language",
