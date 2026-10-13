@@ -25,14 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     title: locale === "fa" ? { default: "کوریافارسی", template: "%s | کوریافارسی" } : { default: "KoreaFarsi", template: "%s | KoreaFarsi" },
     description,
-    applicationName: "KoreaFarsi",
+    applicationName: locale === "fa" ? "کوریافارسی" : "KoreaFarsi",
     keywords:
       locale === "fa"
-        ? ["آموزش زبان کره‌ای", "یادگیری زبان کره‌ای", "کتاب آموزش کره‌ای", "الفبای کره‌ای", "هانگول", "دوره زبان کره‌ای", "کوریافارسی"]
+        ? ["آموزش زبان کره‌ای", "یادگیری زبان کره‌ای", "کتاب آموزش کره‌ای", "الفبای کره‌ای", "هانگول", "دوره زبان کره‌ای", "کوریافارسی", "کوریا فارسی", "آموزش کره‌ای کوریافارسی", "KoreaFarsi"]
         : ["learn Korean", "Korean for Persian speakers", "Korean course", "Hangul", "Korean books", "KoreaFarsi"],
     openGraph: {
       type: "website",
-      siteName: "KoreaFarsi",
+      siteName: locale === "fa" ? "کوریافارسی" : "KoreaFarsi",
       title: m.homepage.metaTitle,
       description,
       locale: locale === "fa" ? "fa_IR" : "en_US",
