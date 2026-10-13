@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { GoogleButton, OrDivider } from "@/components/auth/GoogleButton";
+import { LevelPrompt, type LevelCourse } from "@/components/auth/LevelPrompt";
 import { HexHero } from "@/components/auth/HexHero";
 import { StatusScreen } from "@/components/auth/StatusScreen";
 import { LockIcon, MailIcon, UserIcon } from "@/components/icons";
@@ -21,7 +22,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/env";
 type Errors = { name?: string; email?: string; password?: string };
 
 // Sketch 03 step 2: Full Name / Email / Password (no confirm field; the eye toggle covers typos).
-export function SignupForm({ next, image }: { next: string; image?: string }) {
+export function SignupForm({ next, image, levelCourses }: { next: string; image?: string; levelCourses: LevelCourse[] }) {
   const router = useRouter();
   const { m, locale } = useI18n();
   const t = m.auth.signup;
@@ -140,6 +141,7 @@ export function SignupForm({ next, image }: { next: string; image?: string }) {
 
   return (
     <>
+      <LevelPrompt courses={levelCourses} />
       <HexHero tone="rose" image={image} letter="한" className="-mt-6 mb-4" />
       <AuthHeader title={t.title} />
 
