@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/brand/Logo";
+import { SearchIcon } from "@/components/icons";
+import { isAdminEmail } from "@/lib/admin";
 import { getMessages } from "@/lib/i18n/server";
 import { getCurrentUser } from "@/lib/supabase/server";
 import { SiteMenu } from "./SiteMenu";
@@ -7,7 +9,7 @@ import styles from "@/components/homepage/homepage.module.css";
 
 /**
  * Website top bar. The row is pinned left-to-right in both languages, as Rose asked:
- * logo on the left; sign up | log in (or "my account"), cart and hamburger on the right.
+ * logo on the left; sign up | log in (or "my account"), search, cart and hamburger on the right.
  * Must sit inside a CartProvider.
  */
 export async function SiteHeader({ priorityLogo = false }: { priorityLogo?: boolean }) {
@@ -32,7 +34,10 @@ export async function SiteHeader({ priorityLogo = false }: { priorityLogo?: bool
               <Link href="/login" className="rounded-full px-3 py-2 hover:bg-white/10">{t.login}</Link>
             </div>
           )}
-          <SiteMenu signedIn={!!user} />
+          <Link href="/search" aria-label={t.search} className={`grid size-10 place-items-center rounded-full text-white ${styles.glassPill}`}>
+            <SearchIcon width={19} height={19} />
+          </Link>
+          <SiteMenu signedIn={!!user} isAdmin={isAdminEmail(user?.email)} />
         </div>
       </div>
     </header>

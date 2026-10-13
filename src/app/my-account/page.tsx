@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ProductCover } from "@/components/bookstore/ProductCover";
-import { ChatBubbleIcon, PlannerIcon, SettingsIcon, SparkleIcon, UserIcon } from "@/components/icons";
+import { ChatBubbleIcon, PlannerIcon, SettingsIcon, SparkleIcon } from "@/components/icons";
+import { SiteNameForm, SitePasswordForm } from "@/components/site/auth/SiteAccountForms";
 import { SiteSignOut } from "@/components/site/auth/SiteSignOut";
 import { SitePage } from "@/components/site/SitePage";
+import { isAdminEmail } from "@/lib/admin";
 import { titles } from "@/lib/bookstore/types";
 import { fmt } from "@/lib/i18n/config";
 import { getMessages } from "@/lib/i18n/server";
@@ -20,7 +22,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const STATUS_COLOR = { open: "#FF8FC7", answered: "#2FE6E0", closed: "#A99FC4" } as const;
 
-/** The website's account page: purchases, support tickets and quick links into the app. The app keeps /account. */
+/**
+ * The website's own account page, separate from the app's /account: purchases, tickets,
+ * name and password, links into the app, and the admin panel for admins.
+ */
 export default async function MyAccountPage() {
   const [{ m, locale }, profile] = await Promise.all([getMessages(), getProfile()]);
   if (isSupabaseConfigured && !profile) redirect("/login?next=/my-account");
@@ -31,9 +36,8 @@ export default async function MyAccountPage() {
   const quick = [
     { href: "/home", label: t.links.app, icon: <SparkleIcon width={20} height={20} />, color: "#5D8FE8" },
     { href: "/planner", label: t.links.planner, icon: <PlannerIcon width={20} height={20} />, color: "#FFB72B" },
-    { href: "/account/profile", label: t.links.profile, icon: <UserIcon width={20} height={20} />, color: "#FF8FC7" },
-    { href: "/account/settings", label: t.links.settings, icon: <SettingsIcon width={20} height={20} />, color: "#B79CFF" },
   ];
+  const isAdmin = isAdminEmail(profile?.user.email);
 
   return (
     <SitePage>
@@ -52,6 +56,24 @@ export default async function MyAccountPage() {
           </div>
           {profile && <SiteSignOut label={t.signOut} />}
         </header>
+
+        {isAdmin && (
+          <Link
+            href="/admin"
+            className="relative flex flex-wrap items-center justify-between gap-4 rounded-[26px] border border-[#FFB72B]/40 bg-[#FFB72B]/[0.08] p-6 transition hover:border-[#FFB72B]/70"
+          >
+            <span className="flex items-center gap-4">
+              <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#FFB72B]/20 text-[#FFB72B]">
+                <SettingsIcon width={22} height={22} />
+              </span>
+              <span className="flex flex-col">
+                <span className="text-lg font-black text-white">{t.adminTitle}</span>
+                <span className="text-sm text-[#E4DAF7]">{t.adminBody}</span>
+              </span>
+            </span>
+            <span className="rounded-full bg-[#FFB72B] px-5 py-2.5 text-sm font-extrabold text-[#1C1336]">{t.adminCta}</span>
+          </Link>
+        )}
 
         <section className="relative flex flex-col gap-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -135,6 +157,16 @@ export default async function MyAccountPage() {
             </ul>
           </section>
         </div>
+
+        {profile && (
+          <section className="relative flex flex-col gap-4">
+            <h2 className="m-0 text-xl font-black text-white">{t.settingsTitle}</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <SiteNameForm userId={profile.user.id} initialName={profile.name ?? ""} email={profile.user.email ?? ""} />
+              <SitePasswordForm />
+            </div>
+          </section>
+        )}
       </div>
     </SitePage>
   );

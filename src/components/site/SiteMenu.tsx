@@ -17,6 +17,7 @@ import {
   PlayIcon,
   SendIcon,
   ShieldIcon,
+  SettingsIcon,
   ShoppingBagIcon,
   SparkleIcon,
   UserIcon,
@@ -37,7 +38,7 @@ type Item = { href: string; label: string; icon: ReactNode; color: string; badge
  * and desktop. Rendered into <body> so the hero's stacking and overflow never
  * clip it. Needs a CartProvider above it (SiteHeader's callers provide one).
  */
-export function SiteMenu({ signedIn }: { signedIn: boolean }) {
+export function SiteMenu({ signedIn, isAdmin = false }: { signedIn: boolean; isAdmin?: boolean }) {
   const { m, locale } = useI18n();
   const t = m.homepage.menu;
   const { count, hydrated } = useCart();
@@ -71,8 +72,8 @@ export function SiteMenu({ signedIn }: { signedIn: boolean }) {
     {
       title: t.shop,
       items: [
-        { href: "/shop/books", label: t.books, icon: <BooksStackIcon width={20} height={20} />, color: "#FF8FC7" },
         { href: "/shop/courses", label: t.courses, icon: <PlayIcon width={20} height={20} />, color: "#B79CFF" },
+        { href: "/shop/books", label: t.books, icon: <BooksStackIcon width={20} height={20} />, color: "#FF8FC7" },
         { href: "/shop/cart", label: t.cart, icon: <ShoppingBagIcon width={20} height={20} />, color: "#FFC59A", badge: cartCount },
       ],
     },
@@ -99,6 +100,9 @@ export function SiteMenu({ signedIn }: { signedIn: boolean }) {
         { href: "/terms", label: t.terms, icon: <ShieldIcon width={20} height={20} />, color: "#FFC59A" },
       ],
     },
+    ...(isAdmin
+      ? [{ title: "", items: [{ href: "/admin", label: t.admin, icon: <SettingsIcon width={20} height={20} />, color: "#FFB72B" }] }]
+      : []),
   ];
 
   const close = () => setOpen(false);
@@ -192,7 +196,7 @@ export function SiteMenu({ signedIn }: { signedIn: boolean }) {
   return (
     <>
       {!onHome && (
-        <Link href="/" aria-label={t.home} className={`grid size-10 place-items-center rounded-full text-white ${styles.glassPill}`}>
+        <Link href="/" aria-label={t.home} className={`hidden size-10 place-items-center rounded-full text-white sm:grid ${styles.glassPill}`}>
           <HomeIcon width={19} height={19} />
         </Link>
       )}
