@@ -162,16 +162,16 @@ export function SiteMenu({ signedIn }: { signedIn: boolean }) {
 
         <div className="flex flex-col gap-3 border-t border-white/10 px-6 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           {signedIn ? (
-            <Link href="/account" onClick={close} className={`flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white ${styles.glassPill}`}>
+            <Link href="/my-account" onClick={close} className={`flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white ${styles.glassPill}`}>
               <AccountIcon width={18} height={18} />
               {t.account}
             </Link>
           ) : (
             <div className="grid grid-cols-2 gap-2 text-sm font-bold">
-              <Link href="/auth/login" onClick={close} className={`rounded-full px-5 py-2.5 text-center text-white ${styles.glassPill}`}>
+              <Link href="/login" onClick={close} className={`rounded-full px-5 py-2.5 text-center text-white ${styles.glassPill}`}>
                 {t.login}
               </Link>
-              <Link href="/auth/signup" onClick={close} className="rounded-full bg-white/90 px-5 py-2.5 text-center font-extrabold text-[#1C1336]">
+              <Link href="/signup" onClick={close} className="rounded-full bg-white/90 px-5 py-2.5 text-center font-extrabold text-[#1C1336]">
                 {t.signup}
               </Link>
             </div>

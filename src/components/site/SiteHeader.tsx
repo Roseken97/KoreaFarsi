@@ -22,14 +22,14 @@ export async function SiteHeader({ priorityLogo = false }: { priorityLogo?: bool
         </Link>
         <div className="flex items-center gap-2 text-sm font-bold">
           {user ? (
-            <Link href="/account" className={`rounded-full px-4 py-2 whitespace-nowrap text-white ${styles.glassPill}`}>
+            <Link href="/my-account" className={`rounded-full px-4 py-2 whitespace-nowrap text-white ${styles.glassPill}`}>
               {t.account}
             </Link>
           ) : (
             <div dir={locale === "fa" ? "rtl" : "ltr"} className={`flex items-center rounded-full px-1 whitespace-nowrap text-white ${styles.glassPill}`}>
-              <Link href="/auth/signup" className="rounded-full px-3 py-2 hover:bg-white/10">{t.signup}</Link>
+              <Link href="/signup" className="rounded-full px-3 py-2 hover:bg-white/10">{t.signup}</Link>
               <span aria-hidden="true" className="text-white/40">|</span>
-              <Link href="/auth/login" className="rounded-full px-3 py-2 hover:bg-white/10">{t.login}</Link>
+              <Link href="/login" className="rounded-full px-3 py-2 hover:bg-white/10">{t.login}</Link>
             </div>
           )}
           <SiteMenu signedIn={!!user} />
