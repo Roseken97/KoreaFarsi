@@ -37,6 +37,7 @@ export const en = {
       teacher: "Meet the teacher",
       support: "Support",
       contact: "Contact us",
+      faq: "FAQ",
       terms: "Terms of purchase",
       account: "My account",
       login: "Log in",
@@ -1134,6 +1135,49 @@ export const en = {
       metaDescription: "The KoreaFarsi app: courses, vocabulary review, AI practice and a study planner in one place.",
       kicker: "The app",
       open: "Open the app in your browser",
+    },
+    faq: {
+      metaTitle: "FAQ",
+      metaDescription: "Answers to common questions about KoreaFarsi: getting started, buying books and courses, shipping and returns, the app and your account.",
+      kicker: "Help",
+      title: "Frequently asked questions",
+      subtitle: "Answers to the questions we hear most. If yours isn't here, open a ticket from the contact page.",
+      groups: [
+        {
+          title: "Getting started",
+          items: [
+            { q: "What is KoreaFarsi and who is it for?", a: "KoreaFarsi is the first comprehensive platform dedicated to teaching Korean to Persian speakers: books, video courses, a vocabulary app and AI practice, all in Persian." },
+            { q: "I know no Korean at all. Where do I start?", a: "Start with the Hangul alphabet. Pick \"beginner\" as your level when you sign up and work through the beginner books and courses." },
+            { q: "How do I find my level?", a: "Use the \"Sejong level test\" button on the homepage to take the King Sejong Institute's placement test, then pick a course for your level on the courses page." },
+          ],
+        },
+        {
+          title: "Buying books and courses",
+          items: [
+            { q: "Is my website account the same as my app account?", a: "Yes. One account works on both the website and the app, and anything you buy is available in both." },
+            { q: "Where do I find a course or digital book after buying?", a: "Once payment is confirmed, it unlocks in your account's library in the KoreaFarsi app. If it takes long, open a ticket from the contact page." },
+            { q: "What do prices include?", a: "All prices are in Toman and include VAT. Shipping for printed books is shown before you pay." },
+          ],
+        },
+        {
+          title: "Shipping and returns",
+          items: [
+            { q: "When are printed books shipped?", a: "Within 3 working days after the order is confirmed." },
+            { q: "What if a book arrives damaged or wrong?", a: "You can return it within 7 days of delivery for a full refund. Details are on the terms of purchase page." },
+            { q: "Can digital products be returned?", a: "Digital products can't be returned once activated, unless a technical problem on our side makes them unusable." },
+          ],
+        },
+        {
+          title: "The app and your account",
+          items: [
+            { q: "How do I install the app?", a: "On Android, tap \"Install the app\" on the homepage. On iPhone, tap Share in Safari and choose \"Add to Home Screen\"." },
+            { q: "I forgot my password.", a: "Tap \"Forgot your password?\" on the login page and follow the email you receive." },
+            { q: "How do I reach support?", a: "From the contact page you can message us on Telegram, send an email or open a ticket; ticket answers show up in your account." },
+          ],
+        },
+      ],
+      stillTitle: "Didn't find your answer?",
+      stillCta: "Contact us",
     },
     level: {
       title: "What's your Korean level?",

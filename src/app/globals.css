@@ -136,6 +136,23 @@ body {
   }
 }
 
+/* Website page transition (SiteTransition): the new page rises and fades in. */
+.kf-page-in {
+  animation: kf-page-in 560ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+@keyframes kf-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kf-page-in {
+    animation: none;
+  }
+}
+
 @keyframes kf-blink {
   0%,
   100% {

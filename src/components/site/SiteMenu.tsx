@@ -6,6 +6,7 @@ import { createPortal } from "react-dom";
 import {
   AccountIcon,
   BooksStackIcon,
+  ChatBubbleIcon,
   CloseIcon,
   DictionaryIcon,
   HelpIcon,
@@ -87,6 +88,7 @@ export function SiteMenu({ signedIn }: { signedIn: boolean }) {
       title: t.support,
       items: [
         { href: "/contact", label: t.contact, icon: <SendIcon width={20} height={20} />, color: "#2FE6E0" },
+        { href: "/faq", label: t.faq, icon: <ChatBubbleIcon width={20} height={20} />, color: "#B79CFF" },
         { href: "/terms", label: t.terms, icon: <ShieldIcon width={20} height={20} />, color: "#FFC59A" },
       ],
     },
