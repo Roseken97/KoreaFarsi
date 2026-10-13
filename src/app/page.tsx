@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Outfit } from "next/font/google";
-import { LogoMark } from "@/components/brand/Logo";
 import { HeroVideo } from "@/components/homepage/HeroVideo";
 import { GlassCore } from "@/components/homepage/GlassCore";
 import { InstallCta } from "@/components/homepage/InstallCta";
@@ -14,6 +13,7 @@ import { CartProvider } from "@/lib/bookstore/cart";
 import { BlossomGuide } from "@/components/homepage/blossom/BlossomGuide";
 import styles from "@/components/homepage/homepage.module.css";
 import { CONTACT, CONTACT_LINKS } from "@/config/contact";
+import { TEACHER_PHOTO } from "@/config/media";
 import { SEJONG_LEVEL_TEST_URL } from "@/config/links";
 import { getMessages } from "@/lib/i18n/server";
 import { SITE_URL, localeAlternates } from "@/lib/seo";
@@ -41,7 +41,6 @@ const STATS = [
 ] as const;
 
 /** Rose's portrait for the about section; until it is added the frame shows the brand mark. */
-const TEACHER_PHOTO: string | null = null;
 
 const SOCIALS = (["instagram", "telegram", "youtube"] as const).filter((k) => CONTACT[k]);
 
@@ -169,13 +168,7 @@ export default async function HomePage() {
         <div className="relative z-10 mx-auto grid max-w-[1200px] grid-cols-1 items-center gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
           <div id="teacher" data-guide="photo" data-guide-at="start-top" className={`relative mx-auto w-full max-w-[380px] pb-10 lg:mx-0 ${styles.spinCard}`}>
             <div className="relative aspect-[4/5] overflow-hidden rounded-[36px] border border-white/15 shadow-[0_40px_90px_rgba(0,0,0,0.45)]">
-              {TEACHER_PHOTO ? (
-                <Image src={TEACHER_PHOTO} alt={t.about.teacherName} fill sizes="380px" className="object-cover" />
-              ) : (
-                <div className="grid size-full place-items-center" style={{ background: "radial-gradient(circle at 30% 25%, #FFE3F0 0%, #FF8FC7 40%, #8B5CF6 100%)" }}>
-                  <LogoMark size={150} />
-                </div>
-              )}
+              <Image src={TEACHER_PHOTO} alt={t.about.teacherName} fill sizes="380px" className="object-cover" />
               <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#140E26]/60 to-transparent" />
             </div>
             <div className="absolute -end-4 bottom-0 z-10 flex items-center gap-3 rounded-[22px] border border-white/25 bg-[#241A45]/70 px-5 py-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:-end-10">
