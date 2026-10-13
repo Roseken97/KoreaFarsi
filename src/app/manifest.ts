@@ -16,7 +16,7 @@ export default function manifest(): MetadataRoute.Manifest {
     // Matches the top of the splash film's gradient, so the phone's own launch screen hands off without a flash.
     background_color: "#fff9f2",
     theme_color: "#ffffff",
-    lang: "en",
+    lang: "fa",
     dir: "auto",
     categories: ["education"],
     icons: [

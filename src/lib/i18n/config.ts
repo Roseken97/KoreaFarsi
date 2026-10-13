@@ -4,8 +4,8 @@ import { fa } from "./messages/fa";
 export const LOCALES = ["en", "fa"] as const;
 export type Locale = (typeof LOCALES)[number];
 
-/** Confirmed by Rose: English is the default UI language; Persian is selectable. */
-export const DEFAULT_LOCALE: Locale = "en";
+/** Rose chose Persian as the default UI language (2026-10-13, for Persian SEO); English is selectable. */
+export const DEFAULT_LOCALE: Locale = "fa";
 export const LOCALE_COOKIE = "kf_locale";
 
 export const MESSAGES: Record<Locale, Messages> = { en, fa };
