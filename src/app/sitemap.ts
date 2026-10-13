@@ -18,11 +18,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     entry("/", 1, "weekly"),
     entry("/courses", 0.9, "weekly"),
-    entry("/bookstore", 0.9, "weekly"),
+    entry("/shop", 0.9, "weekly"),
+    entry("/bookstore", 0.6, "weekly"),
     entry("/korea-life", 0.7, "weekly"),
     entry("/terms", 0.3, "monthly"),
     ...courses.map((c) => entry(`/courses/${c.slug}`, 0.8, "monthly")),
-    ...products.map((p) => entry(`/bookstore/${p.slug}`, 0.8, "monthly")),
+    ...products.map((p) => entry(`/shop/${p.slug}`, 0.8, "monthly")),
     ...posts.map((p) => entry(`/korea-life/${p.slug}`, 0.6, "monthly")),
   ];
 }
