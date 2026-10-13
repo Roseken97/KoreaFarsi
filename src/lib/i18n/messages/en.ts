@@ -18,8 +18,8 @@ export const en = {
     sound: "Turn sound on",
   },
   homepage: {
-    metaTitle: "KoreaFarsi — The first Korean learning platform made for Persian speakers",
-    metaDescription: "KoreaFarsi is the first Korean learning platform made for Persian speakers: books, video courses, a vocabulary app and AI speaking practice, from Hangul to advanced Korean.",
+    metaTitle: "KoreaFarsi | Learn Korean in Persian, from Hangul to conversation",
+    metaDescription: "Learn Korean from the Hangul alphabet to conversation with lessons in Persian: KoreaFarsi books, video courses, a vocabulary review app and AI speaking practice.",
     menu: {
       open: "Open menu",
       close: "Close menu",
@@ -1031,6 +1031,7 @@ export const en = {
   },
   terms: {
     metaTitle: "Terms of purchase",
+    metaDescription: "KoreaFarsi purchase terms: accounts, prices and payment, digital products, shipping printed books, cancellations and refunds, privacy and support.",
     title: "Terms of purchase",
     intro: "By buying from KoreaFarsi (koreafarsi.ir and its app) you accept these terms. Please read them before you buy.",
     updated: "Last updated: October 2026",
@@ -1090,7 +1091,7 @@ export const en = {
     },
     about: {
       metaTitle: "About KoreaFarsi",
-      metaDescription: "KoreaFarsi is the first comprehensive platform dedicated to teaching Korean to Persian speakers: books, courses, an app and an AI assistant.",
+      metaDescription: "KoreaFarsi is a platform dedicated to teaching Korean to Persian speakers: books, courses, an app and an AI assistant, built around actually using the language.",
       ctaTitle: "Ready to start?",
       ctaShop: "See books and courses",
     },

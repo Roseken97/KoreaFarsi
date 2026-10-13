@@ -6,7 +6,7 @@ import { ChevronIcon } from "@/components/icons";
 import { SitePage } from "@/components/site/SitePage";
 import { getKoreaLifePost } from "@/lib/korealife/queries";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { breadcrumbJsonLd, jsonLdString, pageMetadata, snippet } from "@/lib/seo";
 
 export async function generateMetadata(props: PageProps<"/magazine/[slug]">): Promise<Metadata> {
   const [{ slug }, { locale }] = await Promise.all([props.params, getMessages()]);
@@ -14,12 +14,7 @@ export async function generateMetadata(props: PageProps<"/magazine/[slug]">): Pr
   if (!post) return { title: "Korea Life" };
   const title = locale === "en" ? post.title_en || post.title : post.title;
   const description = (locale === "en" ? post.excerpt_en || post.excerpt : post.excerpt) ?? undefined;
-  return {
-    title,
-    description,
-    alternates: localeAlternates(`/magazine/${slug}`, locale),
-    openGraph: { type: "article", title, description, ...(post.cover_image_url ? { images: [post.cover_image_url] } : {}) },
-  };
+  return pageMetadata({ locale, path: `/magazine/${slug}`, title, description: snippet(description), image: post.cover_image_url, imageAlt: title, type: "article" });
 }
 
 /** One magazine article on the website. */
@@ -30,9 +25,18 @@ export default async function MagazinePostPage(props: PageProps<"/magazine/[slug
 
   const title = locale === "en" ? post.title_en || post.title : post.title;
   const body = locale === "en" ? post.body_en || post.body : post.body;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    ...breadcrumbJsonLd(locale, [
+      [m.homepage.menu.home, "/"],
+      [m.homepage.menu.koreaLife, "/magazine"],
+      [title, `/magazine/${slug}`],
+    ]),
+  };
 
   return (
     <SitePage>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString(jsonLd) }} />
       <article className="mx-auto max-w-[820px] px-5 pt-12 pb-24 sm:px-6">
         <Link href="/magazine" className="inline-flex items-center gap-1.5 text-sm font-bold text-[#6FF3EE] hover:underline">
           <ChevronIcon width={16} height={16} className="rotate-180" />
@@ -44,7 +48,7 @@ export default async function MagazinePostPage(props: PageProps<"/magazine/[slug
         </h1>
         {post.cover_image_url && (
           <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-[28px] border border-white/10">
-            <Image src={post.cover_image_url} alt="" fill priority sizes="(min-width: 860px) 820px, 100vw" className="object-cover" />
+            <Image src={post.cover_image_url} alt={title} fill priority sizes="(min-width: 860px) 820px, 100vw" className="object-cover" />
           </div>
         )}
         {body && (

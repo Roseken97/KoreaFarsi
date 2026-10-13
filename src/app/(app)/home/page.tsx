@@ -28,10 +28,11 @@ import { getUnreadNotificationCount } from "@/lib/notifications/queries";
 import { getTodayTasks } from "@/lib/planner/queries";
 import { getProfile } from "@/lib/profile";
 import { MESH, MESH_SHADOW } from "@/lib/ui/mesh";
+import { NOINDEX } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m } = await getMessages();
-  return { title: m.home.metaTitle };
+  return { title: m.home.metaTitle, robots: NOINDEX };
 }
 
 type CardKey = keyof Messages["home"]["cards"];

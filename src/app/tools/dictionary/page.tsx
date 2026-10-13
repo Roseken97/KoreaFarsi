@@ -3,11 +3,11 @@ import { SiteDictionary } from "@/components/site/SiteDictionary";
 import { SiteIntro } from "@/components/site/SiteIntro";
 import { SitePage } from "@/components/site/SitePage";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.site.dictionary.title, description: m.site.dictionary.subtitle, alternates: localeAlternates("/tools/dictionary", locale) };
+  return pageMetadata({ locale, path: "/tools/dictionary", title: m.site.dictionary.title, description: m.site.dictionary.subtitle });
 }
 
 /** Website dictionary page: one big search box that opens Naver's dictionary. */

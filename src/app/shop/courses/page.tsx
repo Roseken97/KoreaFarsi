@@ -7,11 +7,12 @@ import { ShopCard } from "@/components/shop/ShopCard";
 import { getProducts } from "@/lib/bookstore/catalog";
 import { levelBucket, type LevelBucket } from "@/lib/courses/types";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { NOINDEX, pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { m, locale } = await getMessages();
-  return { title: m.site.courses.metaTitle, description: m.site.courses.metaDescription, alternates: localeAlternates("/shop/courses", locale) };
+  const [{ m, locale }, products] = await Promise.all([getMessages(), getProducts()]);
+  // An empty listing is a thin page: keep it out of the index until it has items.
+  return pageMetadata({ locale, path: "/shop/courses", title: m.site.courses.metaTitle, description: m.site.courses.metaDescription, robots: products.some((p) => !p.is_sample && p.category === "course") ? undefined : NOINDEX });
 }
 
 const LEVELS: LevelBucket[] = ["beginner", "intermediate", "advanced"];

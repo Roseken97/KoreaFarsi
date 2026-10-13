@@ -3,11 +3,12 @@ import { BookstoreBrowser } from "@/components/bookstore/BookstoreBrowser";
 import { channelHref, configuredChannels } from "@/components/ContactLinks";
 import { getProducts } from "@/lib/bookstore/catalog";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.bookstore.metaTitle, alternates: localeAlternates("/bookstore", locale) };
+  // Same catalogue as the website shop, inside the app shell — consolidate on /shop.
+  return pageMetadata({ locale, path: "/shop", title: m.bookstore.metaTitle, description: m.shop.metaDescription });
 }
 
 /** Bookstore (sketch 13). Browse + cart; purchase goes through a contact request (no payment in Phase 1). */

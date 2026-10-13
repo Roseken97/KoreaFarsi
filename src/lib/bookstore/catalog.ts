@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import samples from "./sample-products.json";
@@ -13,7 +14,8 @@ const SAMPLE_CATALOG: Product[] = (samples as Omit<Product, "id" | "currency" | 
   (p) => ({ ...p, id: p.slug, currency: "IRT", cover_image_url: null, is_sample: true }) as Product,
 );
 
-export async function getProducts(): Promise<Product[]> {
+/** Memoized per request: a page and its generateMetadata both read the catalogue. */
+export const getProducts = cache(async function getProducts(): Promise<Product[]> {
   if (!isSupabaseConfigured) return SAMPLE_CATALOG;
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -26,7 +28,7 @@ export async function getProducts(): Promise<Product[]> {
     return [];
   }
   return (data ?? []) as Product[];
-}
+});
 
 export async function getProductBySlug(slug: string) {
   const products = await getProducts();

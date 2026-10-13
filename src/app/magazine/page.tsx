@@ -7,11 +7,12 @@ import { SitePage } from "@/components/site/SitePage";
 import { getKoreaLifePosts } from "@/lib/korealife/queries";
 import type { KoreaLifeCategory } from "@/lib/korealife/types";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { NOINDEX, pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { m, locale } = await getMessages();
-  return { title: m.site.koreaLife.metaTitle, description: m.site.koreaLife.subtitle, alternates: localeAlternates("/magazine", locale) };
+  const [{ m, locale }, posts] = await Promise.all([getMessages(), getKoreaLifePosts()]);
+  // An empty listing is a thin page: keep it out of the index until it has items.
+  return pageMetadata({ locale, path: "/magazine", title: m.site.koreaLife.metaTitle, description: m.site.koreaLife.subtitle, robots: posts.length > 0 ? undefined : NOINDEX });
 }
 
 const CATEGORIES: KoreaLifeCategory[] = ["culture", "travel", "food", "life"];

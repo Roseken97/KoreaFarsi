@@ -10,19 +10,14 @@ import { levelLabel } from "@/lib/bookstore/format";
 import { descriptionOf, isPurchasable, lowestPrice, titles } from "@/lib/bookstore/types";
 import { getCourses } from "@/lib/courses/queries";
 import { getMessages } from "@/lib/i18n/server";
-import { SITE_URL, langUrl, localeAlternates } from "@/lib/seo";
+import { langUrl, NOINDEX, pageMetadata, SITE_URL, snippet } from "@/lib/seo";
 
 export async function generateMetadata(props: PageProps<"/shop/[slug]">): Promise<Metadata> {
   const [{ slug }, { locale }] = await Promise.all([props.params, getMessages()]);
   const product = await getProductBySlug(slug);
   if (!product) return {};
-  const description = descriptionOf(product, locale).slice(0, 160);
-  return {
-    title: titles(product, locale).primary,
-    description,
-    alternates: localeAlternates(`/shop/${slug}`, locale),
-    openGraph: { title: titles(product, locale).primary, description, ...(product.cover_image_url ? { images: [product.cover_image_url] } : {}) },
-  };
+  const title = titles(product, locale).primary;
+  return pageMetadata({ locale, path: `/shop/${slug}`, title, description: snippet(descriptionOf(product, locale)), image: product.cover_image_url, imageAlt: title, robots: product.is_sample ? NOINDEX : undefined });
 }
 
 /** Website product page: same product row as the app's bookstore, shown in the site's look. */

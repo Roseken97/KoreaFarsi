@@ -4,11 +4,11 @@ import { SiteCta } from "@/components/site/SiteCta";
 import { SiteIntro } from "@/components/site/SiteIntro";
 import { SitePage } from "@/components/site/SitePage";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.site.about.metaTitle, description: m.site.about.metaDescription, alternates: localeAlternates("/about", locale) };
+  return pageMetadata({ locale, path: "/about", title: m.site.about.metaTitle, description: m.site.about.metaDescription });
 }
 
 const FEATURES = [

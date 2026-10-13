@@ -6,11 +6,12 @@ import { ShopCategories, type ShopCategory } from "@/components/shop/ShopCategor
 import { getProducts } from "@/lib/bookstore/catalog";
 import type { Category } from "@/lib/bookstore/types";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { NOINDEX, pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { m, locale } = await getMessages();
-  return { title: m.shop.metaTitle, description: m.shop.metaDescription, alternates: localeAlternates("/shop", locale) };
+  const [{ m, locale }, products] = await Promise.all([getMessages(), getProducts()]);
+  // An empty listing is a thin page: keep it out of the index until it has items.
+  return pageMetadata({ locale, path: "/shop", title: m.shop.metaTitle, description: m.shop.metaDescription, robots: products.some((p) => !p.is_sample) ? undefined : NOINDEX });
 }
 
 const ORDER: Category[] = ["course", "book", "bundle", "planner", "merch"];

@@ -4,11 +4,11 @@ import styles from "@/components/homepage/homepage.module.css";
 import { SitePage } from "@/components/site/SitePage";
 import { CONTACT, CONTACT_LINKS } from "@/config/contact";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.terms.metaTitle, alternates: localeAlternates("/terms", locale) };
+  return pageMetadata({ locale, path: "/terms", title: m.terms.metaTitle, description: m.terms.metaDescription });
 }
 
 const telegram = CONTACT.telegram ? CONTACT_LINKS.telegram(CONTACT.telegram) : null;
