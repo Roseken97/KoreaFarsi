@@ -1,9 +1,11 @@
 import "server-only";
+import { cache } from "react";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import type { KoreaLifePost } from "./types";
 
-export async function getKoreaLifePosts(): Promise<KoreaLifePost[]> {
+/** Memoized per request: a page and its generateMetadata both read the list. */
+export const getKoreaLifePosts = cache(async function getKoreaLifePosts(): Promise<KoreaLifePost[]> {
   if (!isSupabaseConfigured) return [];
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -17,7 +19,7 @@ export async function getKoreaLifePosts(): Promise<KoreaLifePost[]> {
     return [];
   }
   return (data ?? []) as KoreaLifePost[];
-}
+});
 
 export async function getKoreaLifePost(slug: string): Promise<KoreaLifePost | null> {
   if (!isSupabaseConfigured) return null;

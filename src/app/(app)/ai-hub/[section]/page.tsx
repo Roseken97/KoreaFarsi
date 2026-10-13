@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { DictionaryIcon, HeadphonesIcon, MicIcon } from "@/components/icons";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { getMessages } from "@/lib/i18n/server";
+import { NOINDEX } from "@/lib/seo";
 
 const SECTIONS = ["speak", "listen", "shadow", "grammar"] as const;
 type Section = (typeof SECTIONS)[number];
@@ -21,7 +22,7 @@ const SECTION_ICON: Record<Section, typeof MicIcon> = {
 export async function generateMetadata({ params }: { params: Promise<{ section: string }> }): Promise<Metadata> {
   const { section } = await params;
   const { m } = await getMessages();
-  return { title: isSection(section) ? m.aiPractice.sections[section] : "AI Practice" };
+  return { title: isSection(section) ? m.aiPractice.sections[section] : "AI Practice", robots: NOINDEX };
 }
 
 /** Not-yet-built AI Hub sections (Speak/Listen/Shadow/Grammar) — same coming-soon copy as before, now its own page instead of a notice under the hub. */

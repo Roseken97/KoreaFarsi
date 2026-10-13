@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { getMessages } from "@/lib/i18n/server";
 import { AiPracticeView } from "./AiPracticeView";
+import { NOINDEX } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m } = await getMessages();
-  return { title: m.aiPractice.metaTitle };
+  return { title: m.aiPractice.metaTitle, robots: NOINDEX };
 }
 
 /** AI Hub landing — dark immersive experience with premium carousel. Each section's real content lives at /ai-hub/<key>. */

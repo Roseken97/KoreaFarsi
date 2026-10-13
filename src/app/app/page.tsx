@@ -5,11 +5,11 @@ import { InstallCta } from "@/components/homepage/InstallCta";
 import { SiteIntro } from "@/components/site/SiteIntro";
 import { SitePage } from "@/components/site/SitePage";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.site.app.metaTitle, description: m.site.app.metaDescription, alternates: localeAlternates("/app", locale) };
+  return pageMetadata({ locale, path: "/app", title: m.site.app.metaTitle, description: m.site.app.metaDescription });
 }
 
 const FEATURES = ["courses", "vocab", "ai", "speaking", "progress", "motivation"] as const;

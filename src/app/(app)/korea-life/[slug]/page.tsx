@@ -5,7 +5,7 @@ import { LanternIcon } from "@/components/icons";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { getKoreaLifePost } from "@/lib/korealife/queries";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata, snippet } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const [{ slug }, { locale }] = await Promise.all([params, getMessages()]);
@@ -13,12 +13,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) return { title: "Korea Life" };
   const title = locale === "en" ? post.title_en || post.title : post.title;
   const description = (locale === "en" ? post.excerpt_en || post.excerpt : post.excerpt) ?? undefined;
-  return {
-    title,
-    description,
-    alternates: localeAlternates(`/korea-life/${slug}`, locale),
-    openGraph: { type: "article", title, description, ...(post.cover_image_url ? { images: [post.cover_image_url] } : {}) },
-  };
+  // The app-shell copy of a magazine post: canonical is the website URL.
+  return pageMetadata({ locale, path: `/magazine/${slug}`, title, description: snippet(description), image: post.cover_image_url, imageAlt: title, type: "article" });
 }
 
 export default async function KoreaLifePostPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -3,11 +3,11 @@ import { SiteCta } from "@/components/site/SiteCta";
 import { SiteIntro } from "@/components/site/SiteIntro";
 import { SitePage } from "@/components/site/SitePage";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.site.faq.metaTitle, description: m.site.faq.metaDescription, alternates: localeAlternates("/faq", locale) };
+  return pageMetadata({ locale, path: "/faq", title: m.site.faq.metaTitle, description: m.site.faq.metaDescription });
 }
 
 const GROUP_COLORS = ["#2FE6E0", "#FF8FC7", "#FFC59A", "#B79CFF"];

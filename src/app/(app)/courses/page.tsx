@@ -5,12 +5,13 @@ import { Hero } from "@/components/shell/Hero";
 import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { getCourseLessonCounts, getCourses } from "@/lib/courses/queries";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { localeAlternates, NOINDEX } from "@/lib/seo";
 import { CoursesBrowser } from "./CoursesBrowser";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.courses.metaTitle, alternates: localeAlternates("/courses", locale) };
+  // The in-app "My courses" view; the public, indexable catalogue is /shop/courses.
+  return { title: m.courses.metaTitle, alternates: localeAlternates("/courses", locale), robots: NOINDEX };
 }
 
 /** Course list (sketch 06). */

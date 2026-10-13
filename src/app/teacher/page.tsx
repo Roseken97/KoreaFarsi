@@ -4,11 +4,11 @@ import { SiteCta } from "@/components/site/SiteCta";
 import { SitePage } from "@/components/site/SitePage";
 import { TEACHER_PHOTO } from "@/config/media";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.site.teacher.metaTitle, description: m.site.teacher.metaDescription, alternates: localeAlternates("/teacher", locale) };
+  return pageMetadata({ locale, path: "/teacher", title: m.site.teacher.metaTitle, description: m.site.teacher.metaDescription, image: "/landing/teacher.webp", imageAlt: m.site.teacher.metaTitle });
 }
 
 const STATS = [

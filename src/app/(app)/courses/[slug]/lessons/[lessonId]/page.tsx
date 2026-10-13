@@ -13,11 +13,12 @@ import { getMessages } from "@/lib/i18n/server";
 import { getCurrentUser } from "@/lib/supabase/server";
 import { BookmarkButton } from "./BookmarkButton";
 import { LessonMaterials } from "./LessonMaterials";
+import { NOINDEX } from "@/lib/seo";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string; lessonId: string }> }): Promise<Metadata> {
   const { slug, lessonId } = await params;
   const result = await getLessonWithCourse(slug, lessonId);
-  return { title: result?.lesson.title ?? "Lesson" };
+  return { title: result?.lesson.title ?? "Lesson", robots: NOINDEX };
 }
 
 /** How many steps the Start page's learning path will have — main content + whichever of script/vocabulary/notes exist. */

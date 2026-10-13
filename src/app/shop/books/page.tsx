@@ -5,11 +5,12 @@ import { SiteIntro } from "@/components/site/SiteIntro";
 import { ShopCard } from "@/components/shop/ShopCard";
 import { getProducts } from "@/lib/bookstore/catalog";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { NOINDEX, pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { m, locale } = await getMessages();
-  return { title: m.site.books.metaTitle, description: m.site.books.metaDescription, alternates: localeAlternates("/shop/books", locale) };
+  const [{ m, locale }, products] = await Promise.all([getMessages(), getProducts()]);
+  // An empty listing is a thin page: keep it out of the index until it has items.
+  return pageMetadata({ locale, path: "/shop/books", title: m.site.books.metaTitle, description: m.site.books.metaDescription, robots: products.some((p) => !p.is_sample && (p.category === "book" || p.category === "bundle")) ? undefined : NOINDEX });
 }
 
 /** Website page for the books: the shop's book (and bundle) products on their own page. */

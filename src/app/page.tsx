@@ -16,13 +16,13 @@ import { CONTACT, CONTACT_LINKS } from "@/config/contact";
 import { TEACHER_PHOTO } from "@/config/media";
 import { SEJONG_LEVEL_TEST_URL } from "@/config/links";
 import { getMessages } from "@/lib/i18n/server";
-import { SITE_URL, localeAlternates } from "@/lib/seo";
+import { BRAND, pageMetadata, SITE_URL } from "@/lib/seo";
 
 const outfit = Outfit({ subsets: ["latin"], weight: ["200", "300", "500"] });
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: { absolute: m.homepage.metaTitle }, alternates: localeAlternates("/", locale) };
+  return pageMetadata({ locale, path: "/", title: m.homepage.metaTitle, description: m.homepage.metaDescription, absoluteTitle: true });
 }
 
 const FEATURES = [
@@ -94,18 +94,18 @@ export default async function HomePage() {
       {
         "@type": "EducationalOrganization",
         "@id": `${SITE_URL}/#org`,
-        name: "KoreaFarsi",
-        alternateName: ["کوریافارسی", "کوریا فارسی", "Korea Farsi"],
+        name: BRAND.name,
+        alternateName: [...BRAND.alternateNames],
         url: SITE_URL,
-        logo: `${SITE_URL}/brand/logo-512.png`,
+        logo: `${SITE_URL}${BRAND.logoPath}`,
         description: m.homepage.metaDescription,
         sameAs: (["instagram", "youtube", "telegram"] as const).filter((k) => CONTACT[k]).map((k) => CONTACT_LINKS[k](CONTACT[k])),
       },
       {
         "@type": "WebSite",
         "@id": `${SITE_URL}/#website`,
-        name: "KoreaFarsi",
-        alternateName: ["کوریافارسی", "کوریا فارسی", "Korea Farsi"],
+        name: BRAND.name,
+        alternateName: [...BRAND.alternateNames],
         url: SITE_URL,
         inLanguage: ["fa", "en"],
         publisher: { "@id": `${SITE_URL}/#org` },
@@ -140,12 +140,14 @@ export default async function HomePage() {
 
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-6 pt-24 pb-16">
           <div className="pointer-events-auto flex max-w-[1000px] flex-col items-center gap-5 text-center">
-            <h1 aria-label="KoreaFarsi" className="m-0 text-[clamp(54px,11vw,168px)] leading-[0.95] [text-shadow:0_8px_40px_rgba(20,14,38,0.5)]">
-              {brand}
+            {/* One H1 holding both the brand and the tagline, so the page's main heading names its topic
+                (Korean lessons in Persian), not only the logo. Same look as the former h1 + p pair. */}
+            <h1 className="m-0 flex flex-col items-center gap-5">
+              <span className="block text-[clamp(54px,11vw,168px)] leading-[0.95] [text-shadow:0_8px_40px_rgba(20,14,38,0.5)]">{brand}</span>
+              <span className="block max-w-[760px] text-[clamp(19px,2.2vw,28px)] leading-[1.7] font-normal text-white [text-shadow:0_2px_20px_rgba(20,14,38,0.7)]">
+                {t.hero.taglineA} <strong className="font-extrabold whitespace-nowrap">{t.hero.taglineB}</strong>
+              </span>
             </h1>
-            <p className="m-0 max-w-[760px] text-[clamp(19px,2.2vw,28px)] leading-[1.7] text-white [text-shadow:0_2px_20px_rgba(20,14,38,0.7)]">
-              {t.hero.taglineA} <strong className="font-extrabold whitespace-nowrap">{t.hero.taglineB}</strong>
-            </p>
             <div className="flex flex-wrap items-center justify-center gap-3.5 pt-2.5">
               {installCta}
               {placementCta}

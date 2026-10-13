@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { getMessages } from "@/lib/i18n/server";
 import { DictionarySearch } from "./DictionarySearch";
+import { NOINDEX } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m } = await getMessages();
-  return { title: m.dictionaryPage.metaTitle };
+  return { title: m.dictionaryPage.metaTitle, robots: NOINDEX };
 }
 
 /** Dictionary → search box that hands the word to Naver's Korean<->English dictionary in a new tab; no scraping/embedding (against Naver's terms and fragile). */

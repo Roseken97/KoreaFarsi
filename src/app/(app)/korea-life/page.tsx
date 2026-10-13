@@ -6,12 +6,13 @@ import { SubPageHeader } from "@/components/shell/SubPageHeader";
 import { getCardImages } from "@/lib/card-images/queries";
 import { getKoreaLifePosts } from "@/lib/korealife/queries";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 import { KoreaLifeBrowser } from "./KoreaLifeBrowser";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.koreaLife.metaTitle, description: m.koreaLife.subtitle, alternates: localeAlternates("/korea-life", locale) };
+  // Same posts as the website magazine, inside the app shell — consolidate on /magazine.
+  return pageMetadata({ locale, path: "/magazine", title: m.koreaLife.metaTitle, description: m.koreaLife.subtitle });
 }
 
 /** Culture/travel/food articles, following the same list pattern as Courses. */

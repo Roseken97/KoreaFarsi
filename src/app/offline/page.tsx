@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Offline" };
+export const metadata: Metadata = { title: "Offline", robots: { index: false, follow: false } };
 // Static and bilingual: served by the service worker when there's no connection,
 // so it can't depend on the locale cookie.
 export const dynamic = "force-static";

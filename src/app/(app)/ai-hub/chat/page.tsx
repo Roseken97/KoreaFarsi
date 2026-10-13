@@ -6,10 +6,11 @@ import { getMessages } from "@/lib/i18n/server";
 import { formatNumber } from "@/lib/i18n/config";
 import { ChatBox } from "@/components/chat/ChatBox";
 import type { ReactNode } from "react";
+import { NOINDEX } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m } = await getMessages();
-  return { title: m.aiPractice.sections.chat };
+  return { title: m.aiPractice.sections.chat, robots: NOINDEX };
 }
 
 /** The one real AI Hub section — the working chat assistant, plus the real progress numbers. */

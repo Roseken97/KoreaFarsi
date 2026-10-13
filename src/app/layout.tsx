@@ -5,7 +5,7 @@ import { UiSounds } from "@/components/shell/UiSounds";
 import { I18nProvider } from "@/lib/i18n/client";
 import { dirOf } from "@/lib/i18n/config";
 import { getLocale, getMessages } from "@/lib/i18n/server";
-import { SITE_URL } from "@/lib/seo";
+import { BRAND, IS_INDEXABLE_DEPLOYMENT, SITE_URL, siteNameOf } from "@/lib/seo";
 import { getCopyOverrides } from "@/lib/site-copy/queries";
 import "./globals.css";
 
@@ -23,16 +23,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = m.homepage.metaDescription;
   return {
     metadataBase: new URL(SITE_URL),
-    title: locale === "fa" ? { default: "کوریافارسی", template: "%s | کوریافارسی" } : { default: "KoreaFarsi", template: "%s | KoreaFarsi" },
+    title: { default: siteNameOf(locale), template: `%s | ${siteNameOf(locale)}` },
     description,
-    applicationName: locale === "fa" ? "کوریافارسی" : "KoreaFarsi",
+    applicationName: siteNameOf(locale),
     keywords:
       locale === "fa"
         ? ["آموزش زبان کره‌ای", "یادگیری زبان کره‌ای", "کتاب آموزش کره‌ای", "الفبای کره‌ای", "هانگول", "دوره زبان کره‌ای", "کوریافارسی", "کوریا فارسی", "آموزش کره‌ای کوریافارسی", "KoreaFarsi"]
         : ["learn Korean", "Korean for Persian speakers", "Korean course", "Hangul", "Korean books", "KoreaFarsi"],
     openGraph: {
       type: "website",
-      siteName: locale === "fa" ? "کوریافارسی" : "KoreaFarsi",
+      siteName: siteNameOf(locale),
       title: m.homepage.metaTitle,
       description,
       locale: locale === "fa" ? "fa_IR" : "en_US",
@@ -47,8 +47,10 @@ export async function generateMetadata(): Promise<Metadata> {
       apple: "/icons/apple-touch-icon.png",
     },
     // iOS: open full-screen from the home screen, no Safari address bar.
-    appleWebApp: { capable: true, title: "KoreaFarsi", statusBarStyle: "default" },
+    appleWebApp: { capable: true, title: BRAND.name, statusBarStyle: "default" },
     formatDetection: { telephone: false },
+    // Previews/staging: keep the duplicate copy out of Google. Pages that set their own `robots` are already noindex.
+    ...(IS_INDEXABLE_DEPLOYMENT ? {} : { robots: { index: false, follow: false } }),
     // Google Search Console ownership check (the token from "HTML tag" verification); env overrides the built-in one.
     verification: { google: process.env.GOOGLE_SITE_VERIFICATION || GOOGLE_SITE_VERIFICATION },
     // eNAMAD domain-ownership check: <meta name="enamad" content="…" />.

@@ -7,12 +7,12 @@ import { SitePage } from "@/components/site/SitePage";
 import { SiteTicketForm } from "@/components/site/SiteTicketForm";
 import { CONTACT, CONTACT_LINKS } from "@/config/contact";
 import { getMessages } from "@/lib/i18n/server";
-import { localeAlternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 import { getCurrentUser } from "@/lib/supabase/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { m, locale } = await getMessages();
-  return { title: m.site.contact.metaTitle, description: m.site.contact.metaDescription, alternates: localeAlternates("/contact", locale) };
+  return pageMetadata({ locale, path: "/contact", title: m.site.contact.metaTitle, description: m.site.contact.metaDescription });
 }
 
 /** Contact us: Telegram and email cards, plus a support ticket form for signed-in visitors. */
