@@ -24,6 +24,7 @@ export const en = {
       open: "Open menu",
       close: "Close menu",
       title: "Menu",
+      home: "Home",
       shop: "Shop",
       books: "Books",
       courses: "Courses",

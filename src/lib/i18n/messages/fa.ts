@@ -21,6 +21,7 @@ export const fa: Messages = {
       open: "باز کردن منو",
       close: "بستن منو",
       title: "منو",
+      home: "صفحه اصلی",
       shop: "فروشگاه",
       books: "کتاب‌ها",
       courses: "دوره‌ها",
