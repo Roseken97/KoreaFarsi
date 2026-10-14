@@ -39,8 +39,11 @@ export async function generateMetadata(): Promise<Metadata> {
       alternateLocale: locale === "fa" ? "en_US" : "fa_IR",
     },
     twitter: { card: "summary_large_image", title: m.homepage.metaTitle, description },
+    // The logo next to the site link in Google results comes from these home-page <link rel="icon"> tags.
+    // Keep the URLs stable: Google re-fetches them rarely. /favicon.ico is also the classic fallback path.
     icons: {
       icon: [
+        { url: "/favicon.ico", sizes: "16x16 32x32 48x48", type: "image/x-icon" },
         { url: "/icons/favicon-48.png", sizes: "48x48", type: "image/png" },
         { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
       ],
