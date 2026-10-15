@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { SakuraBranch } from "@/components/brand/SakuraBranch";
 import { SeoulSkyline } from "@/components/brand/SeoulSkyline";
 import { ChevronIcon, LayersIcon, LevelIcon, PlayIcon, TargetIcon, WatchIcon } from "@/components/icons";
+import { SaveOfflineButton } from "@/components/offline/SaveOfflineButton";
 import { ButtonLink } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
 import { getLessonWithCourse, isLessonBookmarked } from "@/lib/courses/queries";
@@ -144,6 +145,13 @@ export default async function LessonOverviewPage({ params }: { params: Promise<{
         ) : (
           <p className="rounded-card border border-dashed border-line p-4 text-center text-sm text-ink-soft">{to.materialsEmpty}</p>
         )}
+      </div>
+
+      <div className="mt-6">
+        <SaveOfflineButton
+          id={`lesson:${lessonId}`}
+          pages={[`/courses/${slug}`, `/courses/${slug}/lessons/${lessonId}`, `/courses/${slug}/lessons/${lessonId}/start`]}
+        />
       </div>
 
       <Link

@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LogOutIcon } from "@/components/icons";
+import { clearOfflineQueue, flushOfflineQueue } from "@/lib/offline/progress-queue";
+import { clearOfflineData } from "@/lib/offline/sw";
 import { createClient } from "@/lib/supabase/client";
 
 /** "Log out" on the website's account page; returns to the homepage. */
@@ -11,6 +13,10 @@ export function SiteSignOut({ label }: { label: string }) {
   const [loading, setLoading] = useState(false);
   async function signOut() {
     setLoading(true);
+    // Send any offline progress first, then wipe this learner's cached pages and saved lessons.
+    await flushOfflineQueue();
+    clearOfflineQueue();
+    await clearOfflineData();
     await createClient().auth.signOut();
     router.replace("/");
     router.refresh();

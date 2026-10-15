@@ -1251,6 +1251,18 @@ export const en = {
     en: "English",
     fa: "فارسی",
   },
+  offline: {
+    banner: "Can't reach KoreaFarsi right now. Saved lessons still work, and your progress will sync when you're back.",
+    bannerLimits: "The AI assistant and the shop need a connection.",
+    save: "Save for offline",
+    saving: "Saving…",
+    saved: "Saved for offline",
+    remove: "Remove",
+    hint: "Keeps this lesson's video, text and vocabulary on this device.",
+    failed: "Couldn't save. Check your connection and try again.",
+    unsupported: "This browser can't save lessons for offline use.",
+    progressQueued: "Saved on this device. It will sync when you're back online.",
+  },
   notFound: {
     title: "This page couldn't be found",
     cta: "Go to Home",

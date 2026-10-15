@@ -12,7 +12,11 @@ import { toggleLessonDone } from "@/lib/courses/actions";
 import type { CourseLesson } from "@/lib/courses/types";
 import { fmt, formatNumber, type Locale } from "@/lib/i18n/config";
 import { useI18n } from "@/lib/i18n/client";
+import { useConnectivity } from "@/lib/offline/connectivity";
+import { queueLessonDone } from "@/lib/offline/progress-queue";
 import { playSound } from "@/lib/ui/sound";
+
+const SAVE_TIMEOUT_MS = 8000;
 
 type VideoError = "unauthenticated" | "forbidden" | "unavailable" | "generic" | null;
 type StepKey = "content" | "script" | "vocabulary" | "notes";
@@ -45,6 +49,8 @@ export function LessonView({
   const [pending, startTransition] = useTransition();
   const [activeIndex, setActiveIndex] = useState(0);
   const [unlockedIndex, setUnlockedIndex] = useState(0);
+  const [queued, setQueued] = useState(false);
+  const { markOffline } = useConnectivity();
 
   const script = locale === "en" ? lesson.script_en || lesson.script : lesson.script;
   const slide = lesson.slides[slideIndex];
@@ -60,9 +66,21 @@ export function LessonView({
     const next = !done;
     setDone(next);
     if (next) playSound("success");
+    setQueued(false);
     startTransition(async () => {
-      const result = await toggleLessonDone(lesson.id, next, courseSlug);
-      if (!result.ok) setDone(!next);
+      try {
+        // A blocked route can hang instead of failing, so give up after a few seconds.
+        const result = await Promise.race([
+          toggleLessonDone(lesson.id, next, courseSlug),
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error("timeout")), SAVE_TIMEOUT_MS)),
+        ]);
+        if (!result.ok) setDone(!next);
+      } catch {
+        // The server can't be reached: keep the new state and send it once we're back online.
+        queueLessonDone(lesson.id, courseSlug, next);
+        setQueued(true);
+        markOffline();
+      }
     });
   }
 
@@ -219,6 +237,11 @@ export function LessonView({
         <CheckIcon width={18} height={18} />
         {done ? t.markNotDone : t.markDone}
       </Button>
+      {queued && (
+        <p className="-mt-2 text-center text-xs text-ink-faint" dir="auto">
+          {m.offline.progressQueued}
+        </p>
+      )}
 
       <div className="mt-2 flex items-center justify-between">
         {prevHref ? (
