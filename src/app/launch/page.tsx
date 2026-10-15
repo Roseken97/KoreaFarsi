@@ -24,16 +24,16 @@ const MAX_MS = 12000;
 /**
  * Splash: the logo intro film with its sound, then first-run → onboarding, otherwise → home.
  * This is the PWA's start_url — installed-app opens land here, not on the public marketing page at "/".
- * Browsers block autoplay with sound until the user has interacted, so when the unmuted play is
- * refused the film plays muted and a small button offers the sound. When even muted playback is
- * refused (iOS Low Power Mode, data saver) or the film is slow to arrive, the finished logo shows as
- * a still for a moment instead of a blank screen.
+ * The film always plays with sound and has no mute control (Rose's call). Browsers block autoplay
+ * with sound until the user has interacted, so when the unmuted play is refused the film starts
+ * muted and the sound comes on with the first tap or key press anywhere on the page. When even muted
+ * playback is refused (iOS Low Power Mode, data saver) or the film is slow to arrive, the finished
+ * logo shows as a still for a moment instead of a blank screen.
  */
 export default function SplashPage() {
   const router = useRouter();
   const { m } = useI18n();
   const video = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(false);
   const [still, setStill] = useState(false);
 
   useEffect(() => {
@@ -52,6 +52,10 @@ export default function SplashPage() {
       timers.push(setTimeout(leave, STILL_MS));
     };
     const onPlaying = () => clearTimeout(stall);
+    // A tap or key press is the interaction browsers want before they allow sound.
+    const soundOn = () => {
+      if (el) el.muted = false;
+    };
     const stall = setTimeout(showStill, STALL_MS);
     timers.push(stall, setTimeout(leave, MAX_MS));
 
@@ -63,7 +67,8 @@ export default function SplashPage() {
       lastSource?.addEventListener("error", showStill);
       el.play().catch(() => {
         el.muted = true;
-        setMuted(true);
+        window.addEventListener("pointerdown", soundOn, { once: true });
+        window.addEventListener("keydown", soundOn, { once: true });
         el.play().catch(showStill);
       });
     }
@@ -72,14 +77,10 @@ export default function SplashPage() {
       el?.removeEventListener("playing", onPlaying);
       el?.removeEventListener("ended", leave);
       lastSource?.removeEventListener("error", showStill);
+      window.removeEventListener("pointerdown", soundOn);
+      window.removeEventListener("keydown", soundOn);
     };
   }, [router]);
-
-  function unmute() {
-    if (!video.current) return;
-    video.current.muted = false;
-    setMuted(false);
-  }
 
   return (
     <div className="relative grid h-dvh place-items-center overflow-hidden" style={{ background: SPLASH_BG }}>
@@ -109,19 +110,6 @@ export default function SplashPage() {
           className="absolute inset-0 mx-auto h-dvh w-full max-w-[min(100%,calc(100dvh*9/16))] object-cover"
           style={{ maskImage: "linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)" }}
         />
-      )}
-      {muted && !still && (
-        <button
-          type="button"
-          onClick={unmute}
-          aria-label={m.splash.sound}
-          className="absolute end-5 bottom-[max(1.25rem,env(safe-area-inset-bottom))] grid size-11 place-items-center rounded-full bg-white/70 text-ink shadow-soft backdrop-blur"
-        >
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
-            <path d="m16 9.5 5 5M21 9.5l-5 5" />
-          </svg>
-        </button>
       )}
     </div>
   );

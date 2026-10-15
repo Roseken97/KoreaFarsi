@@ -15,7 +15,6 @@ export const en = {
     tagline: "A Bridge to a Brighter You",
     subline: "More than a language, a closer you.",
     loading: "Loading your journey…",
-    sound: "Turn sound on",
   },
   homepage: {
     metaTitle: "KoreaFarsi | Learn Korean in Persian, from Hangul to conversation",
